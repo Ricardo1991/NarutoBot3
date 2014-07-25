@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NarutoBot3</RootNamespace>
+    <AssemblyName>NarutoBot3</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>NarutoBot3.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\RedditSharp-master\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RedditSharp-master\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bot.cs" />
+    <Compile Include="GoogleSearch.cs" />
+    <Compile Include="assignments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="assignments.Designer.cs">
+      <DependentUpon>assignments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="claims.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="claims.Designer.cs">
+      <DependentUpon>claims.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectWindow.Designer.cs">
+      <DependentUpon>ConnectWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="enabledCommands.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="enabledCommands.Designer.cs">
+      <DependentUpon>enabledCommands.cs</DependentUpon>
+    </Compile>
+    <Compile Include="eta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="eta.Designer.cs">
+      <DependentUpon>eta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="getCompilationDate.cs" />
+    <Compile Include="Greeting.cs" />
+    <Compile Include="help.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="help.Designer.cs">
+      <DependentUpon>help.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IrcClient.cs" />
+    <Compile Include="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindowHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="muted.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="muted.Designer.cs">
+      <DependentUpon>muted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="nick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="nick.Designer.cs">
+      <DependentUpon>nick.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NickGen.cs" />
+    <Compile Include="operators.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operators.Designer.cs">
+      <DependentUpon>operators.cs</DependentUpon>
+    </Compile>
+    <Compile Include="pastMessage.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedditCredentials.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RedditCredentials.Designer.cs">
+      <DependentUpon>RedditCredentials.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RleaseChecker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RleaseChecker.Designer.cs">
+      <DependentUpon>RleaseChecker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="rules.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="rules.Designer.cs">
+      <DependentUpon>rules.cs</DependentUpon>
+    </Compile>
+    <Compile Include="searchAnimeAPI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="searchAnimeAPI.Designer.cs">
+      <DependentUpon>searchAnimeAPI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TimeZoneAPI.cs" />
+    <Compile Include="truncate.cs" />
+    <EmbeddedResource Include="assignments.resx">
+      <DependentUpon>assignments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="claims.resx">
+      <DependentUpon>claims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectWindow.resx">
+      <DependentUpon>ConnectWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="enabledCommands.resx">
+      <DependentUpon>enabledCommands.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="eta.resx">
+      <DependentUpon>eta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="help.resx">
+      <DependentUpon>help.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="muted.resx">
+      <DependentUpon>muted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nick.resx">
+      <DependentUpon>nick.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operators.resx">
+      <DependentUpon>operators.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="RedditCredentials.resx">
+      <DependentUpon>RedditCredentials.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RleaseChecker.resx">
+      <DependentUpon>RleaseChecker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rules.resx">
+      <DependentUpon>rules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="searchAnimeAPI.resx">
+      <DependentUpon>searchAnimeAPI.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\GitHub\RedditSharp\RedditSharp\RedditSharp.csproj">
+      <Project>{a368cb75-75f0-4489-904d-b5cebb0fe624}</Project>
+      <Name>RedditSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
