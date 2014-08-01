@@ -20,7 +20,7 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         delegate void SetTextCallback(string text);
-        delegate void ChangeDataSoure();
+        delegate void ChangeDataSource();
 
         searchAnimeAPI animeAPI = new searchAnimeAPI();
         ConnectWindow Connect = new ConnectWindow();
@@ -46,7 +46,6 @@ namespace NarutoBot3
         string HOST;
         string NICK;
         int PORT;
-        string SYMBOL = "!";
 
         String line;
 
@@ -135,7 +134,7 @@ namespace NarutoBot3
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker1.WorkerSupportsCancellation = true;
 
-            loadSettings();
+            
 
             lastCommand = "";
 
@@ -156,8 +155,8 @@ namespace NarutoBot3
         public bool connect()//This is where the bot connects to the server and logs in
         {
             ChangeLabel("Connecting...");
-            
 
+            loadSettings();
             client = new IrcClient(HOME_CHANNEL, HOST, PORT, NICK);
             return client.Connect();
         }
@@ -237,6 +236,8 @@ namespace NarutoBot3
 
             client.Disconnect();
             Thread.Sleep(250);
+
+            UpdateDataSource();
 
             output2.Clear();
             ChangeTitle("NarutoBot");

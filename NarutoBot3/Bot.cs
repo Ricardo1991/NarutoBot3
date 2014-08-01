@@ -751,6 +751,23 @@ namespace NarutoBot3
                                 twitter(whoSent, user, msg);
                             }
 
+                            else if (message.Contains("\x01"))
+                            {
+                                if (cmd.Contains("VERSION"))
+                                {
+                                    WriteMessage("\n*****  Recieved a ctcp version request from " + user);
+                                    //OnReceiveMessage(EventArgs.Empty);
+                                    ctcpVersion(user);
+                                }
+
+                                if (cmd.Contains("TIME"))
+                                {
+                                    WriteMessage("\n*****  Recieved a ctcp time request from " + user);
+                                    //OnReceiveMessage(EventArgs.Empty);
+                                    ctcpTime(user);
+                                }
+                            }
+
                            
 
                             else //No parsing, just a normal message
@@ -782,14 +799,14 @@ namespace NarutoBot3
                             else argg = "";
                             string commandS = msgg.Substring(msgg.IndexOf("\x01") + 1, msgg.Length - 2);
 
-                            if (commandS.Contains("VERSION"))
+                            if (cmdd.Contains("VERSION"))
                             {
                                 WriteMessage("\n*****  Recieved a ctcp version request from " + userr);
                                 //OnReceiveMessage(EventArgs.Empty);
                                 ctcpVersion(userr);
                             }
 
-                            if (commandS.Contains("TIME"))
+                            if (cmdd.Contains("TIME"))
                             {
                                 WriteMessage("\n*****  Recieved a ctcp time request from " + userr);
                                 //OnReceiveMessage(EventArgs.Empty);

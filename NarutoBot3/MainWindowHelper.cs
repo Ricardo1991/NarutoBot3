@@ -153,7 +153,7 @@ namespace NarutoBot3
         {
             if (listBox1.InvokeRequired)
             {
-                ChangeDataSoure d = new ChangeDataSoure(UpdateDataSource);
+                ChangeDataSource d = new ChangeDataSource(UpdateDataSource);
                 this.Invoke(d);
 
             }
