@@ -19,306 +19,7 @@ namespace NarutoBot3
 {
     public partial class MainWindow
     {
-        public static DateTime ConvertFromUnixTimestamp(double timestamp)
-        {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return origin.AddSeconds(timestamp);
-        }
 
-        public static double ConvertToUnixTimestamp(DateTime date)
-        {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            TimeSpan diff = date.ToUniversalTime() - origin;
-            return Math.Floor(diff.TotalSeconds);
-        }
-
-        void SaveOPS()
-        {
-            using (StreamWriter newTask = new StreamWriter("ops.txt", false))
-            {
-                foreach (string op in ops)
-                {
-                    newTask.WriteLine(op);
-                }
-            }
-
-
-        }
-        void readOPS()
-        {
-            ops.Clear();
-            try
-            {
-                StreamReader sr = new StreamReader("ops.txt");
-                while (sr.Peek() >= 0)
-                {
-                    ops.Add(sr.ReadLine());
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        void SaveBAN()
-        {
-            using (StreamWriter newTask = new StreamWriter("banned.txt", false))
-            {
-                foreach (string rl in ban)
-                {
-                    newTask.WriteLine(rl);
-                }
-            }
-        }
-        void readBAN()
-        {
-            ban.Clear();
-            try
-            {
-                StreamReader sr = new StreamReader("banned.txt");
-                while (sr.Peek() >= 0)
-                {
-                    ban.Add(sr.ReadLine());
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        void SaveRLS()
-        {
-            using (StreamWriter newTask = new StreamWriter("rules.txt", false))
-            {
-                foreach (string rl in rls)
-                {
-                    newTask.WriteLine(rl);
-                }
-            }
-
-
-        }
-        void readRLS()
-        {
-            rls.Clear();
-            try
-            {
-                StreamReader sr = new StreamReader("rules.txt");
-                while (sr.Peek() >= 0)
-                {
-                    rls.Add(sr.ReadLine());
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        void SaveHLP()
-        {
-            using (StreamWriter newTask = new StreamWriter("help.txt", false))
-            {
-                foreach (string hp in hlp)
-                {
-                    newTask.WriteLine(hp);
-                }
-            }
-
-
-        }
-        void readHLP()
-        {
-            hlp.Clear();
-            try
-            {
-                StreamReader sr = new StreamReader("help.txt");
-                while (sr.Peek() >= 0)
-                {
-                    hlp.Add(sr.ReadLine());
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        void readTRI()//Reads the trivia stuff
-        {
-            tri.Clear();
-            triviaNumber = 0;
-
-            try
-            {
-                StreamReader sr = new StreamReader("trivia.txt");
-                while (sr.Peek() >= 0)
-                {
-                    tri.Add(sr.ReadLine());
-                    triviaNumber++;
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        void readGREET()
-        {
-            string nick, greeting, line;
-            string[] split;
-            bool enabled=false;
-            bool found = false;
-
-            if (File.Exists("greetings.txt"))
-            {
-                try
-                {
-                    StreamReader sr = new StreamReader("greetings.txt");
-                    while (sr.Peek() >= 0)
-                    {
-                        line = sr.ReadLine();
-                        split = line.Split(new char[] { ':' }, 3);
-                        nick = split[0];
-                        greeting = split[2];
-
-                        switch (split[1])
-                        { 
-                            case "False":
-                                enabled = false;
-                                break;
-                            case "True":
-                                enabled = true;
-                                break;
-                            default:
-                                enabled = false;
-                                break;  
-                        }
-
-                        foreach (Greeting g in greet)
-                        {
-                            if (g.Nick == nick)
-                                found = true;
-                        
-                        }
-
-                        if (!found)
-                        {
-                            Greeting g = new Greeting(nick, greeting, enabled);
-                            greet.Add(g);
-                        }
-
-                    }
-                    sr.Close();
-                }
-                catch
-                {
-                }
-            
-            }
-        }
-
-
-        void addGreet(string CHANNEL, string args, string nick)
-        {
-            bool found = false;
-
-            foreach (Greeting g in greet)
-            {
-                if (g.Nick == nick)
-                {
-                    found = true;
-                    g.Greetingg = args;
-                    SaveGreets();
-                }
-            }
-
-            if (!found)
-            {
-                Greeting g = new Greeting(nick, args, true);
-                greet.Add(g);
-                SaveGreets();       
-            }
-  
-
-        }
-
-        void SaveGreets()
-        {
-            using (StreamWriter newTask = new StreamWriter("greetings.txt", false))
-            {
-                foreach (Greeting gg in greet)
-                {
-                    newTask.WriteLine(gg.Nick + ":" +gg.Enabled.ToString() +":" + gg.Greetingg);
-                }
-            }
-        
-        }
-
-        void greetToogle(IrcClient c, string CHANNEL, string nick)
-        {
-            string message = notice(nick, "You didn't set a greeting yet");;
-            string state="disabled";
-            bool found = false;
-
-
-            foreach (Greeting g in greet)
-            {
-                if (g.Nick == nick && !found)
-                {
-                    found = true;
-                    g.Enabled = !g.Enabled;
-                    if(g.Enabled) state="enabled";
-
-                    message = notice(nick, "Your greeting is now " + state);
-                    SaveGreets();  
-                }
-            }
-
-            c.messageSender(message);
-        }
-
-        void loadNickGenStrings()//These are for the nick gen
-        {
-            lineNumber = 0;
-            nickGenStrings = new List<string>();
-            nickGenStrings.Clear();
-
-            try
-            {
-                StreamReader sr = new StreamReader("text.txt");
-                while (sr.Peek() >= 0)
-                {
-                    nickGenStrings.Add(sr.ReadLine());
-                    lineNumber++;
-                }
-                sr.Close();
-            }
-            catch
-            {
-            }
-        }
-
-        public static string getBetween(string strSource, string strStart, string strEnd)
-        {
-            int Start, End;
-            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
-            {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.IndexOf(strEnd, Start);
-                if (End < 0) End = strSource.Length;
-                return strSource.Substring(Start, End - Start);
-            }
-            else
-            {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.Length;
-                return strSource.Substring(Start, End - Start);
-            }
-        }
 
         public void ChangeLabel(String message)
         {
@@ -363,7 +64,7 @@ namespace NarutoBot3
 
         public void ChangeTitle(String title)
         {
-            if (output2.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(ChangeTitle);
                 this.Invoke(d, new object[] { title });
@@ -464,79 +165,6 @@ namespace NarutoBot3
             }
         }
 
-        bool isMuted(string nick)
-        {
-            foreach (string user in ban)
-            {
-                if (String.Compare(user, nick, true) == 0)
-                    return true;
-            }
-
-            return false;
-        }
-        bool muteUser(string nick)
-        {
-            if (isMuted(nick))
-                return false;
-            else
-            {
-                ban.Add(nick);
-                return true;
-            }
-        }
-        bool unmuteUSer(string nick)
-        {
-            if (isMuted(nick))
-            {
-                ban.Remove(nick);
-                return true;
-            }
-            else return false;
-
-        }
-        bool isOperator(string nick)
-        {
-            foreach (string user in ops)
-            {
-                if (String.Compare(user, nick, true) == 0)
-                    return true;
-            }
-
-            return false;
-
-        }
-        bool giveOps(string nick)
-        {
-            if (!isOperator(nick))
-            {
-                ops.Add(nick);
-                return true;
-            }
-            else return false;
-
-        }
-        bool takeOps(string nick)
-        {
-            if (isOperator(nick))
-            {
-                ops.Remove(nick);
-                return true;
-            }
-            else return false;
-        }
-        public bool changeNick(string nick)
-        {
-            NICK = Settings.Default.Nick = nick;
-            ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
-            //do nick change to server
-            if (client.isConnected)
-            {
-                string message = "NICK " + NICK + "\n";
-                client.messageSender(message);
-                return true;
-            }
-            else return false;
-        }
 
         private void contextParse(string text)
         {
@@ -544,45 +172,34 @@ namespace NarutoBot3
             switch (split[0])
             {
                 case "Give":
-                    giveOps(split[1]);
-                    SaveOPS();
+                    bot.giveOps(split[1]);
+                    bot.SaveOPS();
                     break;
                 case "Take":
-                    takeOps(split[1]);
-                    SaveOPS();
+                    bot.takeOps(split[1]);
+                    bot.SaveOPS();
                     break;
                 case "Mute":
-                    muteUser(split[1]);
-                    SaveBAN();
+                    bot.muteUser(split[1]);
+                    bot.SaveBAN();
                     break;
                 case "Unmute":
-                    unmuteUSer(split[1]);
-                    SaveBAN();
+                    bot.unmuteUSer(split[1]);
+                    bot.SaveBAN();
                     break;
                 case "Poke":
-                    pokeUser(split[1]);
-                    SaveBAN();
+                    bot.pokeUser(split[1]);
+                    bot.SaveBAN();
                     break;
                 case "Whois":
-                    whoisUser(split[1]);
-                    SaveBAN();
+                    bot.whoisUser(split[1]);
+                    bot.SaveBAN();
                     break;
             }
-            SaveOPS();
+            bot.SaveOPS();
 
         }
-        private void pokeUser(string nick)
-        {
-            string message = privmsg(HOME_CHANNEL, "\x01" + "ACTION stabs " + nick + " with a sharp knife" + "\x01");
-            client.messageSender(message);
 
-        }
-        private void whoisUser(string nick)
-        {
-            string message = "WHOIS " + nick + "\n";
-            client.messageSender(message);
-
-        }
 
         //UI Events
 
@@ -680,7 +297,7 @@ namespace NarutoBot3
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             operatorsWindow.ShowDialog();
-            readOPS();
+            bot.readOPS();
         }
 
         private void input_KeyDown(object sender, KeyEventArgs e)
@@ -796,33 +413,33 @@ namespace NarutoBot3
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             helpWindow.ShowDialog();
-            readHLP();
+            bot.readHLP();
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            readBAN();
+            bot.readBAN();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            readRLS();
+            bot.readRLS();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            readHLP();
+            bot.readHLP();
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            loadNickGenStrings();
+            bot.loadNickGenStrings();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            readTRI();
+            bot.readTRI();
         }
 
         private void redditCredentialsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -832,11 +449,30 @@ namespace NarutoBot3
             if (result == DialogResult.OK)
             {
                 Settings.Default.redditEnabled = true;
-                user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
+                bot.user = bot.reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
                 Settings.Default.Save();
             }
 
 
+        }
+
+        private void botSilence(object sender, EventArgs e)
+        {
+            ChangeChecked("true");
+            Settings.Default.silence = true;
+            ChangeLabel2("Bot is Silenced");
+            Settings.Default.Save();
+        
+        
+        }
+
+        private void botUnsilence(object sender, EventArgs e)
+        {
+            ChangeChecked("false");
+            Settings.Default.silence = false;
+            ChangeLabel2("");
+
+            Settings.Default.Save();
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -946,35 +582,7 @@ namespace NarutoBot3
             }
         }
 
-        //private char getUserMode(string user)
-        //{
-        //    foreach (string u in userList)
-        //    {
-        //        if (u.Contains(user))
-        //        {
-        //            switch (u.Substring(0, 1))
-        //            {
-        //                case "@":
-        //                    return '@';
-        //                case "+":
-        //                    return '+';
-        //                case "%":
-        //                    return '%';
-        //                case "~":
-        //                    return '~';
-        //                case "&":
-        //                    return '&';
-        //                default:
-        //                    return '0';
-        //            }
-        //        }
-        //    }
-        //    return '0';
-        //}
-        public string StripTagsRegex(string source)
-        {
-            return Regex.Replace(source, "<.*?>", string.Empty);
-        }
+       
 
         public string privmsg(string destinatary, string message)
         {
@@ -1007,9 +615,10 @@ namespace NarutoBot3
 
             return result;
         }
+
         private void userJoined(object sender, EventArgs e, string whoJoined)
         {
-            foreach (Greeting g in greet)
+            foreach (Greeting g in bot.greet)
             {
                 if (g.Nick == whoJoined.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
                 {
@@ -1090,12 +699,42 @@ namespace NarutoBot3
         private void userListCreated(object sender, EventArgs e)
         {
             UpdateDataSource();
+        }
+        public void randomTextSender(object source, ElapsedEventArgs e)
+        {
+            bot.randomTextSender(source, e);
+        }
+
+        public void eventChangeTitle(object sender, EventArgs e, string returnmessage)
+        {
+            ChangeTitle(returnmessage);
         
         }
 
+        public void letsQuit(object sender, EventArgs e)
+        {
+            exitThisShit = 1;
+            
+        }
 
+        public bool changeNick(string nick)
+        {
+            client.NICK = Settings.Default.Nick = nick;
+            ChangeTitle( client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+            
+
+            //do nick change to server
+            if (client.isConnected)
+            {
+                string message = "NICK " + client.NICK + "\n";
+                client.messageSender(message);
+                return true;
+            }
+            else return false;
+        }
 
     }
+
     public static class RichTextBoxExtensions
     {
         public static void AppendText(this RichTextBox box, string text, Color color)
@@ -1111,3 +750,4 @@ namespace NarutoBot3
 
 
 }
+

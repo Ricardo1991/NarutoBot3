@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
-    class Greeting
+    public class Greeting
     {
         string Nick1;
         string Greeting1;

@@ -12,11 +12,11 @@ namespace NarutoBot3
     {
         public bool isConnected = false;
 
-        string HOME_CHANNEL;
-        string HOST;
-        int PORT;
-        string NICK;
-        string SYMBOL = "!";
+        public string HOME_CHANNEL;
+        public string HOST;
+        public int PORT;
+        public string NICK;
+        public string SYMBOL = "!";
 
         string user_message;
         string nick_message;
@@ -30,7 +30,7 @@ namespace NarutoBot3
 
         public List<string> userList = new List<string>();
 
-        public IrcClient(string home_channel, string host,int port, string nick)
+        public IrcClient(string home_channel, string host, int port, string nick)
         {
             HOME_CHANNEL = home_channel;
             HOST = host;
