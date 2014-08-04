@@ -1,17 +1,8 @@
 ﻿using NarutoBot3.Properties;
-using RedditSharp;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -19,9 +10,7 @@ namespace NarutoBot3
 {
     public partial class MainWindow
     {
-
-
-        public void ChangeLabel(String message)
+        public void ChangeConnectingLabel(String message)
         {
             try
             {
@@ -29,11 +18,11 @@ namespace NarutoBot3
             }
             catch { }
         }
-        public void ChangeLabel2(String message)
+        public void ChangeSilenceLabel(String message)
         {
             if (statusStrip1.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(ChangeLabel2);
+                SetTextCallback d = new SetTextCallback(ChangeSilenceLabel);
                 this.Invoke(d, new object[] { message });
             }
             else
@@ -42,24 +31,19 @@ namespace NarutoBot3
 
             }
         }
-        public void ChangeChecked(string message)//toolStrip1
+        public void ChangeSilenceCheckBox(bool status)//toolStrip1
         {
 
             if (toolStrip1.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(ChangeChecked);
-                this.Invoke(d, new object[] { message });
+                SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
+                this.Invoke(d, new object[] { status });
             }
             else
             {
-                if (message == "true")
-                    silencedToolStripMenuItem.Checked = true;
-                else
-                    if (message == "false")
-                        silencedToolStripMenuItem.Checked = false;
+                silencedToolStripMenuItem.Checked = status;
+
             }
-
-
         }
 
         public void ChangeTitle(String title)
@@ -116,9 +100,6 @@ namespace NarutoBot3
                 {
                     MethodInvoker invoker = () => WriteMessage(message, color);
                     Invoke(invoker);
-
-                //    SetTextCallback d = new SetTextCallback(WriteMessage);
-                //    this.Invoke(d, new object[] { message, color });
                 }
                 catch { }
             }
@@ -172,31 +153,31 @@ namespace NarutoBot3
             switch (split[0])
             {
                 case "Give":
-                    bot.giveOps(split[1]);
-                    bot.SaveOPS();
+                    ircBot.giveOps(split[1]);
+                    ircBot.SaveOPS();
                     break;
                 case "Take":
-                    bot.takeOps(split[1]);
-                    bot.SaveOPS();
+                    ircBot.takeOps(split[1]);
+                    ircBot.SaveOPS();
                     break;
                 case "Mute":
-                    bot.muteUser(split[1]);
-                    bot.SaveBAN();
+                    ircBot.muteUser(split[1]);
+                    ircBot.SaveBAN();
                     break;
                 case "Unmute":
-                    bot.unmuteUSer(split[1]);
-                    bot.SaveBAN();
+                    ircBot.unmuteUSer(split[1]);
+                    ircBot.SaveBAN();
                     break;
                 case "Poke":
-                    bot.pokeUser(split[1]);
-                    bot.SaveBAN();
+                    ircBot.pokeUser(split[1]);
+                    ircBot.SaveBAN();
                     break;
                 case "Whois":
-                    bot.whoisUser(split[1]);
-                    bot.SaveBAN();
+                    ircBot.whoisUser(split[1]);
+                    ircBot.SaveBAN();
                     break;
             }
-            bot.SaveOPS();
+            ircBot.SaveOPS();
 
         }
 
@@ -219,7 +200,7 @@ namespace NarutoBot3
                     {
                         disconnect();
 
-                        ChangeLabel("Connecting...");
+                        ChangeConnectingLabel("Connecting...");
 
                         HOME_CHANNEL = Settings.Default.Channel;
                         HOST = Settings.Default.Server;
@@ -231,7 +212,7 @@ namespace NarutoBot3
                     }
                     else return;
                 }
-                ChangeLabel("Connecting...");
+                ChangeConnectingLabel("Connecting...");
 
                 HOME_CHANNEL = Settings.Default.Channel;
                 HOST = Settings.Default.Server;
@@ -271,7 +252,7 @@ namespace NarutoBot3
         {
             if (client.isConnected)
                 disconnect();
-            ChangeLabel("Disconnected");
+            ChangeConnectingLabel("Disconnected");
             //isConnected = false;
         }
 
@@ -297,7 +278,7 @@ namespace NarutoBot3
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             operatorsWindow.ShowDialog();
-            bot.readOPS();
+            ircBot.readOPS();
         }
 
         private void input_KeyDown(object sender, KeyEventArgs e)
@@ -413,33 +394,33 @@ namespace NarutoBot3
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             helpWindow.ShowDialog();
-            bot.readHLP();
+            ircBot.readHLP();
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            bot.readBAN();
+            ircBot.readBAN();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.readRLS();
+            ircBot.readRLS();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.readHLP();
+            ircBot.readHLP();
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.loadNickGenStrings();
+            ircBot.loadNickGenStrings();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.readTRI();
+            ircBot.readTRI();
         }
 
         private void redditCredentialsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -449,7 +430,7 @@ namespace NarutoBot3
             if (result == DialogResult.OK)
             {
                 Settings.Default.redditEnabled = true;
-                bot.user = bot.reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
+                ircBot.user = ircBot.reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
                 Settings.Default.Save();
             }
 
@@ -458,9 +439,9 @@ namespace NarutoBot3
 
         private void botSilence(object sender, EventArgs e)
         {
-            ChangeChecked("true");
+            ChangeSilenceCheckBox(true);
             Settings.Default.silence = true;
-            ChangeLabel2("Bot is Silenced");
+            ChangeSilenceLabel("Bot is Silenced");
             Settings.Default.Save();
         
         
@@ -468,9 +449,9 @@ namespace NarutoBot3
 
         private void botUnsilence(object sender, EventArgs e)
         {
-            ChangeChecked("false");
+            ChangeSilenceCheckBox(false);
             Settings.Default.silence = false;
-            ChangeLabel2("");
+            ChangeSilenceLabel("");
 
             Settings.Default.Save();
         }
@@ -479,8 +460,6 @@ namespace NarutoBot3
         {
             contextMenuStrip1.Items.Clear();
             string nick = listBox1.SelectedItem.ToString().Replace("@", string.Empty).Replace("+", string.Empty);
-
-            //MenuItem gOps = new MenuItem(user,
 
             contextMenuStrip1.Items.Add("Give " + nick + " Ops");
             contextMenuStrip1.Items.Add("Take " + nick + " Ops");
@@ -618,7 +597,7 @@ namespace NarutoBot3
 
         private void userJoined(object sender, EventArgs e, string whoJoined)
         {
-            foreach (Greeting g in bot.greet)
+            foreach (Greeting g in ircBot.greet)
             {
                 if (g.Nick == whoJoined.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
                 {
@@ -691,7 +670,7 @@ namespace NarutoBot3
         private void nowConnected(object sender, EventArgs e)
         {
             //isConnected = true;
-            ChangeLabel("Connected");
+            ChangeConnectingLabel("Connected");
             client.Join();
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
         }
@@ -702,7 +681,7 @@ namespace NarutoBot3
         }
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            bot.randomTextSender(source, e);
+            ircBot.randomTextSender(source, e);
         }
 
         public void eventChangeTitle(object sender, EventArgs e, string returnmessage)

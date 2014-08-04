@@ -1,5 +1,6 @@
 ﻿using NarutoBot3.Properties;
 using Newtonsoft.Json;
+using RedditSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,10 +11,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
-using RedditSharp;
 
 namespace NarutoBot3
 {
@@ -497,7 +496,6 @@ namespace NarutoBot3
                                 && arg.ToLower().Contains(Client.NICK.ToLower()))
                             {
                                 WriteMessage("***** Recieved a hello from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 hello(whoSent, user);
                             }
 
@@ -509,29 +507,25 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "help", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a help request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                help(whoSent, user);
+                                help(user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "rules", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a rules request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 rules(whoSent, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "eta", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a eta request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 mangaETA(whoSent, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "quit", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a quit request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                int qu = quitIRC(Client.HOME_CHANNEL, user);
+                                int qu = quitIRC(user);
                                 Client.Disconnect();
                                 Thread.Sleep(100);
                                 if (qu == 1)
@@ -540,13 +534,11 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "oplist", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a oplist request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                opList(whoSent, user);
+                                opList(user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "roll", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a roll request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 roll(whoSent, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "say", true) == 0 && arg != "")
@@ -558,7 +550,6 @@ namespace NarutoBot3
 
                                 string msgSay = msg.Substring(hhj + 1);
                                 WriteMessage("****  Recieved a say request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 say(Client.HOME_CHANNEL, msgSay, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "greetme", true) == 0)
@@ -567,7 +558,6 @@ namespace NarutoBot3
                                 if (arg == "")
                                 {
                                     WriteMessage("****  Recieved a greet TOOGLE request from " + user);
-                                    //OnReceiveMessage(EventArgs.Empty);
                                     greetToogle(Client.HOME_CHANNEL, user);
                                 
                                 }
@@ -580,7 +570,6 @@ namespace NarutoBot3
 
                                     string msgSay = msg.Substring(hhj + 1);
                                     WriteMessage("****  Recieved a greet request from " + user);
-                                    //OnReceiveMessage(EventArgs.Empty);
                                     addGreet(Client.HOME_CHANNEL, msgSay, user);
                                 }
                                
@@ -596,32 +585,27 @@ namespace NarutoBot3
 
                                 string msgSay = msg.Substring(hhj + 1);
                                 WriteMessage("****  Recieved a me request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 me(Client.HOME_CHANNEL, msgSay, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "claims", true) == 0 || String.Compare(cmd, Client.SYMBOL + "c", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a claims request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 claims(whoSent, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "assignments", true) == 0 || String.Compare(cmd, Client.SYMBOL + "a", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a assignments request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 assignments(whoSent, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "silence", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a silence request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                silence(whoSent, user);
+                                silence(user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "rename", true) == 0 && arg != "")
                             {
                                 WriteMessage("*****  Recieved a rename request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 if (isOperator(user))
                                     changeNick(arg, out returnmessage);
                             
@@ -630,33 +614,28 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "op", true) == 0 && arg != "")
                             {
                                 WriteMessage("\n*****  Recieved a op request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                int did = addBotOP(Client.HOME_CHANNEL, user, arg);
+                                int did = addBotOP(user, arg);
                                 if (did == 1) SaveOPS();
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "deop", true) == 0 && arg != "")
                             {
                                 WriteMessage("\n*****  Recieved a deop request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
-                                int did = removeBotOP(Client.HOME_CHANNEL, user, arg);
+                                int did = removeBotOP(user, arg);
                                 if (did == 1) SaveOPS();
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "toF", true) == 0 && arg != "")
                             {
                                 WriteMessage("\n*****  Recieved a temp. conversion to F request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 toFahrenheit(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "toC", true) == 0 && arg != "")
                             {
                                 WriteMessage("\n*****  Recieved a temp. conversion to C request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 toCelcius(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "time", true) == 0)
                             {
                                 WriteMessage("\n*****  Recieved a time request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 time(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "wiki", true) == 0)
@@ -668,7 +647,6 @@ namespace NarutoBot3
 
                                 string msgSay = msg.Substring(hhj + 1);
                                 WriteMessage("\n*****  Recieved a explain request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 explain(Client.HOME_CHANNEL, user, msgSay);
                             }
 
@@ -681,26 +659,22 @@ namespace NarutoBot3
 
                                 string msgSay = msg.Substring(hhj + 1);
                                 WriteMessage("\n*****  Recieved a animeSearch request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 animeSeach(Client.HOME_CHANNEL, user, msgSay);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "poke", true) == 0)
                             {
                                 WriteMessage("\n*****  Recieved a time request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 poke(Client.HOME_CHANNEL, user, arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "trivia", true) == 0)
                             {
                                 WriteMessage("\n*****  Recieved a trivia request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 trivia(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "nick", true) == 0)
                             {
                                 WriteMessage("\n*****  Recieved a nickname request from " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
 
                                 if (arg != "")
                                 {
@@ -719,35 +693,30 @@ namespace NarutoBot3
                             else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("*****  Detected an youtube video from  " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 youtube(whoSent, user, msg);
                             }
 
                             else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
                             {
                                 WriteMessage("*****  Detected a short youtube video from  " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 youtubeS(whoSent, user, msg);
                             }
 
                             else if (msg.Contains("vimeo.com"))
                             {
                                 WriteMessage("*****  Detected an vimeo video from  " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 vimeo(whoSent, user, msg);
                             }
 
                             else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
                             {
                                 WriteMessage("*****  Detected a reddit link from  " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 redditLink(whoSent, user, msg);
                             }
 
                             else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
                             {
                                 WriteMessage("*****  Detected a twiiter link from  " + user);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 twitter(whoSent, user, msg);
                             }
 
@@ -756,19 +725,15 @@ namespace NarutoBot3
                                 if (cmd.Contains("VERSION"))
                                 {
                                     WriteMessage("\n*****  Recieved a ctcp version request from " + user);
-                                    //OnReceiveMessage(EventArgs.Empty);
                                     ctcpVersion(user);
                                 }
 
                                 if (cmd.Contains("TIME"))
                                 {
                                     WriteMessage("\n*****  Recieved a ctcp time request from " + user);
-                                    //OnReceiveMessage(EventArgs.Empty);
                                     ctcpTime(user);
                                 }
                             }
-
-                           
 
                             else //No parsing, just a normal message
                             {
@@ -787,29 +752,27 @@ namespace NarutoBot3
                         {
                             string userr;
                             if (prefix.Contains('!'))
-                                userr = prefix.Substring(0, prefix.IndexOf("!")); //Nick of the Sender
+                                userr = prefix.Substring(0, prefix.IndexOf("!"));   //Nick of the Sender
                             else userr = prefix;
-                            string whoSentt = parameters[0];                         //Who sent is the source of the message. (The Channel, or User if private message)
+                            string whoSentt = parameters[0];                        //Who sent is the source of the message. (The Channel, or User if private message)
                             string msgg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty);
                             msgg.Trim();
                             string cmdd = msgg.Split(' ')[0];
                             string argg;
                             if (msgg.Length - 1 > cmdd.Length)
-                                argg = msgg.Substring(cmdd.Length); //the rest of msg
+                                argg = msgg.Substring(cmdd.Length);                 //the rest of msg
                             else argg = "";
                             string commandS = msgg.Substring(msgg.IndexOf("\x01") + 1, msgg.Length - 2);
 
                             if (cmdd.Contains("VERSION"))
                             {
                                 WriteMessage("\n*****  Recieved a ctcp version request from " + userr);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 ctcpVersion(userr);
                             }
 
                             if (cmdd.Contains("TIME"))
                             {
                                 WriteMessage("\n*****  Recieved a ctcp time request from " + userr);
-                                //OnReceiveMessage(EventArgs.Empty);
                                 ctcpTime(userr);
                             }
                         }
@@ -887,6 +850,7 @@ namespace NarutoBot3
             }
             return '0';
         }
+
         public void SaveOPS()
         {
             using (StreamWriter newTask = new StreamWriter("ops.txt", false))
@@ -896,7 +860,7 @@ namespace NarutoBot3
                     newTask.WriteLine(op);
                 }
             }
-
+            
 
         }
         public void readOPS()
@@ -1156,6 +1120,12 @@ namespace NarutoBot3
             {
             }
         }
+
+        /// <summary>
+        /// Sends a message to the destinatary
+        /// </summary>
+        /// <param name="destinatary">string with either a user or a channel, it's where the message will be sent</param>
+        /// <param name="message">String of text with the message that will be delivered</param>
         public string privmsg(string destinatary, string message)
         {
             string result;
@@ -1182,6 +1152,11 @@ namespace NarutoBot3
             return result;
         }
 
+        /// <summary>
+        /// Sends a notice to the destinatary
+        /// </summary>
+        /// <param name="destinatary">string with either a user or a channel, it's where the message will be sent</param>
+        /// <param name="message">String of text with the message that will be delivered</param>
         public string notice(string destinatary, string message)
         {
             string result;
@@ -1279,45 +1254,61 @@ namespace NarutoBot3
         //       Commands Functions      //
         ///////////////////////////////////
 
-        int addBotOP(string CHANNEL, string nick, string arg)
+        /// <summary>
+        /// Adds a nick name to the Bot Operator list
+        /// </summary>
+        /// <param name="nick">the user that called the command</param>
+        /// <param name="targetUser">the user to be made bot operator</param>
+        int addBotOP(string nick, string targetUser)
         {
             string message;
 
-            arg = arg.Replace("\r", string.Empty).Replace("\n", string.Empty);
+            targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty);
 
-            if (giveOps(arg))
+            if (!isOperator(nick))
+                return 0;
+
+            if (giveOps(targetUser))
             {
-                message = notice(nick, arg + " was added as a bot operator!");
+                message = notice(nick, targetUser + " was added as a bot operator!");
                 Client.messageSender(message);
                 return 1;
             }
             else
             {
-                message = notice(nick, "Error: " + arg + " is already a bot operator!");
+                message = notice(nick, "Error: " + targetUser + " is already a bot operator!");
                 Client.messageSender(message);
                 return 0;
             }
         }
-        int removeBotOP(string CHANNEL, string nick, string arg)
+        /// <summary>
+        /// Removes a nick name to the Bot Operator list
+        /// </summary>
+        /// <param name="nick">the user that called the command</param>
+        /// <param name="targetUser">the user to be removed from the bot operator list</param>
+        int removeBotOP(string nick, string targetUser)
         {
             string message;
 
-            arg = arg.Replace("\r", string.Empty).Replace("\n", string.Empty);
+            targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty);
 
-            if (takeOps(arg))
+            if (!isOperator(nick))
+                return 0;
+
+            if (takeOps(targetUser))
             {
-                message = notice(nick, arg + " was removed as a bot operator!");
+                message = notice(nick, targetUser + " was removed as a bot operator!");
                 Client.messageSender(message);
                 return 1;
             }
             else
             {
-                message = notice(nick, "Error: " + arg + " was not a bot operator!");
+                message = notice(nick, "Error: " + targetUser + " was not a bot operator!");
                 Client.messageSender(message);
                 return 0;
             }
         }
-        int opList(string CHANNEL, string nick)
+        int opList(string nick)
         {
             string message;
 
@@ -1359,7 +1350,7 @@ namespace NarutoBot3
             }
 
         }
-        public void silence(string CHANNEL, string nick)
+        public void silence(string nick)
         {
             string message;
             if (isOperator(nick))
@@ -1391,7 +1382,7 @@ namespace NarutoBot3
                 Client.messageSender(message);
             }
         }
-        void help(string CHANNEL, string nick)
+        void help(string nick)
         {
             string message;
             if (isMuted(nick)) return;
@@ -1653,24 +1644,24 @@ namespace NarutoBot3
             args = args.Replace("\n", string.Empty);
             args = args.Replace(" ", string.Empty);
 
-            string IST = "23.7833, 85.9667";//Bokaro, india
-            string MSK = "55.74941,37.614441";  //Moscow
-            string FET = "53.895311,27.563324"; //Minsk
-            string EET = "44.4476304,26.0860545"; //bucharest
-            string CET = "48.8588589,2.3470599"; //paris
+            string IST = "23.7833, 85.9667";            //Bokaro, india
+            string MSK = "55.74941,37.614441";          //Moscow
+            string FET = "53.895311,27.563324";         //Minsk
+            string EET = "44.4476304,26.0860545";       //bucharest
+            string CET = "48.8588589,2.3470599";        //paris
 
-            string WER = "38.7436266,-9.1602038"; //lisbon
-            string GMT = "51.5232391,-0.1166146"; //london
+            string WER = "38.7436266,-9.1602038";       //lisbon
+            string GMT = "51.5232391,-0.1166146";       //london
 
-            string BRT = "-23.5778896,-46.6096585"; //sao paulo
-            string ART = "-34.6158526,-58.4332985"; //buenos aires
-            string AST = "53.3215407,-60.3542792"; //Happy+Valley-Goose+Bay
-            string VET = "10.4683917,-66.8903658"; //caracas
-            string EST = "40.7056308,-73.9780035"; //NYC
-            string CST = "39.091919,-94.5757195"; //kansas city
-            string MST = "40.7609881,-111.8936263"; //salt lake city
-            string PST = "34.0469605,-118.2621293"; //LA
-            string AKDT = "61.1878492,-149.8158133"; //Anchorage
+            string BRT = "-23.5778896,-46.6096585";     //sao paulo
+            string ART = "-34.6158526,-58.4332985";     //buenos aires
+            string AST = "53.3215407,-60.3542792";      //Happy+Valley-Goose+Bay
+            string VET = "10.4683917,-66.8903658";      //caracas
+            string EST = "40.7056308,-73.9780035";      //NYC
+            string CST = "39.091919,-94.5757195";       //kansas city
+            string MST = "40.7609881,-111.8936263";     //salt lake city
+            string PST = "34.0469605,-118.2621293";     //LA
+            string AKDT = "61.1878492,-149.8158133";    //Anchorage
 
             TimeZone localZone = TimeZone.CurrentTimeZone;
             DateTime currentDate = DateTime.Now;
@@ -2271,7 +2262,7 @@ namespace NarutoBot3
                 Client.messageSender(message);
             }
         }
-        public int quitIRC(string CHANNEL, string nick)
+        public int quitIRC(string nick)
         {
             string message;
 
@@ -2296,7 +2287,7 @@ namespace NarutoBot3
         ///////////////////////////////////
 
         //CTCP replies
-        public void ctcpTime(string CHANNEL)
+        public void ctcpTime(string user)
         {
             DateTime dateValue = new DateTime();
             dateValue = DateTime.Now;
@@ -2308,12 +2299,12 @@ namespace NarutoBot3
 
             string complete = week + " " + month + " " + day + " " + hour;
 
-            string message = notice(CHANNEL, "\x01" + "TIME " + complete + "\x01");
+            string message = notice(user, "\x01" + "TIME " + complete + "\x01");
             Client.messageSender(message);
         }
-        public void ctcpVersion(string CHANNEL)
+        public void ctcpVersion(string user)
         {
-            string message = notice(CHANNEL, "\x01" + "VERSION " + botVersion + "\x01");
+            string message = notice(user, "\x01" + "VERSION " + botVersion + "\x01");
             Client.messageSender(message);
         }
         ////

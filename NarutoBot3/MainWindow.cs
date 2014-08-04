@@ -1,15 +1,10 @@
 ﻿using NarutoBot3.Properties;
-using Newtonsoft.Json;
-using RedditSharp;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Timers;
@@ -20,6 +15,7 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         delegate void SetTextCallback(string text);
+        delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
 
         searchAnimeAPI animeAPI = new searchAnimeAPI();
@@ -36,7 +32,7 @@ namespace NarutoBot3
         RedditCredentials redditcredentials = new RedditCredentials();
         RleaseChecker releaseChecker = new RleaseChecker();
 
-        Bot bot;
+        Bot ircBot;
         public IrcClient client;
 
         System.Timers.Timer aTime;      //To check for manga releases
@@ -154,7 +150,7 @@ namespace NarutoBot3
 
         public bool connect()//This is where the bot connects to the server and logs in
         {
-            ChangeLabel("Connecting...");
+            ChangeConnectingLabel("Connecting...");
 
             loadSettings();
             client = new IrcClient(HOME_CHANNEL, HOST, PORT, NICK);
@@ -167,27 +163,27 @@ namespace NarutoBot3
             String buffer;
             exitThisShit = 0;
 
-            bot = new Bot(ref client, ref output2);
+            ircBot = new Bot(ref client, ref output2);
 
-            bot.Connected += new ConnectedChangedEventHandler(nowConnected);
+            ircBot.Connected += new ConnectedChangedEventHandler(nowConnected);
 
-            bot.Created += new UserListChangedEventHandler(userListCreated);
-            bot.Joined += (senderr, ee) => userJoined(senderr, ee, bot.Who);
-            bot.Left += (senderr, ee) => userLeft(senderr, ee, bot.Wholeft);
-            bot.NickChanged += (senderr, ee) => userNickChange(senderr, ee, bot.Who, bot.NewNick);
-            bot.Kicked += (senderr, ee) => userKicked(senderr, ee, bot.Who);
-            bot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, bot.Who, bot.Mode);
+            ircBot.Created += new UserListChangedEventHandler(userListCreated);
+            ircBot.Joined += (senderr, ee) => userJoined(senderr, ee, ircBot.Who);
+            ircBot.Left += (senderr, ee) => userLeft(senderr, ee, ircBot.Wholeft);
+            ircBot.NickChanged += (senderr, ee) => userNickChange(senderr, ee, ircBot.Who, ircBot.NewNick);
+            ircBot.Kicked += (senderr, ee) => userKicked(senderr, ee, ircBot.Who);
+            ircBot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, ircBot.Who, ircBot.Mode);
 
-            bot.MentionReceived += (senderr, ee) => { WriteMessage(returnmessage, Color.LightGreen); };
-            bot.MessageReceived += (senderr, ee) => { WriteMessage(returnmessage); };
+            ircBot.MentionReceived += (senderr, ee) => { WriteMessage(returnmessage, Color.LightGreen); };
+            ircBot.MessageReceived += (senderr, ee) => { WriteMessage(returnmessage); };
 
-            bot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee, returnmessage);
+            ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee, returnmessage);
 
-            bot.BotSilenced += new BotSilenceChange(botSilence);
-            bot.BotUnsilenced += new BotSilenceChange(botUnsilence);
+            ircBot.BotSilenced += new BotSilenceChange(botSilence);
+            ircBot.BotUnsilenced += new BotSilenceChange(botUnsilence);
 
-            bot.Quit += new Quit(letsQuit);
-            bot.LoadSettings();
+            ircBot.Quit += new Quit(letsQuit);
+            ircBot.LoadSettings();
 
             while (exitThisShit == 0)
             {
@@ -210,7 +206,7 @@ namespace NarutoBot3
                    
                     returnmessage = "";
 
-                    bot.BotMessage(line, out returnmessage);
+                    ircBot.BotMessage(line, out returnmessage);
 
                     //if (line.Contains("PRIVMSG"))
                     //{
@@ -232,7 +228,7 @@ namespace NarutoBot3
 
         private void disconnect()
         {
-            ChangeLabel("Disconnecting...");
+            ChangeConnectingLabel("Disconnecting...");
 
             client.Disconnect();
             Thread.Sleep(250);
@@ -248,14 +244,14 @@ namespace NarutoBot3
         {
             string message;
 
-            foreach (string n in bot.ops)
+            foreach (string n in ircBot.ops)
             {
                 if (String.Compare(n, nick, true) == 0)
                 {
                     message = "QUIT :Goodbye everyone!\n";
                     client.messageSender(message);
 
-                    ChangeLabel("Disconnecting...");
+                    ChangeConnectingLabel("Disconnecting...");
 
                     return 1;
                 }
