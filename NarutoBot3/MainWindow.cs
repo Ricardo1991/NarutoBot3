@@ -188,41 +188,17 @@ namespace NarutoBot3
             while (exitThisShit == 0)
             {
                 buffer = "";
-                bool gotIt = false;
                 try
                 {
                     buffer = client.messageReader();
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
-                    gotIt = true;
+                    ircBot.BotMessage(line, out returnmessage);
                 }
                 catch
                 { }
-
-                //Got a message
-                if (gotIt)
-                {
-                   
-                    returnmessage = "";
-
-                    ircBot.BotMessage(line, out returnmessage);
-
-                    //if (line.Contains("PRIVMSG"))
-                    //{
-                    //    if (line.Length < 30)
-                    //    {
-                    //        WriteMessage("line.Length < 30 : " + line);
-                    //    }
-
-                    //}
-                    //else
-                    //{
-                    //    WriteMessage(line);
-                    //}
-                }
             }
-
         }
 
 
@@ -238,34 +214,9 @@ namespace NarutoBot3
             output2.Clear();
             ChangeTitle("NarutoBot");
             exitThisShit = 1;
-
         }
-        public int quitIRC( string CHANNEL, string nick)
-        {
-            string message;
 
-            foreach (string n in ircBot.ops)
-            {
-                if (String.Compare(n, nick, true) == 0)
-                {
-                    message = "QUIT :Goodbye everyone!\n";
-                    client.messageSender(message);
-
-                    ChangeConnectingLabel("Disconnecting...");
-
-                    return 1;
-                }
-            }
-
-            return 0;
-        }
-        public void ping(string pingmsg, StreamWriter s)
-        {
-            pingmsg = pingmsg.Replace("PING :", "");
-
-            string message = "PONG :" + pingmsg + "\r\n";
-            s.WriteLine(message);
-        }
+        
         public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             //isConnected = false;

@@ -283,6 +283,7 @@ namespace NarutoBot3
                         {
                             Client.userList.Add(userO);
                         }
+
                         Client.userList.Sort();
                         userTemp.Clear();
 
@@ -458,9 +459,9 @@ namespace NarutoBot3
                         //Write Message on Console
                         if (msg.ToLower().Contains(Client.NICK.ToLower()))
                         {
-                            if (user.Length > 15)
+                            if (user.Length > 14)
                             {
-                                WriteMessage(user.Truncate(16) + ":" + msg, Color.LightGreen);
+                                WriteMessage(user.Truncate(15) + " : " + msg, Color.LightGreen);
                             }
                             else if (user.Length >= 8)                       //Write the message on the bot console
                             {
@@ -476,7 +477,7 @@ namespace NarutoBot3
                         {
                             if (user.Length > 14)
                             {
-                                WriteMessage(user.Truncate(15) + " :" + msg);
+                                WriteMessage(user.Truncate(15) + " : " + msg);
                             }
 
                             else if (user.Length >= 8)                       //Write the message on the bot console
@@ -2272,8 +2273,6 @@ namespace NarutoBot3
                 {
                     message = "QUIT :Goodbye everyone!\n";
                     Client.messageSender(message);
-
-                    //ChangeLabel("Disconnecting...");
 
                     return 1;
                 }

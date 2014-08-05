@@ -71,7 +71,7 @@
             this.input = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.output2 = new System.Windows.Forms.RichTextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.InterfaceUserList = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -415,7 +415,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.listBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.InterfaceUserList);
             this.splitContainer1.Size = new System.Drawing.Size(1015, 422);
             this.splitContainer1.SplitterDistance = 866;
             this.splitContainer1.TabIndex = 4;
@@ -438,14 +438,14 @@
             // 
             // listBox1
             // 
-            this.listBox1.ContextMenuStrip = this.contextMenuStrip1;
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(145, 422);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
+            this.InterfaceUserList.ContextMenuStrip = this.contextMenuStrip1;
+            this.InterfaceUserList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InterfaceUserList.FormattingEnabled = true;
+            this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
+            this.InterfaceUserList.Name = "listBox1";
+            this.InterfaceUserList.Size = new System.Drawing.Size(145, 422);
+            this.InterfaceUserList.TabIndex = 0;
+            this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
             // contextMenuStrip1
             // 
@@ -507,7 +507,7 @@
         private System.Windows.Forms.ToolStripMenuItem claimsURLToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem changeETAToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox InterfaceUserList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;

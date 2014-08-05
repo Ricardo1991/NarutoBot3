@@ -132,7 +132,7 @@ namespace NarutoBot3
         }
         public void UpdateDataSource()
         {
-            if (listBox1.InvokeRequired)
+            if (InterfaceUserList.InvokeRequired)
             {
                 ChangeDataSource d = new ChangeDataSource(UpdateDataSource);
                 this.Invoke(d);
@@ -140,8 +140,9 @@ namespace NarutoBot3
             }
             else
             {
-                listBox1.DataSource = null;
-                listBox1.DataSource = client.userList;
+                client.userList.Sort();
+                InterfaceUserList.DataSource = null;
+                InterfaceUserList.DataSource = client.userList;
 
             }
         }
@@ -459,7 +460,7 @@ namespace NarutoBot3
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             contextMenuStrip1.Items.Clear();
-            string nick = listBox1.SelectedItem.ToString().Replace("@", string.Empty).Replace("+", string.Empty);
+            string nick = InterfaceUserList.SelectedItem.ToString().Replace("@", string.Empty).Replace("+", string.Empty);
 
             contextMenuStrip1.Items.Add("Give " + nick + " Ops");
             contextMenuStrip1.Items.Add("Take " + nick + " Ops");
@@ -474,8 +475,8 @@ namespace NarutoBot3
             if (e.Button == MouseButtons.Right)
             {
                 //select the item under the mouse pointer
-                listBox1.SelectedIndex = listBox1.IndexFromPoint(e.Location);
-                if (listBox1.SelectedIndex != -1)
+                InterfaceUserList.SelectedIndex = InterfaceUserList.IndexFromPoint(e.Location);
+                if (InterfaceUserList.SelectedIndex != -1)
                 {
                     contextMenuStrip1.Show();
 
@@ -579,22 +580,6 @@ namespace NarutoBot3
             return result;
         }
 
-        public string notice(string destinatary, string message)
-        {
-            string result;
-
-            result = "NOTICE " + destinatary + " :" + message + "\r\n";
-
-            if (NICK.Length > 15)
-                WriteMessage(NICK.Truncate(16) + ":" + message);
-            else if (NICK.Length >= 8)                       //Write the message on the bot console
-                WriteMessage(NICK + "\t: " + message);
-            else
-                WriteMessage(NICK + "\t\t: " + message);
-
-            return result;
-        }
-
         private void userJoined(object sender, EventArgs e, string whoJoined)
         {
             foreach (Greeting g in ircBot.greet)
@@ -677,6 +662,7 @@ namespace NarutoBot3
 
         private void userListCreated(object sender, EventArgs e)
         {
+
             UpdateDataSource();
         }
         public void randomTextSender(object source, ElapsedEventArgs e)

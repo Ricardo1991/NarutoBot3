@@ -55,13 +55,13 @@ namespace NarutoBot3
                 messageSender(user_message);
                 messageSender(nick_message);
                 
-                return true;//Weee, we connected!
+                return true;    //Weee, we connected!
             }
 
             catch (SocketException se)
             {
                 Console.Out.Write(se);
-                return false;//Boo, we didnt connect
+                return false;   //Boo, we didnt connect
             }
         }
 
@@ -88,7 +88,6 @@ namespace NarutoBot3
 
         public string messageReader()
         {
-
             return reader.ReadLine();
         }
 
@@ -96,7 +95,6 @@ namespace NarutoBot3
         {
             userList.Clear();
 
-            quitIRC(writer, HOME_CHANNEL);
             try
             {
                 isConnected = false;
@@ -105,11 +103,6 @@ namespace NarutoBot3
                 irc.Close();
             }
             catch { }
-
-        }
-        private void quitIRC(StreamWriter s, string CHANNEL)
-        {
-            isConnected = false;
         }
     }
 }
