@@ -22,12 +22,16 @@ namespace NarutoBot3
         {
             tb_API.Text = Settings.Default.apikey;
             tb_cx.Text = Settings.Default.cxKey;
+            tb_User.Text = Settings.Default.malUser;
+            tb_Pass.Text = Settings.Default.malPass;
         }
 
         private void bt_Save_Click(object sender, EventArgs e)
         {
             Settings.Default.apikey = tb_API.Text;
             Settings.Default.cxKey = tb_cx.Text;
+            Settings.Default.malPass = tb_Pass.Text;
+            Settings.Default.malUser = tb_User.Text;
             Settings.Default.Save();
             this.Close();
         }

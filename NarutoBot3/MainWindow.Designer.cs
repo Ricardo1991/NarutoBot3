@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStripBottom = new System.Windows.Forms.StatusStrip();
             this.l_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelSilence = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.connectMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,29 +68,29 @@
             this.assignmentsURLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.claimsURLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.changeETAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.input = new System.Windows.Forms.TextBox();
+            this.InputBox = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.output2 = new System.Windows.Forms.RichTextBox();
+            this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.InterfaceUserList = new System.Windows.Forms.ListBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.statusStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.statusStripBottom.SuspendLayout();
+            this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // statusStrip1
+            // statusStripBottom
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.l_Status,
             this.toolStripStatusLabelSilence});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 467);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1015, 22);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStripBottom.Location = new System.Drawing.Point(0, 467);
+            this.statusStripBottom.Name = "statusStripBottom";
+            this.statusStripBottom.Size = new System.Drawing.Size(1015, 22);
+            this.statusStripBottom.TabIndex = 0;
+            this.statusStripBottom.Text = "statusStrip1";
             // 
             // l_Status
             // 
@@ -106,18 +106,19 @@
             this.toolStripStatusLabelSilence.Size = new System.Drawing.Size(83, 17);
             this.toolStripStatusLabelSilence.Text = "Bot is Silenced";
             // 
-            // toolStrip1
+            // toolStripMenu
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenu.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.toolStripButton1,
             this.toolStripDropDownButton2});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1015, 25);
-            this.toolStrip1.TabIndex = 2;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
+            this.toolStripMenu.Name = "toolStripMenu";
+            this.toolStripMenu.Size = new System.Drawing.Size(1015, 25);
+            this.toolStripMenu.TabIndex = 2;
+            this.toolStripMenu.Text = "toolStripMenu";
+            this.toolStripMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
             // toolStripDropDownButton1
             // 
@@ -393,15 +394,15 @@
             this.changeETAToolStripMenuItem.Text = "Change ETA";
             this.changeETAToolStripMenuItem.Click += new System.EventHandler(this.changeETAToolStripMenuItem_Click);
             // 
-            // input
+            // InputBox
             // 
-            this.input.AcceptsReturn = true;
-            this.input.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.input.Location = new System.Drawing.Point(0, 447);
-            this.input.Name = "input";
-            this.input.Size = new System.Drawing.Size(1015, 20);
-            this.input.TabIndex = 3;
-            this.input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
+            this.InputBox.AcceptsReturn = true;
+            this.InputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.InputBox.Location = new System.Drawing.Point(0, 447);
+            this.InputBox.Name = "InputBox";
+            this.InputBox.Size = new System.Drawing.Size(1015, 20);
+            this.InputBox.TabIndex = 3;
+            this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
             // 
             // splitContainer1
             // 
@@ -411,7 +412,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.output2);
+            this.splitContainer1.Panel1.Controls.Add(this.OutputBox);
             // 
             // splitContainer1.Panel2
             // 
@@ -420,40 +421,40 @@
             this.splitContainer1.SplitterDistance = 866;
             this.splitContainer1.TabIndex = 4;
             // 
-            // output2
+            // OutputBox
             // 
-            this.output2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.output2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.output2.Font = new System.Drawing.Font("Consolas", 8.25F);
-            this.output2.ForeColor = System.Drawing.Color.Silver;
-            this.output2.Location = new System.Drawing.Point(0, 0);
-            this.output2.Name = "output2";
-            this.output2.ReadOnly = true;
-            this.output2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.output2.Size = new System.Drawing.Size(866, 422);
-            this.output2.TabIndex = 2;
-            this.output2.Text = "";
-            this.output2.WordWrap = false;
-            this.output2.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
+            this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.OutputBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.OutputBox.ForeColor = System.Drawing.Color.Silver;
+            this.OutputBox.Location = new System.Drawing.Point(0, 0);
+            this.OutputBox.Name = "OutputBox";
+            this.OutputBox.ReadOnly = true;
+            this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.OutputBox.Size = new System.Drawing.Size(866, 422);
+            this.OutputBox.TabIndex = 2;
+            this.OutputBox.Text = "";
+            this.OutputBox.WordWrap = false;
+            this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
             // 
-            // listBox1
+            // InterfaceUserList
             // 
-            this.InterfaceUserList.ContextMenuStrip = this.contextMenuStrip1;
+            this.InterfaceUserList.ContextMenuStrip = this.contextMenuUserList;
             this.InterfaceUserList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InterfaceUserList.FormattingEnabled = true;
             this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
-            this.InterfaceUserList.Name = "listBox1";
+            this.InterfaceUserList.Name = "InterfaceUserList";
             this.InterfaceUserList.Size = new System.Drawing.Size(145, 422);
             this.InterfaceUserList.TabIndex = 0;
             this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
-            // contextMenuStrip1
+            // contextMenuUserList
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            this.contextMenuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
+            this.contextMenuUserList.Name = "contextMenuStrip1";
+            this.contextMenuUserList.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuUserList.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
+            this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuUserList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
             // 
             // MainWindow
             // 
@@ -461,16 +462,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1015, 489);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.input);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.InputBox);
+            this.Controls.Add(this.statusStripBottom);
+            this.Controls.Add(this.toolStripMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
             this.Text = "NarutoBot3";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.statusStripBottom.ResumeLayout(false);
+            this.statusStripBottom.PerformLayout();
+            this.toolStripMenu.ResumeLayout(false);
+            this.toolStripMenu.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -482,8 +483,8 @@
 
         #endregion
 
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.StatusStrip statusStripBottom;
+        private System.Windows.Forms.ToolStrip toolStripMenu;
         private System.Windows.Forms.ToolStripStatusLabel l_Status;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem connectMenuItem1;
@@ -498,7 +499,7 @@
         private System.Windows.Forms.ToolStripMenuItem mutedUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeNickToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSilence;
-        private System.Windows.Forms.TextBox input;
+        private System.Windows.Forms.TextBox InputBox;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem rulesTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTextToolStripMenuItem;
@@ -516,13 +517,13 @@
         private System.Windows.Forms.ToolStripMenuItem nickGeneratorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem triviaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redditCredentialsToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuUserList;
         private System.Windows.Forms.ToolStripMenuItem releaseCheckerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem randomTextIntervalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem t30;
         private System.Windows.Forms.ToolStripMenuItem t45;
         private System.Windows.Forms.ToolStripMenuItem t60;
-        private System.Windows.Forms.RichTextBox output2;
+        private System.Windows.Forms.RichTextBox OutputBox;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }

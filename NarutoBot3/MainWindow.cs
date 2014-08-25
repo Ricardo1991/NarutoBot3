@@ -81,11 +81,15 @@ namespace NarutoBot3
             }
 
 
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
+            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5 )
             {
                 Settings.Default.aniSearchEnabled = false;
                 Settings.Default.timeEnabled = false;
             }
+
+            if(Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
+                Settings.Default.aniSearchEnabled = false;
+
 
             if (Settings.Default.redditUser == "" || Settings.Default.redditPass == "")
                 Settings.Default.redditEnabled = false;
@@ -163,7 +167,7 @@ namespace NarutoBot3
             String buffer;
             exitThisShit = 0;
 
-            ircBot = new Bot(ref client, ref output2);
+            ircBot = new Bot(ref client, ref OutputBox);
 
             ircBot.Connected += new ConnectedChangedEventHandler(nowConnected);
 
@@ -199,6 +203,7 @@ namespace NarutoBot3
                 catch
                 { }
             }
+            disconnect();
         }
 
 
@@ -211,7 +216,8 @@ namespace NarutoBot3
 
             UpdateDataSource();
 
-            output2.Clear();
+            OutputBox.Clear();
+            
             ChangeTitle("NarutoBot");
             exitThisShit = 1;
         }
@@ -219,7 +225,7 @@ namespace NarutoBot3
         
         public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //isConnected = false;
+            
         }
 
         public void isMangaOutEvent(object source, ElapsedEventArgs e)
@@ -283,6 +289,11 @@ namespace NarutoBot3
             myProcess.Start();
 
             myProcess.Close();
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
 
     }

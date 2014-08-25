@@ -81,7 +81,6 @@ namespace NarutoBot3
 
 
 
-
         protected virtual void OnUnsilence(EventArgs e)
         {
             if (BotUnsilenced != null)
@@ -168,6 +167,7 @@ namespace NarutoBot3
                 MessageReturned(this, e);
         
         }
+
         IrcClient Client;
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
@@ -178,7 +178,13 @@ namespace NarutoBot3
         {
             Client = client;
             Output2 = output2;
+        }
 
+        ~Bot()
+        {
+            Client.Disconnect();
+            Output2.Clear();
+        
         }
 
         public void LoadSettings()
@@ -526,11 +532,7 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "quit", true) == 0)
                             {
                                 WriteMessage("*****  Recieved a quit request from " + user);
-                                int qu = quitIRC(user);
-                                Client.Disconnect();
-                                Thread.Sleep(100);
-                                if (qu == 1)
-                                    OnQuit(EventArgs.Empty);
+                                if(quitIRC(user)) OnQuit(EventArgs.Empty);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "oplist", true) == 0)
                             {
@@ -1953,7 +1955,16 @@ namespace NarutoBot3
         public void animeSeach(string CHANNEL, string nick, string line)
         {
             string message;
-            if (isMuted(nick)) return;
+            if (isMuted(nick))
+            {
+                WriteMessage(nick + " is ignored", Color.BlanchedAlmond);
+                return;
+            }
+            if (Settings.Default.silence == true || Settings.Default.aniSearchEnabled == false)
+            {
+                return;
+            }
+
             GoogleSeach g = new GoogleSeach();
             string json;
             bool user = false;
@@ -1967,76 +1978,78 @@ namespace NarutoBot3
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
-            if (Settings.Default.silence == false && Settings.Default.aniSearchEnabled == true)
+            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
+            webClient.Headers.Add("user-agent", "NarutoBot3");
+
+
+            try
             {
-                try
+                json = webClient.DownloadString(getString);
+                JsonConvert.PopulateObject(json, g);
+            }
+            catch { }
+
+            if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20"));
+            else
+            {
+                int i_max = 0; int i = 0; bool found = false;
+
+                if (g.items.Length < 4)
+                    i_max = g.items.Length - 1;
+                else i_max = 4;
+
+                while (i <= i_max && found == false)
                 {
-                    json = webClient.DownloadString(getString);
-                    JsonConvert.PopulateObject(json, g);
-                }
-                catch { }
-
-                if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20"));
-                else
-                {
-                    int i_max = 0; int i = 0; bool found = false;
-
-                    if (g.items.Length < 4)
-                        i_max = g.items.Length - 1;
-                    else i_max = 4;
-
-                    while (i <= i_max && found == false)
+                    if (!user)
                     {
-                        if (!user)
+                        if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
                         {
-                            if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
-                            {
-                                found = true;
-                            }
-                            else i++;
+                            found = true;
                         }
-                        else
+                        else i++;
+                    }
+                    else
+                    {
+                        if (g.items[i].link.Contains("http://myanimelist.net/profile/"))
                         {
-                            if (g.items[i].link.Contains("http://myanimelist.net/profile/"))
-                            {
-                                found = true;
-                            }
-                            else i++;
+                            found = true;
                         }
-
-
+                        else i++;
                     }
 
-                    if (!found) message = privmsg(CHANNEL, g.items[0].link);
-                    else
-                        if (!user)
-                        {
-                            string readHtml = webClient.DownloadString(g.items[i].link);
 
-                            string score = getBetween(readHtml, "Score:</span> ", "<sup><small>");
-                            string rank = getBetween(readHtml, ">Ranked #", "</div>");
-                            string title = getBetween(readHtml, ">Ranked #" + rank + "</div>", "</h1>");
-
-
-                            message = privmsg(CHANNEL, "[#" + rank + "] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
-
-                        }
-                        else
-                        {
-                            string readHtml = webClient.DownloadString(g.items[i].link);
-
-                            string profile = getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
-
-                            string completed = getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
-                            completed = getBetween(completed, "<td align=\"center\">", "</td>");
-
-
-                            message = privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link);
-                        }
                 }
-                Client.messageSender(message);
 
+                if (!found) message = privmsg(CHANNEL, g.items[0].link);
+                else
+                    if (!user)
+                    {
+                        string readHtml = webClient.DownloadString(g.items[i].link);
+
+                        string score = getBetween(readHtml, "Score:</span> ", "<sup><small>");
+                        string rank = getBetween(readHtml, ">Ranked #", "</div>");
+                        string title = getBetween(readHtml, ">Ranked #" + rank + "</div>", "</h1>");
+
+
+                        message = privmsg(CHANNEL, "[#" + rank + "] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+
+                    }
+                    else
+                    {
+                        string readHtml = webClient.DownloadString(g.items[i].link);
+
+                        string profile = getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
+
+                        string completed = getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
+                        completed = getBetween(completed, "<td align=\"center\">", "</td>");
+
+
+                        message = privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link);
+                    }
             }
+            Client.messageSender(message);
+
+            
         }
 
         public void vimeo(string CHANNEL, string nick, string line)
@@ -2263,7 +2276,7 @@ namespace NarutoBot3
                 Client.messageSender(message);
             }
         }
-        public int quitIRC(string nick)
+        public bool quitIRC(string nick)
         {
             string message;
 
@@ -2274,11 +2287,11 @@ namespace NarutoBot3
                     message = "QUIT :Goodbye everyone!\n";
                     Client.messageSender(message);
 
-                    return 1;
+                    return true;
                 }
             }
 
-            return 0;
+            return false;
         }
 
         ///////////////////////////////////

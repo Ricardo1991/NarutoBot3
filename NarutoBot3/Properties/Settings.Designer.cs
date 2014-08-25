@@ -478,5 +478,29 @@ namespace NarutoBot3.Properties {
                 this["twitterEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string malUser {
+            get {
+                return ((string)(this["malUser"]));
+            }
+            set {
+                this["malUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string malPass {
+            get {
+                return ((string)(this["malPass"]));
+            }
+            set {
+                this["malPass"] = value;
+            }
+        }
     }
 }

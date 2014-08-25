@@ -20,7 +20,7 @@ namespace NarutoBot3
         }
         public void ChangeSilenceLabel(String message)
         {
-            if (statusStrip1.InvokeRequired)
+            if (statusStripBottom.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(ChangeSilenceLabel);
                 this.Invoke(d, new object[] { message });
@@ -34,7 +34,7 @@ namespace NarutoBot3
         public void ChangeSilenceCheckBox(bool status)//toolStrip1
         {
 
-            if (toolStrip1.InvokeRequired)
+            if (toolStripMenu.InvokeRequired)
             {
                 SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
                 this.Invoke(d, new object[] { status });
@@ -61,19 +61,19 @@ namespace NarutoBot3
         }
         public void ChangeInput(String title)
         {
-            if (output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(ChangeInput);
                 this.Invoke(d, new object[] { title });
             }
             else
             {
-                this.input.Text = title;
+                this.InputBox.Text = title;
             }
         }
         public void WriteMessage(String message) //Writes message on the TextBox (bot console)
         {
-            if (output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 try
                 {
@@ -86,7 +86,8 @@ namespace NarutoBot3
             }
             else
             {
-                this.output2.AppendText(message + "\n");
+                this.OutputBox.AppendText(message + "\n");
+
             }
 
             //also, should make a log
@@ -94,7 +95,7 @@ namespace NarutoBot3
         }
         public void WriteMessage(String message, Color color) //Writes message on the TextBox (bot console)
         {
-            if (output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 try
                 {
@@ -105,7 +106,7 @@ namespace NarutoBot3
             }
             else
             {
-                this.output2.AppendText(message + "\n", color);
+                this.OutputBox.AppendText(message + "\n", color);
             }
 
             //also, should make a log
@@ -113,17 +114,17 @@ namespace NarutoBot3
         }
         public void OutputClear(string bah)
         {
-            if (output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(OutputClear);
                 this.Invoke(d, new object[] { " " });
             }
             else
             {
-                var lines = this.output2.Lines;
+                var lines = this.OutputBox.Lines;
                 var newLines = lines.Skip(1);
 
-                this.output2.Lines = newLines.ToArray();
+                this.OutputBox.Lines = newLines.ToArray();
 
 
                 //this.output.Clear();
@@ -254,7 +255,6 @@ namespace NarutoBot3
             if (client.isConnected)
                 disconnect();
             ChangeConnectingLabel("Disconnected");
-            //isConnected = false;
         }
 
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -286,23 +286,23 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Up)
             {
-                input.Text = lastCommand;
+                InputBox.Text = lastCommand;
             }
 
             if (e.KeyCode == Keys.Enter)
             {
-                lastCommand = input.Text;
+                lastCommand = InputBox.Text;
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
                 string message="";
 
                 if (!client.isConnected) return;
-                if (input.Text == "") return;
+                if (InputBox.Text == "") return;
 
                 char[] param = new char[1];
                 param[0] = ' ';
-                string[] parsed = input.Text.Split(param, 2); //parsed[0] is the command, parsed[1] is the rest              
+                string[] parsed = InputBox.Text.Split(param, 2); //parsed[0] is the command, parsed[1] is the rest              
 
                 if (parsed.Length >= 2)
                 {
@@ -330,7 +330,7 @@ namespace NarutoBot3
                                     if (parsed[0] == "/query" || parsed[0] == "/pm" && parsed[1] != "" || parsed[0] == "/msg" && parsed[1] != "")  //Action send
                                     {
 
-                                        string[] parsed2 = input.Text.Split(param, 3);
+                                        string[] parsed2 = InputBox.Text.Split(param, 3);
                                         if (parsed2.Length >= 3)
                                             message = privmsg(parsed2[1], parsed2[2]);
                                     }
@@ -347,7 +347,8 @@ namespace NarutoBot3
                                             else
                                             {
                                                 //Normal send
-                                                message = privmsg(HOME_CHANNEL, input.Text);
+                                                if(parsed[0][0]!='/')
+                                                    message = privmsg(HOME_CHANNEL, InputBox.Text);
 
                                             }
                 }
@@ -361,7 +362,8 @@ namespace NarutoBot3
                     else
                     {
                         //Normal send
-                        message = privmsg(HOME_CHANNEL, input.Text);
+                        if (parsed[0][0] != '/')
+                            message = privmsg(HOME_CHANNEL, InputBox.Text);
                     }
 
 
@@ -459,15 +461,15 @@ namespace NarutoBot3
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            contextMenuStrip1.Items.Clear();
+            contextMenuUserList.Items.Clear();
             string nick = InterfaceUserList.SelectedItem.ToString().Replace("@", string.Empty).Replace("+", string.Empty);
 
-            contextMenuStrip1.Items.Add("Give " + nick + " Ops");
-            contextMenuStrip1.Items.Add("Take " + nick + " Ops");
-            contextMenuStrip1.Items.Add("Mute " + nick);
-            contextMenuStrip1.Items.Add("Unmute " + nick);
-            contextMenuStrip1.Items.Add("Poke " + nick);
-            contextMenuStrip1.Items.Add("Whois " + nick);
+            contextMenuUserList.Items.Add("Give " + nick + " Ops");
+            contextMenuUserList.Items.Add("Take " + nick + " Ops");
+            contextMenuUserList.Items.Add("Mute " + nick);
+            contextMenuUserList.Items.Add("Unmute " + nick);
+            contextMenuUserList.Items.Add("Poke " + nick);
+            contextMenuUserList.Items.Add("Whois " + nick);
         }
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)
@@ -478,7 +480,7 @@ namespace NarutoBot3
                 InterfaceUserList.SelectedIndex = InterfaceUserList.IndexFromPoint(e.Location);
                 if (InterfaceUserList.SelectedIndex != -1)
                 {
-                    contextMenuStrip1.Show();
+                    contextMenuUserList.Show();
 
                 }
             }
@@ -486,7 +488,7 @@ namespace NarutoBot3
 
         private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            contextMenuStrip1.Items.Clear();
+            contextMenuUserList.Items.Clear();
         }
 
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

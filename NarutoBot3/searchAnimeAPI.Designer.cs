@@ -33,8 +33,14 @@
             this.groupBoxAPI = new System.Windows.Forms.GroupBox();
             this.tb_API = new System.Windows.Forms.TextBox();
             this.bt_Save = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tb_User = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tb_Pass = new System.Windows.Forms.TextBox();
             this.cx_group.SuspendLayout();
             this.groupBoxAPI.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cx_group
@@ -62,7 +68,7 @@
             this.groupBoxAPI.Size = new System.Drawing.Size(481, 63);
             this.groupBoxAPI.TabIndex = 0;
             this.groupBoxAPI.TabStop = false;
-            this.groupBoxAPI.Text = "API - for !time and !anime";
+            this.groupBoxAPI.Text = "API - for !anime and !time";
             // 
             // tb_API
             // 
@@ -73,7 +79,7 @@
             // 
             // bt_Save
             // 
-            this.bt_Save.Location = new System.Drawing.Point(418, 155);
+            this.bt_Save.Location = new System.Drawing.Point(419, 330);
             this.bt_Save.Name = "bt_Save";
             this.bt_Save.Size = new System.Drawing.Size(75, 23);
             this.bt_Save.TabIndex = 1;
@@ -81,11 +87,57 @@
             this.bt_Save.UseVisualStyleBackColor = true;
             this.bt_Save.Click += new System.EventHandler(this.bt_Save_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tb_Pass);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.tb_User);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(13, 151);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(481, 109);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "myAnimeList Credentials - for !anime";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Username";
+            // 
+            // tb_User
+            // 
+            this.tb_User.Location = new System.Drawing.Point(78, 28);
+            this.tb_User.Name = "tb_User";
+            this.tb_User.Size = new System.Drawing.Size(122, 20);
+            this.tb_User.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 67);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Password";
+            // 
+            // tb_Pass
+            // 
+            this.tb_Pass.Location = new System.Drawing.Point(78, 64);
+            this.tb_Pass.Name = "tb_Pass";
+            this.tb_Pass.Size = new System.Drawing.Size(122, 20);
+            this.tb_Pass.TabIndex = 1;
+            // 
             // searchAnimeAPI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 190);
+            this.ClientSize = new System.Drawing.Size(506, 365);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bt_Save);
             this.Controls.Add(this.groupBoxAPI);
             this.Controls.Add(this.cx_group);
@@ -97,6 +149,8 @@
             this.cx_group.PerformLayout();
             this.groupBoxAPI.ResumeLayout(false);
             this.groupBoxAPI.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -108,5 +162,10 @@
         private System.Windows.Forms.GroupBox groupBoxAPI;
         private System.Windows.Forms.TextBox tb_API;
         private System.Windows.Forms.Button bt_Save;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox tb_Pass;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tb_User;
+        private System.Windows.Forms.Label label1;
     }
 }
