@@ -49,7 +49,7 @@ namespace NarutoBot3
 
         string returnmessage = "";
 
-        int exitThisShit = 0;
+        bool exitTheLoop = false;
 
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
 
@@ -142,8 +142,9 @@ namespace NarutoBot3
 
             if (result == DialogResult.OK)
             {
-                if (connect())//If connected with success, then start the bot
-                {                 
+                if (connect())//If connected with sfuccess, then start the bot
+                {
+                    exitTheLoop = false;
                     backgroundWorker1.RunWorkerAsync();
                     //isConnected = true;
                 }
@@ -158,18 +159,25 @@ namespace NarutoBot3
 
             loadSettings();
             client = new IrcClient(HOME_CHANNEL, HOST, PORT, NICK);
-            return client.Connect();
+
+
+            if (client.Connect())
+            {
+                exitTheLoop = false;
+                return true;
+            }
+            else return false;
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //This is the main bot cycle... Pretty much everything happens here
         {
             //Main Loop
             String buffer;
-            exitThisShit = 0;
 
             ircBot = new Bot(ref client, ref OutputBox);
 
             ircBot.Connected += new ConnectedChangedEventHandler(nowConnected);
+            ircBot.ConnectedWithServer += new ConnectedChangedEventHandler(nowConnectedWithServer);
 
             ircBot.Created += new UserListChangedEventHandler(userListCreated);
             ircBot.Joined += (senderr, ee) => userJoined(senderr, ee, ircBot.Who);
@@ -187,9 +195,12 @@ namespace NarutoBot3
             ircBot.BotUnsilenced += new BotSilenceChange(botUnsilence);
 
             ircBot.Quit += new Quit(letsQuit);
+
+            ircBot.DuplicatedNick += new NickAlreadyInUse(duplicatedNick);
+
             ircBot.LoadSettings();
 
-            while (exitThisShit == 0)
+            while (!exitTheLoop)
             {
                 buffer = "";
                 try
@@ -203,7 +214,7 @@ namespace NarutoBot3
                 catch
                 { }
             }
-            disconnect();
+            //disconnect();
         }
 
 
@@ -212,20 +223,23 @@ namespace NarutoBot3
             ChangeConnectingLabel("Disconnecting...");
 
             client.Disconnect();
+            
             Thread.Sleep(250);
 
             UpdateDataSource();
 
-            OutputBox.Clear();
+            OutputClean();
             
             ChangeTitle("NarutoBot");
-            exitThisShit = 1;
+
+            exitTheLoop = true;
+            
         }
 
         
         public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            ChangeConnectingLabel("Disconnected");
         }
 
         public void isMangaOutEvent(object source, ElapsedEventArgs e)
@@ -289,11 +303,6 @@ namespace NarutoBot3
             myProcess.Start();
 
             myProcess.Close();
-        }
-
-        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
         }
 
     }

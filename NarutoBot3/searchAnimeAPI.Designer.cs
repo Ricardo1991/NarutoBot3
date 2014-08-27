@@ -34,10 +34,10 @@
             this.tb_API = new System.Windows.Forms.TextBox();
             this.bt_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tb_User = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.tb_Pass = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tb_User = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.cx_group.SuspendLayout();
             this.groupBoxAPI.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -66,7 +66,7 @@
             this.groupBoxAPI.Location = new System.Drawing.Point(13, 81);
             this.groupBoxAPI.Name = "groupBoxAPI";
             this.groupBoxAPI.Size = new System.Drawing.Size(481, 63);
-            this.groupBoxAPI.TabIndex = 0;
+            this.groupBoxAPI.TabIndex = 1;
             this.groupBoxAPI.TabStop = false;
             this.groupBoxAPI.Text = "API - for !anime and !time";
             // 
@@ -82,7 +82,7 @@
             this.bt_Save.Location = new System.Drawing.Point(419, 330);
             this.bt_Save.Name = "bt_Save";
             this.bt_Save.Size = new System.Drawing.Size(75, 23);
-            this.bt_Save.TabIndex = 1;
+            this.bt_Save.TabIndex = 3;
             this.bt_Save.Text = "Save";
             this.bt_Save.UseVisualStyleBackColor = true;
             this.bt_Save.Click += new System.EventHandler(this.bt_Save_Click);
@@ -100,21 +100,12 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "myAnimeList Credentials - for !anime";
             // 
-            // label1
+            // tb_Pass
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Username";
-            // 
-            // tb_User
-            // 
-            this.tb_User.Location = new System.Drawing.Point(78, 28);
-            this.tb_User.Name = "tb_User";
-            this.tb_User.Size = new System.Drawing.Size(122, 20);
-            this.tb_User.TabIndex = 1;
+            this.tb_Pass.Location = new System.Drawing.Point(78, 64);
+            this.tb_Pass.Name = "tb_Pass";
+            this.tb_Pass.Size = new System.Drawing.Size(122, 20);
+            this.tb_Pass.TabIndex = 3;
             // 
             // label2
             // 
@@ -125,12 +116,21 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Password";
             // 
-            // tb_Pass
+            // tb_User
             // 
-            this.tb_Pass.Location = new System.Drawing.Point(78, 64);
-            this.tb_Pass.Name = "tb_Pass";
-            this.tb_Pass.Size = new System.Drawing.Size(122, 20);
-            this.tb_Pass.TabIndex = 1;
+            this.tb_User.Location = new System.Drawing.Point(78, 28);
+            this.tb_User.Name = "tb_User";
+            this.tb_User.Size = new System.Drawing.Size(122, 20);
+            this.tb_User.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Username";
             // 
             // searchAnimeAPI
             // 

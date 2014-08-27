@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -61,7 +62,7 @@ namespace NarutoBot3
         }
         public void ChangeInput(String title)
         {
-            if (OutputBox.InvokeRequired)
+            if (InputBox.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(ChangeInput);
                 this.Invoke(d, new object[] { title });
@@ -131,6 +132,27 @@ namespace NarutoBot3
             }
 
         }
+
+        public void OutputClean()
+        {
+            if (OutputBox.InvokeRequired)
+            {
+                try
+                {
+                    MethodInvoker invoker = () => OutputClean();
+                    Invoke(invoker);
+                }
+                catch { }
+            }
+            else
+            {
+                OutputBox.Clear();
+
+            }
+        
+        
+        
+        }
         public void UpdateDataSource()
         {
             if (InterfaceUserList.InvokeRequired)
@@ -193,36 +215,57 @@ namespace NarutoBot3
             if (result == DialogResult.OK)
             {
                 //Re-do Connect!
-                if (client.isConnected)
+                if (client != null)
                 {
-                    DialogResult resultWarning;
-                    resultWarning = MessageBox.Show("This bot is already connected./nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-
-                    if (result == System.Windows.Forms.DialogResult.OK)
+                    if (client.isConnected)
                     {
-                        disconnect();
+                        DialogResult resultWarning;
+                        resultWarning = MessageBox.Show("This bot is already connected./nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
+                        if (result == System.Windows.Forms.DialogResult.OK)
+                        {
+                            disconnect();
+                            Thread.Sleep(250);
+
+                            ChangeConnectingLabel("Connecting...");
+
+                            if (connect())//If connected with success, then start the bot
+                            {
+                                backgroundWorker1.RunWorkerAsync();
+                            }
+                            else
+                                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else return;
+                    }
+                    else
+                    {
                         ChangeConnectingLabel("Connecting...");
 
-                        HOME_CHANNEL = Settings.Default.Channel;
-                        HOST = Settings.Default.Server;
-                        NICK = Settings.Default.Nick;
-                        PORT = Convert.ToInt32(Settings.Default.Port);
+                        if (connect())//If connected with success, then start the bot
+                        {
+                            backgroundWorker1.RunWorkerAsync();
+                        }
+                        else
+                            MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } 
+                }
+                else
+                {
+                    ChangeConnectingLabel("Connecting...");
 
-                        connect();
+                    HOME_CHANNEL = Settings.Default.Channel;
+                    HOST = Settings.Default.Server;
+                    NICK = Settings.Default.Nick;
+                    PORT = Convert.ToInt32(Settings.Default.Port);
+
+                    if (connect())//If connected with success, then start the bot
+                    {
                         backgroundWorker1.RunWorkerAsync();
                     }
-                    else return;
-                }
-                ChangeConnectingLabel("Connecting...");
-
-                HOME_CHANNEL = Settings.Default.Channel;
-                HOST = Settings.Default.Server;
-                NICK = Settings.Default.Nick;
-                PORT = Convert.ToInt32(Settings.Default.Port);
-
-                connect();
-                backgroundWorker1.RunWorkerAsync();
+                    else
+                        MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                } 
             }
         }
 
@@ -254,7 +297,6 @@ namespace NarutoBot3
         {
             if (client.isConnected)
                 disconnect();
-            ChangeConnectingLabel("Disconnected");
         }
 
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -266,7 +308,11 @@ namespace NarutoBot3
         {
             nickWindow.ShowDialog();
             NICK = Settings.Default.Nick;
-            ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+            if (client.HOST_SERVER != "")
+                ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
+            else
+                ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+
             //do nick change to server
             if (client.isConnected)
             {
@@ -507,7 +553,7 @@ namespace NarutoBot3
             {
                 if (Settings.Default.releaseEnabled)
                 {
-                    string message = privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + " for the chapter " + Settings.Default.chapterNumber + " every " + Settings.Default.checkInterval + " seconds.");
+                    string message = privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + Settings.Default.chapterNumber + " for the chapter every " + Settings.Default.checkInterval + " seconds.");
                     aTime.Interval = Settings.Default.checkInterval * 1000;
                     aTime.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
                     aTime.Enabled = true;
@@ -656,10 +702,13 @@ namespace NarutoBot3
 
         private void nowConnected(object sender, EventArgs e)
         {
-            //isConnected = true;
             ChangeConnectingLabel("Connected");
             client.Join();
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+        }
+        private void nowConnectedWithServer(object sender, EventArgs e)
+        {
+            ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
         }
 
         private void userListCreated(object sender, EventArgs e)
@@ -680,14 +729,19 @@ namespace NarutoBot3
 
         public void letsQuit(object sender, EventArgs e)
         {
-            exitThisShit = 1;
+            disconnect();
             
         }
 
         public bool changeNick(string nick)
         {
             client.NICK = Settings.Default.Nick = nick;
-            ChangeTitle( client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+
+            if (client.HOST_SERVER != "")
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            else
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+            
             
 
             //do nick change to server
@@ -698,6 +752,25 @@ namespace NarutoBot3
                 return true;
             }
             else return false;
+        }
+
+        public void duplicatedNick(object sender, EventArgs e)
+        {
+            Random r = new Random();
+
+            disconnect();
+
+            Settings.Default.Nick = client.NICK + r.Next(10);
+            Settings.Default.Save();
+
+
+            if (connect())//If connected with success, then start the bot
+            {
+
+                backgroundWorker1.RunWorkerAsync();
+                //isConnected = true;
+            }
+
         }
 
     }

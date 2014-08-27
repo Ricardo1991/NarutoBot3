@@ -34,14 +34,14 @@
             this.l_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelSilence = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripButtonNarutoBot = new System.Windows.Forms.ToolStripDropDownButton();
             this.connectMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.changeNickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripButtonSettings = new System.Windows.Forms.ToolStripDropDownButton();
             this.silencedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,7 +61,7 @@
             this.t30 = new System.Windows.Forms.ToolStripMenuItem();
             this.t45 = new System.Windows.Forms.ToolStripMenuItem();
             this.t60 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripButtonText = new System.Windows.Forms.ToolStripDropDownButton();
             this.rulesTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -110,76 +110,75 @@
             // 
             this.toolStripMenu.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton1,
-            this.toolStripButton1,
-            this.toolStripDropDownButton2});
+            this.toolStripButtonNarutoBot,
+            this.toolStripButtonSettings,
+            this.toolStripButtonText});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Size = new System.Drawing.Size(1015, 25);
             this.toolStripMenu.TabIndex = 2;
             this.toolStripMenu.Text = "toolStripMenu";
-            this.toolStripMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
-            // toolStripDropDownButton1
+            // toolStripButtonNarutoBot
             // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonNarutoBot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonNarutoBot.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectMenuItem1,
             this.disconnectToolStripMenuItem,
             this.toolStripSeparator5,
             this.changeNickToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.ShowDropDownArrow = false;
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(66, 22);
-            this.toolStripDropDownButton1.Text = "&NarutoBot";
+            this.toolStripButtonNarutoBot.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNarutoBot.Image")));
+            this.toolStripButtonNarutoBot.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNarutoBot.Name = "toolStripButtonNarutoBot";
+            this.toolStripButtonNarutoBot.ShowDropDownArrow = false;
+            this.toolStripButtonNarutoBot.Size = new System.Drawing.Size(66, 22);
+            this.toolStripButtonNarutoBot.Text = "&NarutoBot";
             // 
             // connectMenuItem1
             // 
             this.connectMenuItem1.Name = "connectMenuItem1";
-            this.connectMenuItem1.Size = new System.Drawing.Size(142, 22);
+            this.connectMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.connectMenuItem1.Text = "Connect...";
             this.connectMenuItem1.Click += new System.EventHandler(this.connectMenuItem1_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // changeNickToolStripMenuItem
             // 
             this.changeNickToolStripMenuItem.Name = "changeNickToolStripMenuItem";
-            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.changeNickToolStripMenuItem.Text = "Change Nick";
             this.changeNickToolStripMenuItem.Click += new System.EventHandler(this.changeNickToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Quit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // toolStripButton1
+            // toolStripButtonSettings
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.silencedToolStripMenuItem,
             this.commandsToolStripMenuItem,
             this.toolStripSeparator6,
@@ -192,13 +191,13 @@
             this.toolStripSeparator2,
             this.reloadToolStripMenuItem,
             this.randomTextIntervalToolStripMenuItem});
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.ShowDropDownArrow = false;
-            this.toolStripButton1.Size = new System.Drawing.Size(53, 22);
-            this.toolStripButton1.Text = "&Settings";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButtonSettings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSettings.Image")));
+            this.toolStripButtonSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSettings.Name = "toolStripButtonSettings";
+            this.toolStripButtonSettings.ShowDropDownArrow = false;
+            this.toolStripButtonSettings.Size = new System.Drawing.Size(53, 22);
+            this.toolStripButtonSettings.Text = "&Settings";
+            this.toolStripButtonSettings.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // silencedToolStripMenuItem
             // 
@@ -337,22 +336,22 @@
             this.t60.Text = "60 minutes";
             this.t60.Click += new System.EventHandler(this.t60_Click);
             // 
-            // toolStripDropDownButton2
+            // toolStripButtonText
             // 
-            this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonText.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rulesTextToolStripMenuItem,
             this.helpTextToolStripMenuItem,
             this.toolStripSeparator4,
             this.assignmentsURLToolStripMenuItem1,
             this.claimsURLToolStripMenuItem1,
             this.changeETAToolStripMenuItem});
-            this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
-            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.ShowDropDownArrow = false;
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(33, 22);
-            this.toolStripDropDownButton2.Text = "&Text";
+            this.toolStripButtonText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonText.Image")));
+            this.toolStripButtonText.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonText.Name = "toolStripButtonText";
+            this.toolStripButtonText.ShowDropDownArrow = false;
+            this.toolStripButtonText.Size = new System.Drawing.Size(33, 22);
+            this.toolStripButtonText.Text = "&Text";
             // 
             // rulesTextToolStripMenuItem
             // 
@@ -486,12 +485,12 @@
         private System.Windows.Forms.StatusStrip statusStripBottom;
         private System.Windows.Forms.ToolStrip toolStripMenu;
         private System.Windows.Forms.ToolStripStatusLabel l_Status;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButtonNarutoBot;
         private System.Windows.Forms.ToolStripMenuItem connectMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButton1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButtonSettings;
         private System.Windows.Forms.ToolStripMenuItem operatorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commandsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem silencedToolStripMenuItem;
@@ -500,7 +499,7 @@
         private System.Windows.Forms.ToolStripMenuItem changeNickToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSilence;
         private System.Windows.Forms.TextBox InputBox;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButtonText;
         private System.Windows.Forms.ToolStripMenuItem rulesTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

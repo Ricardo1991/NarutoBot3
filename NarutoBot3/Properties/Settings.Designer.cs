@@ -373,7 +373,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("675")]
+        [global::System.Configuration.DefaultSettingValueAttribute("690")]
         public string chapterNumber {
             get {
                 return ((string)(this["chapterNumber"]));

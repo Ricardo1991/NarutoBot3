@@ -18,6 +18,8 @@ namespace NarutoBot3
         public string NICK;
         public string SYMBOL = "!";
 
+        public string HOST_SERVER;
+
         string user_message;
         string nick_message;
         string join_message;

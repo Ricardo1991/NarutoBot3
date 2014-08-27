@@ -27,6 +27,8 @@ namespace NarutoBot3
 
     public delegate void BotNameChanged(object sender, EventArgs e);
 
+    public delegate void NickAlreadyInUse(object sender, EventArgs e);
+
     public class Bot
     {
 
@@ -59,6 +61,8 @@ namespace NarutoBot3
         bool conneceted = false;
         public bool isConnected{get { return conneceted; }set { conneceted = value; }}
 
+        public event NickAlreadyInUse DuplicatedNick;
+
         public event UserListChangedEventHandler Created;
         public event UserListChangedEventHandler Joined;
         public event UserListChangedEventHandler Left;
@@ -69,6 +73,7 @@ namespace NarutoBot3
         public event ReturnMessageChanged MessageReturned;
 
         public event ConnectedChangedEventHandler Connected;
+        public event ConnectedChangedEventHandler ConnectedWithServer;
 
         public event ClientMessageReceived MessageReceived;
         public event ClientMessageReceived MentionReceived;
@@ -81,6 +86,19 @@ namespace NarutoBot3
         public event Quit Quit;
 
 
+
+        protected virtual void OnConnectedWithServer(EventArgs e)
+        {
+            if (ConnectedWithServer != null)
+                ConnectedWithServer(this, e);
+        
+        }
+
+        protected virtual void OnDuplicatedNick(EventArgs e)
+        {
+            if (DuplicatedNick != null)
+                DuplicatedNick(this, e);
+        }
 
         protected virtual void OnUnsilence(EventArgs e)
         {
@@ -234,6 +252,21 @@ namespace NarutoBot3
 
                 switch (command)
                 {
+                    case ("004"): //server used for connection
+
+                        Client.HOST_SERVER = parameters[1];
+                        WriteMessage("* " + command + " " + completeParameters);
+                        
+ 
+                        break;
+
+                    //:nova.esper.net 433 * SekiKun :Nickname is already in use.
+                    case("433"):
+                        OnDuplicatedNick(EventArgs.Empty);
+                        WriteMessage("* " + command + " " + completeParameters);
+
+                        break;
+
                     case ("353"): //USERLIST
                        
                         foreach(string s in parameters[3].Split(' '))
@@ -253,7 +286,11 @@ namespace NarutoBot3
                         if(completeParameters.Contains("End of /MOTD command."))
                         {
                             isConnected = true;
-                            OnConenct(EventArgs.Empty); 
+                            OnConenct(EventArgs.Empty);
+
+                            if(Client.HOST_SERVER!="")
+                                OnConnectedWithServer(EventArgs.Empty);
+
                         }
                             
                         break;
@@ -694,59 +731,64 @@ namespace NarutoBot3
                                     nickGen(Client.HOME_CHANNEL, user, "");
                                 }
                             }
-                            else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
+                        else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
+                        {
+                            WriteMessage("*****  Detected an youtube video from  " + user);
+                            youtube(whoSent, user, msg);
+                        }
+
+                        else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
+                        {
+                            WriteMessage("*****  Detected a short youtube video from  " + user);
+                            youtubeS(whoSent, user, msg);
+                        }
+
+                        else if (msg.Contains("vimeo.f"))
+                        {
+                            WriteMessage("*****  Detected an vimeo video from  " + user);
+                            vimeo(whoSent, user, msg);
+                        }
+
+                        else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
+                        {
+                            WriteMessage("*****  Detected a reddit link from  " + user);
+                            redditLink(whoSent, user, msg);
+                        }
+
+                        else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
+                        {
+                            WriteMessage("*****  Detected a twiiter link from  " + user);
+                            twitter(whoSent, user, msg);
+                        }
+
+                        else if (message.Contains("\x01"))
+                        {
+                            if (cmd.Contains("VERSION"))
                             {
-                                WriteMessage("*****  Detected an youtube video from  " + user);
-                                youtube(whoSent, user, msg);
+                                WriteMessage("\n*****  Recieved a ctcp version request from " + user);
+                                ctcpVersion(user);
                             }
 
-                            else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
+                            if (cmd.Contains("TIME"))
                             {
-                                WriteMessage("*****  Detected a short youtube video from  " + user);
-                                youtubeS(whoSent, user, msg);
+                                WriteMessage("\n*****  Recieved a ctcp time request from " + user);
+                                ctcpTime(user);
                             }
-
-                            else if (msg.Contains("vimeo.com"))
+                            if (cmd.Contains("PING"))
                             {
-                                WriteMessage("*****  Detected an vimeo video from  " + user);
-                                vimeo(whoSent, user, msg);
+                                WriteMessage("\n*****  Recieved a ctcp ping request from " + user);
+                                ctcpPing(user, arg);
                             }
+                        }
 
-                            else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
+                        else //No parsing, just a normal message
+                        {
+                            if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
                             {
-                                WriteMessage("*****  Detected a reddit link from  " + user);
-                                redditLink(whoSent, user, msg);
+                                pastMessage p = new pastMessage(user, msg);
+                                pastMessages.Add(p);
                             }
-
-                            else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
-                            {
-                                WriteMessage("*****  Detected a twiiter link from  " + user);
-                                twitter(whoSent, user, msg);
-                            }
-
-                            else if (message.Contains("\x01"))
-                            {
-                                if (cmd.Contains("VERSION"))
-                                {
-                                    WriteMessage("\n*****  Recieved a ctcp version request from " + user);
-                                    ctcpVersion(user);
-                                }
-
-                                if (cmd.Contains("TIME"))
-                                {
-                                    WriteMessage("\n*****  Recieved a ctcp time request from " + user);
-                                    ctcpTime(user);
-                                }
-                            }
-
-                            else //No parsing, just a normal message
-                            {
-                                if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
-                                {
-                                    pastMessage p = new pastMessage(user, msg);
-                                    pastMessages.Add(p);
-                                }
-                            }
+                        }
                         
 
                         break;
@@ -779,13 +821,20 @@ namespace NarutoBot3
                                 WriteMessage("\n*****  Recieved a ctcp time request from " + userr);
                                 ctcpTime(userr);
                             }
+                            if (cmdd.Contains("PING"))
+                            {
+                                WriteMessage("\n*****  Recieved a ctcp ping request from " + userr);
+                                
+                                ctcpPing(userr, argg);
+                            }
                         }
                         else WriteMessage(message, Color.DodgerBlue);
                         
                         break;
 
                     default:
-                        WriteMessage(message);
+                        //WriteMessage(message);
+                        WriteMessage("* " + command + " " + completeParameters);
                         break;
                         
                 }
@@ -1956,6 +2005,7 @@ namespace NarutoBot3
         public void animeSeach(string CHANNEL, string nick, string line)
         {
             string message;
+
             if (isMuted(nick))
             {
                 WriteMessage(nick + " is ignored", Color.BlanchedAlmond);
@@ -1966,6 +2016,8 @@ namespace NarutoBot3
                 return;
             }
 
+            if (line == "" || line == " ") return;
+
             GoogleSeach g = new GoogleSeach();
             anime a = new anime();
 
@@ -1974,7 +2026,6 @@ namespace NarutoBot3
 
             bool user = false;
 
-            if (line == "" || line == " ") return;
 
             if (line.Contains("-u") || line.Contains("-user")) user = true;
 
@@ -1986,7 +2037,7 @@ namespace NarutoBot3
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
             webClient.Headers.Add("user-agent", "NarutoBot3");
 
-            string name="";
+            string name = "";
 
             try
             {
@@ -2347,6 +2398,12 @@ namespace NarutoBot3
             string message = notice(user, "\x01" + "VERSION " + botVersion + "\x01");
             Client.messageSender(message);
         }
+
+        public void ctcpPing(string user, string stamp)
+        {
+            string message = notice(user, "\x01" + "PING " + stamp + "\x01");
+            Client.messageSender(message);
+        }
         ////
 
         public bool isMuted(string nick)
@@ -2413,7 +2470,11 @@ namespace NarutoBot3
         public bool changeNick(string nick, out string returnmessage)
         {
             Client.NICK = Settings.Default.Nick = nick;
-            returnmessage=Client.NICK + " @ " + Client.HOME_CHANNEL + " - " + Client.HOST + ":" + Client.PORT;
+
+            if (Client.HOST_SERVER != "")
+                returnmessage = Client.NICK + " @ " + Client.HOME_CHANNEL + " - " + Client.HOST + ":" + Client.PORT + " (" + Client.HOST_SERVER + ")";
+            else
+                returnmessage = Client.NICK + " @ " + Client.HOME_CHANNEL + " - " + Client.HOST + ":" + Client.PORT;
             OnBotNickChanged(EventArgs.Empty);
 
             //do nick change to server

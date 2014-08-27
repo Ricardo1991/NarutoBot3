@@ -90,7 +90,7 @@
       <Value Profile="(Default)">http://www.mangapanda.com/naruto/</Value>
     </Setting>
     <Setting Name="chapterNumber" Type="System.String" Scope="User">
-      <Value Profile="(Default)">675</Value>
+      <Value Profile="(Default)">690</Value>
     </Setting>
     <Setting Name="checkInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
