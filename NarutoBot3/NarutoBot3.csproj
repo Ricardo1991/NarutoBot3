@@ -129,6 +129,7 @@
     <Compile Include="muted.Designer.cs">
       <DependentUpon>muted.cs</DependentUpon>
     </Compile>
+    <Compile Include="myAnimeListAnime.cs" />
     <Compile Include="nick.cs">
       <SubType>Form</SubType>
     </Compile>

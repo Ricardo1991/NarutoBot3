@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace NarutoBot3
 {
@@ -1966,14 +1967,18 @@ namespace NarutoBot3
             }
 
             GoogleSeach g = new GoogleSeach();
+            anime a = new anime();
+
             string json;
+            string jsonAnime;
+
             bool user = false;
 
             if (line == "" || line == " ") return;
 
-            if (line.Contains("-u") == true) user = true;
+            if (line.Contains("-u") || line.Contains("-user")) user = true;
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -u", "%20");
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -u", "%20").Replace(" -user", "%20");
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -1981,6 +1986,7 @@ namespace NarutoBot3
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
             webClient.Headers.Add("user-agent", "NarutoBot3");
 
+            string name="";
 
             try
             {
@@ -2005,6 +2011,7 @@ namespace NarutoBot3
                         if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
                         {
                             found = true;
+                            name = g.items[i].link;
                         }
                         else i++;
                     }
@@ -2024,19 +2031,39 @@ namespace NarutoBot3
                 else
                     if (!user)
                     {
-                        string readHtml = webClient.DownloadString(g.items[i].link);
+                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+");
 
-                        string score = getBetween(readHtml, "Score:</span> ", "<sup><small>");
-                        string rank = getBetween(readHtml, ">Ranked #", "</div>");
-                        string title = getBetween(readHtml, ">Ranked #" + rank + "</div>", "</h1>");
+                        try
+                        {
+                            jsonAnime = webClient.DownloadString(getString);
+                            XmlSerializer serializer = new XmlSerializer(typeof(anime));
+                            using (StringReader reader = new StringReader(jsonAnime))
+                            {
+                                a = (anime)(serializer.Deserialize(reader));
+                            }
+                        }
+                        catch { }
+
+                        //string readHtml = webClient.DownloadString(g.items[i].link);
+
+                        //string score = getBetween(readHtml, "Score:</span> ", "<sup><small>");
+                        //string rank = getBetween(readHtml, ">Ranked #", "</div>");
+                        //string title = getBetween(readHtml, ">Ranked #" + rank + "</div>", "</h1>");
+
+                        string score = a.entry[0].score.ToString();
+                        string episodes = a.entry[0].episodes.ToString();
+                        string title = a.entry[0].title;
+
+                        
 
 
-                        message = privmsg(CHANNEL, "[#" + rank + "] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        //message = privmsg(CHANNEL, "[#" + rank + "] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
                     }
                     else
                     {
-                        string readHtml = webClient.DownloadString(g.items[i].link);
+                        string readHtml = webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
 
                         string profile = getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
 
@@ -2044,7 +2071,7 @@ namespace NarutoBot3
                         completed = getBetween(completed, "<td align=\"center\">", "</td>");
 
 
-                        message = privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link);
+                        message = privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                     }
             }
             Client.messageSender(message);
