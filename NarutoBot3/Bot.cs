@@ -1978,7 +1978,7 @@ namespace NarutoBot3
 
             if (line.Contains("-u") || line.Contains("-user")) user = true;
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -u", "%20").Replace(" -user", "%20");
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -1995,7 +1995,7 @@ namespace NarutoBot3
             }
             catch { }
 
-            if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20"));
+            if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20"));
             else
             {
                 int i_max = 0; int i = 0; bool found = false;
@@ -2031,7 +2031,8 @@ namespace NarutoBot3
                 else
                     if (!user)
                     {
-                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+");
+                        string[] animeName = name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+").Split('/');
+                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName[1];
 
                         try
                         {
