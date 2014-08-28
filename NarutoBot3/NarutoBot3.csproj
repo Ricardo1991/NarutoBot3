@@ -170,6 +170,7 @@
     <Compile Include="searchAnimeAPI.Designer.cs">
       <DependentUpon>searchAnimeAPI.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaigaAnnounce.cs" />
     <Compile Include="TimeZoneAPI.cs" />
     <Compile Include="truncate.cs" />
     <EmbeddedResource Include="assignments.resx">

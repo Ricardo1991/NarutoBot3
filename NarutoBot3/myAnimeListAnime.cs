@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
@@ -52,7 +53,7 @@ namespace NarutoBot3
 
         private System.DateTime start_dateField;
 
-        private System.DateTime end_dateField;
+        private string end_dateField;
 
         private string synopsisField;
 
@@ -177,8 +178,7 @@ namespace NarutoBot3
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
-        public System.DateTime end_date
+        public string end_date
         {
             get
             {
@@ -218,5 +218,6 @@ namespace NarutoBot3
     }
 
 
-}
 
+
+}

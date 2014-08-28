@@ -1122,8 +1122,8 @@ namespace NarutoBot3
         /// <summary>
         /// Sends a message to the destinatary
         /// </summary>
-        /// <param name="destinatary">string with either a user or a channel, it's where the message will be sent</param>
-        /// <param name="message">String of text with the message that will be delivered</param>
+        /// <param Name="destinatary">string with either a User or a channel, it's where the message will be sent</param>
+        /// <param Name="message">String of text with the message that will be delivered</param>
         public string privmsg(string destinatary, string message)
         {
             string result;
@@ -1153,8 +1153,8 @@ namespace NarutoBot3
         /// <summary>
         /// Sends a notice to the destinatary
         /// </summary>
-        /// <param name="destinatary">string with either a user or a channel, it's where the message will be sent</param>
-        /// <param name="message">String of text with the message that will be delivered</param>
+        /// <param Name="destinatary">string with either a User or a channel, it's where the message will be sent</param>
+        /// <param Name="message">String of text with the message that will be delivered</param>
         public string notice(string destinatary, string message)
         {
             string result;
@@ -1253,10 +1253,10 @@ namespace NarutoBot3
         ///////////////////////////////////
 
         /// <summary>
-        /// Adds a nick name to the Bot Operator list
+        /// Adds a nick Name to the Bot Operator list
         /// </summary>
-        /// <param name="nick">the user that called the command</param>
-        /// <param name="targetUser">the user to be made bot operator</param>
+        /// <param Name="nick">the User that called the command</param>
+        /// <param Name="targetUser">the User to be made bot operator</param>
         bool addBotOP(string nick, string targetUser)
         {
             string message;
@@ -1280,10 +1280,10 @@ namespace NarutoBot3
             }
         }
         /// <summary>
-        /// Removes a nick name to the Bot Operator list
+        /// Removes a nick Name to the Bot Operator list
         /// </summary>
-        /// <param name="nick">the user that called the command</param>
-        /// <param name="targetUser">the user to be removed from the bot operator list</param>
+        /// <param Name="nick">the User that called the command</param>
+        /// <param Name="targetUser">the User to be removed from the bot operator list</param>
         bool removeBotOP(string nick, string targetUser)
         {
             string message;
@@ -1928,7 +1928,7 @@ namespace NarutoBot3
                 webClient.Encoding = Encoding.UTF8;
                 string readHtml = webClient.DownloadString(url);
 
-                author = getBetween(readHtml, "<span>&rlm;</span><span class=\"username js-action-profile-name\"><s>@</s><b>", "</b></span>");
+                author = getBetween(readHtml, "<span>&rlm;</span><span class=\"username js-action-profile-Name\"><s>@</s><b>", "</b></span>");
                 tweet = getBetween(readHtml, "<p class=\"js-tweet-text tweet-text\">", "</p>");
 
                 author = StripTagsRegex(author);
@@ -1972,15 +1972,15 @@ namespace NarutoBot3
             bool user = false;
 
 
-            if (line.Contains("-u") || line.Contains("-user")) user = true;
+            if (line.Contains("-u") || line.Contains("-User")) user = true;
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
-            webClient.Headers.Add("user-agent", "NarutoBot3");
+            webClient.Headers.Add("User-agent", "NarutoBot3");
 
             string name = "";
 
@@ -1991,7 +1991,7 @@ namespace NarutoBot3
             }
             catch { }
 
-            if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20"));
+            if (g.items == null) message = privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20"));
             else
             {
                 int i_max = 0; int i = 0; bool found = false;
@@ -2039,22 +2039,13 @@ namespace NarutoBot3
                                 a = (anime)(serializer.Deserialize(reader));
                             }
                         }
-                        catch { }
+                        catch { } 
 
-                        //string readHtml = webClient.DownloadString(g.items[i].link);
-
-                        //string score = getBetween(readHtml, "Score:</span> ", "<sup><small>");
-                        //string rank = getBetween(readHtml, ">Ranked #", "</div>");
-                        //string title = getBetween(readHtml, ">Ranked #" + rank + "</div>", "</h1>");
 
                         string score = a.entry[0].score.ToString();
                         string episodes = a.entry[0].episodes.ToString();
                         string title = a.entry[0].title;
-
-                        
-
-
-                        //message = privmsg(CHANNEL, "[#" + rank + "] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+ 
                         message = privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
                     }

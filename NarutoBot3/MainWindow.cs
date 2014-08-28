@@ -53,6 +53,10 @@ namespace NarutoBot3
 
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
 
+        BackgroundWorker backgroundHttpListener = new BackgroundWorker();
+
+        bool isListening = false;
+
         public void loadSettings()
         {
             switch (Settings.Default.randomTextInterval)
@@ -134,7 +138,8 @@ namespace NarutoBot3
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker1.WorkerSupportsCancellation = true;
 
-            
+            backgroundHttpListener.DoWork += new DoWorkEventHandler(backgroundHttpListener_Cycle);
+            backgroundHttpListener.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundHttpListener_Completed);
 
             lastCommand = "";
 
@@ -200,8 +205,17 @@ namespace NarutoBot3
 
             ircBot.LoadSettings();
 
+            backgroundHttpListener.RunWorkerAsync();
+            isListening = true;
+
             while (!exitTheLoop)
             {
+                if (!isListening)
+                {
+                    backgroundHttpListener.RunWorkerAsync();
+                    isListening = true;
+                }
+
                 buffer = "";
                 try
                 {
@@ -213,6 +227,7 @@ namespace NarutoBot3
                 }
                 catch
                 { }
+
             }
             //disconnect();
         }
@@ -303,6 +318,54 @@ namespace NarutoBot3
             myProcess.Start();
 
             myProcess.Close();
+        }
+
+
+        public void backgroundHttpListener_Cycle(object sender, DoWorkEventArgs e)
+        {
+            //HttpListener listener = new HttpListener();
+
+            //listener.Prefixes.Add("http://localhost:7079/");
+            //AddAddress("http://localhost:7079/", Environment.UserDomainName, Environment.UserName);
+
+            //listener.Start();
+
+            //while(client.isConnected)
+            //{
+            //    HttpListenerContext context = listener.GetContext();
+            //    HttpListenerRequest request = context.Request;
+
+            //    string documentContents;
+            //    using (Stream receiveStream = request.InputStream)
+            //    {
+            //        using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+            //        {
+            //            documentContents = readStream.ReadToEnd();
+            //        }
+            //    }
+            //    string body = documentContents;
+            //    body=Uri.UnescapeDataString(body);
+            //    string[] split = body.Split('&');
+
+            //    TaigaAnnounce taigaAnime = new TaigaAnnounce(split);
+
+            //    string message = privmsg(client.HOME_CHANNEL, taigaAnime.User + " just watched episode " + taigaAnime.Ep + " out of " + taigaAnime.Total + " of " + taigaAnime.Name);
+
+            //    byte[] bytes = Encoding.Default.GetBytes(message);
+            //    message = Encoding.UTF8.GetString(bytes);
+
+            //    client.messageSender(message);
+            //}
+
+            
+            //listener.Stop();
+        }
+
+        public void backgroundHttpListener_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            isListening = false;
+        
+        
         }
 
     }

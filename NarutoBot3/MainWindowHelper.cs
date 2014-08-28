@@ -1,6 +1,7 @@
 ﻿using NarutoBot3.Properties;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -80,8 +81,6 @@ namespace NarutoBot3
                 {
                     MethodInvoker invoker = () => WriteMessage(message);
                     Invoke(invoker);
-                    //SetTextCallback d = new SetTextCallback(WriteMessage);
-                    //this.Invoke(d, new object[] { message });
                 }
                 catch { }
             }
@@ -127,8 +126,6 @@ namespace NarutoBot3
 
                 this.OutputBox.Lines = newLines.ToArray();
 
-
-                //this.output.Clear();
             }
 
         }
@@ -147,26 +144,21 @@ namespace NarutoBot3
             else
             {
                 OutputBox.Clear();
-
             }
-        
-        
-        
         }
+
         public void UpdateDataSource()
         {
             if (InterfaceUserList.InvokeRequired)
             {
                 ChangeDataSource d = new ChangeDataSource(UpdateDataSource);
                 this.Invoke(d);
-
             }
             else
             {
                 client.userList.Sort();
                 InterfaceUserList.DataSource = null;
                 InterfaceUserList.DataSource = client.userList;
-
             }
         }
 
@@ -202,9 +194,7 @@ namespace NarutoBot3
                     break;
             }
             ircBot.SaveOPS();
-
         }
-
 
         //UI Events
 
@@ -771,6 +761,19 @@ namespace NarutoBot3
                 //isConnected = true;
             }
 
+        }
+        /** method stolen from an SO thread. sorry can't remember the author **/
+        static void AddAddress(string address, string domain, string user)
+        {
+            string args = string.Format(@"http add urlacl url={0}", address) + " user=\"" + domain + "\\" + user + "\"";
+
+            ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
+            psi.Verb = "runas";
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = true;
+
+            Process.Start(psi).WaitForExit();
         }
 
     }
