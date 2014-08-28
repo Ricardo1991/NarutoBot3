@@ -37,6 +37,7 @@ namespace NarutoBot3
         public List<string> hlp = new List<string>();
         public List<string> ban = new List<string>();
         public List<string> tri = new List<string>();
+        public List<string> kill = new List<string>();
         public List<Greeting> greet = new List<Greeting>();
         public List<string> nickGenStrings;
         public List<pastMessage> pastMessages = new List<pastMessage>();
@@ -213,6 +214,7 @@ namespace NarutoBot3
             readHLP();              //help text
             readTRI();              //trivia strings
             readGREET();            //read greetings
+            readKILLS();
             loadNickGenStrings();   //For the nick generator
 
             if (Settings.Default.redditUserEnabled)
@@ -680,6 +682,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a nickname request from " + user, Color.Pink);
                                 nickGen(Client.HOME_CHANNEL, user, arg);
                             }
+                        else if (String.Compare(cmd, Client.SYMBOL + "kill", true) == 0 && arg != "")
+                            {
+                                WriteMessage("* Received a kill request from " + user, Color.Pink);
+                                killUser(Client.HOME_CHANNEL, user, arg);
+                            }
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("* Detected an youtube video from  " + user, Color.Pink);
@@ -693,10 +700,10 @@ namespace NarutoBot3
                             }
 
                         else if (msg.Contains("vimeo.f"))
-                        {
-                            WriteMessage("* Detected an vimeo video from  " + user, Color.Pink);
-                            vimeo(whoSent, user, msg);
-                        }
+                            {
+                                WriteMessage("* Detected an vimeo video from  " + user, Color.Pink);
+                                vimeo(whoSent, user, msg);
+                            }
 
                         else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
                             {
@@ -850,6 +857,23 @@ namespace NarutoBot3
             return '0';
         }
 
+
+        public void readKILLS()
+        {
+            kill.Clear();
+            try
+            {
+                StreamReader sr = new StreamReader("kills.txt");
+                while (sr.Peek() >= 0)
+                {
+                    kill.Add(sr.ReadLine());
+                }
+                sr.Close();
+            }
+            catch
+            {
+            }
+        }
         public void SaveOPS()
         {
             using (StreamWriter newTask = new StreamWriter("ops.txt", false))
@@ -1928,8 +1952,10 @@ namespace NarutoBot3
                 webClient.Encoding = Encoding.UTF8;
                 string readHtml = webClient.DownloadString(url);
 
-                author = getBetween(readHtml, "<span>&rlm;</span><span class=\"username js-action-profile-Name\"><s>@</s><b>", "</b></span>");
+                author = getBetween(readHtml, "<span class=\"username js-action-profile-name\"><s>@</s><b>", "</b></span>");
                 tweet = getBetween(readHtml, "<p class=\"js-tweet-text tweet-text\">", "</p>");
+                if(tweet.Contains("<a "))
+                    tweet = tweet.Substring(0, tweet.IndexOf("<a "));
 
                 author = StripTagsRegex(author);
                 tweet = StripTagsRegex(tweet);
@@ -2122,7 +2148,20 @@ namespace NarutoBot3
 
             }
         }
+        public void killUser(string CHANNEL, string nick, string args)
+        {
+            Random r = new Random();
+            if (isMuted(nick)) return;
 
+            if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
+            {
+                string killString = kill[r.Next(kill.Count)].Replace("<target>", args).Replace("<user>", nick);
+
+                string message = privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                Client.messageSender(message);
+
+            }
+        }
         public void nickGen(string CHANNEL, string nick, string args)
         {
             Random rnd = new Random();

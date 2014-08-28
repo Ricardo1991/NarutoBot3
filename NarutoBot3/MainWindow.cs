@@ -368,5 +368,10 @@ namespace NarutoBot3
         
         }
 
+        private void killToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ircBot.readKILLS();
+        }
+
     }
 }

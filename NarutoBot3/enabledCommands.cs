@@ -16,6 +16,7 @@ namespace NarutoBot3
         public enabledCommands()
         {
             InitializeComponent();
+            cb_Kill.Checked = Settings.Default.killEnabled;
             cb_Anime.Checked = Settings.Default.aniSearchEnabled;
             cb_randomText.Checked = Settings.Default.randomTextEnabled;
             cb_Wiki.Checked = Settings.Default.wikiEnabled;
@@ -40,6 +41,7 @@ namespace NarutoBot3
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Settings.Default.killEnabled = cb_Kill.Checked;
             Settings.Default.twitterEnabled = cb_twitter.Checked;
             Settings.Default.randomTextEnabled = cb_randomText.Checked;
             Settings.Default.wikiEnabled = cb_Wiki.Checked;

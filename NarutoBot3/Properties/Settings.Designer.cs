@@ -502,5 +502,17 @@ namespace NarutoBot3.Properties {
                 this["malPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool killEnabled {
+            get {
+                return ((bool)(this["killEnabled"]));
+            }
+            set {
+                this["killEnabled"] = value;
+            }
+        }
     }
 }
