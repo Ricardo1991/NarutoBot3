@@ -2065,14 +2065,29 @@ namespace NarutoBot3
                                 a = (anime)(serializer.Deserialize(reader));
                             }
                         }
-                        catch { } 
+                        catch { }
+
+                        if (a == null)
+                        {
+                            #if DEBUG
+                            message = privmsg(CHANNEL, "a=null");
+                            #else
+                            message = privmsg(CHANNEL, "");
+                            
+                            #endif
+
+                        }
+                        else
+                        {
+                            string score = a.entry[0].score.ToString();
+                            string episodes = a.entry[0].episodes.ToString();
+                            string title = a.entry[0].title;
+
+                            message = privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        }
 
 
-                        string score = a.entry[0].score.ToString();
-                        string episodes = a.entry[0].episodes.ToString();
-                        string title = a.entry[0].title;
- 
-                        message = privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                       
 
                     }
                     else
@@ -2155,9 +2170,17 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
-                string killString = kill[r.Next(kill.Count)].Replace("<target>", args).Replace("<user>", nick);
+                string message;
+                if (args.ToLower() == "la kill".Trim())
+                {
+                    message = privmsg(CHANNEL, nick + " lost his way");
+                }
+                else
+                {
+                    string killString = kill[r.Next(kill.Count)].Replace("<target>", args.Trim()).Replace("<user>", nick.Trim());
 
-                string message = privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                    message = privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                }
                 Client.messageSender(message);
 
             }

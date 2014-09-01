@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace NarutoBot3
 {
 
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
@@ -43,7 +44,7 @@ namespace NarutoBot3
 
         private string synonymsField;
 
-        private byte episodesField;
+        private ushort episodesField;
 
         private decimal scoreField;
 
@@ -51,7 +52,7 @@ namespace NarutoBot3
 
         private string statusField;
 
-        private System.DateTime start_dateField;
+        private string start_dateField;
 
         private string end_dateField;
 
@@ -112,7 +113,7 @@ namespace NarutoBot3
         }
 
         /// <remarks/>
-        public byte episodes
+        public ushort episodes
         {
             get
             {
@@ -164,8 +165,7 @@ namespace NarutoBot3
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
-        public System.DateTime start_date
+        public string start_date
         {
             get
             {
@@ -216,6 +216,8 @@ namespace NarutoBot3
             }
         }
     }
+
+
 
 
 
