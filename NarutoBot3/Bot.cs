@@ -23,6 +23,9 @@ namespace NarutoBot3
     public delegate void ClientMessageReceived(object sender, EventArgs e);
     public delegate void Quit(object sender, EventArgs e);
 
+    public delegate void TimeOut(object sender, EventArgs e);
+    public delegate void PongReceived(object sender, EventArgs e);
+
     public delegate void BotSilenceChange(object sender, EventArgs e);
 
     public delegate void BotNameChanged(object sender, EventArgs e);
@@ -71,6 +74,9 @@ namespace NarutoBot3
         public event UserListChangedEventHandler ModeChanged;
         public event UserListChangedEventHandler Kicked;
 
+        public event TimeOut TimeOut;
+        public event PongReceived PongReceived;
+
         public event ReturnMessageChanged MessageReturned;
 
         public event ConnectedChangedEventHandler Connected;
@@ -86,7 +92,37 @@ namespace NarutoBot3
 
         public event Quit Quit;
 
+        private System.Timers.Timer dTime;
 
+
+        private string pingTimeStamp;
+        private bool waitigForPong = false;
+
+        public TimeSpan timeDifference;
+
+
+
+
+        public bool WaitigForPong
+        {
+            get { return waitigForPong; }
+            set { waitigForPong = value; }
+        }
+
+        protected virtual void OnPongReceived(EventArgs e)
+        {
+            if (PongReceived != null)
+                PongReceived(this, e);
+
+        }
+
+
+        protected virtual void OnTimeOut(EventArgs e)
+        {
+            if (TimeOut != null)
+                TimeOut(this, e);
+
+        }
 
         protected virtual void OnConnectedWithServer(EventArgs e)
         {
@@ -246,6 +282,10 @@ namespace NarutoBot3
                 var prefixend = message.IndexOf(":");
                 string pingcmd = message.Substring(prefixend+1);
                 Client.messageSender("PONG :" + pingcmd + "\r\n");
+
+                #if DEBUG
+                WriteMessage(message);
+                #endif
             }
 
             else
@@ -295,6 +335,33 @@ namespace NarutoBot3
 
                         }
                             
+                        break;
+
+                    case ("PONG"):
+                        string[] split = message.Split(':');
+                        string pongcmd = split[2];
+
+                        #if DEBUG
+                        WriteMessage(message);
+                        #endif
+
+                        if (WaitigForPong)
+                        {
+                            string currentStamp = GetTimestamp(DateTime.Now);
+                            string format = "mmssffff";
+
+                            DateTime now, then;
+
+                            now = DateTime.ParseExact(currentStamp, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
+                            then = DateTime.ParseExact(pongcmd, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
+
+                            timeDifference = now.Subtract(then);
+
+                            WaitigForPong = false;
+
+                            OnPongReceived(EventArgs.Empty);
+                        }
+
                         break;
 
                     case ("JOIN"):
@@ -2070,7 +2137,7 @@ namespace NarutoBot3
                         if (a == null)
                         {
                             #if DEBUG
-                            message = privmsg(CHANNEL, "a=null");
+                            message = privmsg(CHANNEL, "Error: a=null");
                             #else
                             message = privmsg(CHANNEL, "");
                             
@@ -2518,6 +2585,11 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Writes a message on the output window
+        /// </summary>
+        /// <param name="message">A sting with the message to write</param>
+
         public void WriteMessage(String message) //Writes message on the TextBox (bot console)
         {
             if (Output2.InvokeRequired)
@@ -2565,6 +2637,42 @@ namespace NarutoBot3
         public string StripTagsRegex(string source)
         {
             return Regex.Replace(source, "<.*?>", string.Empty);
+        }
+
+        private static String GetTimestamp(DateTime value)
+        {
+            return value.ToString("mmssffff");
+        }
+
+        public void pingSever()
+        {
+            if (!WaitigForPong)
+            {
+                string timeStamp = GetTimestamp(DateTime.Now);
+                pingTimeStamp = timeStamp;
+                string message = "PING " + timeStamp;
+                #if DEBUG
+                WriteMessage("PING " + timeStamp);
+                #endif
+                Client.messageSender(message);
+
+                WaitigForPong = true;
+
+                dTime = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
+                dTime.Enabled = false;
+
+                dTime.Elapsed += (sender, e) => checkIfTimeout(sender, e);
+            }
+
+        }
+
+        void checkIfTimeout(object sender, EventArgs e)
+        {
+            if (WaitigForPong)
+            {
+                WriteMessage("* The connection timed out. Will try to reconnect.");
+                OnTimeOut(EventArgs.Empty);
+            }
         }
 
     }

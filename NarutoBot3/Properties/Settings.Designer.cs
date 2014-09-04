@@ -514,5 +514,29 @@ namespace NarutoBot3.Properties {
                 this["killEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int timeOutTimeInterval {
+            get {
+                return ((int)(this["timeOutTimeInterval"]));
+            }
+            set {
+                this["timeOutTimeInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("45")]
+        public int pingServerInterval {
+            get {
+                return ((int)(this["pingServerInterval"]));
+            }
+            set {
+                this["pingServerInterval"] = value;
+            }
+        }
     }
 }

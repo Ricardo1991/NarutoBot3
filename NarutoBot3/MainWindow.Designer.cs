@@ -33,6 +33,7 @@
             this.statusStripBottom = new System.Windows.Forms.StatusStrip();
             this.l_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelSilence = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolstripLag = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNarutoBot = new System.Windows.Forms.ToolStripDropDownButton();
             this.connectMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,11 +53,6 @@
             this.operatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mutedUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nickGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.triviaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.randomTextIntervalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.t30 = new System.Windows.Forms.ToolStripMenuItem();
             this.t45 = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,12 +64,20 @@
             this.assignmentsURLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.claimsURLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.changeETAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.reloadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.rulesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.nickGeneratorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.triviasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.killStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InputBox = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.InterfaceUserList = new System.Windows.Forms.ListBox();
             this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripBottom.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -86,7 +90,8 @@
             // 
             this.statusStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.l_Status,
-            this.toolStripStatusLabelSilence});
+            this.toolStripStatusLabelSilence,
+            this.toolstripLag});
             this.statusStripBottom.Location = new System.Drawing.Point(0, 467);
             this.statusStripBottom.Name = "statusStripBottom";
             this.statusStripBottom.Size = new System.Drawing.Size(1015, 22);
@@ -106,6 +111,14 @@
             this.toolStripStatusLabelSilence.Name = "toolStripStatusLabelSilence";
             this.toolStripStatusLabelSilence.Size = new System.Drawing.Size(83, 17);
             this.toolStripStatusLabelSilence.Text = "Bot is Silenced";
+            // 
+            // toolstripLag
+            // 
+            this.toolstripLag.Name = "toolstripLag";
+            this.toolstripLag.Size = new System.Drawing.Size(807, 17);
+            this.toolstripLag.Spring = true;
+            this.toolstripLag.Text = "00m 00s 0000m";
+            this.toolstripLag.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripMenu
             // 
@@ -141,14 +154,14 @@
             // 
             this.connectMenuItem1.Name = "connectMenuItem1";
             this.connectMenuItem1.Size = new System.Drawing.Size(142, 22);
-            this.connectMenuItem1.Text = "Connect...";
+            this.connectMenuItem1.Text = "&Connect...";
             this.connectMenuItem1.Click += new System.EventHandler(this.connectMenuItem1_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
             this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.disconnectToolStripMenuItem.Text = "Disconnect";
+            this.disconnectToolStripMenuItem.Text = "&Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
@@ -160,7 +173,7 @@
             // 
             this.changeNickToolStripMenuItem.Name = "changeNickToolStripMenuItem";
             this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.changeNickToolStripMenuItem.Text = "Change Nick";
+            this.changeNickToolStripMenuItem.Text = "Change &Nick";
             this.changeNickToolStripMenuItem.Click += new System.EventHandler(this.changeNickToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
@@ -173,7 +186,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.exitToolStripMenuItem.Text = "Quit";
+            this.exitToolStripMenuItem.Text = "&Quit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // toolStripButtonSettings
@@ -190,7 +203,6 @@
             this.operatorsToolStripMenuItem,
             this.mutedUsersToolStripMenuItem,
             this.toolStripSeparator2,
-            this.reloadToolStripMenuItem,
             this.randomTextIntervalToolStripMenuItem});
             this.toolStripButtonSettings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSettings.Image")));
             this.toolStripButtonSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -267,46 +279,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(214, 6);
             // 
-            // reloadToolStripMenuItem
-            // 
-            this.reloadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rulesToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.nickGeneratorToolStripMenuItem,
-            this.triviaToolStripMenuItem,
-            this.killToolStripMenuItem});
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.reloadToolStripMenuItem.Text = "Reload...";
-            // 
-            // rulesToolStripMenuItem
-            // 
-            this.rulesToolStripMenuItem.Name = "rulesToolStripMenuItem";
-            this.rulesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.rulesToolStripMenuItem.Text = "Rules";
-            this.rulesToolStripMenuItem.Click += new System.EventHandler(this.rulesToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
-            // 
-            // nickGeneratorToolStripMenuItem
-            // 
-            this.nickGeneratorToolStripMenuItem.Name = "nickGeneratorToolStripMenuItem";
-            this.nickGeneratorToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.nickGeneratorToolStripMenuItem.Text = "Nick Generator";
-            this.nickGeneratorToolStripMenuItem.Click += new System.EventHandler(this.nickGeneratorToolStripMenuItem_Click);
-            // 
-            // triviaToolStripMenuItem
-            // 
-            this.triviaToolStripMenuItem.Name = "triviaToolStripMenuItem";
-            this.triviaToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.triviaToolStripMenuItem.Text = "Trivia";
-            this.triviaToolStripMenuItem.Click += new System.EventHandler(this.triviaToolStripMenuItem_Click);
-            // 
             // randomTextIntervalToolStripMenuItem
             // 
             this.randomTextIntervalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -347,7 +319,9 @@
             this.toolStripSeparator4,
             this.assignmentsURLToolStripMenuItem1,
             this.claimsURLToolStripMenuItem1,
-            this.changeETAToolStripMenuItem});
+            this.changeETAToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.reloadToolStripMenuItem1});
             this.toolStripButtonText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonText.Image")));
             this.toolStripButtonText.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonText.Name = "toolStripButtonText";
@@ -394,6 +368,71 @@
             this.changeETAToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.changeETAToolStripMenuItem.Text = "Change ETA";
             this.changeETAToolStripMenuItem.Click += new System.EventHandler(this.changeETAToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(163, 6);
+            // 
+            // reloadToolStripMenuItem1
+            // 
+            this.reloadToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allToolStripMenuItem,
+            this.toolStripSeparator8,
+            this.rulesToolStripMenuItem1,
+            this.helpToolStripMenuItem1,
+            this.nickGeneratorToolStripMenuItem1,
+            this.triviasToolStripMenuItem,
+            this.killStringsToolStripMenuItem});
+            this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
+            this.reloadToolStripMenuItem1.Text = "Reload...";
+            // 
+            // allToolStripMenuItem
+            // 
+            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.allToolStripMenuItem.Text = "All";
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(150, 6);
+            // 
+            // rulesToolStripMenuItem1
+            // 
+            this.rulesToolStripMenuItem1.Name = "rulesToolStripMenuItem1";
+            this.rulesToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.rulesToolStripMenuItem1.Text = "Rules";
+            this.rulesToolStripMenuItem1.Click += new System.EventHandler(this.rulesToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.helpToolStripMenuItem1.Text = "Help";
+            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // nickGeneratorToolStripMenuItem1
+            // 
+            this.nickGeneratorToolStripMenuItem1.Name = "nickGeneratorToolStripMenuItem1";
+            this.nickGeneratorToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.nickGeneratorToolStripMenuItem1.Text = "Nick Generator";
+            this.nickGeneratorToolStripMenuItem1.Click += new System.EventHandler(this.nickGeneratorToolStripMenuItem_Click);
+            // 
+            // triviasToolStripMenuItem
+            // 
+            this.triviasToolStripMenuItem.Name = "triviasToolStripMenuItem";
+            this.triviasToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.triviasToolStripMenuItem.Text = "Trivias";
+            this.triviasToolStripMenuItem.Click += new System.EventHandler(this.triviaToolStripMenuItem_Click);
+            // 
+            // killStringsToolStripMenuItem
+            // 
+            this.killStringsToolStripMenuItem.Name = "killStringsToolStripMenuItem";
+            this.killStringsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.killStringsToolStripMenuItem.Text = "Kill Strings";
+            this.killStringsToolStripMenuItem.Click += new System.EventHandler(this.killToolStripMenuItem_Click);
             // 
             // InputBox
             // 
@@ -457,13 +496,6 @@
             this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             this.contextMenuUserList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
             // 
-            // killToolStripMenuItem
-            // 
-            this.killToolStripMenuItem.Name = "killToolStripMenuItem";
-            this.killToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.killToolStripMenuItem.Text = "Kill";
-            this.killToolStripMenuItem.Click += new System.EventHandler(this.killToolStripMenuItem_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -519,11 +551,6 @@
         private System.Windows.Forms.ListBox InterfaceUserList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rulesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nickGeneratorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem triviaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redditCredentialsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuUserList;
         private System.Windows.Forms.ToolStripMenuItem releaseCheckerToolStripMenuItem;
@@ -534,7 +561,16 @@
         private System.Windows.Forms.RichTextBox OutputBox;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem killToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem rulesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem nickGeneratorToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem triviasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem killStringsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolstripLag;
     }
 }
 

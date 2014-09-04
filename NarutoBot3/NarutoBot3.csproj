@@ -120,9 +120,6 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainWindowHelper.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="muted.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,7 +167,6 @@
     <Compile Include="searchAnimeAPI.Designer.cs">
       <DependentUpon>searchAnimeAPI.cs</DependentUpon>
     </Compile>
-    <Compile Include="TaigaAnnounce.cs" />
     <Compile Include="TimeZoneAPI.cs" />
     <Compile Include="truncate.cs" />
     <EmbeddedResource Include="assignments.resx">
