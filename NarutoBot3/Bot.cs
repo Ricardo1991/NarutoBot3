@@ -749,13 +749,13 @@ namespace NarutoBot3
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("* Detected an youtube video from  " + user, Color.Pink);
-                                youtube(whoSent, user, msg);
+                                youtube(whoSent, user, msg, false);
                             }
 
                         else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
                             {
                                 WriteMessage("* Detected a short youtube video from  " + user, Color.Pink);
-                                youtubeS(whoSent, user, msg);
+                                youtube(whoSent, user, msg, true);
                             }
 
                         else if (msg.Contains("vimeo.f"))
@@ -1842,7 +1842,7 @@ namespace NarutoBot3
             }
         }
 
-        public void youtube(string CHANNEL, string nick, string line)
+        public void youtube(string CHANNEL, string nick, string line, bool isShort)
         {
             if (isMuted(nick)) return;
 
@@ -1852,13 +1852,20 @@ namespace NarutoBot3
                 string ID;
                 string message;
 
-                if (line.Contains("?v="))
+                if (isShort)
                 {
-                    ID = getBetween(line, "?v=", "&");
+                    if (line.Contains("?v="))
+                    {
+                        ID = getBetween(line, "?v=", "&");
+                    }
+                    else
+                    {
+                        ID = getBetween(line, "&v=", "&");
+                    }
                 }
-                else
-                {
-                    ID = getBetween(line, "&v=", "&");
+                else {
+
+                    ID = getBetween(line, "youtu.be/", "?t");
                 }
 
 
@@ -1906,70 +1913,6 @@ namespace NarutoBot3
                     minutes = temp;
                     message = privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
                     Client.messageSender(message); ;
-                }
-                else
-                {
-                    message = privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message);
-                }
-            }
-        }
-        public void youtubeS(string CHANNEL, string nick, string line)//for short links
-        {
-            if (isMuted(nick)) return;
-
-            if (Settings.Default.silence == false && Settings.Default.youtube_Enabled == true)
-            {
-                string[] bah;
-                string ID;
-                string message;
-
-                ID = getBetween(line, "youtu.be/", "?t");
-
-                bah = ID.Split(new char[] { ' ' }, 2);
-                ID = bah[0];
-
-                string title, duration;
-                int hours = 0;
-                int minutes = 0;
-                int seconds = 0;
-                int temp = 0;
-                string URLString = "http://gdata.youtube.com/feeds/api/videos/" + ID;
-
-                var webClient = new WebClient();
-                webClient.Encoding = Encoding.UTF8;
-                string readHtml = webClient.DownloadString(URLString);
-
-                title = getBetween(readHtml, "<title type='text'>", "</title>");
-                duration = getBetween(readHtml, "<yt:duration seconds='", "'/>");
-
-                temp = Convert.ToInt32(duration);
-
-                title = title.Replace("&lt;", "<");
-                title = title.Replace("&rt;", ">");
-                title = title.Replace("&amp;", "&");
-                title = title.Replace("&quot;", "\"");
-
-                while (temp >= 60)
-                {
-                    minutes++;
-                    temp = temp - 60;
-
-                }
-                seconds = temp;
-
-                if (minutes >= 60)
-                {
-                    temp = minutes;
-                    while (temp >= 60)
-                    {
-                        hours++;
-                        temp = temp - 60;
-
-                    }
-                    minutes = temp;
-                    message = privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message);
                 }
                 else
                 {
@@ -2143,9 +2086,6 @@ namespace NarutoBot3
 
                             message = privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
                         }
-
-
-                       
 
                     }
                     else
