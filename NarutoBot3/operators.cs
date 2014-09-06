@@ -47,7 +47,7 @@ namespace NarutoBot3
             listOperators.DataSource = ops;
         }
 
-        private void SaveOPS()
+        static private void SaveOPS()
         {
             using (StreamWriter newTask = new StreamWriter("ops.txt", false))
             {

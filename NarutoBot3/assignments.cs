@@ -11,9 +11,9 @@ using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
-    public partial class assignments : Form
+    public partial class Assignments : Form
     {
-        public assignments()
+        public Assignments()
         {
             InitializeComponent();
             textBox1.Text = Settings.Default.currentAssignmentURL;

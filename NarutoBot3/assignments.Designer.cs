@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class assignments
+    partial class Assignments
     {
         /// <summary>
         /// Required designer variable.

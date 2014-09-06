@@ -8,10 +8,10 @@ namespace NarutoBot3
 {
     public class TimeZoneAPI
     {
-        public int dstOffset { get; set; }
-        public int rawOffset { get; set; }
-        public string status { get; set; }
-        public string timeZoneId { get; set; }
-        public string timeZoneName { get; set; }
+        public int DSTOffset { get; set; }
+        public int RawOffset { get; set; }
+        public string Status { get; set; }
+        public string TimeZoneId { get; set; }
+        public string TimeZoneName { get; set; }
     }
 }

@@ -40,7 +40,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.bt_OK = new System.Windows.Forms.Button();
             this.bt_Cancel = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -180,6 +179,5 @@
         private System.Windows.Forms.Button bt_OK;
         private System.Windows.Forms.Button bt_Cancel;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
-    public class IrcClient
+    public class IrcClient : IDisposable
     {
         public bool isConnected = false;
 
@@ -23,7 +23,6 @@ namespace NarutoBot3
         string user_message;
         string nick_message;
         string join_message;
-        string quit_message;
 
         NetworkStream stream;
         TcpClient irc;
@@ -42,7 +41,6 @@ namespace NarutoBot3
             user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :/r/naruto \n";
             nick_message = "NICK " + NICK + "\r\n";
             join_message = "JOIN " + HOME_CHANNEL + "\r\n";
-            quit_message = "QUIT " + HOME_CHANNEL + "\n";
         }
 
         public bool Connect()
@@ -105,6 +103,24 @@ namespace NarutoBot3
                 irc.Close();
             }
             catch { }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                stream.Close();
+                reader.Close();
+                writer.Close();
+                irc.Close();
+            }
+            // free native resources if there are any.
+
         }
     }
 }

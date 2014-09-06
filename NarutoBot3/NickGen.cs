@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
-    class NickGen
+    static class NickGen
     {
         static int lineNumber;
 
@@ -18,7 +18,7 @@ namespace NarutoBot3
 
         static List<string> nomes;
 
-        static public string NickG(List<string> nome,int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
+        static public string NickG(List<string> nome, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
         {
             nomes = new List<string>();
             LineNumber = lineNumber;

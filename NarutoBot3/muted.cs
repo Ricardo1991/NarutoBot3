@@ -44,7 +44,7 @@ namespace NarutoBot3
             listMuted.DataSource = null;
             listMuted.DataSource = ban;
         }
-        private void SaveBAN()
+        static private void SaveBAN()
         {
             using (StreamWriter newTask = new StreamWriter("banned.txt", false))
             {

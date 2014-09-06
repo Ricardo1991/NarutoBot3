@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
-    class getCompilationDate
+    static class getCompilationDate
     {
         static public DateTime RetrieveLinkerTimestamp()
         {

@@ -15,7 +15,7 @@ namespace NarutoBot3
     {
         static List<string> hlp = new List<string>();
 
-        private void SaveHLP()
+        static private void SaveHLP()
         {
             using (StreamWriter newTask = new StreamWriter("help.txt", false))
             {

@@ -21,7 +21,7 @@ namespace NarutoBot3
         searchAnimeAPI animeAPI = new searchAnimeAPI();
         ConnectWindow Connect = new ConnectWindow();
         enabledCommands enableCommandsWindow = new enabledCommands();
-        assignments assignmentsWindow = new assignments();
+        Assignments assignmentsWindow = new Assignments();
         claims claimsWindow = new claims();
         nick nickWindow = new nick();
         operators operatorsWindow = new operators();
@@ -94,7 +94,7 @@ namespace NarutoBot3
                 Settings.Default.aniSearchEnabled = false;
 
 
-            if (Settings.Default.redditUser == "" || Settings.Default.redditPass == "")
+            if (String.IsNullOrEmpty(Settings.Default.redditUser) || String.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
 
            
@@ -181,29 +181,29 @@ namespace NarutoBot3
 
             ircBot = new Bot(ref client, ref OutputBox);
 
-            ircBot.Connected += new ConnectedChangedEventHandler(nowConnected);
-            ircBot.ConnectedWithServer += new ConnectedChangedEventHandler(nowConnectedWithServer);
+            ircBot.Connected += new EventHandler<EventArgs>(nowConnected);
+            ircBot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
 
-            ircBot.Created += new UserListChangedEventHandler(userListCreated);
+            ircBot.Created += new EventHandler<EventArgs>(userListCreated);
             ircBot.Joined += (senderr, ee) => userJoined(senderr, ee, ircBot.Who);
             ircBot.Left += (senderr, ee) => userLeft(senderr, ee, ircBot.Wholeft);
             ircBot.NickChanged += (senderr, ee) => userNickChange(senderr, ee, ircBot.Who, ircBot.NewNick);
             ircBot.Kicked += (senderr, ee) => userKicked(senderr, ee, ircBot.Who);
             ircBot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, ircBot.Who, ircBot.Mode);
 
-            ircBot.TimeOut += new TimeOut(timeout);
+            ircBot.TimeOut += new EventHandler<EventArgs>(timeout);
 
             ircBot.MentionReceived += (senderr, ee) => { WriteMessage(returnmessage, Color.LightGreen); };
             ircBot.MessageReceived += (senderr, ee) => { WriteMessage(returnmessage); };
 
             ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee, returnmessage);
 
-            ircBot.BotSilenced += new BotSilenceChange(botSilence);
-            ircBot.BotUnsilenced += new BotSilenceChange(botUnsilence);
+            ircBot.BotSilenced += new EventHandler<EventArgs>(botSilence);
+            ircBot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
 
-            ircBot.Quit += new Quit(letsQuit);
+            ircBot.Quit += new EventHandler<EventArgs>(letsQuit);
 
-            ircBot.DuplicatedNick += new NickAlreadyInUse(duplicatedNick);
+            ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
 
             ircBot.PongReceived += (senderr, ee) => updateLag(sender, ee, ircBot.timeDifference);
 
@@ -257,13 +257,12 @@ namespace NarutoBot3
             webClient.Encoding = Encoding.UTF8;
             HttpWebRequest request;
 
-
             if (!Settings.Default.releaseEnabled) return;
 
             try
             {
                 //readHtml = webClient.DownloadString(url);
-                request = (HttpWebRequest)WebRequest.Create(url);
+                request = (HttpWebRequest)WebRequest.Create(new Uri(url));
                 request.MaximumAutomaticRedirections = 4;
                 request.MaximumResponseHeadersLength = 4;
                 request.Timeout = 7 * 1000;   //7 seconds
@@ -503,7 +502,7 @@ namespace NarutoBot3
                         DialogResult resultWarning;
                         resultWarning = MessageBox.Show("This bot is already connected./nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                        if (result == System.Windows.Forms.DialogResult.OK)
+                        if (resultWarning == System.Windows.Forms.DialogResult.OK)
                         {
                             disconnect();
                             Thread.Sleep(250);
@@ -598,7 +597,7 @@ namespace NarutoBot3
         {
             nickWindow.ShowDialog();
             NICK = Settings.Default.Nick;
-            if (client.HOST_SERVER != "")
+            if (!String.IsNullOrEmpty(client.HOST_SERVER))
                 ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
             else
                 ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
@@ -634,7 +633,7 @@ namespace NarutoBot3
                 string message = "";
 
                 if (!client.isConnected) return;
-                if (InputBox.Text == "") return;
+                if (String.IsNullOrEmpty(InputBox.Text)) return;
 
                 char[] param = new char[1];
                 param[0] = ' ';
@@ -642,51 +641,53 @@ namespace NarutoBot3
 
                 if (parsed.Length >= 2)
                 {
-                    parsed[0] = parsed[0].ToLower();
-                    if (parsed[0] == "/me" && parsed[1] != "")  //Action send
+                    if (!String.IsNullOrEmpty(parsed[1]))
                     {
-                        message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
-                    }
-                    else
-                        if (parsed[0] == "/whois" && parsed[1] != "")  //Action send
+                        parsed[0] = parsed[0].ToLower();
+                        if (parsed[0] == "/me")  //Action send
                         {
-                            message = "WHOIS " + parsed[1] + "\n";
+                            message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
                         }
                         else
-                            if (parsed[0] == "/whowas" && parsed[1] != "")  //Action send
+                            if (parsed[0] == "/whois" )  //Action send
                             {
-                                message = "WHOWAS " + parsed[1] + "\n";
+                                message = "WHOIS " + parsed[1] + "\n";
                             }
                             else
-                                if (parsed[0] == "/nick" && parsed[1] != "")  //Action send
+                                if (parsed[0] == "/whowas" )  //Action send
                                 {
-                                    changeNick(parsed[1]);
+                                    message = "WHOWAS " + parsed[1] + "\n";
                                 }
                                 else
-                                    if (parsed[0] == "/query" || parsed[0] == "/pm" && parsed[1] != "" || parsed[0] == "/msg" && parsed[1] != "")  //Action send
+                                    if (parsed[0] == "/nick" )  //Action send
                                     {
-
-                                        string[] parsed2 = InputBox.Text.Split(param, 3);
-                                        if (parsed2.Length >= 3)
-                                            message = privmsg(parsed2[1], parsed2[2]);
+                                        changeNick(parsed[1]);
                                     }
                                     else
-                                        if (parsed[0] == "/ns" || parsed[0] == "/nickserv" && parsed[1] != "")  //NickServ send
+                                        if (parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg" )  //Action send
                                         {
-                                            message = privmsg("NickServ", parsed[1]);
+
+                                            string[] parsed2 = InputBox.Text.Split(param, 3);
+                                            if (parsed2.Length >= 3)
+                                                message = privmsg(parsed2[1], parsed2[2]);
                                         }
                                         else
-                                            if (parsed[0] == "/cs" || parsed[0] == "/chanserv" && parsed[1] != "")  //Chanserv send
+                                            if (parsed[0] == "/ns" || parsed[0] == "/nickserv" )  //NickServ send
                                             {
-                                                message = privmsg("ChanServ", parsed[1]);
+                                                message = privmsg("NickServ", parsed[1]);
                                             }
                                             else
-                                            {
-                                                //Normal send
-                                                if (parsed[0][0] != '/')
-                                                    message = privmsg(HOME_CHANNEL, InputBox.Text);
-
-                                            }
+                                                if (parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Chanserv send
+                                                {
+                                                    message = privmsg("ChanServ", parsed[1]);
+                                                }
+                                                else
+                                                {
+                                                    //Normal send
+                                                    if (parsed[0][0] != '/')
+                                                        message = privmsg(HOME_CHANNEL, InputBox.Text);
+                                                }
+                    }
                 }
                 else
                     if (parsed[0] == "/me" || parsed[0] == "/whois" || parsed[0] == "/whowas" ||
@@ -936,14 +937,7 @@ namespace NarutoBot3
 
         private void userJoined(object sender, EventArgs e, string whoJoined)
         {
-            foreach (Greeting g in ircBot.greet)
-            {
-                if (g.Nick == whoJoined.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
-                {
-                    string message = privmsg(HOME_CHANNEL, g.Greetingg);
-                    client.messageSender(message);
-                }
-            }
+
 
             WriteMessage("** " + whoJoined + " joined", Color.Green);
             UpdateDataSource();
@@ -1043,7 +1037,7 @@ namespace NarutoBot3
         {
             client.NICK = Settings.Default.Nick = nick;
 
-            if (client.HOST_SERVER != "")
+            if (!String.IsNullOrEmpty(client.HOST_SERVER))
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
@@ -1124,5 +1118,6 @@ namespace NarutoBot3
             box.SelectionColor = box.ForeColor;
         }
     }
+
 
 }
