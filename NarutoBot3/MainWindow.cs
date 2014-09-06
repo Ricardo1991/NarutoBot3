@@ -174,7 +174,7 @@ namespace NarutoBot3
             else return false;
         }
 
-        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //This is the main bot cycle... Pretty much everything happens here
+        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e)
         {
             //Main Loop
             String buffer;
@@ -782,16 +782,12 @@ namespace NarutoBot3
             Settings.Default.silence = true;
             ChangeSilenceLabel("Bot is Silenced");
             Settings.Default.Save();
-
-
         }
 
         private void timeout(object sender, EventArgs e)
         {
             try { disconnect(); }
             catch { }
-
-
 
             ChangeConnectingLabel("Connecting...");
 
@@ -804,11 +800,6 @@ namespace NarutoBot3
                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
             }
-                
-
-            
-        
-        
         }
 
         private void botUnsilence(object sender, EventArgs e)
@@ -1114,7 +1105,8 @@ namespace NarutoBot3
         {
             try
             {
-                toolstripLag.Text = diff.Minutes+":"+diff.Seconds+"."+diff.Milliseconds;
+                int seconds = diff.Seconds * 60 + diff.Seconds;
+                toolstripLag.Text = seconds+"."+diff.Milliseconds;
             }
             catch { }
         }
