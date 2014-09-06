@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -2289,10 +2288,9 @@ namespace NarutoBot3
 
                 if (linkParse.Length >= 9 && !String.IsNullOrEmpty(linkParse[8]))    //Com comentário
                 {
-                    string urlFix = url;
-                    tempQ = urlFix.Split(new char[] { '?' }, 2);
-                    urlFix = tempQ[0];
-                    Uri urlURI = new Uri(urlFix.Replace("\r", string.Empty));
+                    tempQ = url.Split(new char[] { '?' }, 2);
+                    url = tempQ[0];
+                    Uri urlURI = new Uri(url.Replace("\r", string.Empty));
                     post = reddit.GetPost(urlURI);     //slow
 
                     string commentID = linkParse[8];

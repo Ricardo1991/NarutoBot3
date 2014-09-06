@@ -15,8 +15,8 @@
         {
             if (disposing && (components != null))
             {
-                ircBot.Dispose();
-                client.Dispose();
+                if (ircBot != null) ircBot.Dispose();
+                if (client != null) client.Dispose();
 
                 components.Dispose();
             }
