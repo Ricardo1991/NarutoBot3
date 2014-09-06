@@ -461,7 +461,6 @@ namespace NarutoBot3
                         NewNick = newnick;
                         Who = oldnick;
 
-                        WriteMessage("** " + oldnick + " is now known as " + newnick, Color.Yellow);
                         OnNickChange(EventArgs.Empty);
                         userTemp.Clear();
                         break;
