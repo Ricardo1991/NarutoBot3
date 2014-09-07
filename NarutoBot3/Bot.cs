@@ -1851,7 +1851,7 @@ namespace NarutoBot3
                 string ID;
                 string message;
 
-                if (isShort)
+                if (!isShort)
                 {
                     if (line.Contains("?v="))
                     {
@@ -2614,7 +2614,7 @@ namespace NarutoBot3
         {
             if (disposing)
             {
-                dTime.Close();
+                if(dTime!=null) dTime.Close();
             }
             Client.Disconnect();
             Output2.Clear();

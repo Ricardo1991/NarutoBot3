@@ -120,7 +120,7 @@
             this.toolstripLag.Name = "toolstripLag";
             this.toolstripLag.Size = new System.Drawing.Size(807, 17);
             this.toolstripLag.Spring = true;
-            this.toolstripLag.Text = "0.000";
+            this.toolstripLag.Text = "0.000s";
             this.toolstripLag.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripMenu
