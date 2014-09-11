@@ -2182,7 +2182,10 @@ namespace NarutoBot3
                 {
                     string killString = kill[r.Next(kill.Count)].Replace("<target>", args.Trim()).Replace("<user>", nick.Trim());
 
-                    message = privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                    if(killString.ToLower().Contains("<normal>"))
+                        message = privmsg(CHANNEL, killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty));
+                    else
+                        message = privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
                 }
                 Client.messageSender(message);
 
@@ -2595,7 +2598,7 @@ namespace NarutoBot3
                 WaitigForPong = true;
 
                 dTime = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-                dTime.Enabled = false;
+                dTime.Enabled = true;
 
                 dTime.Elapsed += (sender, e) => checkIfTimeout(sender, e);
             }
