@@ -147,7 +147,7 @@ namespace NarutoBot3
 
             if (result == DialogResult.OK)
             {
-                if (connect())//If connected with sfuccess, then start the bot
+                if (connect()) //If connected with sfuccess, then start the bot
                 {
                     exitTheLoop = false;
                     backgroundWorker1.RunWorkerAsync();
@@ -476,11 +476,12 @@ namespace NarutoBot3
                     break;
                 case "Poke":
                     ircBot.pokeUser(split[1]);
-                    ircBot.SaveBAN();
                     break;
                 case "Whois":
                     ircBot.whoisUser(split[1]);
-                    ircBot.SaveBAN();
+                    break;
+                case "Kick":
+                    ircBot.kickUser(split[1]);
                     break;
             }
             ircBot.SaveOPS();
@@ -684,8 +685,12 @@ namespace NarutoBot3
                                                 else
                                                 {
                                                     //Normal send
-                                                    if (parsed[0][0] != '/')
+                                                    if (String.IsNullOrWhiteSpace(parsed[0]))                                             
                                                         message = privmsg(HOME_CHANNEL, InputBox.Text);
+                                                    else if (parsed[0][0] != '/')
+                                                    {
+                                                        message = privmsg(HOME_CHANNEL, InputBox.Text);
+                                                    }
                                                 }
                     }
                 }
@@ -790,10 +795,12 @@ namespace NarutoBot3
             try { disconnect(); }
             catch { }
 
-            ChangeConnectingLabel("Connecting...");
+            ChangeConnectingLabel("Re-Connecting...");
+            WriteMessage("* The connection timed out. Will try to reconnect.");
 
             if (connect())//If connected with success, then start the bot
             {
+                exitTheLoop = false;
                 backgroundWorker1.RunWorkerAsync();
             }
             else
@@ -823,6 +830,7 @@ namespace NarutoBot3
             contextMenuUserList.Items.Add("Unmute " + nick);
             contextMenuUserList.Items.Add("Poke " + nick);
             contextMenuUserList.Items.Add("Whois " + nick);
+            contextMenuUserList.Items.Add("Kick " + nick + " (if operator)");
         }
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)

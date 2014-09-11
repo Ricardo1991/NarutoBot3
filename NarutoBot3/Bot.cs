@@ -1929,6 +1929,7 @@ namespace NarutoBot3
             {
                 string[] bah;
                 string url = "";
+                string link="";
                 string author, tweet;
                 bool gotIt = false;
 
@@ -1955,7 +1956,12 @@ namespace NarutoBot3
                 author = getBetween(readHtml, "<span class=\"username js-action-profile-name\"><s>@</s><b>", "</b></span>");
                 tweet = getBetween(readHtml, "<p class=\"js-tweet-text tweet-text\">", "</p>");
                 if(tweet.Contains("<a "))
-                    tweet = tweet.Substring(0, tweet.IndexOf("<a "));
+                {
+                    link = getBetween(tweet, "data-expanded-url=\"", "\"");
+                    tweet = tweet.Substring(0, tweet.IndexOf("<a ")); 
+                    
+                }
+                    
 
                 author = StripTagsRegex(author);
                 tweet = StripTagsRegex(tweet);
@@ -1968,7 +1974,7 @@ namespace NarutoBot3
                 tweet = tweet.Replace("&#10;", " ");
                 tweet = tweet.Replace("&nbsp;", " ");
 
-                string message = privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
+                string message = privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet + " " + link);
                 Client.messageSender(message);
             }
         }
@@ -2299,7 +2305,7 @@ namespace NarutoBot3
 
                     com = reddit.GetComment(sub.Name, "t1_" + commentID, "t3_" + linkParse[6]);
 
-                    message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submited by /u/" + post.Author + "\x02");
+                    message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                     Client.messageSender(message);
 
                     if (com.Body.ToString().Length > 250)
@@ -2317,12 +2323,12 @@ namespace NarutoBot3
 
                     if (post.IsSelfPost)
                     {
-                        message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submited by /u/" + post.Author + "\x02");
+                        message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                         Client.messageSender(message);
                     }
                     else
                     {
-                        message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submited by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
+                        message = privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
                         Client.messageSender(message);
 
                     }
@@ -2596,11 +2602,18 @@ namespace NarutoBot3
 
         }
 
+        public void kickUser(string user)
+        {
+            string message = "KICK " + Client.HOME_CHANNEL + " " + user;
+            Client.messageSender(message);
+        
+        
+        }
+
         void checkIfTimeout(object sender, EventArgs e)
         {
             if (WaitigForPong)
             {
-                WriteMessage("* The connection timed out. Will try to reconnect.");
                 OnTimeOut(EventArgs.Empty);
             }
         }
