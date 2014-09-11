@@ -597,19 +597,21 @@ namespace NarutoBot3
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
         {
             nickWindow.ShowDialog();
-            NICK = Settings.Default.Nick;
-            if (!String.IsNullOrEmpty(client.HOST_SERVER))
-                ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
-            else
-                ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+            //NICK = Settings.Default.Nick;
+            //if (!String.IsNullOrEmpty(client.HOST_SERVER))
+            //    ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
+            //else
+            //    ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
 
-            //do nick change to server
-            if (client.isConnected)
-            {
-                string message = "NICK " + NICK + "\n";
-                client.messageSender(message);
+            ////do nick change to server
+            //if (client.isConnected)
+            //{
+            //    client.NICK = NICK;
+            //    string message = "NICK " + client.NICK + "\n";
+            //    client.messageSender(message);
 
-            }
+            //}
+            ircBot.changeNick(Settings.Default.Nick, out returnmessage);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1096,11 +1098,7 @@ namespace NarutoBot3
 
         private void pingServer(object sender, EventArgs e)
         {
-            if (!ircBot.WaitigForPong)
-            {
-                ircBot.pingSever();
-            
-            }
+            ircBot.pingSever();
         }
 
         private void updateLag(object sender, EventArgs e, TimeSpan diff)

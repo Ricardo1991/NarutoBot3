@@ -339,6 +339,7 @@ namespace NarutoBot3
                             timeDifference = now.Subtract(then);
 
                             WaitigForPong = false;
+                            dTime.Stop();
 
                             OnPongReceived(EventArgs.Empty);
                         }
@@ -2590,27 +2591,24 @@ namespace NarutoBot3
             {
                 string timeStamp = GetTimestamp(DateTime.Now);
                 string message = "PING " + timeStamp;
+
                 #if DEBUG
-                WriteMessage("PING " + timeStamp);
+                    WriteMessage("PING " + timeStamp);
                 #endif
-                Client.messageSender(message);
+                    Client.messageSender(message);
 
                 WaitigForPong = true;
 
                 dTime = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-                dTime.Enabled = true;
-
                 dTime.Elapsed += (sender, e) => checkIfTimeout(sender, e);
+                dTime.Enabled = true;
             }
-
         }
 
         public void kickUser(string user)
         {
             string message = "KICK " + Client.HOME_CHANNEL + " " + user;
             Client.messageSender(message);
-        
-        
         }
 
         void checkIfTimeout(object sender, EventArgs e)
