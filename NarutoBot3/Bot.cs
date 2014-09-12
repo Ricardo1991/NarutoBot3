@@ -2050,10 +2050,9 @@ namespace NarutoBot3
                         if (a == null)
                         {
                             #if DEBUG
-                            message = Privmsg(CHANNEL, "Error: a=null");
+                                message = Privmsg(CHANNEL, "Error: a=null");
                             #else
-                            message = privmsg(CHANNEL, "");
-                            
+                                message = Privmsg(CHANNEL, "");
                             #endif
 
                         }

@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>en</TargetCulture>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
