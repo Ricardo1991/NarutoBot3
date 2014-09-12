@@ -1974,13 +1974,14 @@ namespace NarutoBot3
 
             string json;
             string jsonAnime;
+            string query = line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
 
             bool user = false;
 
 
             if (line.Contains("-u") || line.Contains("-User")) user = true;
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2013,7 +2014,11 @@ namespace NarutoBot3
                         if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
                         {
                             found = true;
-                            name = g.items[i].link;
+                            string[] split = g.items[i].link.Split('/');
+                            if (split.Length <= 5)
+                                name = g.items[i].link+"/"+query;
+                            else
+                                name = g.items[i].link;
                         }
                         else i++;
                     }
@@ -2061,6 +2066,9 @@ namespace NarutoBot3
                             string score = a.entry[0].score.ToString();
                             string episodes = a.entry[0].episodes.ToString();
                             string title = a.entry[0].title;
+
+                            if (episodes == "0")
+                                episodes = "?";
 
                             message = Privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
                         }
@@ -2474,8 +2482,6 @@ namespace NarutoBot3
             return Math.Floor(diff.TotalSeconds);
         }
 
-
-
         public static string getBetween(string strSource, string strStart, string strEnd)
         {
             int Start, End;
@@ -2579,6 +2585,7 @@ namespace NarutoBot3
             if (WaitingForPong)
             {
                 OnTimeout(EventArgs.Empty);
+                WaitingForPong = false;
             }
         }
         public void Dispose()
