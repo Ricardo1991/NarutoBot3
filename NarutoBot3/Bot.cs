@@ -896,7 +896,6 @@ namespace NarutoBot3
             return '0';
         }
 
-
         public void ReadKills()
         {
             kill.Clear();
@@ -913,6 +912,7 @@ namespace NarutoBot3
             {
             }
         }
+
         public void SaveOps()
         {
             using (StreamWriter newTask = new StreamWriter("ops.txt", false))

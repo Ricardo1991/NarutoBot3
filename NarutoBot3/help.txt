@@ -1,0 +1,24 @@
+ALL USERS:
+!anime [-u | -user] [args]       	 - Searches MyAnimeList for the [text] anime
+!poke								 - Pokes a random user
+!eta         						 - tells the estimated time for the chapter release
+!rules      						 - rules for this channel
+!kill [nick]						 - writes a random death for the selected nick
+!toC [temp]  						 - converts Farenheit to Celcius
+!toF [temp] 						 - converts Celcius to Farenheit
+!roll       						 - roll a random number from 0 to 99
+!wiki [text]						 - wiki search
+!nick [args] 						 - Generates a nickname. Args can be "random" or a combination of "RN", "IQ", "SL" and "RU"
+!time [arg]  						 - Displays time in the arg timezone
+!trivia      						 - Random trivia
+!greetme [text]						 - Sets a greeting for your nickname. If you use !greetme without any ext after it, it toogles it on/pff
+
+OPERATORS:
+!silence							 - toogles the bot being able to write on/off
+!rename [nick]						 - changes he nick of the bot
+!op [user]   						 - ads user as a bot operator
+!deop [user] 						 - removes user as a bot operator
+!oplist      						 - shows the list of operators
+!say [text]  						 - makes the bot say the text
+!me [text]   						 - makes the bot do an action
+!quit        						 - the bot quits and closes

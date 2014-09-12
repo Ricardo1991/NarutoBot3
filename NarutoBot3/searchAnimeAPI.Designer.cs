@@ -79,7 +79,7 @@
             // 
             // bt_Save
             // 
-            this.bt_Save.Location = new System.Drawing.Point(419, 330);
+            this.bt_Save.Location = new System.Drawing.Point(419, 266);
             this.bt_Save.Name = "bt_Save";
             this.bt_Save.Size = new System.Drawing.Size(75, 23);
             this.bt_Save.TabIndex = 3;
@@ -106,6 +106,7 @@
             this.tb_Pass.Name = "tb_Pass";
             this.tb_Pass.Size = new System.Drawing.Size(122, 20);
             this.tb_Pass.TabIndex = 3;
+            this.tb_Pass.UseSystemPasswordChar = true;
             // 
             // label2
             // 
@@ -136,14 +137,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 365);
+            this.ClientSize = new System.Drawing.Size(506, 297);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bt_Save);
             this.Controls.Add(this.groupBoxAPI);
             this.Controls.Add(this.cx_group);
             this.Name = "searchAnimeAPI";
             this.ShowIcon = false;
-            this.Text = "Google API Keys";
+            this.Text = "Google and MAL API Keys";
             this.Shown += new System.EventHandler(this.searchAnimeAPI_Shown);
             this.cx_group.ResumeLayout(false);
             this.cx_group.PerformLayout();
