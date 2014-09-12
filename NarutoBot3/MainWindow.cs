@@ -49,8 +49,6 @@ namespace NarutoBot3
 
         string lastCommand;
 
-        string returnmessage = "";
-
         bool exitTheLoop = false;
 
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
@@ -193,10 +191,7 @@ namespace NarutoBot3
 
             ircBot.TimeOut += new EventHandler<EventArgs>(timeout);
 
-            ircBot.MentionReceived += (senderr, ee) => { WriteMessage(returnmessage, Color.LightGreen); };
-            ircBot.MessageReceived += (senderr, ee) => { WriteMessage(returnmessage); };
-
-            ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee, returnmessage);
+            ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee);
 
             ircBot.BotSilenced += new EventHandler<EventArgs>(botSilence);
             ircBot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
@@ -218,7 +213,7 @@ namespace NarutoBot3
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
-                    ircBot.BotMessage(line, out returnmessage);
+                    ircBot.BotMessage(line);
                 }
                 catch
                 { }
@@ -597,21 +592,7 @@ namespace NarutoBot3
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
         {
             nickWindow.ShowDialog();
-            //NICK = Settings.Default.Nick;
-            //if (!String.IsNullOrEmpty(client.HOST_SERVER))
-            //    ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
-            //else
-            //    ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
-
-            ////do nick change to server
-            //if (client.isConnected)
-            //{
-            //    client.NICK = NICK;
-            //    string message = "NICK " + client.NICK + "\n";
-            //    client.messageSender(message);
-
-            //}
-            ircBot.changeNick(Settings.Default.Nick, out returnmessage);
+            ircBot.changeNick(Settings.Default.Nick);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1031,10 +1012,12 @@ namespace NarutoBot3
             ircBot.randomTextSender(source, e);
         }
 
-        public void eventChangeTitle(object sender, EventArgs e, string returnmessage)
+        public void eventChangeTitle(object sender, EventArgs e)
         {
-            ChangeTitle(returnmessage);
-
+            if (!String.IsNullOrEmpty(client.HOST_SERVER))
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            else
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
         }
 
         public void letsQuit(object sender, EventArgs e)

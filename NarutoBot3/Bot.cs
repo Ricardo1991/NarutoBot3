@@ -61,13 +61,10 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> TimeOut;
         public event EventHandler<EventArgs> PongReceived;
 
-        public event EventHandler<EventArgs> MessageReturned;
-
         public event EventHandler<EventArgs> Connected;
         public event EventHandler<EventArgs> ConnectedWithServer;
 
         public event EventHandler<EventArgs> MessageReceived;
-        public event EventHandler<EventArgs> MentionReceived;
 
         public event EventHandler<EventArgs> BotNickChanged;
 
@@ -81,9 +78,6 @@ namespace NarutoBot3
         private bool waitigForPong = false;
 
         public TimeSpan timeDifference;
-
-
-
 
         public bool WaitigForPong
         {
@@ -151,12 +145,6 @@ namespace NarutoBot3
                 MessageReceived(this, e);
         }
 
-        protected virtual void OnReceiveMention(EventArgs e)
-        {
-            if (MentionReceived != null)
-                MentionReceived(this, e);
-        }
-
         protected virtual void OnCreate(EventArgs e)
         {
             if (Created != null)
@@ -199,13 +187,6 @@ namespace NarutoBot3
         
         }
 
-        protected virtual void OnMessageReturned(EventArgs e)
-        {
-            if (MessageReturned != null)
-                MessageReturned(this, e);
-        
-        }
-
         IrcClient Client;
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
@@ -244,7 +225,7 @@ namespace NarutoBot3
             reddit = new Reddit();
         
         }
-        public void BotMessage(string message, out string returnmessage)
+        public void BotMessage(string message)
         {
             Who = "";
             Wholeft = "";
@@ -254,7 +235,6 @@ namespace NarutoBot3
             string command;
             string[] parameters;
             string completeParameters;
-            returnmessage = "";
             List<string> userTemp = new List<string>();
 
             bool found;
@@ -686,7 +666,7 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "rename", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a rename request from " + user, Color.Pink);
-                                if (isOperator(user)) changeNick(arg, out returnmessage);
+                                if (isOperator(user)) changeNick(arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "op", true) == 0 && !String.IsNullOrEmpty(arg))
@@ -1216,17 +1196,14 @@ namespace NarutoBot3
             if (Client.NICK.Length > 15)
             {
                 WriteMessage(Client.NICK.Truncate(16) + ":" + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
                 
             else if (Client.NICK.Length >= 8)                       //Write the message on the bot console
             {
                 WriteMessage(Client.NICK + "\t: " + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
             else {
                 WriteMessage(Client.NICK + "\t\t: " + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
                 
 
@@ -1246,19 +1223,16 @@ namespace NarutoBot3
 
             if (Client.NICK.Length > 15){
                 WriteMessage(Client.NICK.Truncate(16) + ":" + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
                 
             else if (Client.NICK.Length >= 8)                       //Write the message on the bot console
             {
                 WriteMessage(Client.NICK + "\t: " + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
                 
             else
             {
                 WriteMessage(Client.NICK + "\t\t: " + message);
-                OnReceiveMessage(EventArgs.Empty);
             }
                 
 
@@ -1389,7 +1363,7 @@ namespace NarutoBot3
                 return false;
             }
         }
-        int opList(string nick)
+        void opList(string nick)
         {
             string message;
 
@@ -1402,11 +1376,9 @@ namespace NarutoBot3
                     message = notice(nick, nick + " :->" + p);
                     Client.messageSender(message);
                 }
-                return 1;
             }
-
-            return 0;
         }
+
         void say(string CHANNEL, string args, string nick)
         {
             string message;
@@ -1463,6 +1435,7 @@ namespace NarutoBot3
                 Client.messageSender(message);
             }
         }
+
         void help(string nick)
         {
             string message;
@@ -2473,14 +2446,10 @@ namespace NarutoBot3
             else return false;
         }
 
-        public bool changeNick(string nick, out string returnmessage)
+        public bool changeNick(string nick)
         {
             Client.NICK = Settings.Default.Nick = nick;
-
-            if (!String.IsNullOrEmpty(Client.HOST_SERVER))
-                returnmessage = Client.NICK + " @ " + Client.HOME_CHANNEL + " - " + Client.HOST + ":" + Client.PORT + " (" + Client.HOST_SERVER + ")";
-            else
-                returnmessage = Client.NICK + " @ " + Client.HOME_CHANNEL + " - " + Client.HOST + ":" + Client.PORT;
+            Settings.Default.Save();
             OnBotNickChanged(EventArgs.Empty);
 
             //do nick change to server
