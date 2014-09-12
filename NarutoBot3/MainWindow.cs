@@ -189,7 +189,7 @@ namespace NarutoBot3
             ircBot.Kicked += (senderr, ee) => userKicked(senderr, ee, ircBot.Who);
             ircBot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, ircBot.Who, ircBot.Mode);
 
-            ircBot.TimeOut += new EventHandler<EventArgs>(timeout);
+            ircBot.Timeout += new EventHandler<EventArgs>(timeout);
 
             ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee);
 
@@ -310,7 +310,7 @@ namespace NarutoBot3
 
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.readKILLS();
+            ircBot.ReadKills();
         }
 
 
@@ -455,19 +455,19 @@ namespace NarutoBot3
             {
                 case "Give":
                     ircBot.giveOps(split[1]);
-                    ircBot.SaveOPS();
+                    ircBot.SaveOps();
                     break;
                 case "Take":
                     ircBot.takeOps(split[1]);
-                    ircBot.SaveOPS();
+                    ircBot.SaveOps();
                     break;
                 case "Mute":
                     ircBot.muteUser(split[1]);
-                    ircBot.SaveBAN();
+                    ircBot.SaveBan();
                     break;
                 case "Unmute":
                     ircBot.unmuteUSer(split[1]);
-                    ircBot.SaveBAN();
+                    ircBot.SaveBan();
                     break;
                 case "Poke":
                     ircBot.pokeUser(split[1]);
@@ -479,7 +479,7 @@ namespace NarutoBot3
                     ircBot.kickUser(split[1]);
                     break;
             }
-            ircBot.SaveOPS();
+            ircBot.SaveOps();
         }
 
         //UI Events
@@ -598,7 +598,7 @@ namespace NarutoBot3
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             operatorsWindow.ShowDialog();
-            ircBot.readOPS();
+            ircBot.ReadOps();
         }
 
         private void input_KeyDown(object sender, KeyEventArgs e)
@@ -722,33 +722,33 @@ namespace NarutoBot3
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             helpWindow.ShowDialog();
-            ircBot.readHLP();
+            ircBot.ReadHelp();
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            ircBot.readBAN();
+            ircBot.ReadBan();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.readRLS();
+            ircBot.ReadRules();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.readHLP();
+            ircBot.ReadHelp();
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.loadNickGenStrings();
+            ircBot.LoadNickGenStrings();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.readTRI();
+            ircBot.ReadTrivia();
         }
 
         private void redditCredentialsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -928,8 +928,6 @@ namespace NarutoBot3
 
         private void userJoined(object sender, EventArgs e, string whoJoined)
         {
-
-
             WriteMessage("** " + whoJoined + " joined", Color.Green);
             UpdateDataSource();
         }
