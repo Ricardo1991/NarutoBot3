@@ -2539,8 +2539,6 @@ namespace NarutoBot3
                 {
                     MethodInvoker invoker = () => WriteMessage(message);
                     Output2.Invoke(invoker);
-                    //SetTextCallback d = new SetTextCallback(WriteMessage);
-                    //this.Invoke(d, new object[] { message });
                 }
                 catch { }
             }
@@ -2560,9 +2558,6 @@ namespace NarutoBot3
                 {
                     MethodInvoker invoker = () => WriteMessage(message, color);
                     Output2.Invoke(invoker);
-
-                    //    SetTextCallback d = new SetTextCallback(WriteMessage);
-                    //    this.Invoke(d, new object[] { message, color });
                 }
                 catch { }
             }

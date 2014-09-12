@@ -50,7 +50,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 'a' || nick_gen[i] == 'A')
+                    else if (nick_gen[i] == 'a' || nick_gen[i] == 'A')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -59,7 +59,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 't' || nick_gen[i] == 'T')
+                    else if (nick_gen[i] == 't' || nick_gen[i] == 'T')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -68,7 +68,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 'o' || nick_gen[i] == 'O')
+                    else if (nick_gen[i] == 'o' || nick_gen[i] == 'O')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -77,7 +77,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 'i' || nick_gen[i] == 'I')
+                    else if (nick_gen[i] == 'i' || nick_gen[i] == 'I')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -86,7 +86,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 's' || nick_gen[i] == 'S')
+                    else if (nick_gen[i] == 's' || nick_gen[i] == 'S')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -95,7 +95,7 @@ namespace NarutoBot3
                             letras = 0;
                         }
                     }
-                    if (nick_gen[i] == 'z' || nick_gen[i] == 'Z')
+                    else if (nick_gen[i] == 'z' || nick_gen[i] == 'Z')
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
@@ -132,6 +132,7 @@ namespace NarutoBot3
             int changed = 0;
             int i = 0;
             int letras = 0;
+            char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
             while (changed == 0 || letras == 0)
             {
@@ -139,239 +140,16 @@ namespace NarutoBot3
                 while (i < nick_gen.Length)
                 {
                     letras = 1;
-                    if (nick_gen[i] == 'a')
+                    if (alphabet.Any((s) => nick_gen[i].Equals(s)))
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + 'A' + nick_gen.Substring(i + 1);
+                            nick_gen = nick_gen.Substring(0, i) + nick_gen[i].ToString().ToUpper() + nick_gen.Substring(i + 1);
                             changed = 1;
                             letras = 0;
+                            
                         }
                     }
-                    if (nick_gen[i] == 'b')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'B' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'c')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'C' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'd')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'D' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'e')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'E' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'f')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'F' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'g')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'G' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    } if (nick_gen[i] == 'h')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'H' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'i')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'I' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'j')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'J' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'k')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'K' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'l')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'L' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    } if (nick_gen[i] == 'm')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'M' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'n')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'N' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'o')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'O' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'p')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'P' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'q')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'Q' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'r')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'R' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 's')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'S' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 't')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'T' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'u')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'U' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'v')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'V' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    } if (nick_gen[i] == 'w')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'W' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-
-                    if (nick_gen[i] == 'x')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'X' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'y')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'Y' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-                    if (nick_gen[i] == 'z')
-                    {
-                        if (rnd.Next(0, 10) <= 2)
-                        {
-                            nick_gen = nick_gen.Substring(0, i) + 'Z' + nick_gen.Substring(i + 1);
-                            changed = 1;
-                            letras = 0;
-                        }
-                    }
-
                     i++;
                 }
             }
