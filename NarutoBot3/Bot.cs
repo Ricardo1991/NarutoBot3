@@ -357,7 +357,7 @@ namespace NarutoBot3
 
                         foreach (string userP in Client.userList)
                         {
-                            if (userP.Replace("@", string.Empty).Replace("+", string.Empty) != Wholeft.Replace("@", string.Empty).Replace("+", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty))
+                            if (removeUserMode(userP) != removeUserMode(Wholeft))
                             {
                                 userTemp.Add(userP);
                             }
@@ -384,17 +384,14 @@ namespace NarutoBot3
 
                         foreach (string userB in Client.userList)
                         {
-                            if (userB.Replace("@", string.Empty).Replace("+", string.Empty) != Wholeft.Replace("@", string.Empty).Replace("+", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty))
-                            {
+                            if (removeUserMode(userB) != removeUserMode(Wholeft))
                                 userTemp.Add(userB);
-                            }
                         }
                         Client.userList.Clear();
 
                         foreach (string userN in userTemp)
-                        {
                             Client.userList.Add(userN);
-                        }
+
                         Client.userList.Sort();
                         userTemp.Clear();
                         OnLeave(EventArgs.Empty);
@@ -413,12 +410,8 @@ namespace NarutoBot3
 
                         foreach (string userC in Client.userList)
                         {
-                            if (userC.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty)
-                                !=
-                                oldnick.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty.Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty)))
-                            {
+                            if (removeUserMode(userC) != removeUserMode(oldnick))
                                 userTemp.Add(userC);
-                            }
                         }
                         Client.userList.Clear();
 
@@ -449,12 +442,9 @@ namespace NarutoBot3
 
                         foreach (string userD in Client.userList)
                         {
-                            if (userD.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty)
-                                !=
-                                affectedUser.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty))
-                            {
+                            if (removeUserMode(userD)!= removeUserMode(affectedUser))
                                 userTemp.Add(userD);
-                            }
+       
                         }
                         Client.userList.Clear();
 
@@ -510,13 +500,12 @@ namespace NarutoBot3
                         userTemp = new List<string>();
                         string kickedUser = parameters[1];
 
-                          foreach (string userR in Client.userList)
+                        foreach (string userR in Client.userList)
                         {
-                            if (userR.Replace("@", string.Empty).Replace("+", string.Empty) != kickedUser.Replace("@", string.Empty).Replace("+", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace(" ", string.Empty))
-                            {
+                            if (removeUserMode(userR) != removeUserMode(kickedUser))
                                 userTemp.Add(userR);
-                            }
                         }
+
                         Client.userList.Clear();
 
                         foreach (string userT in userTemp)
@@ -894,6 +883,21 @@ namespace NarutoBot3
                 }
             }
             return '0';
+        }
+
+        static private string removeUserMode(string user)
+        {
+            char[] usermodes = { '@', '+', '%', '~', '&'};
+            
+            if (user.Contains(user))
+            {
+                if (usermodes.Any((s) => user.Substring(0, 1).Equals(s)))
+                {
+                    return user.Substring(1).Trim();
+                }
+                else return user.Trim();
+            }
+            return "";
         }
 
         public void ReadKills()

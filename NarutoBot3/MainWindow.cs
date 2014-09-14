@@ -1087,7 +1087,7 @@ namespace NarutoBot3
             try
             {
                 int seconds = diff.Seconds * 60 + diff.Seconds;
-                toolstripLag.Text = seconds+"."+diff.Milliseconds+"s";
+                toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") +"s";
             }
             catch { }
         }
