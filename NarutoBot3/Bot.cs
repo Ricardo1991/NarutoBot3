@@ -1530,7 +1530,7 @@ namespace NarutoBot3
             {
                 userNumber = rnd.Next((Client.userList.Count - 1));
             }
-            while (Client.userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty) == nicks);
+            while (removeUserMode(Client.userList[userNumber]) == nicks);
 
             if (Settings.Default.silence == false && Settings.Default.pokeEnabled == true)
             {
@@ -2155,6 +2155,7 @@ namespace NarutoBot3
         {
             Random r = new Random();
             if (isMuted(nick)) return;
+            string target;
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
@@ -2163,11 +2164,17 @@ namespace NarutoBot3
                 {
                     message = Privmsg(CHANNEL, nick + " lost his way");
                 }
+                
                 else
                 {
-                    string killString = kill[r.Next(kill.Count)].Replace("<target>", args.Trim()).Replace("<user>", nick.Trim());
+                    if (args.ToLower() == "random")
+                        target = removeUserMode(Client.userList[r.Next((Client.userList.Count - 1))]);
+                    else
+                        target = args.Trim();
 
-                    if(killString.ToLower().Contains("<normal>"))
+                    string killString = kill[r.Next(kill.Count)].Replace("<target>", target).Replace("<user>", nick.Trim());
+
+                    if (killString.ToLower().Contains("<normal>"))
                         message = Privmsg(CHANNEL, killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty));
                     else
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
