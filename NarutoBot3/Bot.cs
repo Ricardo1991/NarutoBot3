@@ -710,7 +710,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a nickname request from " + user, Color.Pink);
                                 nickGen(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, Client.SYMBOL + "kill", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, Client.SYMBOL + "kill", true) == 0)
                             {
                                 WriteMessage("* Received a kill request from " + user, Color.Pink);
                                 killUser(Client.HOME_CHANNEL, user, arg);
@@ -891,7 +891,7 @@ namespace NarutoBot3
             
             if (user.Contains(user))
             {
-                if (usermodes.Any((s) => user.Substring(0, 1).Equals(s)))
+                if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
                 {
                     return user.Substring(1).Trim();
                 }
@@ -2167,7 +2167,7 @@ namespace NarutoBot3
                 
                 else
                 {
-                    if (args.ToLower() == "random")
+                    if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                         target = removeUserMode(Client.userList[r.Next((Client.userList.Count - 1))]);
                     else
                         target = args.Trim();
@@ -2360,6 +2360,8 @@ namespace NarutoBot3
             {
                 if (String.Compare(n, nick, true) == 0)
                 {
+                    dTime.Stop();
+                    waitingForPong = false;
                     message = "QUIT :Goodbye everyone!\n";
                     Client.messageSender(message);
 
