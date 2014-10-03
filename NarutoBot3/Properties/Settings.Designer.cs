@@ -538,5 +538,17 @@ namespace NarutoBot3.Properties {
                 this["pingServerInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool questionEnabled {
+            get {
+                return ((bool)(this["questionEnabled"]));
+            }
+            set {
+                this["questionEnabled"] = value;
+            }
+        }
     }
 }

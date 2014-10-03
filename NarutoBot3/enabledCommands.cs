@@ -36,11 +36,13 @@ namespace NarutoBot3
             cb_Time.Checked = Settings.Default.timeEnabled;
             cb_Trivia.Checked = Settings.Default.triviaEnabled;
             cb_twitter.Checked = Settings.Default.twitterEnabled;
+            cb_Questions.Checked = Settings.Default.questionEnabled;
         }
 
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Settings.Default.questionEnabled = cb_Questions.Checked;
             Settings.Default.killEnabled = cb_Kill.Checked;
             Settings.Default.twitterEnabled = cb_twitter.Checked;
             Settings.Default.randomTextEnabled = cb_randomText.Checked;

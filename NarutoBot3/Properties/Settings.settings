@@ -131,5 +131,8 @@
     <Setting Name="pingServerInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">45</Value>
     </Setting>
+    <Setting Name="questionEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -184,7 +184,7 @@ namespace NarutoBot3
 
             ircBot.Created += new EventHandler<EventArgs>(userListCreated);
             ircBot.Joined += (senderr, ee) => userJoined(senderr, ee, ircBot.Who);
-            ircBot.Left += (senderr, ee) => userLeft(senderr, ee, ircBot.Wholeft);
+            ircBot.Left += (senderr, ee) => userLeft(senderr, ee, ircBot.WhoLeft);
             ircBot.NickChanged += (senderr, ee) => userNickChange(senderr, ee, ircBot.Who, ircBot.NewNick);
             ircBot.Kicked += (senderr, ee) => userKicked(senderr, ee, ircBot.Who);
             ircBot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, ircBot.Who, ircBot.Mode);
@@ -200,7 +200,7 @@ namespace NarutoBot3
 
             ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
 
-            ircBot.PongReceived += (senderr, ee) => updateLag(sender, ee, ircBot.timeDifference);
+            ircBot.PongReceived += (senderr, ee) => updateLag(sender, ee, ircBot.TimeDifference);
 
             ircBot.LoadSettings();
 
@@ -375,7 +375,7 @@ namespace NarutoBot3
                 this.InputBox.Text = title;
             }
         }
-        public void WriteMessage(String message) //Writes message on the TextBox (bot console)
+        public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -395,7 +395,7 @@ namespace NarutoBot3
             //also, should make a log
 
         }
-        public void WriteMessage(String message, Color color) //Writes message on the TextBox (bot console)
+        public void WriteMessage(String message, Color color) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -918,7 +918,7 @@ namespace NarutoBot3
 
             if (NICK.Length > 15)
                 WriteMessage(NICK.Truncate(16) + ":" + message);
-            else if (NICK.Length >= 8)                       //Write the message on the bot console
+            else if (NICK.Length >= 8)                       //Write the Message on the bot console
                 WriteMessage(NICK + "\t: " + message);
             else
                 WriteMessage(NICK + "\t\t: " + message);
@@ -1066,7 +1066,7 @@ namespace NarutoBot3
         /** method stolen from an SO thread. sorry can't remember the author **/
         static void AddAddress(string address, string domain, string user)
         {
-            string args = string.Format(@"http add urlacl url={0}", address) + " user=\"" + domain + "\\" + user + "\"";
+            string args = string.Format(@"http add urlacl url={0}", address) + " User=\"" + domain + "\\" + user + "\"";
 
             ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
             psi.Verb = "runas";

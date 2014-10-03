@@ -48,13 +48,14 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cb_Kill = new System.Windows.Forms.CheckBox();
             this.cb_nicks = new System.Windows.Forms.CheckBox();
             this.cb_Trivia = new System.Windows.Forms.CheckBox();
             this.cb_Poke = new System.Windows.Forms.CheckBox();
             this.cb_randomText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cb_Kill = new System.Windows.Forms.CheckBox();
+            this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -299,6 +300,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cb_Questions);
             this.groupBox4.Controls.Add(this.cb_Kill);
             this.groupBox4.Controls.Add(this.cb_hello);
             this.groupBox4.Controls.Add(this.cb_roll);
@@ -312,6 +314,18 @@
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "For Fun";
+            // 
+            // cb_Kill
+            // 
+            this.cb_Kill.AutoSize = true;
+            this.cb_Kill.Checked = true;
+            this.cb_Kill.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_Kill.Location = new System.Drawing.Point(6, 158);
+            this.cb_Kill.Name = "cb_Kill";
+            this.cb_Kill.Size = new System.Drawing.Size(39, 17);
+            this.cb_Kill.TabIndex = 10;
+            this.cb_Kill.Text = "Kill";
+            this.cb_Kill.UseVisualStyleBackColor = true;
             // 
             // cb_nicks
             // 
@@ -384,17 +398,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Basic";
             // 
-            // cb_Kill
+            // cb_Questions
             // 
-            this.cb_Kill.AutoSize = true;
-            this.cb_Kill.Checked = true;
-            this.cb_Kill.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Kill.Location = new System.Drawing.Point(6, 158);
-            this.cb_Kill.Name = "cb_Kill";
-            this.cb_Kill.Size = new System.Drawing.Size(39, 17);
-            this.cb_Kill.TabIndex = 10;
-            this.cb_Kill.Text = "Kill";
-            this.cb_Kill.UseVisualStyleBackColor = true;
+            this.cb_Questions.AutoSize = true;
+            this.cb_Questions.Checked = true;
+            this.cb_Questions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_Questions.Location = new System.Drawing.Point(6, 182);
+            this.cb_Questions.Name = "cb_Questions";
+            this.cb_Questions.Size = new System.Drawing.Size(73, 17);
+            this.cb_Questions.TabIndex = 11;
+            this.cb_Questions.Text = "Questions";
+            this.cb_Questions.UseVisualStyleBackColor = true;
             // 
             // enabledCommands
             // 
@@ -451,5 +465,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox cb_Kill;
+        private System.Windows.Forms.CheckBox cb_Questions;
     }
 }
