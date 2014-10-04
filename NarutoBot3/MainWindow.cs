@@ -21,8 +21,7 @@ namespace NarutoBot3
         searchAnimeAPI animeAPI = new searchAnimeAPI();
         ConnectWindow Connect = new ConnectWindow();
         enabledCommands enableCommandsWindow = new enabledCommands();
-        Assignments assignmentsWindow = new Assignments();
-        claims claimsWindow = new claims();
+        ColorkageURLs colorkageUrlsWindow = new ColorkageURLs();
         nick nickWindow = new nick();
         operators operatorsWindow = new operators();
         rules rulesWindow = new rules();
@@ -31,7 +30,6 @@ namespace NarutoBot3
         muted mutedWindow = new muted();
         RedditCredentials redditcredentials = new RedditCredentials();
         RleaseChecker releaseChecker = new RleaseChecker();
-
 
         Bot ircBot;
         public IrcClient client;
@@ -145,11 +143,10 @@ namespace NarutoBot3
 
             if (result == DialogResult.OK)
             {
-                if (connect()) //If connected with sfuccess, then start the bot
+                if (connect()) //If connected with success, then start the bot
                 {
                     exitTheLoop = false;
                     backgroundWorker1.RunWorkerAsync();
-                    //isConnected = true;
                 }
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -163,12 +160,12 @@ namespace NarutoBot3
             loadSettings();
             client = new IrcClient(HOME_CHANNEL, HOST, PORT, NICK);
 
-
             if (client.Connect())
             {
                 exitTheLoop = false;
                 return true;
             }
+
             else return false;
         }
 
@@ -223,17 +220,13 @@ namespace NarutoBot3
         private void disconnect()
         {
             ChangeConnectingLabel("Disconnecting...");
-
             client.Disconnect();
             
             Thread.Sleep(250);
 
             UpdateDataSource();
-
             OutputClean();
-            
             ChangeTitle("NarutoBot");
-
             exitTheLoop = true;
             
         }
@@ -305,8 +298,6 @@ namespace NarutoBot3
 
             myProcess.Close();
         }
-
-
 
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -496,7 +487,7 @@ namespace NarutoBot3
                     if (client.isConnected)
                     {
                         DialogResult resultWarning;
-                        resultWarning = MessageBox.Show("This bot is already connected./nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                         if (resultWarning == System.Windows.Forms.DialogResult.OK)
                         {
@@ -706,12 +697,7 @@ namespace NarutoBot3
 
         private void assignmentsURLToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            assignmentsWindow.Show();
-        }
-
-        private void claimsURLToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            claimsWindow.Show();
+            colorkageUrlsWindow.Show();
         }
 
         private void changeETAToolStripMenuItem_Click(object sender, EventArgs e)
@@ -840,10 +826,6 @@ namespace NarutoBot3
             contextParse(e.ClickedItem.Text);
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
-        }
         public void releaseCheckerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var result = releaseChecker.ShowDialog();

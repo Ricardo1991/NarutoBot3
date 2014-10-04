@@ -24,8 +24,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>en</TargetCulture>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>7</ApplicationRevision>
-    <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>3.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -92,17 +92,11 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="GoogleSearch.cs" />
-    <Compile Include="assignments.cs">
+    <Compile Include="colorkage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="assignments.Designer.cs">
-      <DependentUpon>assignments.cs</DependentUpon>
-    </Compile>
-    <Compile Include="claims.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="claims.Designer.cs">
-      <DependentUpon>claims.cs</DependentUpon>
+    <Compile Include="colorkage.Designer.cs">
+      <DependentUpon>colorkage.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectWindow.cs">
       <SubType>Form</SubType>
@@ -186,11 +180,8 @@
     </Compile>
     <Compile Include="TimeZoneAPI.cs" />
     <Compile Include="truncate.cs" />
-    <EmbeddedResource Include="assignments.resx">
-      <DependentUpon>assignments.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="claims.resx">
-      <DependentUpon>claims.cs</DependentUpon>
+    <EmbeddedResource Include="colorkage.resx">
+      <DependentUpon>colorkage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConnectWindow.resx">
       <DependentUpon>ConnectWindow.cs</DependentUpon>

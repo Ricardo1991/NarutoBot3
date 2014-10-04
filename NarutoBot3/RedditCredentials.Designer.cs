@@ -82,9 +82,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(223, 13);
+            this.label3.Size = new System.Drawing.Size(222, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "This saves the password in an unsafe manner";
+            this.label3.Text = "Warning: The password is saved as clear text";
             // 
             // b_Login
             // 

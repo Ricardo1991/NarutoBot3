@@ -28,24 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.rulesBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // textBox1
-            // 
-            this.textBox1.AcceptsReturn = true;
-            this.textBox1.AcceptsTab = true;
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(522, 227);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.WordWrap = false;
             // 
             // label1
             // 
@@ -68,17 +54,30 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // rulesBox
+            // 
+            this.rulesBox.AcceptsTab = true;
+            this.rulesBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rulesBox.Location = new System.Drawing.Point(12, 12);
+            this.rulesBox.Name = "rulesBox";
+            this.rulesBox.Size = new System.Drawing.Size(523, 227);
+            this.rulesBox.TabIndex = 3;
+            this.rulesBox.Text = "";
+            this.rulesBox.WordWrap = false;
+            // 
             // rules
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 276);
+            this.Controls.Add(this.rulesBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
             this.Name = "rules";
             this.ShowIcon = false;
-            this.Text = "Rules";
+            this.Text = "Rules Text";
             this.Shown += new System.EventHandler(this.rules_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -87,8 +86,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.RichTextBox rulesBox;
     }
 }

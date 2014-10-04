@@ -29,6 +29,7 @@ namespace NarutoBot3
         }
         static void readHLP()
         {
+            hlp.Clear();
             StreamReader sr = new StreamReader("help.txt");
             try
             {
@@ -52,7 +53,7 @@ namespace NarutoBot3
         private void button1_Click(object sender, EventArgs e)
         {
             hlp.Clear();
-            foreach (var myString in textBox1.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var myString in helpBox.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 hlp.Add(myString);
             SaveHLP();
 
@@ -61,12 +62,11 @@ namespace NarutoBot3
 
         private void help_Shown(object sender, EventArgs e)
         {
-            hlp.Clear();
-            textBox1.Text = "";
+            helpBox.Text = "";
             readHLP();
             foreach (string hp in hlp)
             {
-                textBox1.AppendText(hp + "\n");
+                helpBox.AppendText(hp + "\n");
             }
         }
     }

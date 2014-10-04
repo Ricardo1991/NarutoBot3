@@ -63,8 +63,6 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> Connected;
         public event EventHandler<EventArgs> ConnectedWithServer;
 
-        public event EventHandler<EventArgs> MessageReceived;
-
         public event EventHandler<EventArgs> BotNickChanged;
 
         public event EventHandler<EventArgs> BotSilenced;
@@ -77,6 +75,12 @@ namespace NarutoBot3
         private bool waitingForPong = false;
 
         private TimeSpan timeDifference;
+
+        IrcClient Client;
+        RichTextBox Output2;
+        string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
+        public Reddit reddit;
+        public RedditSharp.Things.AuthenticatedUser user;
 
         public TimeSpan TimeDifference
         {
@@ -94,7 +98,6 @@ namespace NarutoBot3
         {
             if (PongReceived != null)
                 PongReceived(this, e);
-
         }
 
 
@@ -102,14 +105,12 @@ namespace NarutoBot3
         {
             if (Timeout != null)
                 Timeout(this, e);
-
         }
 
         protected virtual void OnConnectedWithServer(EventArgs e)
         {
             if (ConnectedWithServer != null)
                 ConnectedWithServer(this, e);
-        
         }
 
         protected virtual void OnDuplicatedNick(EventArgs e)
@@ -122,32 +123,24 @@ namespace NarutoBot3
         {
             if (BotUnsilenced != null)
                 BotUnsilenced(this, e);
-
         }
+
         protected virtual void OnSilence(EventArgs e)
         {
             if (BotSilenced != null)
                 BotSilenced(this, e);
-
         }
 
         protected virtual void OnQuit(EventArgs e)
         {
             if (Quit != null)
                 Quit(this, e);
-        
         }
 
         protected virtual void OnBotNickChanged(EventArgs e)
         {
             if (BotNickChanged != null)
                 BotNickChanged(this, e);
-        
-        }
-        protected virtual void OnReceiveMessage(EventArgs e)
-        {
-            if (MessageReceived != null)
-                MessageReceived(this, e);
         }
 
         protected virtual void OnCreate(EventArgs e)
@@ -181,22 +174,14 @@ namespace NarutoBot3
         protected virtual void OnModeChange(EventArgs e)
         {
             if (ModeChanged != null)
-                ModeChanged(this, e);
-        
+                ModeChanged(this, e);  
         }
 
         protected virtual void OnKick(EventArgs e)
         {
             if (Kicked != null)
                 Kicked(this, e);
-        
         }
-
-        IrcClient Client;
-        RichTextBox Output2;
-        string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
-        public Reddit reddit;
-        public RedditSharp.Things.AuthenticatedUser user;
         
         public Bot(ref IrcClient client, ref RichTextBox output2)
         {
@@ -208,28 +193,29 @@ namespace NarutoBot3
         {
             Dispose(false);
             return;
-        
         }
 
         public void LoadSettings()
         {
-            ReadOps();              //operators
-            ReadBan();              //banned users
-            ReadHelp();              //help text
-            ReadTrivia();              //trivia strings
+            ReadOps();                  //operators
+            ReadBan();                  //banned users
+            ReadHelp();                 //help text
+            ReadTrivia();               //trivia strings
             ReadGreetings();            //read greetings
-            ReadKills();
-            LoadNickGenStrings();   //For the nick generator
+            ReadKills();                //Read the killstrings
+            LoadNickGenStrings();       //For the nick generator
+
+            reddit = new Reddit();
 
             if (Settings.Default.redditUserEnabled)
             {
-                try { user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass); }
+                try { 
+                    user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true); 
+                }
                 catch { }
             }
-
-            reddit = new Reddit();
-        
         }
+
         public void BotMessage(string message)
         {
             Who = "";
@@ -266,7 +252,6 @@ namespace NarutoBot3
                         Client.HOST_SERVER = parameters[1];
                         WriteMessage("* " + command + " " + completeParameters);
                         
- 
                         break;
 
                     //:nova.esper.net 433 * SekiKun :Nickname is already in use.
@@ -499,7 +484,6 @@ namespace NarutoBot3
                         userTemp.Clear();
 
                         break;
-
 
                     case ("KICK"): ;
 
@@ -983,18 +967,6 @@ namespace NarutoBot3
             }
         }
 
-        public void SaveRules()
-        {
-            using (StreamWriter newTask = new StreamWriter("rules.txt", false))
-            {
-                foreach (string rl in rls)
-                {
-                    newTask.WriteLine(rl);
-                }
-            }
-
-
-        }
         public void ReadRules()
         {
             rls.Clear();
@@ -1012,18 +984,6 @@ namespace NarutoBot3
             }
         }
 
-        public void SaveHelp()
-        {
-            using (StreamWriter newTask = new StreamWriter("help.txt", false))
-            {
-                foreach (string hp in hlp)
-                {
-                    newTask.WriteLine(hp);
-                }
-            }
-
-
-        }
         public void ReadHelp()
         {
             hlp.Clear();

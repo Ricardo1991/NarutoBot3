@@ -54,7 +54,7 @@ namespace NarutoBot3
         private void button1_Click(object sender, EventArgs e)
         {
             rls.Clear();
-            foreach (var myString in textBox1.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var myString in rulesBox.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 rls.Add(myString);
             SaveRLS();
 
@@ -64,11 +64,12 @@ namespace NarutoBot3
         private void rules_Shown(object sender, EventArgs e)
         {
             rls.Clear();
-            textBox1.Text = "";
+            rulesBox.Text = "";
             readRLS();
             foreach (string rl in rls)
             {
-                textBox1.AppendText(rl+"\n");
+                rulesBox.AppendText(rl+"\n");
+
             }
             
         }
