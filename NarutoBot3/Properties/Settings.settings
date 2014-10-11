@@ -42,10 +42,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="currentAssignmentURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://www.reddit.com/r/NMCP/comments/23sgud/674_assignments/</Value>
+      <Value Profile="(Default)">https://www.reddit.com/r/NMCP/comments/2isfh1/695_assignments/</Value>
     </Setting>
     <Setting Name="currentClaimsURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://www.reddit.com/r/NMCP/comments/23rkok/674_page_claiming/</Value>
+      <Value Profile="(Default)">https://www.reddit.com/r/NMCP/comments/2iqqra/695_page_claiming/</Value>
     </Setting>
     <Setting Name="youtube_Enabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -63,7 +63,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="timeEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="triviaEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -90,7 +90,7 @@
       <Value Profile="(Default)">http://www.mangapanda.com/naruto/</Value>
     </Setting>
     <Setting Name="chapterNumber" Type="System.String" Scope="User">
-      <Value Profile="(Default)">690</Value>
+      <Value Profile="(Default)">696</Value>
     </Setting>
     <Setting Name="checkInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
@@ -114,7 +114,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="twitterEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="malUser" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -126,10 +126,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="timeOutTimeInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">120</Value>
+      <Value Profile="(Default)">240</Value>
     </Setting>
     <Setting Name="pingServerInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">45</Value>
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="questionEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

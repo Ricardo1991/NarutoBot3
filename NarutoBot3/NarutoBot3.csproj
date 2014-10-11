@@ -22,10 +22,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>http://www.reddit.com/r/Ricardo1991</SupportUrl>
     <TargetCulture>en</TargetCulture>
+    <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>3.3.1.%2a</ApplicationVersion>
+    <ApplicationVersion>3.4.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -266,9 +268,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="banned.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="TextFiles\banned.txt" />
     <Content Include="TextFiles\help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -104,7 +104,7 @@
             // 
             this.b_Conect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.b_Conect.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.b_Conect.Location = new System.Drawing.Point(12, 156);
+            this.b_Conect.Location = new System.Drawing.Point(93, 156);
             this.b_Conect.Name = "b_Conect";
             this.b_Conect.Size = new System.Drawing.Size(196, 30);
             this.b_Conect.TabIndex = 5;
@@ -116,7 +116,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(214, 156);
+            this.button1.Location = new System.Drawing.Point(12, 156);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 6;
@@ -172,7 +172,11 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.b_Conect);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(320, 234);
+            this.MinimumSize = new System.Drawing.Size(320, 234);
             this.Name = "ConnectWindow";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Connect";
             this.groupBox1.ResumeLayout(false);

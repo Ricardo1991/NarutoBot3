@@ -38,6 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tb_User = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.cx_group.SuspendLayout();
             this.groupBoxAPI.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -89,6 +90,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.tb_Pass);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.tb_User);
@@ -133,7 +135,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Username";
             // 
-            // searchAnimeAPI
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(230, 67);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(222, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Warning: The password is saved as clear text";
+            // 
+            // SearchAnimeAPIWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -142,8 +153,10 @@
             this.Controls.Add(this.bt_Save);
             this.Controls.Add(this.groupBoxAPI);
             this.Controls.Add(this.cx_group);
-            this.Name = "searchAnimeAPI";
+            this.MinimumSize = new System.Drawing.Size(522, 336);
+            this.Name = "SearchAnimeAPIWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Google and MAL API Keys";
             this.Shown += new System.EventHandler(this.searchAnimeAPI_Shown);
             this.cx_group.ResumeLayout(false);
@@ -168,5 +181,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tb_User;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
     }
 }

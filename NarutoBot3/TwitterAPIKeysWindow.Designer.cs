@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.consumerBox = new System.Windows.Forms.GroupBox();
-            this.b_ConsumerKey = new System.Windows.Forms.Label();
-            this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.tb_ConsumerKeySecret = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
+            this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.AccessTokenBox = new System.Windows.Forms.GroupBox();
+            this.tb_AccessTokenSecret = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tb_AccessToken = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tb_AccessTokenSecret = new System.Windows.Forms.TextBox();
             this.cb_TwitterEnabled = new System.Windows.Forms.CheckBox();
             this.bSave = new System.Windows.Forms.Button();
             this.consumerBox.SuspendLayout();
@@ -59,22 +59,13 @@
             this.consumerBox.TabStop = false;
             this.consumerBox.Text = "Consumer Keys";
             // 
-            // b_ConsumerKey
+            // tb_ConsumerKeySecret
             // 
-            this.b_ConsumerKey.AutoSize = true;
-            this.b_ConsumerKey.Location = new System.Drawing.Point(7, 24);
-            this.b_ConsumerKey.Name = "b_ConsumerKey";
-            this.b_ConsumerKey.Size = new System.Drawing.Size(75, 13);
-            this.b_ConsumerKey.TabIndex = 0;
-            this.b_ConsumerKey.Text = "Consumer Key";
-            // 
-            // tb_ConsumerKey
-            // 
-            this.tb_ConsumerKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tb_ConsumerKey.Location = new System.Drawing.Point(129, 21);
-            this.tb_ConsumerKey.Name = "tb_ConsumerKey";
-            this.tb_ConsumerKey.Size = new System.Drawing.Size(321, 20);
-            this.tb_ConsumerKey.TabIndex = 1;
+            this.tb_ConsumerKeySecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_ConsumerKeySecret.Location = new System.Drawing.Point(129, 47);
+            this.tb_ConsumerKeySecret.Name = "tb_ConsumerKeySecret";
+            this.tb_ConsumerKeySecret.Size = new System.Drawing.Size(321, 20);
+            this.tb_ConsumerKeySecret.TabIndex = 1;
             // 
             // label1
             // 
@@ -85,13 +76,22 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Consumer Key Secret";
             // 
-            // tb_ConsumerKeySecret
+            // tb_ConsumerKey
             // 
-            this.tb_ConsumerKeySecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tb_ConsumerKeySecret.Location = new System.Drawing.Point(129, 47);
-            this.tb_ConsumerKeySecret.Name = "tb_ConsumerKeySecret";
-            this.tb_ConsumerKeySecret.Size = new System.Drawing.Size(321, 20);
-            this.tb_ConsumerKeySecret.TabIndex = 1;
+            this.tb_ConsumerKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_ConsumerKey.Location = new System.Drawing.Point(129, 21);
+            this.tb_ConsumerKey.Name = "tb_ConsumerKey";
+            this.tb_ConsumerKey.Size = new System.Drawing.Size(321, 20);
+            this.tb_ConsumerKey.TabIndex = 1;
+            // 
+            // b_ConsumerKey
+            // 
+            this.b_ConsumerKey.AutoSize = true;
+            this.b_ConsumerKey.Location = new System.Drawing.Point(7, 24);
+            this.b_ConsumerKey.Name = "b_ConsumerKey";
+            this.b_ConsumerKey.Size = new System.Drawing.Size(75, 13);
+            this.b_ConsumerKey.TabIndex = 0;
+            this.b_ConsumerKey.Text = "Consumer Key";
             // 
             // AccessTokenBox
             // 
@@ -107,6 +107,23 @@
             this.AccessTokenBox.TabIndex = 1;
             this.AccessTokenBox.TabStop = false;
             this.AccessTokenBox.Text = "Access Tokens";
+            // 
+            // tb_AccessTokenSecret
+            // 
+            this.tb_AccessTokenSecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_AccessTokenSecret.Location = new System.Drawing.Point(129, 46);
+            this.tb_AccessTokenSecret.Name = "tb_AccessTokenSecret";
+            this.tb_AccessTokenSecret.Size = new System.Drawing.Size(321, 20);
+            this.tb_AccessTokenSecret.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 49);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Access Token Secret";
             // 
             // label2
             // 
@@ -124,23 +141,6 @@
             this.tb_AccessToken.Name = "tb_AccessToken";
             this.tb_AccessToken.Size = new System.Drawing.Size(321, 20);
             this.tb_AccessToken.TabIndex = 1;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 49);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Access Token Secret";
-            // 
-            // tb_AccessTokenSecret
-            // 
-            this.tb_AccessTokenSecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tb_AccessTokenSecret.Location = new System.Drawing.Point(129, 46);
-            this.tb_AccessTokenSecret.Name = "tb_AccessTokenSecret";
-            this.tb_AccessTokenSecret.Size = new System.Drawing.Size(321, 20);
-            this.tb_AccessTokenSecret.TabIndex = 1;
             // 
             // cb_TwitterEnabled
             // 
@@ -165,7 +165,7 @@
             this.bSave.UseVisualStyleBackColor = true;
             this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
-            // twitterAPIkeys
+            // TwitterAPIKeysWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -174,7 +174,8 @@
             this.Controls.Add(this.cb_TwitterEnabled);
             this.Controls.Add(this.AccessTokenBox);
             this.Controls.Add(this.consumerBox);
-            this.Name = "twitterAPIkeys";
+            this.MinimumSize = new System.Drawing.Size(497, 259);
+            this.Name = "TwitterAPIKeysWindow";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Twitter API Keys";

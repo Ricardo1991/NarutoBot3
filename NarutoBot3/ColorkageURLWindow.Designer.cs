@@ -92,8 +92,10 @@
             this.Controls.Add(this.claimsBox);
             this.Controls.Add(this.bSave);
             this.Controls.Add(this.assignmentsBox);
+            this.MinimumSize = new System.Drawing.Size(553, 215);
             this.Name = "ColorkageURLs";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Change Assignments and Claims";
             this.Load += new System.EventHandler(this.assignments_Load);
             this.ResumeLayout(false);

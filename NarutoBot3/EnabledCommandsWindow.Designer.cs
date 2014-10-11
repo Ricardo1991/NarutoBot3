@@ -48,6 +48,7 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.cb_Kill = new System.Windows.Forms.CheckBox();
             this.cb_nicks = new System.Windows.Forms.CheckBox();
             this.cb_Trivia = new System.Windows.Forms.CheckBox();
@@ -55,7 +56,6 @@
             this.cb_randomText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -315,6 +315,18 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "For Fun";
             // 
+            // cb_Questions
+            // 
+            this.cb_Questions.AutoSize = true;
+            this.cb_Questions.Checked = true;
+            this.cb_Questions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_Questions.Location = new System.Drawing.Point(6, 182);
+            this.cb_Questions.Name = "cb_Questions";
+            this.cb_Questions.Size = new System.Drawing.Size(73, 17);
+            this.cb_Questions.TabIndex = 11;
+            this.cb_Questions.Text = "Questions";
+            this.cb_Questions.UseVisualStyleBackColor = true;
+            // 
             // cb_Kill
             // 
             this.cb_Kill.AutoSize = true;
@@ -398,19 +410,7 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Basic";
             // 
-            // cb_Questions
-            // 
-            this.cb_Questions.AutoSize = true;
-            this.cb_Questions.Checked = true;
-            this.cb_Questions.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Questions.Location = new System.Drawing.Point(6, 182);
-            this.cb_Questions.Name = "cb_Questions";
-            this.cb_Questions.Size = new System.Drawing.Size(73, 17);
-            this.cb_Questions.TabIndex = 11;
-            this.cb_Questions.Text = "Questions";
-            this.cb_Questions.UseVisualStyleBackColor = true;
-            // 
-            // enabledCommands
+            // EnabledCommandsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -418,8 +418,9 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.MinimumSize = new System.Drawing.Size(620, 351);
-            this.Name = "enabledCommands";
+            this.Name = "EnabledCommandsWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Enable/Disable Commands";
             this.groupBox1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);

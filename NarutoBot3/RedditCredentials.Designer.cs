@@ -136,8 +136,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 174);
             this.Controls.Add(this.groupBox1);
+            this.MinimumSize = new System.Drawing.Size(300, 213);
             this.Name = "RedditCredentials";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Reddit Login";
             this.Shown += new System.EventHandler(this.RedditCredentials_Shown);
             this.groupBox1.ResumeLayout(false);

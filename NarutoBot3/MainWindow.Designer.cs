@@ -478,7 +478,6 @@
             this.OutputBox.Size = new System.Drawing.Size(866, 422);
             this.OutputBox.TabIndex = 2;
             this.OutputBox.Text = "";
-            this.OutputBox.WordWrap = false;
             this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
             // 
             // InterfaceUserList

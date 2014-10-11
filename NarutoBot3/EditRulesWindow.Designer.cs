@@ -46,7 +46,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(460, 245);
+            this.button1.Location = new System.Drawing.Point(467, 245);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -62,21 +62,23 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rulesBox.Location = new System.Drawing.Point(12, 12);
             this.rulesBox.Name = "rulesBox";
-            this.rulesBox.Size = new System.Drawing.Size(523, 227);
+            this.rulesBox.Size = new System.Drawing.Size(530, 227);
             this.rulesBox.TabIndex = 3;
             this.rulesBox.Text = "";
             this.rulesBox.WordWrap = false;
             // 
-            // rules
+            // EditRulesWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(547, 276);
+            this.ClientSize = new System.Drawing.Size(554, 276);
             this.Controls.Add(this.rulesBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Name = "rules";
+            this.MinimumSize = new System.Drawing.Size(570, 315);
+            this.Name = "EditRulesWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Rules Text";
             this.Shown += new System.EventHandler(this.rules_Shown);
             this.ResumeLayout(false);

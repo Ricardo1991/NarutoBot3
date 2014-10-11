@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cb_Enable = new System.Windows.Forms.CheckBox();
@@ -148,7 +147,7 @@
             this.bt_Cancel.Text = "Cancel";
             this.bt_Cancel.UseVisualStyleBackColor = true;
             // 
-            // RleaseChecker
+            // MangaReleaseCheckerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -156,8 +155,10 @@
             this.Controls.Add(this.bt_Cancel);
             this.Controls.Add(this.bt_OK);
             this.Controls.Add(this.groupBox1);
-            this.Name = "RleaseChecker";
+            this.MinimumSize = new System.Drawing.Size(385, 245);
+            this.Name = "MangaReleaseCheckerWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Chapter Release Checker";
             this.Shown += new System.EventHandler(this.RleaseChecker_Shown);
             this.groupBox1.ResumeLayout(false);

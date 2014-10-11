@@ -111,7 +111,7 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // muted
+            // MutedUsersWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -120,8 +120,10 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.listMuted);
-            this.Name = "muted";
+            this.MinimumSize = new System.Drawing.Size(408, 211);
+            this.Name = "MutedUsersWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Muted Users";
             this.Shown += new System.EventHandler(this.muted_Shown);
             this.groupBox1.ResumeLayout(false);

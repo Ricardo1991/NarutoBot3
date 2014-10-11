@@ -181,7 +181,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.reddit.com/r/NMCP/comments/23sgud/674_assignments/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.reddit.com/r/NMCP/comments/2isfh1/695_assignments/")]
         public string currentAssignmentURL {
             get {
                 return ((string)(this["currentAssignmentURL"]));
@@ -193,7 +193,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.reddit.com/r/NMCP/comments/23rkok/674_page_claiming/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.reddit.com/r/NMCP/comments/2iqqra/695_page_claiming/")]
         public string currentClaimsURL {
             get {
                 return ((string)(this["currentClaimsURL"]));
@@ -265,7 +265,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool timeEnabled {
             get {
                 return ((bool)(this["timeEnabled"]));
@@ -373,7 +373,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("690")]
+        [global::System.Configuration.DefaultSettingValueAttribute("696")]
         public string chapterNumber {
             get {
                 return ((string)(this["chapterNumber"]));
@@ -469,7 +469,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool twitterEnabled {
             get {
                 return ((bool)(this["twitterEnabled"]));
@@ -517,7 +517,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        [global::System.Configuration.DefaultSettingValueAttribute("240")]
         public int timeOutTimeInterval {
             get {
                 return ((int)(this["timeOutTimeInterval"]));
@@ -529,7 +529,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("45")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
         public int pingServerInterval {
             get {
                 return ((int)(this["pingServerInterval"]));

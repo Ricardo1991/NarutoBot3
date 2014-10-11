@@ -9,12 +9,12 @@ namespace NarutoBot3
         public ChangeBotNickWindow()
         {
             InitializeComponent();
-            textBox1.Text = Settings.Default.Nick;
+            tb_Nick.Text = Settings.Default.Nick;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Settings.Default.Nick = textBox1.Text;
+            Settings.Default.Nick = tb_Nick.Text;
             Settings.Default.Save();
             this.Close();
         }

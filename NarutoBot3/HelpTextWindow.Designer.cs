@@ -36,7 +36,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSave.Location = new System.Drawing.Point(460, 245);
+            this.bSave.Location = new System.Drawing.Point(467, 245);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 5;
@@ -61,20 +61,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.helpBox.Location = new System.Drawing.Point(12, 12);
             this.helpBox.Name = "helpBox";
-            this.helpBox.Size = new System.Drawing.Size(523, 227);
+            this.helpBox.Size = new System.Drawing.Size(530, 227);
             this.helpBox.TabIndex = 6;
             this.helpBox.Text = "";
             // 
-            // help
+            // HelpTextWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(547, 276);
+            this.ClientSize = new System.Drawing.Size(554, 276);
             this.Controls.Add(this.helpBox);
             this.Controls.Add(this.bSave);
             this.Controls.Add(this.label1);
-            this.Name = "help";
+            this.MinimumSize = new System.Drawing.Size(570, 315);
+            this.Name = "HelpTextWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Help Text";
             this.Shown += new System.EventHandler(this.help_Shown);
             this.ResumeLayout(false);
