@@ -1,4 +1,5 @@
-﻿namespace NarutoBot3
+﻿using System;
+namespace NarutoBot3
 {
     public class pastMessage
     {
@@ -44,6 +45,8 @@
 
         public pastMessage(string userA, string messageA)
         {
+            if (String.IsNullOrEmpty(userA) || String.IsNullOrEmpty(messageA)) return;
+
             this.lenght = messageA.Length;
             this.message = messageA;
             this.user = userA;

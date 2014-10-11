@@ -52,6 +52,29 @@ namespace NarutoBot3
 
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
 
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
+            backgroundWorker1.WorkerSupportsCancellation = true;
+
+            lastCommand = "";
+
+            var result = Connect.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                if (connect()) //If connected with success, then start the bot
+                {
+                    exitTheLoop = false;
+                    backgroundWorker1.RunWorkerAsync();
+                }
+                else
+                    MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public void loadSettings()
         {
@@ -80,14 +103,13 @@ namespace NarutoBot3
                     break;
             }
 
-
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5 )
+            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
             {
                 Settings.Default.aniSearchEnabled = false;
                 Settings.Default.timeEnabled = false;
             }
 
-            if(Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
+            if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
 
 
@@ -99,8 +121,6 @@ namespace NarutoBot3
                     String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
                     String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
                 Settings.Default.twitterEnabled = false;
-
-            
 
             aTime = new System.Timers.Timer(Settings.Default.checkInterval);
             aTime.Enabled = false;
@@ -131,35 +151,9 @@ namespace NarutoBot3
             NICK = Settings.Default.Nick;
             PORT = Convert.ToInt32(Settings.Default.Port);
 
-
             Settings.Default.Save();
 
         }
-
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
-            backgroundWorker1.WorkerSupportsCancellation = true;
-
-            lastCommand = "";
-
-            var result = Connect.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                if (connect()) //If connected with success, then start the bot
-                {
-                    exitTheLoop = false;
-                    backgroundWorker1.RunWorkerAsync();
-                }
-                else
-                    MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public bool connect()//This is where the bot connects to the server and logs in
         {
             ChangeConnectingLabel("Connecting...");
@@ -183,34 +177,12 @@ namespace NarutoBot3
 
             ircBot = new Bot(ref client, ref OutputBox);
 
-            ircBot.Connected += new EventHandler<EventArgs>(nowConnected);
-            ircBot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
-
-            ircBot.Created += new EventHandler<EventArgs>(userListCreated);
-            ircBot.Joined += (senderr, ee) => userJoined(senderr, ee, ircBot.Who);
-            ircBot.Left += (senderr, ee) => userLeft(senderr, ee, ircBot.WhoLeft);
-            ircBot.NickChanged += (senderr, ee) => userNickChange(senderr, ee, ircBot.Who, ircBot.NewNick);
-            ircBot.Kicked += (senderr, ee) => userKicked(senderr, ee, ircBot.Who);
-            ircBot.ModeChanged += (senderr, ee) => userModeChanged(senderr, ee, ircBot.Who, ircBot.Mode);
-
-            ircBot.Timeout += new EventHandler<EventArgs>(timeout);
-
-            ircBot.BotNickChanged += (senderr, ee) => eventChangeTitle(senderr, ee);
-
-            ircBot.BotSilenced += new EventHandler<EventArgs>(botSilence);
-            ircBot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
-
-            ircBot.Quit += new EventHandler<EventArgs>(letsQuit);
-
-            ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
-
-            ircBot.PongReceived += (senderr, ee) => updateLag(sender, ee, ircBot.TimeDifference);
-
-            ircBot.LoadSettings();
+            initializeBot();
 
             while (!exitTheLoop)
             { 
                 buffer = "";
+                
                 try
                 {
                     buffer = client.messageReader();
@@ -222,6 +194,34 @@ namespace NarutoBot3
                 catch
                 { }
             }
+        }
+
+        private void initializeBot()
+        {
+            ircBot.Connected += new EventHandler<EventArgs>(nowConnected);
+            ircBot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
+
+            ircBot.Created += new EventHandler<EventArgs>(userListCreated);
+            ircBot.Joined += (sender, e) => userJoined(sender, e, ircBot.Who);
+            ircBot.Left += (sender, e) => userLeft(sender, e, ircBot.WhoLeft);
+            ircBot.NickChanged += (sender, e) => userNickChange(sender, e, ircBot.Who, ircBot.NewNick);
+            ircBot.Kicked += (sender, e) => userKicked(sender, e, ircBot.Who);
+            ircBot.ModeChanged += (sender, e) => userModeChanged(sender, e, ircBot.Who, ircBot.Mode);
+
+            ircBot.Timeout += new EventHandler<EventArgs>(timeout);
+
+            ircBot.BotNickChanged += (sender, e) => eventChangeTitle(sender, e);
+
+            ircBot.BotSilenced += new EventHandler<EventArgs>(botSilence);
+            ircBot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
+
+            ircBot.Quit += new EventHandler<EventArgs>(letsQuit);
+
+            ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
+
+            ircBot.PongReceived += (sender, e) => updateLag(sender, e, ircBot.TimeDifference);
+
+            ircBot.LoadSettings();
         }
 
         private void disconnect()
@@ -237,7 +237,6 @@ namespace NarutoBot3
             exitTheLoop = true;
             
         }
-
         
         public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -539,6 +538,11 @@ namespace NarutoBot3
                     NICK = Settings.Default.Nick;
                     PORT = Convert.ToInt32(Settings.Default.Port);
 
+                    if (String.IsNullOrWhiteSpace(HOME_CHANNEL)) HOME_CHANNEL = "#reddit-naruto";
+                    if (String.IsNullOrWhiteSpace(HOST)) HOST = "irc.freenode.net";
+                    if (String.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
+                    if (PORT == null || PORT == 0) PORT = 6667;
+
                     if (connect())//If connected with success, then start the bot
                     {
                         backgroundWorker1.RunWorkerAsync();
@@ -759,7 +763,8 @@ namespace NarutoBot3
             if (result == DialogResult.OK)
             {
                 Settings.Default.redditEnabled = true;
-                ircBot.user = ircBot.reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
+                ircBot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                
                 Settings.Default.Save();
             }
         }
@@ -1099,6 +1104,8 @@ namespace NarutoBot3
     {
         public static void AppendText(this RichTextBox box, string text, Color color)
         {
+            if (box == null) return;
+
             box.SelectionStart = box.TextLength;
             box.SelectionLength = 0;
 

@@ -80,11 +80,11 @@ namespace NarutoBot3
         IRC_Client Client;
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
-        public Reddit reddit;
+        private Reddit reddit;
 
-        public TwitterService service;
+        private TwitterService service;
 
-        public RedditSharp.Things.AuthenticatedUser user;
+        private RedditSharp.Things.AuthenticatedUser user;
         
         public TimeSpan TimeDifference
         {
@@ -237,6 +237,8 @@ namespace NarutoBot3
 
         public void BotMessage(string message)
         {
+            if (String.IsNullOrEmpty(message)) return;
+
             Who = "";
             WhoLeft = "";
             NewNick = "";
@@ -303,6 +305,8 @@ namespace NarutoBot3
 
                             if (!String.IsNullOrEmpty(Client.HOST_SERVER))
                                 OnConnectedWithServer(EventArgs.Empty);
+
+                            pingSever();
                         }
                             
                         break;
@@ -1813,6 +1817,7 @@ namespace NarutoBot3
 
         public void youtube(string CHANNEL, string nick, string line, bool isShort)
         {
+            if (String.IsNullOrEmpty(line)) return;
             if (isMuted(nick)) return;
 
             if (Settings.Default.silence == false && Settings.Default.youtube_Enabled == true)
@@ -2108,6 +2113,7 @@ namespace NarutoBot3
         }
         public void killUser(string CHANNEL, string nick, string args)
         {
+            if (String.IsNullOrEmpty(args) || String.IsNullOrEmpty(nick)) return;
             Random r = new Random();
             if (isMuted(nick)) return;
             string target;
@@ -2254,19 +2260,19 @@ namespace NarutoBot3
                         {
                             rest += split[i] + " ";
                         }
-                        rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ');
 
                         string replaced = questionsRegex(rest);
 
                         if (yes)
                         {
 
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject + " is " + replaced);
+                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your","my") + " is " + replaced);
                             
                         }
                         else
                         {
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + subject + " isn't " + replaced);
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + subject.Replace("your","my")  + " isn't " + replaced);
                         }
 
                     }
@@ -2404,7 +2410,7 @@ namespace NarutoBot3
                         {
                             rest += split[i] + " ";
                         }
-                        rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ');
 
                         string replaced = questionsRegex(rest);
 
@@ -2461,7 +2467,7 @@ namespace NarutoBot3
                         {
                             rest += split[i] + " ";
                         }
-                        rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ');
 
                         string replaced = questionsRegex(rest);
 
@@ -2501,6 +2507,7 @@ namespace NarutoBot3
 
         public void nickGen(string CHANNEL, string nick, string args)
         {
+            if (String.IsNullOrEmpty(args) || String.IsNullOrEmpty(nick)) return;
             Random rnd = new Random();
 
             bool randomnumber = false;
@@ -2571,6 +2578,8 @@ namespace NarutoBot3
 
         public void redditLink(string CHANNEL, string nick, string line)
         {
+            if (String.IsNullOrEmpty(line) || String.IsNullOrEmpty(nick)) return;
+
             string[] temp = line.Split(' ');
             string subreddit = "";
             string url = "";
@@ -2880,11 +2889,6 @@ namespace NarutoBot3
 
         }
 
-        static public string StripTagsRegex(string source)
-        {
-            return Regex.Replace(source, "<.*?>", string.Empty);
-        }
-
         private static String GetTimestamp(DateTime value)
         {
             return value.ToString("mmssffff");
@@ -2998,5 +3002,10 @@ namespace NarutoBot3
             return System.Convert.ToBase64String(plainTextBytes);
         }
 
+
+        internal void redditLogin(string userName, string password)
+        {
+            user = reddit.LogIn(userName, password);
+        }
     }
 }
