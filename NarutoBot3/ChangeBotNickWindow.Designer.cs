@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class nick
+    partial class ChangeBotNickWindow
     {
         /// <summary>
         /// Required designer variable.

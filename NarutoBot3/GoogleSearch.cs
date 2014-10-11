@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NarutoBot3
-{
-
+﻿namespace NarutoBot3
+{   
     public class GoogleSeach
     {
         public string kind { get; set; }

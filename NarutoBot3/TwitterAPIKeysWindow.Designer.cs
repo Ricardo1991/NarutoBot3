@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class twitterAPIkeys
+    partial class TwitterAPIKeysWindow
     {
         /// <summary>
         /// Required designer variable.

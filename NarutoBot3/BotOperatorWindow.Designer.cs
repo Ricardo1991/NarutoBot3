@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class operators
+    partial class BotOperatorWindow
     {
         /// <summary>
         /// Required designer variable.

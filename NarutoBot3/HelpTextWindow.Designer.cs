@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class help
+    partial class HelpTextWindow
     {
         /// <summary>
         /// Required designer variable.

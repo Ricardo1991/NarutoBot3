@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NarutoBot3
 {
-    public partial class help : Form
+    public partial class HelpTextWindow : Form
     {
         static List<string> hlp = new List<string>();
 
         static private void SaveHLP()
         {
-            using (StreamWriter newTask = new StreamWriter("help.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/help.txt", false))
             {
                 foreach (string hp in hlp)
                 {
@@ -30,7 +24,7 @@ namespace NarutoBot3
         static void readHLP()
         {
             hlp.Clear();
-            StreamReader sr = new StreamReader("help.txt");
+            StreamReader sr = new StreamReader("TextFiles/help.txt");
             try
             {
                 while (sr.Peek() >= 0)
@@ -45,7 +39,7 @@ namespace NarutoBot3
             sr.Close();
         }
 
-        public help()
+        public HelpTextWindow()
         {
             InitializeComponent();
         }

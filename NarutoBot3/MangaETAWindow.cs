@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NarutoBot3.Properties;
+using System;
 using System.Windows.Forms;
-using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
-    public partial class eta : Form
+    public partial class MangaETAWindow : Form
     {
-        public eta()
+        public MangaETAWindow()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class rules
+    partial class EditRulesWindow
     {
         /// <summary>
         /// Required designer variable.

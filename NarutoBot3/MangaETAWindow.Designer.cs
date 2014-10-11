@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class eta
+    partial class MangaETAWindow
     {
         /// <summary>
         /// Required designer variable.

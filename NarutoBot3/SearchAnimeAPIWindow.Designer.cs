@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class searchAnimeAPI
+    partial class SearchAnimeAPIWindow
     {
         /// <summary>
         /// Required designer variable.

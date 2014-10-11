@@ -1,7 +1,6 @@
 ﻿using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using RedditSharp;
-using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,12 +13,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using System.Web;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using TweetSharp;
-
-
 
 namespace NarutoBot3
 {
@@ -31,7 +25,7 @@ namespace NarutoBot3
         private List<string> ban = new List<string>();
         private List<string> tri = new List<string>();
         private List<string> kill = new List<string>();
-        private List<Greeting> greet = new List<Greeting>();
+        private List<Greetings> greet = new List<Greetings>();
         private List<string> nickGenStrings;
         private List<pastMessage> pastMessages = new List<pastMessage>();
 
@@ -83,7 +77,7 @@ namespace NarutoBot3
 
         private TimeSpan timeDifference;
 
-        IrcClient Client;
+        IRC_Client Client;
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
         public Reddit reddit;
@@ -193,7 +187,7 @@ namespace NarutoBot3
                 Kicked(this, e);
         }
         
-        public Bot(ref IrcClient client, ref RichTextBox output2)
+        public Bot(ref IRC_Client client, ref RichTextBox output2)
         {
             Client = client;
             Output2 = output2;
@@ -354,7 +348,7 @@ namespace NarutoBot3
 
                         OnJoin(EventArgs.Empty);
 
-                        foreach (Greeting g in greet)
+                        foreach (Greetings g in greet)
                         {
                             if (g.Nick == Who.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
                             {
@@ -925,7 +919,7 @@ namespace NarutoBot3
             kill.Clear();
             try
             {
-                StreamReader sr = new StreamReader("kills.txt");
+                StreamReader sr = new StreamReader("TextFiles/kills.txt");
                 while (sr.Peek() >= 0)
                 {
                     kill.Add(sr.ReadLine());
@@ -939,7 +933,7 @@ namespace NarutoBot3
 
         public void SaveOps()
         {
-            using (StreamWriter newTask = new StreamWriter("ops.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/ops.txt", false))
             {
                 foreach (string op in ops)
                 {
@@ -953,7 +947,7 @@ namespace NarutoBot3
             ops.Clear();
             try
             {
-                StreamReader sr = new StreamReader("ops.txt");
+                StreamReader sr = new StreamReader("TextFiles/ops.txt");
                 while (sr.Peek() >= 0)
                 {
                     ops.Add(sr.ReadLine());
@@ -967,7 +961,7 @@ namespace NarutoBot3
 
         public void SaveBan()
         {
-            using (StreamWriter newTask = new StreamWriter("banned.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/banned.txt", false))
             {
                 foreach (string rl in ban)
                 {
@@ -980,7 +974,7 @@ namespace NarutoBot3
             ban.Clear();
             try
             {
-                StreamReader sr = new StreamReader("banned.txt");
+                StreamReader sr = new StreamReader("TextFiles/banned.txt");
                 while (sr.Peek() >= 0)
                 {
                     ban.Add(sr.ReadLine());
@@ -997,7 +991,7 @@ namespace NarutoBot3
             rls.Clear();
             try
             {
-                StreamReader sr = new StreamReader("rules.txt");
+                StreamReader sr = new StreamReader("TextFiles/rules.txt");
                 while (sr.Peek() >= 0)
                 {
                     rls.Add(sr.ReadLine());
@@ -1014,7 +1008,7 @@ namespace NarutoBot3
             hlp.Clear();
             try
             {
-                StreamReader sr = new StreamReader("help.txt");
+                StreamReader sr = new StreamReader("TextFiles/help.txt");
                 while (sr.Peek() >= 0)
                 {
                     hlp.Add(sr.ReadLine());
@@ -1033,7 +1027,7 @@ namespace NarutoBot3
 
             try
             {
-                StreamReader sr = new StreamReader("trivia.txt");
+                StreamReader sr = new StreamReader("TextFiles/trivia.txt");
                 while (sr.Peek() >= 0)
                 {
                     tri.Add(sr.ReadLine());
@@ -1053,11 +1047,11 @@ namespace NarutoBot3
             bool enabled = false;
             bool found = false;
 
-            if (File.Exists("greetings.txt"))
+            if (File.Exists("TextFiles/greetings.txt"))
             {
                 try
                 {
-                    StreamReader sr = new StreamReader("greetings.txt");
+                    StreamReader sr = new StreamReader("TextFiles/greetings.txt");
                     while (sr.Peek() >= 0)
                     {
                         line = sr.ReadLine();
@@ -1078,7 +1072,7 @@ namespace NarutoBot3
                                 break;
                         }
 
-                        foreach (Greeting g in greet)
+                        foreach (Greetings g in greet)
                         {
                             if (g.Nick == nick)
                                 found = true;
@@ -1087,7 +1081,7 @@ namespace NarutoBot3
 
                         if (!found)
                         {
-                            Greeting g = new Greeting(nick, greeting, enabled);
+                            Greetings g = new Greetings(nick, greeting, enabled);
                             greet.Add(g);
                         }
 
@@ -1106,7 +1100,7 @@ namespace NarutoBot3
         {
             bool found = false;
 
-            foreach (Greeting g in greet)
+            foreach (Greetings g in greet)
             {
                 if (g.Nick == nick)
                 {
@@ -1118,7 +1112,7 @@ namespace NarutoBot3
 
             if (!found)
             {
-                Greeting g = new Greeting(nick, args, true);
+                Greetings g = new Greetings(nick, args, true);
                 greet.Add(g);
                 SaveGreetings();
             }
@@ -1128,9 +1122,9 @@ namespace NarutoBot3
 
         public void SaveGreetings()
         {
-            using (StreamWriter newTask = new StreamWriter("greetings.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/greetings.txt", false))
             {
-                foreach (Greeting gg in greet)
+                foreach (Greetings gg in greet)
                 {
                     newTask.WriteLine(gg.Nick + ":" + gg.Enabled.ToString() + ":" + gg.Greetingg);
                 }
@@ -1145,7 +1139,7 @@ namespace NarutoBot3
             bool found = false;
 
 
-            foreach (Greeting g in greet)
+            foreach (Greetings g in greet)
             {
                 if (g.Nick == nick && !found)
                 {
@@ -1169,7 +1163,7 @@ namespace NarutoBot3
 
             try
             {
-                StreamReader sr = new StreamReader("text.txt");
+                StreamReader sr = new StreamReader("TextFiles/nickGen.txt");
                 while (sr.Peek() >= 0)
                 {
                     nickGenStrings.Add(sr.ReadLine());
@@ -1691,7 +1685,7 @@ namespace NarutoBot3
 
             DateTime convertedTime;
 
-            TimeZoneAPI g = new TimeZoneAPI();
+            GoogleTimeZone g = new GoogleTimeZone();
             string json;
 
             if (isMuted(nick)) return;
@@ -2149,7 +2143,7 @@ namespace NarutoBot3
         {
             string message="";
             Random r = new Random();
-            StreamWriter w =  new StreamWriter("questions.txt", true);
+            StreamWriter w = new StreamWriter("TextFiles/questions.txt", true);
 
             if (isMuted(user)) return;
             if (!Settings.Default.questionEnabled) return;

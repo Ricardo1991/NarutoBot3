@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class muted
+    partial class MutedUsersWindow
     {
         /// <summary>
         /// Required designer variable.

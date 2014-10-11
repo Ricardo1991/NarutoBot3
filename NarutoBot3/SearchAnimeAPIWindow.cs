@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
-    public partial class searchAnimeAPI : Form
+    public partial class SearchAnimeAPIWindow : Form
     {
-        public searchAnimeAPI()
+        public SearchAnimeAPIWindow()
         {
             InitializeComponent();
         }

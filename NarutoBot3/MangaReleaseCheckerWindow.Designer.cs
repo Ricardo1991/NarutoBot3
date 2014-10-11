@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class RleaseChecker
+    partial class MangaReleaseCheckerWindow
     {
         /// <summary>
         /// Required designer variable.

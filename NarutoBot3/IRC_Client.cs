@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace NarutoBot3
 {
-    public class IrcClient : IDisposable
+    public class IRC_Client : IDisposable
     {
         public bool isConnected = false;
 
@@ -28,7 +28,7 @@ namespace NarutoBot3
 
         public List<string> userList = new List<string>();
 
-        public IrcClient(string home_channel, string host, int port, string nick)
+        public IRC_Client(string home_channel, string host, int port, string nick)
         {
             HOME_CHANNEL = home_channel;
             HOST = host;

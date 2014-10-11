@@ -1,6 +1,6 @@
 ﻿namespace NarutoBot3
 {
-    partial class enabledCommands
+    partial class EnabledCommandsWindow
     {
         /// <summary>
         /// Required designer variable.

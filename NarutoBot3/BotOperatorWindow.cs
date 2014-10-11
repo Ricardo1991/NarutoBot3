@@ -1,25 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
-    public partial class operators : Form
+    public partial class BotOperatorWindow : Form
     {
         static List<string> ops = new List<string>();
         static List<string> tmp = new List<string>();
 
         bool foundRepeated = false;
 
-        public operators()
+        public BotOperatorWindow()
         {
             InitializeComponent();
             readOPS(); 
@@ -28,7 +21,7 @@ namespace NarutoBot3
         public void readOPS()
         {
             ops.Clear();
-            StreamReader sr = new StreamReader("ops.txt");
+            StreamReader sr = new StreamReader("TextFiles/ops.txt");
             try
             {
                 while (sr.Peek() >= 0)
@@ -49,7 +42,7 @@ namespace NarutoBot3
 
         static private void SaveOPS()
         {
-            using (StreamWriter newTask = new StreamWriter("ops.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/ops.txt", false))
             {
                 foreach (string op in ops)
                 {

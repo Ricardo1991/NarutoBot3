@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NarutoBot3
+﻿namespace NarutoBot3
 {
-    public class TimeZoneAPI
+    public class GoogleTimeZone
     {
         public int DSTOffset { get; set; }
         public int RawOffset { get; set; }

@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NarutoBot3
 {
-    public partial class rules : Form
+    public partial class EditRulesWindow : Form
     {
         static List<string> rls = new List<string>();
 
         static private void SaveRLS()
         {
-            using (StreamWriter newTask = new StreamWriter("rules.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/rules.txt", false))
             {
                 foreach (string rl in rls)
                 {
@@ -30,7 +23,7 @@ namespace NarutoBot3
         }
         static void readRLS()
         {
-            StreamReader sr = new StreamReader("rules.txt");
+            StreamReader sr = new StreamReader("TextFiles/rules.txt");
             try
             {
                 while (sr.Peek() >= 0)
@@ -46,7 +39,7 @@ namespace NarutoBot3
         }
 
 
-        public rules()
+        public EditRulesWindow()
         {
             InitializeComponent();
         }

@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace NarutoBot3
 {
-    public partial class twitterAPIkeys : Form
+    public partial class TwitterAPIKeysWindow : Form
     {
-        public twitterAPIkeys()
+        public TwitterAPIKeysWindow()
         {
             InitializeComponent();
         }

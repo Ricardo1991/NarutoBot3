@@ -24,8 +24,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>en</TargetCulture>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
-    <ApplicationVersion>3.3.0.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>3.3.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -106,11 +106,11 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="GoogleSearch.cs" />
-    <Compile Include="colorkage.cs">
+    <Compile Include="ColorkageURLWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="colorkage.Designer.cs">
-      <DependentUpon>colorkage.cs</DependentUpon>
+    <Compile Include="ColorkageURLWindow.Designer.cs">
+      <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectWindow.cs">
       <SubType>Form</SubType>
@@ -118,52 +118,51 @@
     <Compile Include="ConnectWindow.Designer.cs">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="enabledCommands.cs">
+    <Compile Include="EnabledCommandsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="enabledCommands.Designer.cs">
-      <DependentUpon>enabledCommands.cs</DependentUpon>
+    <Compile Include="EnabledCommandsWindow.Designer.cs">
+      <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="eta.cs">
+    <Compile Include="MangaETAWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="eta.Designer.cs">
-      <DependentUpon>eta.cs</DependentUpon>
+    <Compile Include="MangaETAWindow.Designer.cs">
+      <DependentUpon>MangaETAWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="getCompilationDate.cs" />
-    <Compile Include="Greeting.cs" />
-    <Compile Include="help.cs">
+    <Compile Include="Greetings.cs" />
+    <Compile Include="HelpTextWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="help.Designer.cs">
-      <DependentUpon>help.cs</DependentUpon>
+    <Compile Include="HelpTextWindow.Designer.cs">
+      <DependentUpon>HelpTextWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="IrcClient.cs" />
+    <Compile Include="IRC_Client.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="muted.cs">
+    <Compile Include="MutedUsersWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="muted.Designer.cs">
-      <DependentUpon>muted.cs</DependentUpon>
+    <Compile Include="MutedUsersWindow.Designer.cs">
+      <DependentUpon>MutedUsersWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="myAnimeListAnime.cs" />
-    <Compile Include="nick.cs">
+    <Compile Include="MAL_Anime.cs" />
+    <Compile Include="ChangeBotNickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="nick.Designer.cs">
-      <DependentUpon>nick.cs</DependentUpon>
+    <Compile Include="ChangeBotNickWindow.Designer.cs">
+      <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="NickGen.cs" />
-    <Compile Include="operators.cs">
+    <Compile Include="BotOperatorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="operators.Designer.cs">
-      <DependentUpon>operators.cs</DependentUpon>
+    <Compile Include="BotOperatorWindow.Designer.cs">
+      <DependentUpon>BotOperatorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="pastMessage.cs" />
     <Compile Include="Program.cs" />
@@ -174,58 +173,57 @@
     <Compile Include="RedditCredentials.Designer.cs">
       <DependentUpon>RedditCredentials.cs</DependentUpon>
     </Compile>
-    <Compile Include="RleaseChecker.cs">
+    <Compile Include="MangaReleaseCheckerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RleaseChecker.Designer.cs">
-      <DependentUpon>RleaseChecker.cs</DependentUpon>
+    <Compile Include="MangaReleaseCheckerWindow.Designer.cs">
+      <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="rules.cs">
+    <Compile Include="EditRulesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="rules.Designer.cs">
-      <DependentUpon>rules.cs</DependentUpon>
+    <Compile Include="EditRulesWindow.Designer.cs">
+      <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="searchAnimeAPI.cs">
+    <Compile Include="SearchAnimeAPIWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="searchAnimeAPI.Designer.cs">
-      <DependentUpon>searchAnimeAPI.cs</DependentUpon>
+    <Compile Include="SearchAnimeAPIWindow.Designer.cs">
+      <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeZoneAPI.cs" />
-    <Compile Include="truncate.cs" />
-    <Compile Include="twitterAPIkeys.cs">
+    <Compile Include="GoogleTimeZone.cs" />
+    <Compile Include="TwitterAPIKeysWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="twitterAPIkeys.Designer.cs">
-      <DependentUpon>twitterAPIkeys.cs</DependentUpon>
+    <Compile Include="TwitterAPIKeysWindow.Designer.cs">
+      <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="colorkage.resx">
-      <DependentUpon>colorkage.cs</DependentUpon>
+    <EmbeddedResource Include="ColorkageURLWindow.resx">
+      <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConnectWindow.resx">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="enabledCommands.resx">
-      <DependentUpon>enabledCommands.cs</DependentUpon>
+    <EmbeddedResource Include="EnabledCommandsWindow.resx">
+      <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="eta.resx">
-      <DependentUpon>eta.cs</DependentUpon>
+    <EmbeddedResource Include="MangaETAWindow.resx">
+      <DependentUpon>MangaETAWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="help.resx">
-      <DependentUpon>help.cs</DependentUpon>
+    <EmbeddedResource Include="HelpTextWindow.resx">
+      <DependentUpon>HelpTextWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="muted.resx">
-      <DependentUpon>muted.cs</DependentUpon>
+    <EmbeddedResource Include="MutedUsersWindow.resx">
+      <DependentUpon>MutedUsersWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="nick.resx">
-      <DependentUpon>nick.cs</DependentUpon>
+    <EmbeddedResource Include="ChangeBotNickWindow.resx">
+      <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="operators.resx">
-      <DependentUpon>operators.cs</DependentUpon>
+    <EmbeddedResource Include="BotOperatorWindow.resx">
+      <DependentUpon>BotOperatorWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -240,17 +238,17 @@
     <EmbeddedResource Include="RedditCredentials.resx">
       <DependentUpon>RedditCredentials.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RleaseChecker.resx">
-      <DependentUpon>RleaseChecker.cs</DependentUpon>
+    <EmbeddedResource Include="MangaReleaseCheckerWindow.resx">
+      <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="rules.resx">
-      <DependentUpon>rules.cs</DependentUpon>
+    <EmbeddedResource Include="EditRulesWindow.resx">
+      <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="searchAnimeAPI.resx">
-      <DependentUpon>searchAnimeAPI.cs</DependentUpon>
+    <EmbeddedResource Include="SearchAnimeAPIWindow.resx">
+      <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="twitterAPIkeys.resx">
-      <DependentUpon>twitterAPIkeys.cs</DependentUpon>
+    <EmbeddedResource Include="TwitterAPIKeysWindow.resx">
+      <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NarutoBot3_TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -271,23 +269,23 @@
     <Content Include="banned.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="help.txt">
+    <Content Include="TextFiles\help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="icon.ico" />
-    <Content Include="kills.txt">
+    <Content Include="TextFiles\kills.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ops.txt">
+    <Content Include="TextFiles\ops.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="rules.txt">
+    <Content Include="TextFiles\rules.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="text.txt">
+    <Content Include="TextFiles\nickGen.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="trivia.txt">
+    <Content Include="TextFiles\trivia.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

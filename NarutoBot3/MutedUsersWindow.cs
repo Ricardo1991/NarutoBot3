@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NarutoBot3
 {
-    public partial class muted : Form
+    public partial class MutedUsersWindow : Form
     {
         static List<string> ban = new List<string>();
         static List<string> tmp = new List<string>();
 
         bool foundRepeated = false;
 
-        public muted()
+        public MutedUsersWindow()
         {
             InitializeComponent();
             readBAN();
@@ -27,7 +21,7 @@ namespace NarutoBot3
         public void readBAN()
         {
             ban.Clear();
-            StreamReader sr = new StreamReader("banned.txt");
+            StreamReader sr = new StreamReader("TextFiles/banned.txt");
             try
             {
                 while (sr.Peek() >= 0)
@@ -46,7 +40,7 @@ namespace NarutoBot3
         }
         static private void SaveBAN()
         {
-            using (StreamWriter newTask = new StreamWriter("banned.txt", false))
+            using (StreamWriter newTask = new StreamWriter("TextFiles/banned.txt", false))
             {
                 foreach (string rl in ban)
                 {

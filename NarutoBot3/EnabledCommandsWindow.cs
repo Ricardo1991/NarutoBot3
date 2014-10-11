@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NarutoBot3.Properties;
+using System;
 using System.Windows.Forms;
-using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
-    public partial class enabledCommands : Form
+    public partial class EnabledCommandsWindow : Form
     {
-        public enabledCommands()
+        public EnabledCommandsWindow()
         {
             InitializeComponent();
             cb_Kill.Checked = Settings.Default.killEnabled;
