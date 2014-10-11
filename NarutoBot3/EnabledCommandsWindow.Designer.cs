@@ -199,7 +199,7 @@
             this.groupBox6.Size = new System.Drawing.Size(200, 115);
             this.groupBox6.TabIndex = 16;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Helpfull";
+            this.groupBox6.Text = "Helpful";
             // 
             // cb_Time
             // 

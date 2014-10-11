@@ -541,7 +541,7 @@ namespace NarutoBot3
                     if (String.IsNullOrWhiteSpace(HOME_CHANNEL)) HOME_CHANNEL = "#reddit-naruto";
                     if (String.IsNullOrWhiteSpace(HOST)) HOST = "irc.freenode.net";
                     if (String.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
-                    if (PORT == null || PORT == 0) PORT = 6667;
+                    if (PORT <= 0 || PORT > 65535) PORT = 6667;
 
                     if (connect())//If connected with success, then start the bot
                     {
