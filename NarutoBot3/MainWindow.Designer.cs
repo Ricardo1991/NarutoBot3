@@ -47,18 +47,20 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButtonSettings = new System.Windows.Forms.ToolStripDropDownButton();
             this.silencedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.redditCredentialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.releaseCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.operatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mutedUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.randomTextIntervalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.t30 = new System.Windows.Forms.ToolStripMenuItem();
             this.t45 = new System.Windows.Forms.ToolStripMenuItem();
             this.t60 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.redditCredentialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterAPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.operatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mutedUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButtonText = new System.Windows.Forms.ToolStripDropDownButton();
             this.rulesTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +81,6 @@
             this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.InterfaceUserList = new System.Windows.Forms.ListBox();
             this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStripBottom.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -155,39 +156,39 @@
             // connectMenuItem1
             // 
             this.connectMenuItem1.Name = "connectMenuItem1";
-            this.connectMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.connectMenuItem1.Size = new System.Drawing.Size(142, 22);
             this.connectMenuItem1.Text = "&Connect...";
             this.connectMenuItem1.Click += new System.EventHandler(this.connectMenuItem1_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.disconnectToolStripMenuItem.Text = "&Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
             // 
             // changeNickToolStripMenuItem
             // 
             this.changeNickToolStripMenuItem.Name = "changeNickToolStripMenuItem";
-            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.changeNickToolStripMenuItem.Text = "Change &Nick";
             this.changeNickToolStripMenuItem.Click += new System.EventHandler(this.changeNickToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.exitToolStripMenuItem.Text = "&Quit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -203,6 +204,7 @@
             this.toolStripSeparator6,
             this.redditCredentialsToolStripMenuItem,
             this.toolStripMenuItem1,
+            this.twitterAPIToolStripMenuItem,
             this.toolStripSeparator3,
             this.operatorsToolStripMenuItem,
             this.mutedUsersToolStripMenuItem});
@@ -223,12 +225,55 @@
             this.silencedToolStripMenuItem.Text = "&Silenced";
             this.silencedToolStripMenuItem.Click += new System.EventHandler(this.silencedToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(214, 6);
+            // 
             // commandsToolStripMenuItem
             // 
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.commandsToolStripMenuItem.Text = "Enable/Disable Commands";
             this.commandsToolStripMenuItem.Click += new System.EventHandler(this.commandsToolStripMenuItem_Click);
+            // 
+            // releaseCheckerToolStripMenuItem
+            // 
+            this.releaseCheckerToolStripMenuItem.Name = "releaseCheckerToolStripMenuItem";
+            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.releaseCheckerToolStripMenuItem.Text = "Chapter Release Checker";
+            this.releaseCheckerToolStripMenuItem.Click += new System.EventHandler(this.releaseCheckerToolStripMenuItem_Click);
+            // 
+            // randomTextIntervalToolStripMenuItem
+            // 
+            this.randomTextIntervalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.t30,
+            this.t45,
+            this.t60});
+            this.randomTextIntervalToolStripMenuItem.Name = "randomTextIntervalToolStripMenuItem";
+            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.randomTextIntervalToolStripMenuItem.Text = "Random Text Interval";
+            // 
+            // t30
+            // 
+            this.t30.Name = "t30";
+            this.t30.Size = new System.Drawing.Size(132, 22);
+            this.t30.Text = "30 minutes";
+            this.t30.Click += new System.EventHandler(this.t30_Click);
+            // 
+            // t45
+            // 
+            this.t45.Name = "t45";
+            this.t45.Size = new System.Drawing.Size(132, 22);
+            this.t45.Text = "45 minutes";
+            this.t45.Click += new System.EventHandler(this.t45_Click);
+            // 
+            // t60
+            // 
+            this.t60.Name = "t60";
+            this.t60.Size = new System.Drawing.Size(132, 22);
+            this.t60.Text = "60 minutes";
+            this.t60.Click += new System.EventHandler(this.t60_Click);
             // 
             // toolStripSeparator6
             // 
@@ -246,15 +291,15 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(217, 22);
-            this.toolStripMenuItem1.Text = "Search Anime API";
+            this.toolStripMenuItem1.Text = "Anime and Time API";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
-            // releaseCheckerToolStripMenuItem
+            // twitterAPIToolStripMenuItem
             // 
-            this.releaseCheckerToolStripMenuItem.Name = "releaseCheckerToolStripMenuItem";
-            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.releaseCheckerToolStripMenuItem.Text = "Chapter Release Checker";
-            this.releaseCheckerToolStripMenuItem.Click += new System.EventHandler(this.releaseCheckerToolStripMenuItem_Click);
+            this.twitterAPIToolStripMenuItem.Name = "twitterAPIToolStripMenuItem";
+            this.twitterAPIToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.twitterAPIToolStripMenuItem.Text = "Twitter API";
+            this.twitterAPIToolStripMenuItem.Click += new System.EventHandler(this.twitterAPIToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -274,37 +319,6 @@
             this.mutedUsersToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.mutedUsersToolStripMenuItem.Text = "Ignored Users";
             this.mutedUsersToolStripMenuItem.Click += new System.EventHandler(this.mutedUsersToolStripMenuItem_Click);
-            // 
-            // randomTextIntervalToolStripMenuItem
-            // 
-            this.randomTextIntervalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.t30,
-            this.t45,
-            this.t60});
-            this.randomTextIntervalToolStripMenuItem.Name = "randomTextIntervalToolStripMenuItem";
-            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.randomTextIntervalToolStripMenuItem.Text = "Random Text Interval";
-            // 
-            // t30
-            // 
-            this.t30.Name = "t30";
-            this.t30.Size = new System.Drawing.Size(152, 22);
-            this.t30.Text = "30 minutes";
-            this.t30.Click += new System.EventHandler(this.t30_Click);
-            // 
-            // t45
-            // 
-            this.t45.Name = "t45";
-            this.t45.Size = new System.Drawing.Size(152, 22);
-            this.t45.Text = "45 minutes";
-            this.t45.Click += new System.EventHandler(this.t45_Click);
-            // 
-            // t60
-            // 
-            this.t60.Name = "t60";
-            this.t60.Size = new System.Drawing.Size(152, 22);
-            this.t60.Text = "60 minutes";
-            this.t60.Click += new System.EventHandler(this.t60_Click);
             // 
             // toolStripButtonText
             // 
@@ -488,11 +502,6 @@
             this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             this.contextMenuUserList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(214, 6);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -567,6 +576,7 @@
         private System.Windows.Forms.ToolStripMenuItem killStringsToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolstripLag;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem twitterAPIToolStripMenuItem;
     }
 }
 

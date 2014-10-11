@@ -30,6 +30,7 @@ namespace NarutoBot3
         muted mutedWindow = new muted();
         RedditCredentials redditcredentials = new RedditCredentials();
         RleaseChecker releaseChecker = new RleaseChecker();
+        twitterAPIkeys twitterAPIWindow = new twitterAPIkeys();
 
         Bot ircBot;
         public IrcClient client;
@@ -93,9 +94,13 @@ namespace NarutoBot3
             if (String.IsNullOrEmpty(Settings.Default.redditUser) || String.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
 
-           
+            if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+                Settings.Default.twitterEnabled = false;
 
-            Settings.Default.Save();
+            
 
             aTime = new System.Timers.Timer(Settings.Default.checkInterval);
             aTime.Enabled = false;
@@ -126,7 +131,9 @@ namespace NarutoBot3
             NICK = Settings.Default.Nick;
             PORT = Convert.ToInt32(Settings.Default.Port);
 
-            //bot.LoadSettings();
+
+            Settings.Default.Save();
+
         }
 
         public MainWindow()
@@ -578,6 +585,14 @@ namespace NarutoBot3
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             enableCommandsWindow.ShowDialog();
+            if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+            {
+                Settings.Default.twitterEnabled = false;
+                Settings.Default.Save();
+            }
         }
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
@@ -747,8 +762,6 @@ namespace NarutoBot3
                 ircBot.user = ircBot.reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass);
                 Settings.Default.Save();
             }
-
-
         }
 
         private void botSilence(object sender, EventArgs e)
@@ -1045,19 +1058,6 @@ namespace NarutoBot3
             }
 
         }
-        /** method stolen from an SO thread. sorry can't remember the author **/
-        static void AddAddress(string address, string domain, string user)
-        {
-            string args = string.Format(@"http add urlacl url={0}", address) + " User=\"" + domain + "\\" + user + "\"";
-
-            ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
-            psi.Verb = "runas";
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.UseShellExecute = true;
-
-            Process.Start(psi).WaitForExit();
-        }
 
         private void pingServer(object sender, EventArgs e)
         {
@@ -1072,6 +1072,26 @@ namespace NarutoBot3
                 toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") +"s";
             }
             catch { }
+        }
+
+        private void twitterAPIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = twitterAPIWindow.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+                {
+                    Settings.Default.twitterEnabled = false;
+                    Settings.Default.Save();
+
+                }
+                else
+                    if(Settings.Default.twitterEnabled) ircBot.TwitterLogin();
+
+            }
         }
     }
 

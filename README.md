@@ -14,3 +14,4 @@ To run, it needs the following files in the same dir as the .exe
 * kills.txt     - A file with kill strings. On the strings, <target> is the person that dies, <user> is the one that ordered the kill
 
 It requires RedditSharp - https://github.com/SirCmpwn/RedditSharp
+and TweetSharp - https://github.com/danielcrenna/tweetsharp

@@ -1,6 +1,7 @@
 ﻿using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using RedditSharp;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,6 +14,12 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Web;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using TweetSharp;
+
+
 
 namespace NarutoBot3
 {
@@ -80,8 +87,11 @@ namespace NarutoBot3
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
         public Reddit reddit;
-        public RedditSharp.Things.AuthenticatedUser user;
 
+        public TwitterService service;
+
+        public RedditSharp.Things.AuthenticatedUser user;
+        
         public TimeSpan TimeDifference
         {
             get { return timeDifference; }
@@ -213,6 +223,21 @@ namespace NarutoBot3
                     user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true); 
                 }
                 catch { }
+            }
+
+            if (Settings.Default.twitterEnabled)
+            {
+                try {
+                    service = new TwitterService(Settings.Default.twitterConsumerKey, Settings.Default.twitterConsumerKeySecret);
+
+                    service.AuthenticateWith(Settings.Default.twitterAccessToken, Settings.Default.twitterAccessTokenSecret);
+                }
+
+                catch {
+                    Settings.Default.twitterEnabled = false;
+                    Settings.Default.Save();
+                }
+            
             }
         }
 
@@ -1868,69 +1893,27 @@ namespace NarutoBot3
                 }
             }
         }
-
         public void twitter(string CHANNEL, string nick, string line)
         {
+            string author, tweet, message;
+
             if (isMuted(nick)) return;
 
-            if (Settings.Default.silence == false && Settings.Default.twitterEnabled == true)
+            if (Settings.Default.silence == true || Settings.Default.twitterEnabled == false) return;
+            else
             {
-                string[] bah;
-                string url = "";
-                string link="";
-                string author, tweet;
-                bool gotIt = false;
 
-                string message;
+                string ID = getBetween(line, "/status/", "/");
+                long tweetID = Convert.ToInt64(ID);
 
-                bah = line.Split(new char[] { ' ' });
+                TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID });
 
-                foreach (string ss in bah)
-                {
-                    if (ss.Contains("twitter.com/"))
-                    {
-                        url = ss;
-                        gotIt = true;
-                    }
-
-                    if (gotIt) break;
-                }
-
-                if (!gotIt) return;
+                author = tweetResult.Author.ScreenName;
+                tweet = tweetResult.Text.Replace("\n", " ");
 
 
-                var webClient = new WebClient();
-                webClient.Encoding = Encoding.UTF8;
-                string readHtml = webClient.DownloadString(url);
-
-                author = getBetween(readHtml, "<span class=\"username js-action-profile-name\" data-aria-label-part><s>@</s><b>", "</b></span>");
-                tweet = getBetween(readHtml, "<p class=\"js-tweet-text tweet-text\" lang=\"en\" data-aria-label-part=\"0\">", "</p>");
-
-                if (author.Length > 16)
-                {
-                    /*Error*/
-                    message = Privmsg(CHANNEL, "Error parsisng the tweet. :(");
-                }
-                else
-                {
-                    if (tweet.Contains("<a "))
-                    {
-                        link = getBetween(tweet, "data-expanded-url=\"", "\"");
-                        tweet = tweet.Substring(0, tweet.IndexOf("<a "));
-
-                    }
-
-                    author = StripTagsRegex(author);
-                    tweet = StripTagsRegex(tweet);
-
-                    tweet = WebUtility.HtmlDecode(tweet);
-                    author = WebUtility.HtmlDecode(author);
-
-                    message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet + " " + link);
+                message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
                 
-                }
-
-               
                 Client.messageSender(message);
             }
         }
@@ -2991,6 +2974,34 @@ namespace NarutoBot3
 
             return replaced;
         
+        }
+
+        public void TwitterLogin()
+        {
+            if (Settings.Default.twitterEnabled)
+            {
+                try
+                {
+                    service = new TwitterService(Settings.Default.twitterConsumerKey, Settings.Default.twitterConsumerKeySecret);
+
+                    service.AuthenticateWith(Settings.Default.twitterAccessToken, Settings.Default.twitterAccessTokenSecret);
+                }
+
+                catch
+                {
+                    Settings.Default.twitterEnabled = false;
+                    Settings.Default.Save();
+                }
+
+            }
+
+            
+            
+        }
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }

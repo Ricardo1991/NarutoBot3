@@ -550,5 +550,53 @@ namespace NarutoBot3.Properties {
                 this["questionEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string twitterConsumerKey {
+            get {
+                return ((string)(this["twitterConsumerKey"]));
+            }
+            set {
+                this["twitterConsumerKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string twitterConsumerKeySecret {
+            get {
+                return ((string)(this["twitterConsumerKeySecret"]));
+            }
+            set {
+                this["twitterConsumerKeySecret"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string twitterAccessToken {
+            get {
+                return ((string)(this["twitterAccessToken"]));
+            }
+            set {
+                this["twitterAccessToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string twitterAccessTokenSecret {
+            get {
+                return ((string)(this["twitterAccessTokenSecret"]));
+            }
+            set {
+                this["twitterAccessTokenSecret"] = value;
+            }
+        }
     }
 }
