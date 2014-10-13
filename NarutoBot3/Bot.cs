@@ -2113,7 +2113,7 @@ namespace NarutoBot3
         }
         public void killUser(string CHANNEL, string nick, string args)
         {
-            if (String.IsNullOrEmpty(args) || String.IsNullOrEmpty(nick)) return;
+            if (String.IsNullOrEmpty(nick)) return;
             Random r = new Random();
             if (isMuted(nick)) return;
             string target;
@@ -2507,7 +2507,7 @@ namespace NarutoBot3
 
         public void nickGen(string CHANNEL, string nick, string args)
         {
-            if (String.IsNullOrEmpty(args) || String.IsNullOrEmpty(nick)) return;
+            if (String.IsNullOrEmpty(nick)) return;
             Random rnd = new Random();
 
             bool randomnumber = false;
