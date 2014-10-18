@@ -31,7 +31,6 @@ namespace NarutoBot3
 
         string eta = Settings.Default.eta;
 
-        int lineNumber;
         int triviaNumber;
 
         string mode;
@@ -1161,7 +1160,6 @@ namespace NarutoBot3
 
         public void LoadNickGenStrings()//These are for the nick gen
         {
-            lineNumber = 0;
             nickGenStrings = new List<string>();
             nickGenStrings.Clear();
 
@@ -1171,7 +1169,6 @@ namespace NarutoBot3
                 while (sr.Peek() >= 0)
                 {
                     nickGenStrings.Add(sr.ReadLine());
-                    lineNumber++;
                 }
                 sr.Close();
             }
@@ -2020,8 +2017,6 @@ namespace NarutoBot3
                         {
                             #if DEBUG
                                 message = Privmsg(CHANNEL, "Error: a=null");
-                            #else
-                                message = Privmsg(CHANNEL, "");
                             #endif
 
                         }
@@ -2318,7 +2313,7 @@ namespace NarutoBot3
                 {
                     if (arg == "can you give me a nick" || arg == "can you make me a nick" || arg == "can you generate a nick" || arg == "can you create a nick" || arg == "can you make me a new nick")
                     {
-                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, lineNumber, false, false, false, false));
+                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     }
                     else if (arg.Contains("can you kill "))
@@ -2336,7 +2331,7 @@ namespace NarutoBot3
                 {
                     if (arg == "would you make me a nick" || arg == "would you generate a nick" || arg == "would you create a nick" || arg == "would you make me a new nick")
                     {
-                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, lineNumber, false, false, false, false));
+                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     }
                     else
@@ -2518,7 +2513,7 @@ namespace NarutoBot3
 
             if (isMuted(nick)) return;
 
-            if (lineNumber < 2)
+            if (nickGenStrings.Count < 2)
             {
                 message = Privmsg(CHANNEL, "Nicks was not initialized properly");
                 Client.messageSender(message);
@@ -2531,45 +2526,34 @@ namespace NarutoBot3
                 {
                     if (rnd.Next(0, 100) <= 30)
                         switchLetterNumb = true;
-                    else switchLetterNumb = false;
 
                     if (rnd.Next(0, 100) <= 30)
                         randomnumber = true;
-                    else randomnumber = false;
 
                     if (rnd.Next(0, 100) <= 30)
                         randomUpper = true;
-                    else randomUpper = false;
 
                     if (rnd.Next(0, 100) <= 10)
                         Ique = true;
-                    else Ique = false;
                 }
                 else
                 {
                     if (args.Contains("SL") == true)
-                    {
                         switchLetterNumb = true;
-                    }
-                    if (args.Contains("RN") == true)
-                    {
-                        randomnumber = true;
-                    }
-                    if (args.Contains("RU") == true)
-                    {
-                        randomUpper = true;
-                    }
-                    if (args.Contains("IQ") == true)
-                    {
-                        Ique = true;
-                    }
-                }
-                if (lineNumber == 0)
-                    return;
 
+                    if (args.Contains("RN") == true)
+                        randomnumber = true;
+
+                    if (args.Contains("RU") == true)
+                        randomUpper = true;
+
+                    if (args.Contains("IQ") == true)
+                        Ique = true;
+
+                }
 
                 //gen = new NickGen();
-                string nick_ = NickGen.NickG(nickGenStrings, lineNumber, randomnumber, randomUpper, switchLetterNumb, Ique);
+                string nick_ = NickGen.NickG(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
                 Client.messageSender(message);
@@ -2583,13 +2567,11 @@ namespace NarutoBot3
             string[] temp = line.Split(' ');
             string subreddit = "";
             string url = "";
-            bool found = false;
-            string[] tempQ;
-            string message, message2;
+            string message;
 
             RedditSharp.Things.Post post;
             RedditSharp.Things.Subreddit sub;
-            RedditSharp.Things.Comment com;
+            RedditSharp.Things.Comment comment;
 
             if (isMuted(nick)) return;
 
@@ -2598,11 +2580,10 @@ namespace NarutoBot3
                 if (st.Contains("reddit.com") && st.Contains("/r/") && st.Contains("/comments/"))
                 {
                     url = st;
-                    found = true;
+                    url = url.Replace("http://", string.Empty).Replace("https://", string.Empty);
                 }
+                else return;
             }
-
-            if (!found) return;
 
             subreddit = getBetween(url, "/r/", "/");
 
@@ -2612,34 +2593,28 @@ namespace NarutoBot3
 
                 string[] linkParse = url.Replace("\r", string.Empty).Split('/');
 
-                if (linkParse.Length >= 9 && !String.IsNullOrEmpty(linkParse[8]))    //Com comentário
+                if (linkParse.Length >= 7 && !String.IsNullOrEmpty(linkParse[6]))    //With Comment
                 {
-                    tempQ = url.Split(new char[] { '?' }, 2);
-                    url = tempQ[0];
-                    Uri urlURI = new Uri(url.Replace("\r", string.Empty));
-                    post = reddit.GetPost(urlURI);     //slow
+                    string postName = linkParse[4];
+                    string commentName = linkParse[6].Split(new char[] { '?' }, 2)[0];
 
-                    string commentID = linkParse[8];
-                    tempQ = commentID.Split(new char[] { '?' }, 2);
-                    commentID = tempQ[0];
-
-                    com = reddit.GetComment(sub.Name, "t1_" + commentID, "t3_" + linkParse[6]);
+                    post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + postName);
+                    comment = reddit.GetComment(sub.Name, "t1_" + commentName, "t3_" + postName);
 
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                     Client.messageSender(message);
 
-                    if (com.Body.ToString().Length > 250)
-                        message2 = Privmsg(CHANNEL, "\x02" + "Comment: " + com.Body.ToString().Truncate(250).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
+                    if (comment.Body.ToString().Length > 250)
+                        message = Privmsg(CHANNEL, "\x02" + "Comment: " + comment.Body.ToString().Truncate(250).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
                     else
-                        message2 = Privmsg(CHANNEL, "\x02" + "Comment: " + com.Body.ToString().Replace("\r", string.Empty).Replace("\n", string.Empty) + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "Comment: " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
 
-                    Client.messageSender(message2);
+                    Client.messageSender(message);
 
                 }
                 else
                 {                                               //No comment link
-                    Uri urlURI = new Uri(url.Replace("\r", string.Empty));
-                    post = reddit.GetPost(urlURI);     //slow
+                    post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
 
                     if (post.IsSelfPost)
                     {
@@ -2650,18 +2625,15 @@ namespace NarutoBot3
                     {
                         message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
                         Client.messageSender(message);
-
                     }
-
                 }
-
             }
 
             catch   //403 error
             {
                 subreddit = getBetween(url, "/r/", "/");
 
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "this subreddit is private" + "\x02");
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "this subreddit is private or the link was invalid" + "\x02");
                 Client.messageSender(message);
                 return;
             }
