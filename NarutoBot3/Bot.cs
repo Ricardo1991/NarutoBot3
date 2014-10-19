@@ -31,8 +31,6 @@ namespace NarutoBot3
 
         string eta = Settings.Default.eta;
 
-        int triviaNumber;
-
         string mode;
         public string Mode{ get { return mode; } set { mode = value; } }
 
@@ -1023,10 +1021,9 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadTrivia()//Reads the trivia stuff
+        public void ReadTrivia() //Reads the trivia stuff
         {
             tri.Clear();
-            triviaNumber = 0;
 
             try
             {
@@ -1034,7 +1031,6 @@ namespace NarutoBot3
                 while (sr.Peek() >= 0)
                 {
                     tri.Add(sr.ReadLine());
-                    triviaNumber++;
                 }
                 sr.Close();
             }
@@ -1075,11 +1071,13 @@ namespace NarutoBot3
                                 break;
                         }
 
-                        foreach (Greetings g in greet)
+                        foreach (Greetings g in greet)//avoid adding duplicate nicks
                         {
                             if (g.Nick == nick)
+                            {
                                 found = true;
-
+                                break;
+                            }
                         }
 
                         if (!found)
@@ -1661,12 +1659,12 @@ namespace NarutoBot3
         public void trivia(string CHANNEL, string nick)
         {
             if (isMuted(nick)) return;
-            if (triviaNumber == 0) return;
+            if (tri.Count == 0) return;
             if (Settings.Default.silence == false && Settings.Default.triviaEnabled == true)
             {
                 string message;
                 Random rnd = new Random();
-                int rt = rnd.Next(triviaNumber - 1);
+                int rt = rnd.Next(tri.Count - 1);
 
                 message = Privmsg(CHANNEL, tri[rt]);
                 Client.messageSender(message);
@@ -1916,7 +1914,7 @@ namespace NarutoBot3
 
         public void animeSeach(string CHANNEL, string nick, string line)
         {
-            string message;
+            string message="";
 
             if (isMuted(nick))
             {
@@ -1933,16 +1931,16 @@ namespace NarutoBot3
             GoogleSeach g = new GoogleSeach();
             anime a = new anime();
 
-            string json;
+            string jsonGoogle;
             string jsonAnime;
-            string query = line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
-
             bool user = false;
-
 
             if (line.Contains("-u") || line.Contains("-User")) user = true;
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
+            line = line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
+
+
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line;
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -1954,12 +1952,12 @@ namespace NarutoBot3
 
             try
             {
-                json = webClient.DownloadString(getString);
-                JsonConvert.PopulateObject(json, g);
+                jsonGoogle = webClient.DownloadString(getString);
+                JsonConvert.PopulateObject(jsonGoogle, g);
             }
             catch { }
 
-            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20"));
+            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line);
             else
             {
                 int i_max = 0; int i = 0; bool found = false;
@@ -1977,7 +1975,7 @@ namespace NarutoBot3
                             found = true;
                             string[] split = g.items[i].link.Split('/');
                             if (split.Length <= 5)
-                                name = g.items[i].link+"/"+query;
+                                name = g.items[i].link + "/" + line;
                             else
                                 name = g.items[i].link;
                         }
@@ -2046,9 +2044,8 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                     }
             }
-            Client.messageSender(message);
 
-            
+            Client.messageSender(message);
         }
 
         public void vimeo(string CHANNEL, string nick, string line)

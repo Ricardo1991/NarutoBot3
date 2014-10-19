@@ -176,7 +176,6 @@
             this.MinimumSize = new System.Drawing.Size(320, 234);
             this.Name = "ConnectWindow";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Connect";
             this.groupBox1.ResumeLayout(false);

@@ -17,12 +17,12 @@ namespace NarutoBot3
 
         public string HOST_SERVER;
 
-        string user_message;
-        string nick_message;
-        string join_message;
+        private string user_message;
+        private string nick_message;
+        private string join_message;
 
-        NetworkStream stream;
-        TcpClient irc;
+        private NetworkStream stream;
+        private TcpClient irc;
         public StreamReader reader;
         public StreamWriter writer;
 
