@@ -292,7 +292,12 @@ namespace NarutoBot3
                         WriteMessage("* " + command + " " + completeParameters);
 
                         break;
+                    case ("333"):   //Topic author and time
 
+                        break;
+                    case ("366"): //End of /NAMES
+
+                        break;
                     case ("353"): //USERLIST
                        
                         foreach(string s in parameters[3].Split(' '))
