@@ -15,6 +15,7 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         delegate void SetTextCallback(string text);
+        delegate void SetEventCallback(object sender, EventArgs e, string text);
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
 
@@ -55,6 +56,8 @@ namespace NarutoBot3
         public MainWindow()
         {
             InitializeComponent();
+
+            Settings.Default.Upgrade();
 
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
@@ -221,7 +224,22 @@ namespace NarutoBot3
 
             ircBot.PongReceived += (sender, e) => updateLag(sender, e, ircBot.TimeDifference);
 
+            ircBot.TopicChange += (sender, e) => changeTopic(sender, e, ircBot.Topic);
+
             ircBot.LoadSettings();
+        }
+
+        private void changeTopic(object sender, EventArgs e, string p)
+        {
+            if (tbTopic.InvokeRequired)
+            {
+                SetEventCallback d = new SetEventCallback(changeTopic);
+                this.Invoke(d, new object[] { sender, e, p });
+            }
+            else
+            {
+                tbTopic.Text = p;
+            }
         }
 
         private void disconnect()

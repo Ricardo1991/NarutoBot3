@@ -76,13 +76,14 @@
             this.nickGeneratorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.triviasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.killStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripHelp = new System.Windows.Forms.ToolStripDropDownButton();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InputBox = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tbTopic = new System.Windows.Forms.TextBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.InterfaceUserList = new System.Windows.Forms.ListBox();
             this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripHelp = new System.Windows.Forms.ToolStripDropDownButton();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripBottom.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -120,7 +121,7 @@
             // toolstripLag
             // 
             this.toolstripLag.Name = "toolstripLag";
-            this.toolstripLag.Size = new System.Drawing.Size(838, 17);
+            this.toolstripLag.Size = new System.Drawing.Size(847, 17);
             this.toolstripLag.Spring = true;
             this.toolstripLag.Text = "0.000s";
             this.toolstripLag.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -439,6 +440,25 @@
             this.killStringsToolStripMenuItem.Text = "Kill Strings";
             this.killStringsToolStripMenuItem.Click += new System.EventHandler(this.killToolStripMenuItem_Click);
             // 
+            // toolStripHelp
+            // 
+            this.toolStripHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.toolStripHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripHelp.Image")));
+            this.toolStripHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripHelp.Name = "toolStripHelp";
+            this.toolStripHelp.ShowDropDownArrow = false;
+            this.toolStripHelp.Size = new System.Drawing.Size(36, 22);
+            this.toolStripHelp.Text = "&Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // InputBox
             // 
             this.InputBox.AcceptsReturn = true;
@@ -459,26 +479,41 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.tbTopic);
             this.splitContainer1.Panel1.Controls.Add(this.OutputBox);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.InterfaceUserList);
             this.splitContainer1.Size = new System.Drawing.Size(1024, 424);
-            this.splitContainer1.SplitterDistance = 873;
+            this.splitContainer1.SplitterDistance = 882;
             this.splitContainer1.TabIndex = 4;
+            // 
+            // tbTopic
+            // 
+            this.tbTopic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.tbTopic.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tbTopic.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.tbTopic.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.tbTopic.Location = new System.Drawing.Point(0, 0);
+            this.tbTopic.Name = "tbTopic";
+            this.tbTopic.ReadOnly = true;
+            this.tbTopic.Size = new System.Drawing.Size(882, 20);
+            this.tbTopic.TabIndex = 3;
             // 
             // OutputBox
             // 
+            this.OutputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.OutputBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F);
             this.OutputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.OutputBox.Location = new System.Drawing.Point(0, 0);
+            this.OutputBox.Location = new System.Drawing.Point(0, 22);
             this.OutputBox.Name = "OutputBox";
             this.OutputBox.ReadOnly = true;
             this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.OutputBox.Size = new System.Drawing.Size(873, 424);
+            this.OutputBox.Size = new System.Drawing.Size(882, 402);
             this.OutputBox.TabIndex = 2;
             this.OutputBox.Text = "";
             this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
@@ -492,7 +527,7 @@
             this.InterfaceUserList.FormattingEnabled = true;
             this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
             this.InterfaceUserList.Name = "InterfaceUserList";
-            this.InterfaceUserList.Size = new System.Drawing.Size(147, 424);
+            this.InterfaceUserList.Size = new System.Drawing.Size(138, 424);
             this.InterfaceUserList.TabIndex = 0;
             this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
@@ -503,25 +538,6 @@
             this.contextMenuUserList.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             this.contextMenuUserList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
-            // 
-            // toolStripHelp
-            // 
-            this.toolStripHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-            this.toolStripHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripHelp.Image")));
-            this.toolStripHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripHelp.Name = "toolStripHelp";
-            this.toolStripHelp.ShowDropDownArrow = false;
-            this.toolStripHelp.Size = new System.Drawing.Size(36, 22);
-            this.toolStripHelp.Text = "&Help";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -540,6 +556,7 @@
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -600,6 +617,7 @@
         private System.Windows.Forms.ToolStripMenuItem twitterAPIToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripHelp;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.TextBox tbTopic;
     }
 }
 

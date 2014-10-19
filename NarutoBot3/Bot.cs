@@ -68,6 +68,8 @@ namespace NarutoBot3
 
         public event EventHandler<EventArgs> Quit;
 
+        public event EventHandler<EventArgs> TopicChange;
+
         private System.Timers.Timer dTime;
 
         private bool waitingForPong = false;
@@ -78,6 +80,14 @@ namespace NarutoBot3
         RichTextBox Output2;
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
         private Reddit reddit;
+
+        string topic;
+
+        public string Topic
+        {
+            get { return topic; }
+            set { topic = value; }
+        }
 
         private TwitterService service;
 
@@ -95,12 +105,17 @@ namespace NarutoBot3
             set { waitingForPong = value; }
         }
 
+        protected virtual void OnTopicChange(EventArgs e)
+        {
+            if (TopicChange != null)
+                TopicChange(this, e);
+        
+        }
         protected virtual void OnPongReceived(EventArgs e)
         {
             if (PongReceived != null)
                 PongReceived(this, e);
         }
-
 
         protected virtual void OnTimeout(EventArgs e)
         {
@@ -272,8 +287,7 @@ namespace NarutoBot3
                         
                         break;
 
-                    //:nova.esper.net 433 * SekiKun :Nickname is already in use.
-                    case("433"):
+                    case ("433"): //Nickname is already in use.
                         OnDuplicatedNick(EventArgs.Empty);
                         WriteMessage("* " + command + " " + completeParameters);
 
@@ -306,6 +320,11 @@ namespace NarutoBot3
                             pingSever();
                         }
                             
+                        break;
+                    case ("332"):   //TOPIC
+
+                        Topic = completeParameters.Split(new char[] {' '}, 3)[2];
+                        OnTopicChange(EventArgs.Empty);
                         break;
 
                     case ("PONG"):
