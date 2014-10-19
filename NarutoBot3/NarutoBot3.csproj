@@ -26,8 +26,8 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>8</ApplicationRevision>
-    <ApplicationVersion>3.4.1.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>3.5.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -126,6 +126,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bot.cs" />
     <Compile Include="GoogleSearch.cs" />
     <Compile Include="ColorkageURLWindow.cs">
@@ -220,6 +226,9 @@
     <Compile Include="TwitterAPIKeysWindow.Designer.cs">
       <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ColorkageURLWindow.resx">
       <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -288,7 +297,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TextFiles\banned.txt" />
+    <Content Include="TextFiles\banned.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextFiles\help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

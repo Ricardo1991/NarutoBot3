@@ -32,6 +32,8 @@ namespace NarutoBot3
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
         TwitterAPIKeysWindow twitterAPIWindow = new TwitterAPIKeysWindow();
 
+        AboutBox aboutbox = new AboutBox();
+
         Bot ircBot;
         public IRC_Client client;
 
@@ -43,8 +45,6 @@ namespace NarutoBot3
         string HOST;
         string NICK;
         int PORT;
-
-        String line;
 
         string lastCommand;
 
@@ -170,10 +170,10 @@ namespace NarutoBot3
             else return false;
         }
 
-        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e)
+        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
         {
-            //Main Loop
             String buffer;
+            String line;
 
             ircBot = new Bot(ref client, ref OutputBox);
 
@@ -255,7 +255,6 @@ namespace NarutoBot3
 
             try
             {
-                //readHtml = webClient.DownloadString(url);
                 request = (HttpWebRequest)WebRequest.Create(new Uri(url));
                 request.MaximumAutomaticRedirections = 4;
                 request.MaximumResponseHeadersLength = 4;
@@ -263,26 +262,25 @@ namespace NarutoBot3
                 request.Credentials = CredentialCache.DefaultCredentials;
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-
                 Stream receiveStream = response.GetResponseStream();
                 StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
 
                 readHtml = readStream.ReadToEnd();
             }
-            catch       //Error
+            catch
             {
                 return;
             }
 
-            if (!readHtml.Contains("is not released yet."))//Not yet
+            if (!readHtml.Contains("is not released yet.")) //Not yet
             {
                 string message;
 
-                message = privmsg(HOME_CHANNEL, "*");
+                message = privmsg(client.HOME_CHANNEL, "*");
                 client.messageSender(message);
-                message = privmsg(HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
+                message = privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
                 client.messageSender(message);
-                message = privmsg(HOME_CHANNEL, "*");
+                message = privmsg(client.HOME_CHANNEL, "*");
                 client.messageSender(message);
 
                 Settings.Default.releaseEnabled = false;
@@ -290,10 +288,8 @@ namespace NarutoBot3
 
                 aTime.Enabled = false;
             }
-
         }
         
-
         private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             Process myProcess = new Process();
@@ -309,7 +305,6 @@ namespace NarutoBot3
         {
             ircBot.ReadKills();
         }
-
 
         public void ChangeConnectingLabel(String message)
         {
@@ -343,7 +338,6 @@ namespace NarutoBot3
             else
             {
                 silencedToolStripMenuItem.Checked = status;
-
             }
         }
 
@@ -386,12 +380,11 @@ namespace NarutoBot3
             else
             {
                 this.OutputBox.AppendText(message + "\n");
-
             }
 
             //also, should make a log
-
         }
+
         public void WriteMessage(String message, Color color) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
@@ -409,7 +402,6 @@ namespace NarutoBot3
             }
 
             //also, should make a log
-
         }
 
         public void OutputClean()
@@ -481,7 +473,7 @@ namespace NarutoBot3
 
         //UI Events
 
-        private void connectMenuItem1_Click(object sender, EventArgs e)//Connect to...
+        private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
             var result = Connect.ShowDialog();
 
@@ -558,7 +550,8 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
-            if (client.isConnected) disconnect();
+            if (client.isConnected) 
+                disconnect();
 
             this.Close();
         }
@@ -863,7 +856,6 @@ namespace NarutoBot3
                 }
 
             }
-
         }
 
         private void t30_Click(object sender, EventArgs e)
@@ -874,7 +866,6 @@ namespace NarutoBot3
             t60.Checked = false;
 
             rTime.Interval = Settings.Default.randomTextInterval * 60 * 1000;
-
         }
 
         private void t45_Click(object sender, EventArgs e)
@@ -907,8 +898,6 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
         }
-
-
 
         public string privmsg(string destinatary, string message)
         {
@@ -1002,7 +991,6 @@ namespace NarutoBot3
 
         private void userListCreated(object sender, EventArgs e)
         {
-
             UpdateDataSource();
         }
         public void randomTextSender(object source, ElapsedEventArgs e)
@@ -1021,7 +1009,6 @@ namespace NarutoBot3
         public void letsQuit(object sender, EventArgs e)
         {
             disconnect();
-
         }
 
         public bool changeNick(string nick)
@@ -1032,8 +1019,6 @@ namespace NarutoBot3
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
-
-
 
             //do nick change to server
             if (client.isConnected)
@@ -1054,14 +1039,8 @@ namespace NarutoBot3
             Settings.Default.Nick = client.NICK + r.Next(10);
             Settings.Default.Save();
 
-
             if (connect())//If connected with success, then start the bot
-            {
-
                 backgroundWorker1.RunWorkerAsync();
-                //isConnected = true;
-            }
-
         }
 
         private void pingServer(object sender, EventArgs e)
@@ -1095,8 +1074,12 @@ namespace NarutoBot3
                 }
                 else
                     if(Settings.Default.twitterEnabled) ircBot.TwitterLogin();
-
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            aboutbox.ShowDialog();
         }
     }
 

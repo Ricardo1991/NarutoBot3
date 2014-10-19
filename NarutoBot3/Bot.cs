@@ -532,46 +532,40 @@ namespace NarutoBot3
                     case ("PRIVMSG"):
                         string user = prefix.Substring(0, prefix.IndexOf("!")); //Nick of the Sender
                         string whoSent = parameters[0];                         //Who sent is the source of the Message. (The Channel, or User if private Message)
-                        string msg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty);
-                        msg=msg.Trim();
+                        string msg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
                         string cmd = msg.Split(' ')[0];
-                        string arg;
+                        string arg = "";
+
                         if (msg.Length - 1 > cmd.Length)
                             arg = msg.Substring(cmd.Length+1); //the rest of msg
-                        else arg = "";
 
                         //Write Message on Console
-                        if (msg.ToLower().Contains(Client.NICK.ToLower()))
+                        if (whoSent == Client.NICK)
                         {
                             if (user.Length > 14)
-                            {
-                                WriteMessage(user.Truncate(15) + " : " + msg, Color.LightGreen);
-                            }
+                                WriteMessage(user.Truncate(15) + " : " + msg, Color.DodgerBlue);
                             else if (user.Length >= 8)                       //Write the Message on the bot console
-                            {
-                                WriteMessage(user + "\t: " + msg, Color.LightGreen);
-                            }
+                                WriteMessage(user + "\t: " + msg, Color.DodgerBlue);
                             else
-                            {
+                                WriteMessage(user + "\t\t: " + msg, Color.DodgerBlue);
+                        }
+                        else if (msg.ToLower().Contains(Client.NICK.ToLower()))
+                        {
+                            if (user.Length > 14)
+                                WriteMessage(user.Truncate(15) + " : " + msg, Color.LightGreen);
+                            else if (user.Length >= 8)                       //Write the Message on the bot console
+                                WriteMessage(user + "\t: " + msg, Color.LightGreen);
+                            else
                                 WriteMessage(user + "\t\t: " + msg, Color.LightGreen);
-                            }
-                                
                         }
                         else
                         {
                             if (user.Length > 14)
-                            {
                                 WriteMessage(user.Truncate(15) + " : " + msg);
-                            }
-
                             else if (user.Length >= 8)                       //Write the Message on the bot console
-                            {
                                 WriteMessage(user + "\t: " + msg);
-                            }
                             else
-                            {
                                 WriteMessage(user + "\t\t: " + msg);
-                            }
                         }
 
                         //StartParsing
@@ -761,33 +755,33 @@ namespace NarutoBot3
                             }
 
                         else if (message.Contains("\x01"))
-                        {
-                            if (cmd.Contains("VERSION"))
                             {
-                                WriteMessage("* Received a CTCP version request from " + user, Color.Pink);
-                                ctcpVersion(user);
-                            }
+                                if (cmd.Contains("VERSION"))
+                                {
+                                    WriteMessage("* Received a CTCP version request from " + user, Color.Pink);
+                                    ctcpVersion(user);
+                                }
 
-                            if (cmd.Contains("TIME"))
-                            {
-                                WriteMessage("* Received a CTCP time request from " + user, Color.Pink);
-                                ctcpTime(user);
+                                if (cmd.Contains("TIME"))
+                                {
+                                    WriteMessage("* Received a CTCP time request from " + user, Color.Pink);
+                                    ctcpTime(user);
+                                }
+                                if (cmd.Contains("PING"))
+                                {
+                                    WriteMessage("* Received a CTCP ping request from " + user, Color.Pink);
+                                    ctcpPing(user, arg);
+                                }
                             }
-                            if (cmd.Contains("PING"))
-                            {
-                                WriteMessage("* Received a CTCP ping request from " + user, Color.Pink);
-                                ctcpPing(user, arg);
-                            }
-                        }
 
                         else //No parsing, just a normal Message
-                        {
-                            if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
                             {
-                                pastMessage p = new pastMessage(user, msg);
-                                pastMessages.Add(p);
+                                if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
+                                {
+                                    pastMessage p = new pastMessage(user, msg);
+                                    pastMessages.Add(p);
+                                }
                             }
-                        }
 
                         break;
 
@@ -843,7 +837,6 @@ namespace NarutoBot3
             string trailing = null;
             prefix = command = String.Empty;
             parameters = new string[] { };
-            completeParameters="";
 
             if (message.StartsWith(":"))
             {
