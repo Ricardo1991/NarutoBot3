@@ -923,12 +923,12 @@ namespace NarutoBot3
 
             result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
 
-            if (NICK.Length > 15)
-                WriteMessage(NICK.Truncate(16) + ":" + message);
+            if (client.NICK.Length > 15)
+                WriteMessage(client.NICK.Truncate(16) + ":" + message);
             else if (NICK.Length >= 8)                       //Write the Message on the bot console
-                WriteMessage(NICK + "\t: " + message);
+                WriteMessage(client.NICK + "\t: " + message);
             else
-                WriteMessage(NICK + "\t\t: " + message);
+                WriteMessage(client.NICK + "\t\t: " + message);
 
             return result;
         }
