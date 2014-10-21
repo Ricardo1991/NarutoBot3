@@ -14,6 +14,7 @@ namespace NarutoBot3
         public int PORT;
         public string NICK;
         public string SYMBOL = "!";
+        public string REALNAME;
 
         public string HOST_SERVER;
 
@@ -28,14 +29,15 @@ namespace NarutoBot3
 
         public List<string> userList = new List<string>();
 
-        public IRC_Client(string home_channel, string host, int port, string nick)
+        public IRC_Client(string home_channel, string host, int port, string nick, string realName)
         {
             HOME_CHANNEL = home_channel;
             HOST = host;
             PORT = port;
             NICK = nick;
+            REALNAME = realName;
 
-            user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :/r/naruto \n";
+            user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME + "\n";
             nick_message = "NICK " + NICK + "\r\n";
             join_message = "JOIN " + HOME_CHANNEL + "\r\n";
         }

@@ -598,5 +598,17 @@ namespace NarutoBot3.Properties {
                 this["twitterAccessTokenSecret"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/r/Naruto")]
+        public string RealName {
+            get {
+                return ((string)(this["RealName"]));
+            }
+            set {
+                this["RealName"] = value;
+            }
+        }
     }
 }

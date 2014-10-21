@@ -46,6 +46,7 @@ namespace NarutoBot3
         string HOST;
         string NICK;
         int PORT;
+        string REALNAME;
 
         string lastCommand;
 
@@ -57,7 +58,7 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            Settings.Default.Upgrade();
+            //Settings.Default.Upgrade();
 
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
@@ -153,6 +154,7 @@ namespace NarutoBot3
             HOST = Settings.Default.Server;
             NICK = Settings.Default.Nick;
             PORT = Convert.ToInt32(Settings.Default.Port);
+            REALNAME = Settings.Default.RealName;
 
             Settings.Default.Save();
 
@@ -162,7 +164,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Connecting...");
 
             loadSettings();
-            client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK);
+            client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
             if (client.Connect())
             {

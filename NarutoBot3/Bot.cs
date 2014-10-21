@@ -935,17 +935,25 @@ namespace NarutoBot3
         public void ReadKills()
         {
             kill.Clear();
-            try
+            if (File.Exists("TextFiles/kills.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/kills.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    kill.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/kills.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        kill.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                }
             }
-            catch
+            else
             {
+                Settings.Default.killEnabled = false;
+                Settings.Default.Save();
             }
         }
 
@@ -963,17 +971,20 @@ namespace NarutoBot3
         public void ReadOps()
         {
             ops.Clear();
-            try
+            if (File.Exists("TextFiles/ops.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/ops.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    ops.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/ops.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        ops.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
-            }
-            catch
-            {
+                catch
+                {
+                }
             }
         }
 
@@ -990,51 +1001,70 @@ namespace NarutoBot3
         public void ReadBan()
         {
             ban.Clear();
-            try
+            if (File.Exists("TextFiles/banned.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/banned.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    ban.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/banned.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        ban.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
-            }
-            catch
-            {
+                catch
+                {
+                }
             }
         }
 
         public void ReadRules()
         {
             rls.Clear();
-            try
+            if (File.Exists("TextFiles/rules.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/rules.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    rls.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/rules.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        rls.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                }
             }
-            catch
+            else
             {
+                Settings.Default.rules_Enabled = false;
+                Settings.Default.Save();
             }
         }
 
         public void ReadHelp()
         {
             hlp.Clear();
-            try
+            if (File.Exists("TextFiles/help.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/help.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    hlp.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/help.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        hlp.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                }
             }
-            catch
+            else
             {
+                Settings.Default.help_Enabled = false;
+                Settings.Default.Save();
             }
         }
 
@@ -1042,17 +1072,25 @@ namespace NarutoBot3
         {
             tri.Clear();
 
-            try
+            if (File.Exists("TextFiles/trivia.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/trivia.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    tri.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/trivia.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        tri.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                }
             }
-            catch
+            else
             {
+                Settings.Default.triviaEnabled = false;
+                Settings.Default.Save();
             }
         }
 
@@ -1177,18 +1215,25 @@ namespace NarutoBot3
         {
             nickGenStrings = new List<string>();
             nickGenStrings.Clear();
-
-            try
+            if (File.Exists("TextFiles/nickGen.txt"))
             {
-                StreamReader sr = new StreamReader("TextFiles/nickGen.txt");
-                while (sr.Peek() >= 0)
+                try
                 {
-                    nickGenStrings.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader("TextFiles/nickGen.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        nickGenStrings.Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                }
             }
-            catch
+            else
             {
+                Settings.Default.nickEnabled = false;
+                Settings.Default.Save();
             }
         }
 

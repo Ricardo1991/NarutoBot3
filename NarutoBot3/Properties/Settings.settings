@@ -146,5 +146,8 @@
     <Setting Name="twitterAccessTokenSecret" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="RealName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/r/Naruto</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

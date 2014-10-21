@@ -15,6 +15,7 @@ namespace NarutoBot3
             t_Channel.Text = Settings.Default.Channel;
             t_BotNick.Text = Settings.Default.Nick;
             t_port.Text = Settings.Default.Port;
+            t_RealName.Text = Settings.Default.RealName;
         }
 
         private void b_Conect_Click(object sender, EventArgs e)
@@ -23,6 +24,7 @@ namespace NarutoBot3
             Settings.Default.Nick = t_BotNick.Text;
             Settings.Default.Server = t_Server.Text;
             Settings.Default.Port = t_port.Text;
+            Settings.Default.RealName = t_RealName.Text;
             Settings.Default.Save();
 
 
@@ -45,6 +47,7 @@ namespace NarutoBot3
                 Settings.Default.Nick = t_BotNick.Text;
                 Settings.Default.Server = t_Server.Text;
                 Settings.Default.Port = t_port.Text;
+                Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
 
@@ -62,6 +65,7 @@ namespace NarutoBot3
                 Settings.Default.Nick = t_BotNick.Text;
                 Settings.Default.Server = t_Server.Text;
                 Settings.Default.Port = t_port.Text;
+                Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
 
@@ -79,6 +83,7 @@ namespace NarutoBot3
                 Settings.Default.Nick = t_BotNick.Text;
                 Settings.Default.Server = t_Server.Text;
                 Settings.Default.Port = t_port.Text;
+                Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
 
@@ -96,6 +101,25 @@ namespace NarutoBot3
                 Settings.Default.Nick = t_BotNick.Text;
                 Settings.Default.Server = t_Server.Text;
                 Settings.Default.Port = t_port.Text;
+                Settings.Default.RealName = t_RealName.Text;
+                Settings.Default.Save();
+
+
+                //do connect after this
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.Close();
+            }
+        }
+
+        private void t_RealName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Settings.Default.Channel = t_Channel.Text;
+                Settings.Default.Nick = t_BotNick.Text;
+                Settings.Default.Server = t_Server.Text;
+                Settings.Default.Port = t_port.Text;
+                Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
 
