@@ -2473,9 +2473,6 @@ namespace NarutoBot3
                             
                             if (yes)
                             {
-
-                                
-
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I do " + replaced);
                             }
                             else
@@ -2483,6 +2480,30 @@ namespace NarutoBot3
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "I don't " + replaced);
                             }
 
+                        }
+                        else if (split[1] == "i")
+                        {
+
+                            if (yes)
+                            {
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you do " + replaced);
+                            }
+                            else
+                            {
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "you don't " + replaced);
+                            }
+
+                        }
+                        else
+                        {
+                            if (yes)
+                            {
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " do " + replaced);
+                            }
+                            else
+                            {
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + split[1] + " don't " + replaced);
+                            }
                         }
                     }
                     else
@@ -2495,6 +2516,76 @@ namespace NarutoBot3
                     }
                     
                     
+                    w.WriteLine(arg);
+                }
+                else if (String.Compare(split[0], "should", true) == 0)
+                {
+                    string[] whyY = { "Im not sure if", "Yeah", "Yes", "Correct" };
+                    string[] whyN = { "Nope", "No" };
+                    bool yes = false;
+                    if (r.Next(1, 3) == 1)
+                        yes = true;
+
+                    if (split.Length >= 2)
+                    {
+                        string subject = split[1];
+                        string rest = "";
+
+                        for (int i = 2; i < split.Length; i++)
+                        {
+                            rest += split[i] + " ";
+                        }
+                        rest = rest.TrimEnd(' ');
+
+                        string replaced = questionsRegex(rest);
+
+                        if (split[1] == "you")
+                        {
+
+                            if (yes)
+                            {
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I should " + replaced);
+                            }
+                            else
+                            {
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "I shouldn't " + replaced);
+                            }
+
+                        }
+                        else if (split[1] == "i")
+                        {
+                            if (yes)
+                            {
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you should " + replaced);
+                            }
+                            else
+                            {
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "you shouldn't " + replaced);
+                            }
+
+                        }
+                        else
+                        {
+                            if (yes)
+                            {
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " should " + replaced);
+                            }
+                            else
+                            {
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + split[1] + " shouldn't " + replaced);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (yes)
+                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
+                        else
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
+
+                    }
+
+
                     w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "did", true) == 0)
