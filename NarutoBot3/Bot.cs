@@ -2062,9 +2062,11 @@ namespace NarutoBot3
                         string[] animeName = name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+").Split('/');
                         getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName[1];
 
+                        jsonAnime = webClient.DownloadString(getString);
+
                         try
                         {
-                            jsonAnime = webClient.DownloadString(getString);
+                           
                             XmlSerializer serializer = new XmlSerializer(typeof(anime));
                             using (StringReader reader = new StringReader(jsonAnime))
                             {
@@ -2073,11 +2075,16 @@ namespace NarutoBot3
                         }
                         catch { }
 
-                        if (a == null)
+                        if (a.entry == null)
                         {
-                            #if DEBUG
-                                message = Privmsg(CHANNEL, "Error: a=null");
-                            #endif
+                            string score = getBetween(jsonAnime, "<score>", "</score>");
+                            string episodes = getBetween(jsonAnime, "<episodes>", "</episodes>");
+                            string title = getBetween(jsonAnime, "<title>", "</title>");
+
+                            if (episodes == "0")
+                                episodes = "?";
+
+                            message = Privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
                         }
                         else

@@ -28,7 +28,7 @@
     public partial class animeEntry
     {
 
-        private ushort idField;
+        private int idField;
 
         private string titleField;
 
@@ -36,7 +36,7 @@
 
         private string synonymsField;
 
-        private ushort episodesField;
+        private int episodesField;
 
         private decimal scoreField;
 
@@ -53,7 +53,7 @@
         private string imageField;
 
         /// <remarks/>
-        public ushort id
+        public int id
         {
             get
             {
@@ -105,7 +105,7 @@
         }
 
         /// <remarks/>
-        public ushort episodes
+        public int episodes
         {
             get
             {
