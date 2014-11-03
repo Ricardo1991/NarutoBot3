@@ -14,14 +14,25 @@ namespace NarutoBot3
             set { lineNumber = value; }
         }
 
-        static List<string> nomes;
+        static List<string> nickStrings;
 
-        static public string NickG(List<string> nome, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
+        static public string GenerateNick(List<string> _nickStrings, int lineNumber)
         {
-            nomes = new List<string>();
+            nickStrings = new List<string>();
             LineNumber = lineNumber;
-            foreach (string s in nome)
-                nomes.Add(s);
+
+            foreach (string s in _nickStrings)
+                nickStrings.Add(s);
+
+            return Creator(false,false,false,false);
+        }
+
+        static public string GenerateNick(List<string> _nickStrings, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
+        {
+            nickStrings = new List<string>();
+            LineNumber = lineNumber;
+            foreach (string s in _nickStrings)
+                nickStrings.Add(s);
 
             return Creator(rd_numb, rd_uppr, rd_switch, rd_ique);
         }
@@ -166,6 +177,7 @@ namespace NarutoBot3
             return nick_gen;
 
         }
+
         static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique) //Used to create nicks
         {
             Random rnd = new Random();
@@ -177,8 +189,8 @@ namespace NarutoBot3
             } while (rd == rdd);
 
             string nick_gen;
-            string part1 = nomes[rd];
-            string part2 = nomes[rdd];
+            string part1 = nickStrings[rd];
+            string part2 = nickStrings[rdd];
 
             nick_gen = part1 + part2;
 

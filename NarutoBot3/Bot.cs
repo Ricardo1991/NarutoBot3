@@ -2178,6 +2178,7 @@ namespace NarutoBot3
             Random r = new Random();
             if (isMuted(nick)) return;
             string target;
+            string killString, temp;
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
@@ -2194,15 +2195,22 @@ namespace NarutoBot3
                     else
                         target = args.Trim();
 
-                    string killString = kill[r.Next(kill.Count)].Replace("<target>", target).Replace("<user>", nick.Trim());
+                    temp = kill[r.Next(kill.Count)];
 
-                    if (killString.ToLower().Contains("<normal>"))
+                    if (temp.ToLower().Contains("<normal>"))
+                    {
+                        temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+
                         message = Privmsg(CHANNEL, killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty));
-                    else
+                    }
+                    else {
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                    }
                 }
                 Client.messageSender(message);
-
             }
         }
 
@@ -2379,7 +2387,7 @@ namespace NarutoBot3
                 {
                     if (arg == "can you give me a nick" || arg == "can you make me a nick" || arg == "can you generate a nick" || arg == "can you create a nick" || arg == "can you make me a new nick")
                     {
-                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, nickGenStrings.Count, false, false, false, false));
+                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     }
                     else if (arg.Contains("can you kill "))
@@ -2397,7 +2405,7 @@ namespace NarutoBot3
                 {
                     if (arg == "would you make me a nick" || arg == "would you generate a nick" || arg == "would you create a nick" || arg == "would you make me a new nick")
                     {
-                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.NickG(nickGenStrings, nickGenStrings.Count, false, false, false, false));
+                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     }
                     else
@@ -2679,38 +2687,24 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.nickEnabled == true)
             {
-                if (args.Contains("random"))
+                foreach (string s in args.Split(' '))
                 {
-                    if (rnd.Next(0, 100) <= 30)
-                        switchLetterNumb = true;
+                    if (s.ToLower() == "random")
+                    {
+                        switchLetterNumb = rnd.Next(0, 100) <= 30;
+                        randomnumber = rnd.Next(0, 100) <= 30;
+                        randomUpper = rnd.Next(0, 100) <= 30;
+                        Ique = rnd.Next(0, 100) <= 10;
+                        break;
+                    }
 
-                    if (rnd.Next(0, 100) <= 30)
-                        randomnumber = true;
-
-                    if (rnd.Next(0, 100) <= 30)
-                        randomUpper = true;
-
-                    if (rnd.Next(0, 100) <= 10)
-                        Ique = true;
-                }
-                else
-                {
-                    if (args.Contains("SL") == true)
-                        switchLetterNumb = true;
-
-                    if (args.Contains("RN") == true)
-                        randomnumber = true;
-
-                    if (args.Contains("RU") == true)
-                        randomUpper = true;
-
-                    if (args.Contains("IQ") == true)
-                        Ique = true;
-
+                    switchLetterNumb = s.ToLower() == "SL";
+                    randomnumber = s.ToLower() == "RN";
+                    randomUpper = s.ToLower() == "RU";
+                    Ique = s.ToLower() == "IQ";
                 }
 
-                //gen = new NickGen();
-                string nick_ = NickGen.NickG(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
+                string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
                 Client.messageSender(message);
