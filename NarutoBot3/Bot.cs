@@ -760,7 +760,7 @@ namespace NarutoBot3
                                 youtube(whoSent, user, msg, true);
                             }
 
-                        else if (msg.Contains("vimeo.f"))
+                        else if (msg.Contains("vimeo.com"))
                             {
                                 WriteMessage("* Detected an vimeo video from  " + user, Color.Pink);
                                 vimeo(whoSent, user, msg);
