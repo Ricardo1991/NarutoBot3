@@ -1959,7 +1959,7 @@ namespace NarutoBot3
             else
             {
 
-                string ID = getBetween(line, "/status/", "/");
+                string ID = getBetween(line, "/status/", "?");
                 long tweetID = Convert.ToInt64(ID);
 
                 TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID });
@@ -2221,7 +2221,7 @@ namespace NarutoBot3
             StreamWriter w = new StreamWriter("TextFiles/questions.txt", true);
 
             if (isMuted(user)) return;
-            if (!Settings.Default.questionEnabled) return;
+            if (!Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
             arg = arg.ToLower().Replace("?", string.Empty).TrimStart(new char[]{' '});
             string[] split = arg.Split(new char[] { ' ' });
@@ -2436,7 +2436,7 @@ namespace NarutoBot3
                         string randomUser = removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]);
                         string[] who = { "probabbly", "maybe it was", "i'm sure it was", "it wasn't" };
 
-                        message = Privmsg(CHANNEL, who + " " + randomUser);
+                        message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + randomUser);
 
                         w.WriteLine(arg);
                     }
