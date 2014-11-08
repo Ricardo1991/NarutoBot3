@@ -2698,10 +2698,10 @@ namespace NarutoBot3
                         break;
                     }
 
-                    switchLetterNumb = s.ToLower() == "SL";
-                    randomnumber = s.ToLower() == "RN";
-                    randomUpper = s.ToLower() == "RU";
-                    Ique = s.ToLower() == "IQ";
+                    switchLetterNumb = s.ToLower() == "sl";
+                    randomnumber = s.ToLower() == "rn";
+                    randomUpper = s.ToLower() == "ru";
+                    Ique = s.ToLower() == "iq";
                 }
 
                 string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
