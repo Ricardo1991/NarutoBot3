@@ -283,7 +283,7 @@ namespace NarutoBot3
                     case ("004"): //server used for connection
 
                         Client.HOST_SERVER = parameters[1];
-                        WriteMessage("* " + command + " " + completeParameters);
+                        //WriteMessage("* " + command + " " + completeParameters);
                         
                         break;
 
@@ -292,6 +292,31 @@ namespace NarutoBot3
                         WriteMessage("* " + command + " " + completeParameters);
 
                         break;
+                    case ("005"):   
+
+                        break;
+                    case ("250"):
+
+                        break;
+                    case ("251"):
+
+                        break;
+                    case ("252"):
+
+                        break;
+                    case ("254"):
+
+                        break;
+                    case ("255"):
+
+                        break;
+                    case ("265"):
+
+                        break;
+                    case ("266"):
+
+                        break;
+
                     case ("333"):   //Topic author and time
 
                         break;
@@ -312,6 +337,11 @@ namespace NarutoBot3
                         OnCreate(EventArgs.Empty);
                         break;
 
+                    case ("375"): //Start OF MOTD
+
+
+                        break;
+
                     case ("376"): //END OF MOTD
 
                         if(completeParameters.Contains("End of /MOTD command."))
@@ -330,6 +360,12 @@ namespace NarutoBot3
 
                         Topic = completeParameters.Split(new char[] {' '}, 3)[2];
                         OnTopicChange(EventArgs.Empty);
+                        break;
+
+                    case ("372"):   //MOTD
+
+                        string motd = completeParameters.Split(new char[] {' '}, 3)[2];
+                        WriteMessage(motd);
                         break;
 
                     case ("PONG"):
@@ -849,6 +885,8 @@ namespace NarutoBot3
                         break;
 
                     default:
+                        //string text = completeParameters.Split(new char[] {' '}, 2)[1];
+                        //WriteMessage(text);
                         WriteMessage("* " + command + " " + completeParameters);
                         break;
                 }
