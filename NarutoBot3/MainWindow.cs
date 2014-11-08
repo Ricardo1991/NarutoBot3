@@ -454,40 +454,6 @@ namespace NarutoBot3
         }
 
 
-        private void contextParse(string text)
-        {
-            string[] split = text.Split(' ');
-            switch (split[0])
-            {
-                case "Give":
-                    ircBot.giveOps(split[1]);
-                    ircBot.SaveOps();
-                    break;
-                case "Take":
-                    ircBot.takeOps(split[1]);
-                    ircBot.SaveOps();
-                    break;
-                case "Mute":
-                    ircBot.muteUser(split[1]);
-                    ircBot.SaveBan();
-                    break;
-                case "Unmute":
-                    ircBot.unmuteUSer(split[1]);
-                    ircBot.SaveBan();
-                    break;
-                case "Poke":
-                    ircBot.pokeUser(split[1]);
-                    break;
-                case "Whois":
-                    ircBot.whoisUser(split[1]);
-                    break;
-                case "Kick":
-                    ircBot.kickUser(split[1]);
-                    break;
-            }
-            ircBot.SaveOps();
-        }
-
         //UI Events
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
@@ -800,6 +766,44 @@ namespace NarutoBot3
             contextMenuUserList.Items.Add("Whois " + nick);
             contextMenuUserList.Items.Add("Kick " + nick + " (if operator)");
         }
+        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            contextParse(e.ClickedItem.Text);
+        }
+
+        private void contextParse(string text)
+        {
+            string[] split = text.Split(' ');
+            switch (split[0])
+            {
+                case "Give":
+                    ircBot.giveOps(split[1]);
+                    ircBot.SaveOps();
+                    break;
+                case "Take":
+                    ircBot.takeOps(split[1]);
+                    ircBot.SaveOps();
+                    break;
+                case "Mute":
+                    ircBot.muteUser(split[1]);
+                    ircBot.SaveBan();
+                    break;
+                case "Unmute":
+                    ircBot.unmuteUSer(split[1]);
+                    ircBot.SaveBan();
+                    break;
+                case "Poke":
+                    ircBot.pokeUser(split[1]);
+                    break;
+                case "Whois":
+                    ircBot.whoisUser(split[1]);
+                    break;
+                case "Kick":
+                    ircBot.kickUser(split[1]);
+                    break;
+            }
+            ircBot.SaveOps();
+        }
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -817,11 +821,6 @@ namespace NarutoBot3
         private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             contextMenuUserList.Items.Clear();
-        }
-
-        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            contextParse(e.ClickedItem.Text);
         }
 
         public void releaseCheckerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1069,6 +1068,7 @@ namespace NarutoBot3
         {
             aboutbox.ShowDialog();
         }
+
     }
 
     public static class RichTextBoxExtensions

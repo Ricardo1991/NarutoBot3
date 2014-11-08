@@ -281,48 +281,44 @@ namespace NarutoBot3
                 switch (command)
                 {
                     case ("004"): //server used for connection
-
                         Client.HOST_SERVER = parameters[1];
-                        //WriteMessage("* " + command + " " + completeParameters);
-                        
                         break;
 
                     case ("433"): //Nickname is already in use.
                         OnDuplicatedNick(EventArgs.Empty);
                         WriteMessage("* " + command + " " + completeParameters);
-
                         break;
+
                     case ("005"):   
-
                         break;
+
                     case ("250"):
-
                         break;
+
                     case ("251"):
-
                         break;
+
                     case ("252"):
-
                         break;
+
                     case ("254"):
-
                         break;
+
                     case ("255"):
-
                         break;
+
                     case ("265"):
-
                         break;
+
                     case ("266"):
-
                         break;
 
-                    case ("333"):   //Topic author and time
-
+                    case ("333"): //Topic author and time
                         break;
+
                     case ("366"): //End of /NAMES
-
                         break;
+
                     case ("353"): //USERLIST
                        
                         foreach(string s in parameters[3].Split(' '))
@@ -337,35 +333,28 @@ namespace NarutoBot3
                         OnCreate(EventArgs.Empty);
                         break;
 
-                    case ("375"): //Start OF MOTD
+                    case ("375"): //START OF MOTD
+                        break;
 
-
+                    case ("372"): //MOTD
+                        string motd = completeParameters.Split(new char[] { ' ' }, 2)[1];
+                        WriteMessage(motd, Color.MediumOrchid);
                         break;
 
                     case ("376"): //END OF MOTD
+                        IsConnected = true;
+                        OnConnect(EventArgs.Empty);
 
-                        if(completeParameters.Contains("End of /MOTD command."))
-                        {
-                            IsConnected = true;
-                            OnConnect(EventArgs.Empty);
+                        if (!String.IsNullOrEmpty(Client.HOST_SERVER))
+                            OnConnectedWithServer(EventArgs.Empty);
 
-                            if (!String.IsNullOrEmpty(Client.HOST_SERVER))
-                                OnConnectedWithServer(EventArgs.Empty);
-
-                            pingSever();
-                        }
+                        pingSever();
                             
                         break;
-                    case ("332"):   //TOPIC
 
+                    case ("332"):   //TOPIC
                         Topic = completeParameters.Split(new char[] {' '}, 3)[2];
                         OnTopicChange(EventArgs.Empty);
-                        break;
-
-                    case ("372"):   //MOTD
-
-                        string motd = completeParameters.Split(new char[] {' '}, 3)[2];
-                        WriteMessage(motd);
                         break;
 
                     case ("PONG"):

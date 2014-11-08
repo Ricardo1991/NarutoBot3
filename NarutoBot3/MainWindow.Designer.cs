@@ -80,8 +80,8 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InputBox = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tbTopic = new System.Windows.Forms.TextBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
+            this.tbTopic = new System.Windows.Forms.TextBox();
             this.InterfaceUserList = new System.Windows.Forms.ListBox();
             this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.statusStripBottom.SuspendLayout();
@@ -481,13 +481,29 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.tbTopic);
             this.splitContainer1.Panel1.Controls.Add(this.OutputBox);
+            this.splitContainer1.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel1_Paint);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.InterfaceUserList);
             this.splitContainer1.Size = new System.Drawing.Size(1024, 424);
-            this.splitContainer1.SplitterDistance = 882;
+            this.splitContainer1.SplitterDistance = 902;
             this.splitContainer1.TabIndex = 4;
+            // 
+            // OutputBox
+            // 
+            this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.OutputBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.OutputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.OutputBox.Location = new System.Drawing.Point(0, 0);
+            this.OutputBox.Name = "OutputBox";
+            this.OutputBox.ReadOnly = true;
+            this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.OutputBox.Size = new System.Drawing.Size(902, 424);
+            this.OutputBox.TabIndex = 2;
+            this.OutputBox.Text = "";
+            this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
             // 
             // tbTopic
             // 
@@ -498,25 +514,8 @@
             this.tbTopic.Location = new System.Drawing.Point(0, 0);
             this.tbTopic.Name = "tbTopic";
             this.tbTopic.ReadOnly = true;
-            this.tbTopic.Size = new System.Drawing.Size(882, 20);
+            this.tbTopic.Size = new System.Drawing.Size(902, 20);
             this.tbTopic.TabIndex = 3;
-            // 
-            // OutputBox
-            // 
-            this.OutputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F);
-            this.OutputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.OutputBox.Location = new System.Drawing.Point(0, 22);
-            this.OutputBox.Name = "OutputBox";
-            this.OutputBox.ReadOnly = true;
-            this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.OutputBox.Size = new System.Drawing.Size(882, 402);
-            this.OutputBox.TabIndex = 2;
-            this.OutputBox.Text = "";
-            this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
             // 
             // InterfaceUserList
             // 
@@ -527,7 +526,7 @@
             this.InterfaceUserList.FormattingEnabled = true;
             this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
             this.InterfaceUserList.Name = "InterfaceUserList";
-            this.InterfaceUserList.Size = new System.Drawing.Size(138, 424);
+            this.InterfaceUserList.Size = new System.Drawing.Size(118, 424);
             this.InterfaceUserList.TabIndex = 0;
             this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
