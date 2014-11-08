@@ -1578,19 +1578,17 @@ namespace NarutoBot3
 
             if (isMuted(nicks)) return;
 
-            do
-            {
-                userNumber = rnd.Next((Client.userList.Count - 1));
-            }
-
-            while (removeUserMode(Client.userList[userNumber]) == nicks);
-
             if (Settings.Default.silence == false && Settings.Default.pokeEnabled == true)
             {
+                do
+                {
+                    userNumber = rnd.Next((Client.userList.Count - 1));
+                }
+                while (removeUserMode(Client.userList[userNumber]) == nicks);
+
                 message = Privmsg(CHANNEL, "\x01" + "ACTION " + "pokes " + Client.userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty) + "\x01");
                 Client.messageSender(message);
             }
-
         }
 
         void assignments(string CHANNEL, string nick)
@@ -1730,7 +1728,6 @@ namespace NarutoBot3
 
                 message = Privmsg(CHANNEL, tri[rt]);
                 Client.messageSender(message);
-
             }
         }
 
@@ -1886,19 +1883,14 @@ namespace NarutoBot3
                 if (!isShort)
                 {
                     if (line.Contains("?v="))
-                    {
                         ID = getBetween(line, "?v=", "&");
-                    }
                     else
-                    {
                         ID = getBetween(line, "&v=", "&");
-                    }
                 }
                 else {
 
                     ID = getBetween(line, "youtu.be/", "?t");
                 }
-
 
                 bah = ID.Split(new char[] { ' ' }, 2);
                 ID = bah[0];
@@ -1925,8 +1917,8 @@ namespace NarutoBot3
                 {
                     minutes++;
                     temp = temp - 60;
-
                 }
+
                 seconds = temp;
 
                 if (minutes >= 60)
@@ -1974,22 +1966,9 @@ namespace NarutoBot3
             }
         }
 
-        public void animeSeach(string CHANNEL, string nick, string line)
+        public void animeSeach(string CHANNEL, string nick, string query)
         {
-            string message="";
-
-            if (isMuted(nick))
-            {
-                WriteMessage(nick + " is ignored", Color.BlanchedAlmond);
-                return;
-            }
-            if (Settings.Default.silence == true || Settings.Default.aniSearchEnabled == false)
-            {
-                return;
-            }
-
-            if (String.IsNullOrWhiteSpace(line)) return;
-
+            string message = "";
             GoogleSeach g = new GoogleSeach();
             anime a = new anime();
 
@@ -1997,12 +1976,15 @@ namespace NarutoBot3
             string jsonAnime;
             bool user = false;
 
-            if (line.Contains("-u") || line.Contains("-User")) user = true;
+            if (isMuted(nick)) return;
+            if (Settings.Default.silence == true || Settings.Default.aniSearchEnabled == false) return;
+            if (String.IsNullOrWhiteSpace(query)) return;
 
-            line = line.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -u", "%20");
+            if (query.Contains("-u") || query.Contains("-User") || query.Contains("-user")) user = true;
 
+            query = query.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
 
-            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + line;
+            string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2019,7 +2001,7 @@ namespace NarutoBot3
             }
             catch { }
 
-            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + line);
+            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
             else
             {
                 int i_max = 0; int i = 0; bool found = false;
@@ -2037,7 +2019,7 @@ namespace NarutoBot3
                             found = true;
                             string[] split = g.items[i].link.Split('/');
                             if (split.Length <= 5)
-                                name = g.items[i].link + "/" + line;
+                                name = g.items[i].link + "/" + query;
                             else
                                 name = g.items[i].link;
                         }
@@ -2051,8 +2033,6 @@ namespace NarutoBot3
                         }
                         else i++;
                     }
-
-
                 }
 
                 if (!found) message = Privmsg(CHANNEL, g.items[0].link);
@@ -2108,7 +2088,6 @@ namespace NarutoBot3
 
                         string completed = getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
                         completed = getBetween(completed, "<td align=\"center\">", "</td>");
-
 
                         message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                     }
@@ -2174,11 +2153,12 @@ namespace NarutoBot3
         }
         public void killUser(string CHANNEL, string nick, string args)
         {
-            if (String.IsNullOrEmpty(nick)) return;
             Random r = new Random();
-            if (isMuted(nick)) return;
             string target;
             string killString, temp;
+
+            if (isMuted(nick)) return;
+            if (String.IsNullOrEmpty(nick)) return;
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
@@ -2756,9 +2736,9 @@ namespace NarutoBot3
                     Client.messageSender(message);
 
                     if (comment.Body.ToString().Length > 250)
-                        message = Privmsg(CHANNEL, "\x02" + "Comment: " + comment.Body.ToString().Truncate(250).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Truncate(250).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
                     else
-                        message = Privmsg(CHANNEL, "\x02" + "Comment: " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
 
                     Client.messageSender(message);
 

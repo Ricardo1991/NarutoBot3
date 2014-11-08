@@ -58,8 +58,6 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            //Settings.Default.Upgrade();
-
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker1.WorkerSupportsCancellation = true;
@@ -70,7 +68,7 @@ namespace NarutoBot3
 
             if (result == DialogResult.OK)
             {
-                if (connect()) //If connected with success, then start the bot
+                if (connect())          //If connected with success, then start the bot
                 {
                     exitTheLoop = false;
                     backgroundWorker1.RunWorkerAsync();
@@ -115,7 +113,6 @@ namespace NarutoBot3
 
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
-
 
             if (String.IsNullOrEmpty(Settings.Default.redditUser) || String.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
@@ -514,10 +511,9 @@ namespace NarutoBot3
 
                             ChangeConnectingLabel("Connecting...");
 
-                            if (connect())//If connected with success, then start the bot
-                            {
+                            if (connect()) //If connected with success, then start the bot
                                 backgroundWorker1.RunWorkerAsync();
-                            }
+                            
                             else
                             {
                                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -629,6 +625,8 @@ namespace NarutoBot3
             if (e.KeyCode == Keys.Up)
             {
                 InputBox.Text = lastCommand;
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
 
             if (e.KeyCode == Keys.Enter)
@@ -642,83 +640,53 @@ namespace NarutoBot3
                 if (!client.isConnected) return;
                 if (String.IsNullOrEmpty(InputBox.Text)) return;
 
-                char[] param = new char[1];
-                param[0] = ' ';
-                string[] parsed = InputBox.Text.Split(param, 2); //parsed[0] is the command, parsed[1] is the rest              
+                string[] parsed = InputBox.Text.Split(new char[] {' '}, 2); //parsed[0] is the command (first word), parsed[1] is the rest              
 
-                if (parsed.Length >= 2)
+                if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
                 {
-                    if (!String.IsNullOrEmpty(parsed[1]))
-                    {
-                        parsed[0] = parsed[0].ToLower();
-                        if (parsed[0] == "/me")  //Action send
-                        {
-                            message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
-                        }
-                        else
-                            if (parsed[0] == "/whois" )  //Action send
-                            {
-                                message = "WHOIS " + parsed[1] + "\n";
-                            }
-                            else
-                                if (parsed[0] == "/whowas" )  //Action send
-                                {
-                                    message = "WHOWAS " + parsed[1] + "\n";
-                                }
-                                else
-                                    if (parsed[0] == "/nick" )  //Action send
-                                    {
-                                        changeNick(parsed[1]);
-                                    }
-                                    else
-                                        if (parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg" )  //Action send
-                                        {
+                    parsed[0] = parsed[0].ToLower();
 
-                                            string[] parsed2 = InputBox.Text.Split(param, 3);
-                                            if (parsed2.Length >= 3)
-                                                message = privmsg(parsed2[1], parsed2[2]);
-                                        }
-                                        else
-                                            if (parsed[0] == "/ns" || parsed[0] == "/nickserv" )  //NickServ send
-                                            {
-                                                message = privmsg("NickServ", parsed[1]);
-                                            }
-                                            else
-                                                if (parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Chanserv send
-                                                {
-                                                    message = privmsg("ChanServ", parsed[1]);
-                                                }
-                                                else
-                                                {
-                                                    //Normal send
-                                                    if (String.IsNullOrWhiteSpace(parsed[0]))                                             
-                                                        message = privmsg(HOME_CHANNEL, InputBox.Text);
-                                                    else if (parsed[0][0] != '/')
-                                                    {
-                                                        message = privmsg(HOME_CHANNEL, InputBox.Text);
-                                                    }
-                                                }
+                    if (parsed[0] == "/me")  //Action send
+                            message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
+
+                    else if (parsed[0] == "/whois" )  //Action send
+                            message = "WHOIS " + parsed[1] + "\n";
+
+                    else if (parsed[0] == "/whowas" )  //Action send
+                            message = "WHOWAS " + parsed[1] + "\n";
+
+                    else if (parsed[0] == "/nick" )  //Action send
+                            changeNick(parsed[1]);
+
+                    else if (parsed[0] == "/ns" || parsed[0] == "/nickserv" )  //NickServ send
+                            message = privmsg("NickServ", parsed[1]);
+
+                    else if (parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Chanserv send
+                            message = privmsg("ChanServ", parsed[1]);
+
+                    else if (parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg")  //Action send
+                    {
+                        parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
+                        if (parsed.Length >= 3)
+                            message = privmsg(parsed[1], parsed[2]);
+                        else
+                            WriteMessage("Not enough arguments");
                     }
+                    else if (parsed[0][0] != '/') //Normal send
+                            message = privmsg(HOME_CHANNEL, InputBox.Text);
+                        
                 }
                 else
                     if (parsed[0] == "/me" || parsed[0] == "/whois" || parsed[0] == "/whowas" ||
                         parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg" ||
                          parsed[0] == "/ns" || parsed[0] == "/nickserv" || parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Action send
-                    {
                         WriteMessage("Not enough arguments");
-                    }
-                    else
-                    {
-                        //Normal send
-                        if (parsed[0][0] != '/')
-                            message = privmsg(HOME_CHANNEL, InputBox.Text);
-                    }
 
-
-                client.messageSender(message);
-                message = "";
+                    else if (parsed[0][0] != '/') //Normal send
+                        message = privmsg(HOME_CHANNEL, InputBox.Text);
+                    
+                if(!String.IsNullOrWhiteSpace(message)) client.messageSender(message);
                 ChangeInput("");
-
             }
         }
 
@@ -798,7 +766,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
 
-            if (connect())//If connected with success, then start the bot
+            if (connect()) //If connected with success, then start the bot
             {
                 exitTheLoop = false;
                 backgroundWorker1.RunWorkerAsync();
@@ -842,7 +810,6 @@ namespace NarutoBot3
                 if (InterfaceUserList.SelectedIndex != -1)
                 {
                     contextMenuUserList.Show();
-
                 }
             }
         }
@@ -1034,6 +1001,7 @@ namespace NarutoBot3
         public bool changeNick(string nick)
         {
             client.NICK = Settings.Default.Nick = nick;
+            Settings.Default.Save();
 
             if (!String.IsNullOrEmpty(client.HOST_SERVER))
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
@@ -1043,11 +1011,11 @@ namespace NarutoBot3
             //do nick change to server
             if (client.isConnected)
             {
-                string message = "NICK " + client.NICK + "\n";
-                client.messageSender(message);
+                client.messageSender("NICK " + client.NICK + "\n");
                 return true;
             }
-            else return false;
+
+            return false;
         }
 
         public void duplicatedNick(object sender, EventArgs e)
