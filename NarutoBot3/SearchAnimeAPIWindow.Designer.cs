@@ -34,11 +34,11 @@
             this.tb_API = new System.Windows.Forms.TextBox();
             this.bt_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tb_Pass = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tb_User = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.cx_group.SuspendLayout();
             this.groupBoxAPI.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -52,7 +52,7 @@
             this.cx_group.Size = new System.Drawing.Size(481, 63);
             this.cx_group.TabIndex = 0;
             this.cx_group.TabStop = false;
-            this.cx_group.Text = "cx - for !anime";
+            this.cx_group.Text = "Google Search Engine CX key - for !anime";
             // 
             // tb_cx
             // 
@@ -69,7 +69,7 @@
             this.groupBoxAPI.Size = new System.Drawing.Size(481, 63);
             this.groupBoxAPI.TabIndex = 1;
             this.groupBoxAPI.TabStop = false;
-            this.groupBoxAPI.Text = "API - for !anime and !time";
+            this.groupBoxAPI.Text = "Google API key - for !anime and !time";
             // 
             // tb_API
             // 
@@ -101,6 +101,15 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "myAnimeList Credentials - for !anime";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(230, 67);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(222, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Warning: The password is saved as clear text";
             // 
             // tb_Pass
             // 
@@ -134,15 +143,6 @@
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Username";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(230, 67);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(222, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Warning: The password is saved as clear text";
             // 
             // SearchAnimeAPIWindow
             // 

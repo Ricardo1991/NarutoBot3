@@ -457,7 +457,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("009080231302963844733:3y1u9c-spl4")]
         public string cxKey {
             get {
                 return ((string)(this["cxKey"]));

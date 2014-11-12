@@ -3110,7 +3110,6 @@ namespace NarutoBot3
                 try
                 {
                     service = new TwitterService(Settings.Default.twitterConsumerKey, Settings.Default.twitterConsumerKeySecret);
-
                     service.AuthenticateWith(Settings.Default.twitterAccessToken, Settings.Default.twitterAccessTokenSecret);
                 }
 

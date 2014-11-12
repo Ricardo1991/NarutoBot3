@@ -111,7 +111,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="cxKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">009080231302963844733:3y1u9c-spl4</Value>
     </Setting>
     <Setting Name="twitterEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
