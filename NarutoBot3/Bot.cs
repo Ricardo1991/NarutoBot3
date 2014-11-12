@@ -243,7 +243,6 @@ namespace NarutoBot3
                     Settings.Default.twitterEnabled = false;
                     Settings.Default.Save();
                 }
-            
             }
         }
 
@@ -348,7 +347,7 @@ namespace NarutoBot3
                         if (!String.IsNullOrEmpty(Client.HOST_SERVER))
                             OnConnectedWithServer(EventArgs.Empty);
 
-                        pingSever();
+                        //pingSever();
                             
                         break;
 
@@ -618,9 +617,9 @@ namespace NarutoBot3
                         }
 
                         //StartParsing
-                        if ((String.Compare(cmd, "hello", true) == 0
-                                || String.Compare(cmd, "hi", true) == 0
-                                || String.Compare(cmd, "hey", true) == 0)
+                        if ((String.Compare(cmd.Replace(",",string.Empty), "hello", true) == 0
+                                || String.Compare(cmd.Replace(",", string.Empty), "hi", true) == 0
+                                || String.Compare(cmd.Replace(",",string.Empty), "hey", true) == 0)
                                 && arg.ToLower().Contains(Client.NICK.ToLower()))
                             {
                                 WriteMessage("* Received a hello from " + user, Color.Pink);

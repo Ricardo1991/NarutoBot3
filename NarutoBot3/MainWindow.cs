@@ -453,7 +453,6 @@ namespace NarutoBot3
             }
         }
 
-
         //UI Events
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
@@ -517,7 +516,7 @@ namespace NarutoBot3
                     if (String.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
                     if (PORT <= 0 || PORT > 65535) PORT = 6667;
 
-                    if (connect())//If connected with success, then start the bot
+                    if (connect()) //If connected with success, then start the bot
                     {
                         backgroundWorker1.RunWorkerAsync();
                     }
@@ -768,12 +767,7 @@ namespace NarutoBot3
         }
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            contextParse(e.ClickedItem.Text);
-        }
-
-        private void contextParse(string text)
-        {
-            string[] split = text.Split(' ');
+            string[] split = e.ClickedItem.Text.Split(' ');
             switch (split[0])
             {
                 case "Give":
@@ -801,8 +795,7 @@ namespace NarutoBot3
                 case "Kick":
                     ircBot.kickUser(split[1]);
                     break;
-            }
-            ircBot.SaveOps();
+            } 
         }
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)
