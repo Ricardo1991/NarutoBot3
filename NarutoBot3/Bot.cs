@@ -2224,10 +2224,10 @@ namespace NarutoBot3
         {
             string message="";
             Random r = new Random();
-            StreamWriter w = new StreamWriter("TextFiles/questions.txt", true);
+            //StreamWriter w = new StreamWriter("TextFiles/questions.txt", true);
 
             if (isMuted(user)) return;
-            if (!Settings.Default.silence || !Settings.Default.questionEnabled) return;
+            if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
             arg = arg.ToLower().Replace("?", string.Empty).TrimStart(new char[]{' '});
             string[] split = arg.Split(new char[] { ' ' });
@@ -2254,7 +2254,7 @@ namespace NarutoBot3
                             else
                             {
                                 message = Privmsg(CHANNEL, "I dont know, maybe something like " + r.Next(50));
-                                w.WriteLine(arg);
+                                //w.WriteLine(arg);
                             }
                                 
 
@@ -2269,7 +2269,7 @@ namespace NarutoBot3
                             else
                             {
                                 message = Privmsg(CHANNEL, "I dont know yet, ask later");
-                                w.WriteLine(arg);
+                                //w.WriteLine(arg);
                             }
 
                         }
@@ -2283,16 +2283,16 @@ namespace NarutoBot3
                             }
                             else
                             {
-                                w.WriteLine(arg);
+                                //w.WriteLine(arg);
                             }
 
                         }
-                        else w.WriteLine(arg);
+                        //else w.WriteLine(arg);
                     }
                     else
                     {
                         message = Privmsg(CHANNEL, user + ", no idea...");
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                         Client.messageSender(message);
 
                     }
@@ -2302,7 +2302,7 @@ namespace NarutoBot3
                 if (String.Compare(split[0], "how's", true) == 0)
                 {
                     message = Privmsg(CHANNEL, user + ", no idea...");
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                     Client.messageSender(message);
                 }
                 else if (String.Compare(split[0], "why", true) == 0)
@@ -2315,7 +2315,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                     }
                 }
                 else if (String.Compare(split[0], "is", true) == 0)
@@ -2359,7 +2359,7 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
 
                     }
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
                 {
@@ -2367,7 +2367,7 @@ namespace NarutoBot3
 
                     message = Privmsg(CHANNEL, when[r.Next(when.Length - 1)]);
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "are", true) == 0)
                 {
@@ -2385,9 +2385,9 @@ namespace NarutoBot3
                     {
                         string[] are = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No." , "Probably"};
                         message = Privmsg(CHANNEL, are[r.Next(are.Length - 1)]);
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                     }
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "can", true) == 0)
                 {
@@ -2404,7 +2404,7 @@ namespace NarutoBot3
                     {
                         string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                     }
                 }
                 else if (String.Compare(split[0], "would", true) == 0)
@@ -2418,7 +2418,7 @@ namespace NarutoBot3
                     {
                         string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                     }
                 }
                 else if (String.Compare(split[0], "where", true) == 0)
@@ -2428,7 +2428,7 @@ namespace NarutoBot3
 
                     message = Privmsg(CHANNEL, where[r.Next(where.Length - 1)]);
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "who", true) == 0)
                 {
@@ -2444,7 +2444,7 @@ namespace NarutoBot3
 
                         message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + randomUser);
 
-                        w.WriteLine(arg);
+                        //w.WriteLine(arg);
                     }
 
                 }
@@ -2456,17 +2456,17 @@ namespace NarutoBot3
 
                     }
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "what's", true) == 0)
                 {
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "if", true) == 0)
                 {
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
@@ -2537,7 +2537,7 @@ namespace NarutoBot3
                     }
                     
                     
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "should", true) == 0)
                 {
@@ -2607,14 +2607,14 @@ namespace NarutoBot3
                     }
 
 
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "did", true) == 0)
                 {
 
                     string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
                     message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                    w.WriteLine(arg);
+                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "does", true) == 0)
                 {
@@ -2663,12 +2663,12 @@ namespace NarutoBot3
             else
             {
                 message = Privmsg(CHANNEL, user + ", what?");
-                w.WriteLine(arg);
+                //w.WriteLine(arg);
             
             }
 
             if(!String.IsNullOrWhiteSpace(message)) Client.messageSender(message);
-            w.Close();
+            //w.Close();
         }
 
         public void nickGen(string CHANNEL, string nick, string args)
