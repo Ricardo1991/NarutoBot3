@@ -356,6 +356,12 @@ namespace NarutoBot3
                         OnTopicChange(EventArgs.Empty);
                         break;
 
+                    case ("TOPIC"):   //TOPIC
+                        Topic = completeParameters.Split(new char[] { ' ' }, 2)[1];
+                        OnTopicChange(EventArgs.Empty);
+                        break;
+
+
                     case ("PONG"):
                         string[] split = message.Split(':');
                         string pongcmd = split[2];
