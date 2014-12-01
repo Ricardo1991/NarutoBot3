@@ -2209,9 +2209,14 @@ namespace NarutoBot3
                         target = removeUserMode(Client.userList[r.Next((Client.userList.Count - 1))]);
                     else
                         target = args.Trim();
-                    do
+
+                    if(kill.Count<=10)
                         killID = r.Next(kill.Count);
-                    while (killsUsed.Contains(killID) || kill.Count>=10);
+                    else{
+                        do
+                            killID = r.Next(kill.Count);
+                        while (killsUsed.Contains(killID));
+                    }
                     
                     if (killsUsed.Count >= 10){
                         for (int i = 0; i == 8; i++)
