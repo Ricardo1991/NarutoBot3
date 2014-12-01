@@ -83,6 +83,8 @@ namespace NarutoBot3
 
         string topic;
 
+        private List<int> killsUsed = new List<int>();
+
         public string Topic
         {
             get { return topic; }
@@ -1906,7 +1908,7 @@ namespace NarutoBot3
             if (String.IsNullOrEmpty(line)) return;
             if (isMuted(nick)) return;
 
-            if (Settings.Default.silence == false && Settings.Default.youtube_Enabled == true)
+            if (!Settings.Default.silence && Settings.Default.youtube_Enabled)
             {
                 string[] bah;
                 string ID;
@@ -2188,6 +2190,7 @@ namespace NarutoBot3
             Random r = new Random();
             string target;
             string killString, temp;
+            int killID;
 
             if (isMuted(nick)) return;
             if (String.IsNullOrEmpty(nick)) return;
@@ -2206,9 +2209,21 @@ namespace NarutoBot3
                         target = removeUserMode(Client.userList[r.Next((Client.userList.Count - 1))]);
                     else
                         target = args.Trim();
+                    do
+                        killID = r.Next(kill.Count);
+                    while (killsUsed.Contains(killID) || kill.Count>=10);
+                    
+                    if (killsUsed.Count >= 10){
+                        for (int i = 0; i == 8; i++)
+                            killsUsed[i + 1] = killsUsed[i];
 
-                    temp = kill[r.Next(kill.Count)];
+                        killsUsed[0] = killID;
+                    }
+                    else
+                        killsUsed.Add(killID);
 
+
+                    temp = kill[killID];
                     if (temp.ToLower().Contains("<normal>"))
                     {
                         temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
