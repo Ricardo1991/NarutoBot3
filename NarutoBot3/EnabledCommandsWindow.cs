@@ -30,11 +30,13 @@ namespace NarutoBot3
             cb_Trivia.Checked = Settings.Default.triviaEnabled;
             cb_twitter.Checked = Settings.Default.twitterEnabled;
             cb_Questions.Checked = Settings.Default.questionEnabled;
+            cb_YTSearch.Checked = Settings.Default.youtubeSearchEnabled;
         }
 
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Settings.Default.youtubeSearchEnabled = cb_YTSearch.Checked;
             Settings.Default.questionEnabled = cb_Questions.Checked;
             Settings.Default.killEnabled = cb_Kill.Checked;
             Settings.Default.twitterEnabled = cb_twitter.Checked;

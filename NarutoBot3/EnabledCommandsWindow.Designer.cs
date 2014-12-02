@@ -56,6 +56,7 @@
             this.cb_randomText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cb_YTSearch = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -163,7 +164,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(517, 277);
+            this.button1.Location = new System.Drawing.Point(517, 329);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -183,20 +184,21 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(586, 259);
+            this.groupBox1.Size = new System.Drawing.Size(586, 311);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Commands";
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.cb_YTSearch);
             this.groupBox6.Controls.Add(this.cb_Time);
             this.groupBox6.Controls.Add(this.cb_Convert);
             this.groupBox6.Controls.Add(this.cb_Wiki);
             this.groupBox6.Controls.Add(this.cb_Anime);
             this.groupBox6.Location = new System.Drawing.Point(174, 136);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(200, 115);
+            this.groupBox6.Size = new System.Drawing.Size(200, 169);
             this.groupBox6.TabIndex = 16;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Helpful";
@@ -310,7 +312,7 @@
             this.groupBox4.Controls.Add(this.cb_randomText);
             this.groupBox4.Location = new System.Drawing.Point(380, 14);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 237);
+            this.groupBox4.Size = new System.Drawing.Size(200, 291);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "For Fun";
@@ -393,7 +395,7 @@
             this.groupBox3.Controls.Add(this.cb_claims);
             this.groupBox3.Location = new System.Drawing.Point(6, 178);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(162, 73);
+            this.groupBox3.Size = new System.Drawing.Size(162, 127);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Colorkage";
@@ -410,11 +412,21 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Basic";
             // 
+            // cb_YTSearch
+            // 
+            this.cb_YTSearch.AutoSize = true;
+            this.cb_YTSearch.Location = new System.Drawing.Point(5, 111);
+            this.cb_YTSearch.Name = "cb_YTSearch";
+            this.cb_YTSearch.Size = new System.Drawing.Size(103, 17);
+            this.cb_YTSearch.TabIndex = 11;
+            this.cb_YTSearch.Text = "Youtube Search";
+            this.cb_YTSearch.UseVisualStyleBackColor = true;
+            // 
             // EnabledCommandsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 312);
+            this.ClientSize = new System.Drawing.Size(604, 364);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.MinimumSize = new System.Drawing.Size(620, 351);
@@ -467,5 +479,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox cb_Kill;
         private System.Windows.Forms.CheckBox cb_Questions;
+        private System.Windows.Forms.CheckBox cb_YTSearch;
     }
 }

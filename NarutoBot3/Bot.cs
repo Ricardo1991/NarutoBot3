@@ -14,6 +14,7 @@ using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using TweetSharp;
+using YoutubeSearch;
 
 namespace NarutoBot3
 {
@@ -757,7 +758,12 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "anime", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a animeSearch request from " + user, Color.Pink);
-                                animeSeach(Client.HOME_CHANNEL, user, arg);
+                                animeSearch(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, Client.SYMBOL + "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a youtubeSearch request from " + user, Color.Pink);
+                                youtubeSearch(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "poke", true) == 0)
                             {
@@ -2000,7 +2006,7 @@ namespace NarutoBot3
             }
         }
 
-        public void animeSeach(string CHANNEL, string nick, string query)
+        public void animeSearch(string CHANNEL, string nick, string query)
         {
             string message = "";
             GoogleSeach g = new GoogleSeach();
@@ -2023,8 +2029,7 @@ namespace NarutoBot3
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
-            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
-            webClient.Headers.Add("User-agent", "NarutoBot3");
+            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
 
             string name = "";
 
@@ -2034,6 +2039,8 @@ namespace NarutoBot3
                 JsonConvert.PopulateObject(jsonGoogle, g);
             }
             catch { }
+
+            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
 
             if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
             else
@@ -2128,6 +2135,80 @@ namespace NarutoBot3
             }
 
             Client.messageSender(message);
+        }
+
+        public void youtubeSearch(string CHANNEL, string nick, string query)
+        {
+            string message = "";
+            YoutubeSearch.YoutubeSearch y = new YoutubeSearch.YoutubeSearch();
+            string jsonYoutube;
+            string title, duration;
+            int temp, minutes = 0, hours = 0, seconds = 0;
+
+            if (isMuted(nick)) return;
+            if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
+            if (String.IsNullOrWhiteSpace(query)) return;
+
+            query = query.Replace(" ", "%20");
+
+            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=5";
+
+            var webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+
+            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+            try
+            {
+                jsonYoutube = webClient.DownloadString(getString);
+                JsonConvert.PopulateObject(jsonYoutube, y);
+            }
+            catch { }
+
+            foreach (var searchResult in y.items)
+            {
+                switch (searchResult.id.kind)
+                {
+                    case "youtube#video":
+                        string URLString = "http://gdata.youtube.com/feeds/api/videos/" + searchResult.id.videoId;
+                        string readHtml = webClient.DownloadString(URLString);
+
+                        title = getBetween(readHtml, "<title type='text'>", "</title>");
+                        duration = getBetween(readHtml, "<yt:duration seconds='", "'/>");
+
+                        title = WebUtility.HtmlDecode(title);
+
+                        temp = Convert.ToInt32(duration);
+
+                        while (temp >= 60)
+                        {
+                            minutes++;
+                            temp = temp - 60;
+                        }
+
+                        seconds = temp;
+
+                        if (minutes >= 60)
+                        {
+                            temp = minutes;
+                            while (temp >= 60)
+                            {
+                                hours++;
+                                temp = temp - 60;
+
+                            }
+                            minutes = temp;
+                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                            Client.messageSender(message);
+                            return;
+                        }
+                        else
+                        {
+                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                            Client.messageSender(message);
+                            return;
+                        }
+                }
+            }
         }
 
         public void vimeo(string CHANNEL, string nick, string line)

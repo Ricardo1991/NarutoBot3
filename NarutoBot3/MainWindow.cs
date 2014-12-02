@@ -108,9 +108,13 @@ namespace NarutoBot3
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
             {
                 Settings.Default.aniSearchEnabled = false;
-                Settings.Default.timeEnabled = false;
             }
-
+            if (Settings.Default.apikey.Length < 5)
+            {
+                Settings.Default.timeEnabled = false;
+                Settings.Default.youtubeSearchEnabled = false;
+            }
+            
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
 

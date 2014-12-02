@@ -149,5 +149,11 @@
     <Setting Name="RealName" Type="System.String" Scope="User">
       <Value Profile="(Default)">/r/Naruto</Value>
     </Setting>
+    <Setting Name="youtubeSearchEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UserAgent" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NarutoBot3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
