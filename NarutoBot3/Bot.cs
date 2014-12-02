@@ -2151,7 +2151,7 @@ namespace NarutoBot3
 
             query = query.Replace(" ", "%20");
 
-            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=5";
+            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=10&type=video&safeSearch=none";
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2209,6 +2209,9 @@ namespace NarutoBot3
                         }
                 }
             }
+            message = Privmsg(CHANNEL, "No results found");
+            Client.messageSender(message);
+            return;
         }
 
         public void vimeo(string CHANNEL, string nick, string line)
