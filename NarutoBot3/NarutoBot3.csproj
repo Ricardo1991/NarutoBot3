@@ -26,8 +26,8 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>3.5.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>3.6.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
