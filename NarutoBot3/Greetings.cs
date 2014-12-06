@@ -12,7 +12,7 @@
           set { nick = value; }
         }        
 
-        public string Greetingg
+        public string Greeting
         {
           get { return greeting; }
           set { greeting = value; }

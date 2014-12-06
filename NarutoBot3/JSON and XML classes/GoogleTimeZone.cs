@@ -1,4 +1,4 @@
-﻿namespace NarutoBot3
+﻿namespace GoogleTimeZone
 {
     public class GoogleTimeZone
     {

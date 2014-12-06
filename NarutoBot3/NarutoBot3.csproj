@@ -126,136 +126,139 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.cs">
+    <Compile Include="Forms\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutBox.Designer.cs">
+    <Compile Include="Forms\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Bot.cs" />
-    <Compile Include="GoogleSearch.cs" />
-    <Compile Include="ColorkageURLWindow.cs">
+    <Compile Include="JSON and XML classes\GoogleSearch.cs" />
+    <Compile Include="Forms\ColorkageURLWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ColorkageURLWindow.Designer.cs">
+    <Compile Include="Forms\ColorkageURLWindow.Designer.cs">
       <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectWindow.cs">
+    <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConnectWindow.Designer.cs">
+    <Compile Include="Forms\ConnectWindow.Designer.cs">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="EnabledCommandsWindow.cs">
+    <Compile Include="Forms\EnabledCommandsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EnabledCommandsWindow.Designer.cs">
+    <Compile Include="Forms\EnabledCommandsWindow.Designer.cs">
       <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MangaETAWindow.cs">
+    <Compile Include="Forms\MangaETAWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MangaETAWindow.Designer.cs">
+    <Compile Include="Forms\MangaETAWindow.Designer.cs">
       <DependentUpon>MangaETAWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Greetings.cs" />
-    <Compile Include="HelpTextWindow.cs">
+    <Compile Include="Forms\HelpTextWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HelpTextWindow.Designer.cs">
+    <Compile Include="Forms\HelpTextWindow.Designer.cs">
       <DependentUpon>HelpTextWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="IRC_Client.cs" />
-    <Compile Include="MainWindow.cs">
+    <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainWindow.Designer.cs">
+    <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MutedUsersWindow.cs">
+    <Compile Include="Forms\MutedUsersWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MutedUsersWindow.Designer.cs">
+    <Compile Include="Forms\MutedUsersWindow.Designer.cs">
       <DependentUpon>MutedUsersWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MAL_Anime.cs" />
-    <Compile Include="ChangeBotNickWindow.cs">
+    <Compile Include="JSON and XML classes\MAL_Anime.cs" />
+    <Compile Include="Forms\ChangeBotNickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChangeBotNickWindow.Designer.cs">
+    <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />
     <Compile Include="NickGen.cs" />
-    <Compile Include="BotOperatorWindow.cs">
+    <Compile Include="Forms\BotOperatorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BotOperatorWindow.Designer.cs">
+    <Compile Include="Forms\BotOperatorWindow.Designer.cs">
       <DependentUpon>BotOperatorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="pastMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedditCredentials.cs">
+    <Compile Include="Forms\RedditCredentials.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RedditCredentials.Designer.cs">
+    <Compile Include="Forms\RedditCredentials.Designer.cs">
       <DependentUpon>RedditCredentials.cs</DependentUpon>
     </Compile>
-    <Compile Include="MangaReleaseCheckerWindow.cs">
+    <Compile Include="Forms\MangaReleaseCheckerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MangaReleaseCheckerWindow.Designer.cs">
+    <Compile Include="Forms\MangaReleaseCheckerWindow.Designer.cs">
       <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditRulesWindow.cs">
+    <Compile Include="Forms\EditRulesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditRulesWindow.Designer.cs">
+    <Compile Include="Forms\EditRulesWindow.Designer.cs">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchAnimeAPIWindow.cs">
+    <Compile Include="Forms\SearchAnimeAPIWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchAnimeAPIWindow.Designer.cs">
+    <Compile Include="Forms\SearchAnimeAPIWindow.Designer.cs">
       <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GoogleTimeZone.cs" />
+    <Compile Include="JSON and XML classes\GoogleTimeZone.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TwitterAPIKeysWindow.cs">
+    <Compile Include="Forms\TwitterAPIKeysWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TwitterAPIKeysWindow.Designer.cs">
+    <Compile Include="Forms\TwitterAPIKeysWindow.Designer.cs">
       <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="YoutubeSearch.cs" />
-    <EmbeddedResource Include="AboutBox.resx">
+    <Compile Include="JSON and XML classes\YoutubeSearch.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="YoutubeUtil.cs" />
+    <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ColorkageURLWindow.resx">
+    <EmbeddedResource Include="Forms\ColorkageURLWindow.resx">
       <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConnectWindow.resx">
+    <EmbeddedResource Include="Forms\ConnectWindow.resx">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EnabledCommandsWindow.resx">
+    <EmbeddedResource Include="Forms\EnabledCommandsWindow.resx">
       <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MangaETAWindow.resx">
+    <EmbeddedResource Include="Forms\MangaETAWindow.resx">
       <DependentUpon>MangaETAWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HelpTextWindow.resx">
+    <EmbeddedResource Include="Forms\HelpTextWindow.resx">
       <DependentUpon>HelpTextWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainWindow.resx">
+    <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MutedUsersWindow.resx">
+    <EmbeddedResource Include="Forms\MutedUsersWindow.resx">
       <DependentUpon>MutedUsersWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChangeBotNickWindow.resx">
+    <EmbeddedResource Include="Forms\ChangeBotNickWindow.resx">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BotOperatorWindow.resx">
+    <EmbeddedResource Include="Forms\BotOperatorWindow.resx">
       <DependentUpon>BotOperatorWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -268,19 +271,19 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="RedditCredentials.resx">
+    <EmbeddedResource Include="Forms\RedditCredentials.resx">
       <DependentUpon>RedditCredentials.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MangaReleaseCheckerWindow.resx">
+    <EmbeddedResource Include="Forms\MangaReleaseCheckerWindow.resx">
       <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditRulesWindow.resx">
+    <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchAnimeAPIWindow.resx">
+    <EmbeddedResource Include="Forms\SearchAnimeAPIWindow.resx">
       <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TwitterAPIKeysWindow.resx">
+    <EmbeddedResource Include="Forms\TwitterAPIKeysWindow.resx">
       <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NarutoBot3_TemporaryKey.pfx" />

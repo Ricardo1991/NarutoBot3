@@ -1,7 +1,4 @@
-﻿using NarutoBot3.Properties;
-using Newtonsoft.Json;
-using RedditSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -13,8 +10,14 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using GoogleSearch;
+using GoogleTimeZone;
+using NarutoBot3.Properties;
+using Newtonsoft.Json;
+using RedditSharp;
 using TweetSharp;
 using YoutubeSearch;
+using YoutubeVideoInfo;
 
 namespace NarutoBot3
 {
@@ -410,7 +413,7 @@ namespace NarutoBot3
                         {
                             if (g.Nick == Who.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
                             {
-                                string messagess = Privmsg(Client.HOME_CHANNEL, g.Greetingg);
+                                string messagess = Privmsg(Client.HOME_CHANNEL, g.Greeting);
                                 Client.messageSender(messagess);
                             }
                         }
@@ -789,13 +792,13 @@ namespace NarutoBot3
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("* Detected an youtube video from  " + user, Color.Pink);
-                                youtube(whoSent, user, msg, false);
+                                youtube(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
                             {
                                 WriteMessage("* Detected a short youtube video from  " + user, Color.Pink);
-                                youtube(whoSent, user, msg, true);
+                                youtube(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("vimeo.com"))
@@ -1201,7 +1204,7 @@ namespace NarutoBot3
                 if (g.Nick == nick)
                 {
                     found = true;
-                    g.Greetingg = args;
+                    g.Greeting = args;
                     SaveGreetings();
                 }
             }
@@ -1222,7 +1225,7 @@ namespace NarutoBot3
             {
                 foreach (Greetings gg in greet)
                 {
-                    newTask.WriteLine(gg.Nick + ":" + gg.Enabled.ToString() + ":" + gg.Greetingg);
+                    newTask.WriteLine(gg.Nick + ":" + gg.Enabled.ToString() + ":" + gg.Greeting);
                 }
             }
 
@@ -1783,7 +1786,7 @@ namespace NarutoBot3
 
             DateTime convertedTime;
 
-            GoogleTimeZone g = new GoogleTimeZone();
+            GoogleTimeZone.GoogleTimeZone g = new GoogleTimeZone.GoogleTimeZone();
             string json;
 
             if (isMuted(nick)) return;
@@ -1909,76 +1912,39 @@ namespace NarutoBot3
             }
         }
 
-        public void youtube(string CHANNEL, string nick, string line, bool isShort)
+        public void youtube(string CHANNEL, string nick, string line)
         {
             if (String.IsNullOrEmpty(line)) return;
             if (isMuted(nick)) return;
 
             if (!Settings.Default.silence && Settings.Default.youtube_Enabled)
             {
-                string[] bah;
-                string ID;
+                string id;
                 string message;
-
-                if (!isShort)
-                {
-                    if (line.Contains("?v="))
-                        ID = getBetween(line, "?v=", "&");
-                    else
-                        ID = getBetween(line, "&v=", "&");
-                }
-                else {
-
-                    ID = getBetween(line, "youtu.be/", "?t");
-                }
-
-                bah = ID.Split(new char[] { ' ' }, 2);
-                ID = bah[0];
-
+                string jsonYoutube="";
                 string title, duration;
-                int hours = 0;
-                int minutes = 0;
-                int seconds = 0;
-                int temp = 0;
-                string URLString = "http://gdata.youtube.com/feeds/api/videos/" + ID;
+                YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
+
+                id = YoutubeUtil.getYoutubeIdFromURL(line);
+
+                string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
 
                 var webClient = new WebClient();
                 webClient.Encoding = Encoding.UTF8;
-                string readHtml = webClient.DownloadString(URLString);
 
-                title = getBetween(readHtml, "<title type='text'>", "</title>");
-                duration = getBetween(readHtml, "<yt:duration seconds='", "'/>");
-
-                title = WebUtility.HtmlDecode(title);
-
-                temp = Convert.ToInt32(duration);
-
-                while (temp >= 60)
+                webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+                try
                 {
-                    minutes++;
-                    temp = temp - 60;
+                    jsonYoutube = webClient.DownloadString(getString);
+                    JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
                 }
+                catch { }
 
-                seconds = temp;
+                title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+                duration = youtubeVideo.items[0].contentDetails.duration.Replace("PT", string.Empty).Replace("H", ":").Replace("M", ":").Replace("S", string.Empty);
 
-                if (minutes >= 60)
-                {
-                    temp = minutes;
-                    while (temp >= 60)
-                    {
-                        hours++;
-                        temp = temp - 60;
-
-                    }
-                    minutes = temp;
-                    message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message); ;
-                }
-                else
-                {
-                    message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message);
-                }
+                message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02");
+                Client.messageSender(message);
             }
         }
         public void twitter(string CHANNEL, string nick, string line)
@@ -1991,7 +1957,7 @@ namespace NarutoBot3
             else
             {
 
-                string ID = getBetween(line, "/status/", "?");
+                string ID = util.getBetween(line, "/status/", "?");
                 long tweetID = Convert.ToInt64(ID);
 
                 TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID });
@@ -2009,7 +1975,7 @@ namespace NarutoBot3
         public void animeSearch(string CHANNEL, string nick, string query)
         {
             string message = "";
-            GoogleSeach g = new GoogleSeach();
+            GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
             anime a = new anime();
 
             string jsonGoogle;
@@ -2098,9 +2064,9 @@ namespace NarutoBot3
 
                         if (a.entry == null)
                         {
-                            string score = getBetween(jsonAnime, "<score>", "</score>");
-                            string episodes = getBetween(jsonAnime, "<episodes>", "</episodes>");
-                            string title = getBetween(jsonAnime, "<title>", "</title>");
+                            string score = util.getBetween(jsonAnime, "<score>", "</score>");
+                            string episodes = util.getBetween(jsonAnime, "<episodes>", "</episodes>");
+                            string title = util.getBetween(jsonAnime, "<title>", "</title>");
 
                             if (episodes == "0")
                                 episodes = "?";
@@ -2125,10 +2091,10 @@ namespace NarutoBot3
                     {
                         string readHtml = webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
 
-                        string profile = getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
+                        string profile = util.getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
 
-                        string completed = getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
-                        completed = getBetween(completed, "<td align=\"center\">", "</td>");
+                        string completed = util.getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
+                        completed = util.getBetween(completed, "<td align=\"center\">", "</td>");
 
                         message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                     }
@@ -2140,10 +2106,9 @@ namespace NarutoBot3
         public void youtubeSearch(string CHANNEL, string nick, string query)
         {
             string message = "";
+            string jsonYoutube, title, duration;
             YoutubeSearch.YoutubeSearch y = new YoutubeSearch.YoutubeSearch();
-            string jsonYoutube;
-            string title, duration;
-            int temp, minutes = 0, hours = 0, seconds = 0;
+            YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
 
             if (isMuted(nick)) return;
             if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
@@ -2157,6 +2122,7 @@ namespace NarutoBot3
             webClient.Encoding = Encoding.UTF8;
 
             webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+
             try
             {
                 jsonYoutube = webClient.DownloadString(getString);
@@ -2169,45 +2135,25 @@ namespace NarutoBot3
                 switch (searchResult.id.kind)
                 {
                     case "youtube#video":
-                        string URLString = "http://gdata.youtube.com/feeds/api/videos/" + searchResult.id.videoId;
-                        string readHtml = webClient.DownloadString(URLString);
 
-                        title = getBetween(readHtml, "<title type='text'>", "</title>");
-                        duration = getBetween(readHtml, "<yt:duration seconds='", "'/>");
 
-                        title = WebUtility.HtmlDecode(title);
-
-                        temp = Convert.ToInt32(duration);
-
-                        while (temp >= 60)
+                        getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + searchResult.id.videoId;
+                        try
                         {
-                            minutes++;
-                            temp = temp - 60;
+                            jsonYoutube = webClient.DownloadString(getString);
+                            JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
                         }
+                        catch { }
 
-                        seconds = temp;
+                        title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+                        duration = youtubeVideo.items[0].contentDetails.duration.Replace("PT", string.Empty).Replace("H", ":").Replace("M", ":").Replace("S", string.Empty);
 
-                        if (minutes >= 60)
-                        {
-                            temp = minutes;
-                            while (temp >= 60)
-                            {
-                                hours++;
-                                temp = temp - 60;
+                        message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                        Client.messageSender(message);
 
-                            }
-                            minutes = temp;
-                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                            Client.messageSender(message);
-                            return;
-                        }
-                        else
-                        {
-                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                            Client.messageSender(message);
-                            return;
-                        }
+                        break;
                 }
+                return;//Only shows 1 link
             }
             message = Privmsg(CHANNEL, "No results found");
             Client.messageSender(message);
@@ -2227,15 +2173,15 @@ namespace NarutoBot3
                 int temp = 0;
 
                 string message;
-                string ID = getBetween(line, "vimeo.com/", "/");
+                string ID = util.getBetween(line, "vimeo.com/", "/");
                 string URLString = "http://vimeo.com/api/v2/video/" + ID.Replace("\r", "").Replace("\n", "") + ".xml";
 
                 var webClient = new WebClient();
                 webClient.Encoding = Encoding.UTF8;
                 string readHtml = webClient.DownloadString(URLString);
 
-                title = getBetween(readHtml, "<title>", "</title>");
-                duration = getBetween(readHtml, "<duration>", "</duration>");
+                title = util.getBetween(readHtml, "<title>", "</title>");
+                duration = util.getBetween(readHtml, "<duration>", "</duration>");
 
                 temp = Convert.ToInt32(duration);
 
@@ -2508,7 +2454,7 @@ namespace NarutoBot3
                     }
                     else if (arg.Contains("can you kill "))
                     {
-                        killUser(CHANNEL, user, getBetween(arg, "can you kill ", ""));
+                        killUser(CHANNEL, user, util.getBetween(arg, "can you kill ", ""));
                     }
                     else
                     {
@@ -2852,7 +2798,7 @@ namespace NarutoBot3
                 else return;
             }
 
-            subreddit = getBetween(url, "/r/", "/");
+            subreddit = util.getBetween(url, "/r/", "/");
 
             try
             {
@@ -2898,7 +2844,7 @@ namespace NarutoBot3
 
             catch   //403 error
             {
-                subreddit = getBetween(url, "/r/", "/");
+                subreddit = util.getBetween(url, "/r/", "/");
 
                 message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "this subreddit is private or the link was invalid" + "\x02");
                 Client.messageSender(message);
@@ -3059,30 +3005,7 @@ namespace NarutoBot3
             return Math.Floor(diff.TotalSeconds);
         }
 
-        public static string getBetween(string strSource, string strStart, string strEnd)
-        {
-            int Start, End;
-            if (String.IsNullOrEmpty(strEnd))
-            {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.Length;
-                return strSource.Substring(Start, End - Start);
-            }
-            
-            else if (strSource.Contains(strStart) && strSource.Contains(strEnd))
-            {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.IndexOf(strEnd, Start);
-                if (End < 0) End = strSource.Length;
-                return strSource.Substring(Start, End - Start);
-            }
-            else
-            {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.Length;
-                return strSource.Substring(Start, End - Start);
-            }
-        }
+
 
         /// <summary>
         /// Writes a Message on the output window
@@ -3234,12 +3157,6 @@ namespace NarutoBot3
             
             
         }
-        public static string Base64Encode(string plainText)
-        {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
-        }
-
 
         internal void redditLogin(string userName, string password)
         {

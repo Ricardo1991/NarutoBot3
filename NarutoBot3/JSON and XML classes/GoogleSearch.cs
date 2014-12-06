@@ -1,6 +1,5 @@
-﻿namespace NarutoBot3
-{   
-    public class GoogleSeach
+﻿namespace GoogleSearch
+{   public class GoogleSearch
     {
         public string kind { get; set; }
         public Url url { get; set; }
