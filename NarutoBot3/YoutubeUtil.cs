@@ -26,7 +26,7 @@ namespace NarutoBot3
 
             return id.Split(new char[] { ' ' }, 2)[0];
         }
-        static public string parseDuration(string duration)
+        static public string parseDuration(string duration)//PT#H#M#S
         {
             string temp="";
             int hours = 0, minutes = 0, seconds = 0;
