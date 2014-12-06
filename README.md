@@ -3,7 +3,7 @@ NarutoBot3
 
 Simple private IRC bot made with Windows Forms
 
-To run, it needs the following files in the same dir as the .exe
+To run, it needs the following files in the \TextFiles\ directory
 
 * help.txt      - Contains the text for the !help command
 * ops.txt       - Contains the nicks that can operate the bot
