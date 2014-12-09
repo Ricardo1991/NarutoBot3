@@ -225,7 +225,7 @@ namespace NarutoBot3
             ReadTrivia();               //trivia strings
             ReadGreetings();            //read greetings
             ReadKills();                //Read the killstrings
-            LoadNickGenStrings();       //For the nick generator
+            ReadNickGen();              //For the nick generator
 
             reddit = new Reddit();
 
@@ -373,7 +373,7 @@ namespace NarutoBot3
                         string pongcmd = split[2];
 
                         #if DEBUG
-                        WriteMessage(message);
+                            WriteMessage(message);
                         #endif
 
                         if (WaitingForPong)
@@ -1254,7 +1254,7 @@ namespace NarutoBot3
             Client.messageSender(message);
         }
 
-        public void LoadNickGenStrings()//These are for the nick gen
+        public void ReadNickGen()//These are for the nick gen
         {
             nickGenStrings = new List<string>();
             nickGenStrings.Clear();
@@ -3007,8 +3007,6 @@ namespace NarutoBot3
             return Math.Floor(diff.TotalSeconds);
         }
 
-
-
         /// <summary>
         /// Writes a Message on the output window
         /// </summary>
@@ -3066,7 +3064,7 @@ namespace NarutoBot3
                 string message = "PING " + timeStamp;
 
                 #if DEBUG
-                    WriteMessage("PING " + timeStamp);
+                    WriteMessage(message);
                 #endif
                     Client.messageSender(message);
 

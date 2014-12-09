@@ -37,6 +37,8 @@ namespace NarutoBot3
             NICK = nick;
             REALNAME = realName;
 
+            irc = new TcpClient();
+
             user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME + "\n";
             nick_message = "NICK " + NICK + "\r\n";
             join_message = "JOIN " + HOME_CHANNEL + "\r\n";
@@ -44,21 +46,19 @@ namespace NarutoBot3
 
         public bool Connect()
         {
+            irc = null;
             irc = new TcpClient(HOST, PORT);
             stream = irc.GetStream();
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream) { AutoFlush = true };
 
-            try
-            {
+            try{
                 messageSender(user_message);
                 messageSender(nick_message);
                 
                 return true;    //Weee, we connected!
             }
-
-            catch (SocketException se)
-            {
+            catch (SocketException se){
                 Console.Out.Write(se);
                 return false;   //Boo, we didnt connect
             }

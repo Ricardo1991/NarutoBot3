@@ -52,7 +52,7 @@ namespace NarutoBot3
 
         bool exitTheLoop = false;
 
-        BackgroundWorker backgroundWorker1 = new BackgroundWorker();
+        BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
         {
@@ -65,9 +65,9 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
 
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
-            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
+            backgroundWorker.WorkerSupportsCancellation = true;
 
             lastCommand = "";
 
@@ -76,10 +76,7 @@ namespace NarutoBot3
             if (result == DialogResult.OK)
             {
                 if (connect())          //If connected with success, then start the bot
-                {
-                    exitTheLoop = false;
-                    backgroundWorker1.RunWorkerAsync();
-                }
+                    backgroundWorker.RunWorkerAsync();
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -113,11 +110,9 @@ namespace NarutoBot3
             }
 
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
-            {
                 Settings.Default.aniSearchEnabled = false;
-            }
-            if (Settings.Default.apikey.Length < 5)
-            {
+
+            if (Settings.Default.apikey.Length < 5){
                 Settings.Default.timeEnabled = false;
                 Settings.Default.youtubeSearchEnabled = false;
             }
@@ -147,13 +142,11 @@ namespace NarutoBot3
 
             Settings.Default.releaseEnabled = false;
 
-            if (Settings.Default.silence == true)
-            {
+            if (Settings.Default.silence == true){
                 silencedToolStripMenuItem.Checked = true;
                 toolStripStatusLabelSilence.Text = "Bot is Silenced";
             }
-            else
-            {
+            else{
                 silencedToolStripMenuItem.Checked = false;
                 toolStripStatusLabelSilence.Text = "";
             }
@@ -174,13 +167,18 @@ namespace NarutoBot3
             loadSettings();
             client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
-            if (client.Connect())
-            {
+            if ( client.Connect() ) {
                 exitTheLoop = false;
+                dTime.Enabled = true;
+
                 return true;
             }
 
-            else return false;
+            else {
+                dTime.Enabled = false;
+
+                return false;
+            } 
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
@@ -237,6 +235,7 @@ namespace NarutoBot3
             ircBot.TopicChange += (sender, e) => changeTopic(sender, e, ircBot.Topic);
 
             ircBot.LoadSettings();
+
         }
 
         private void changeTopic(object sender, EventArgs e, string p)
@@ -259,11 +258,11 @@ namespace NarutoBot3
             
             Thread.Sleep(250);
 
+            exitTheLoop = true;
+            dTime.Enabled = false;
             UpdateDataSource();
             OutputClean();
             ChangeTitle("NarutoBot");
-            exitTheLoop = true;
-            
         }
         
         public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -357,7 +356,6 @@ namespace NarutoBot3
         }
         public void ChangeSilenceCheckBox(bool status)//toolStrip1
         {
-
             if (toolStripMenu.InvokeRequired)
             {
                 SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
@@ -488,7 +486,7 @@ namespace NarutoBot3
                             ChangeConnectingLabel("Connecting...");
 
                             if (connect()) //If connected with success, then start the bot
-                                backgroundWorker1.RunWorkerAsync();
+                                backgroundWorker.RunWorkerAsync();
                             
                             else
                             {
@@ -504,7 +502,7 @@ namespace NarutoBot3
 
                         if (connect())//If connected with success, then start the bot
                         {
-                            backgroundWorker1.RunWorkerAsync();
+                            backgroundWorker.RunWorkerAsync();
                         }
                         else
                         {
@@ -529,7 +527,7 @@ namespace NarutoBot3
 
                     if (connect()) //If connected with success, then start the bot
                     {
-                        backgroundWorker1.RunWorkerAsync();
+                        backgroundWorker.RunWorkerAsync();
                     }
                     else
                     {
@@ -705,7 +703,7 @@ namespace NarutoBot3
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.LoadNickGenStrings();
+            ircBot.ReadNickGen();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -736,19 +734,15 @@ namespace NarutoBot3
 
         private void timeout(object sender, EventArgs e)
         {
-            try { disconnect(); }
-            catch { }
+            disconnect();
 
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
 
             if (connect()) //If connected with success, then start the bot
-            {
-                exitTheLoop = false;
-                backgroundWorker1.RunWorkerAsync();
-            }
-            else
-            {
+                backgroundWorker.RunWorkerAsync();
+
+            else{
                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
             }
@@ -1030,7 +1024,7 @@ namespace NarutoBot3
             Settings.Default.Save();
 
             if (connect())//If connected with success, then start the bot
-                backgroundWorker1.RunWorkerAsync();
+                backgroundWorker.RunWorkerAsync();
         }
 
         private void pingServer(object sender, EventArgs e)
