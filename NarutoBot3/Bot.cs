@@ -2148,7 +2148,7 @@ namespace NarutoBot3
                         catch { }
 
                         title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-                        duration = youtubeVideo.items[0].contentDetails.duration.Replace("PT", string.Empty).Replace("H", ":").Replace("M", ":").Replace("S", string.Empty);
+                        duration = YoutubeUtil.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
                         message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
                         Client.messageSender(message);

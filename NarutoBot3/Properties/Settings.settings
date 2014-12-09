@@ -155,5 +155,8 @@
     <Setting Name="UserAgent" Type="System.String" Scope="User">
       <Value Profile="(Default)">NarutoBot3</Value>
     </Setting>
+    <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
