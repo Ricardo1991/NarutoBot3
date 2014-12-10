@@ -2536,7 +2536,7 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
                     string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
@@ -2607,7 +2607,7 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "should", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
                     string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
@@ -2684,7 +2684,7 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "does", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct!", "I think", "I believe that" };
                     string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
@@ -2702,6 +2702,8 @@ namespace NarutoBot3
                         rest = rest.TrimEnd(' ');
 
                         string replaced = questionsRegex(rest);
+
+                        subject = questionsRegex(subject);
 
                         if (yes)
                         {
@@ -3131,7 +3133,7 @@ namespace NarutoBot3
                     {"i am", someVariable3},
                     {"i'm", someVariable3},
                     {"your", someVariable4},
-                    {"mine", someVariable5},
+                    {"my", someVariable5},
                     {"yourself", someVariable6},
                     {"myself", someVariable7},
                     {"i", someVariable1}
