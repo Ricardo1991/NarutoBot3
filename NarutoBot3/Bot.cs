@@ -2307,11 +2307,12 @@ namespace NarutoBot3
                             else if (arg == "how many fucks do you give")
                             {
                                 message = Privmsg(CHANNEL, "I always give 0 fucks.");
-
                             }
                             else
                             {
-                                message = Privmsg(CHANNEL, "I dont know, maybe something like " + r.Next(50));
+                                string[] many = { "I dont know, maybe something like ", "Probably ", "More than ", "Less than ", "I think it was ", "I don't know, so i'll give you a random number: " };
+                                message = Privmsg(CHANNEL, many[r.Next(many.Length - 1)]) + r.Next(20);
+                                //message = Privmsg(CHANNEL, "I dont know, maybe something like " + r.Next(50));
                                 //w.WriteLine(arg);
                             }
                                 
@@ -2332,18 +2333,22 @@ namespace NarutoBot3
 
                         }
                         else if (String.Compare(split[1], "is", true) == 0)
-                        {
-                            string[] howIs = {"fine", "not fine", "lost", "being retarded again"};
+                        { string[] howIs = { "fine", "not fine", "lost", "being retarded again" };
                             if (split.Length == 3)
                             {
                                 string subject = split[2];
-                                message = Privmsg(CHANNEL, subject+" is "+howIs[r.Next(howIs.Length-1)]);
+                                message = Privmsg(CHANNEL, subject + " is " + howIs[r.Next(howIs.Length - 1)]);
                             }
                             else
                             {
                                 //w.WriteLine(arg);
                             }
 
+                        }
+                        else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length - 1], "die", true) == 0)
+                        {
+                            string target = util.getBetween(arg,"did", "die");
+                            killUser(CHANNEL, user, target);
                         }
                         //else w.WriteLine(arg);
                     }
@@ -2352,9 +2357,7 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, user + ", no idea...");
                         //w.WriteLine(arg);
                         Client.messageSender(message);
-
                     }
-
                 }
 
                 if (String.Compare(split[0], "how's", true) == 0)
@@ -2421,7 +2424,7 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
                 {
-                    string[] when = { "maybe next week", "a few days ago", "last year", "yesterday" , "tomorrow", "in a few hours", "nobody knows" };
+                    string[] when = { "maybe next week", "a few days ago", "last year", "yesterday" , "tomorrow", "in a few hours", "nobody knows", "next year", "it was yesterday" };
 
                     message = Privmsg(CHANNEL, when[r.Next(when.Length - 1)]);
 
@@ -2441,7 +2444,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        string[] are = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No." , "Probably"};
+                        string[] are = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
                         message = Privmsg(CHANNEL, are[r.Next(are.Length - 1)]);
                         //w.WriteLine(arg);
                     }
@@ -2460,7 +2463,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
+                        string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
                         //w.WriteLine(arg);
                     }
@@ -2482,7 +2485,12 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "where", true) == 0)
                 {
 
-                    string[] where = { "somewhere in a far away land" , "on the youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place" , "in outer space" };
+                    string[] where = { "somewhere in a far away land" , 
+                                         "on the youtube datacenter", "behind you", 
+                                         "in your house", "in Europe", "near Lygs", 
+                                         "that special place" , "in outer space",
+                                     "somewhere i belong", "On the shaddiest subreddit",
+                                     "on tumblr", "in space", "on your computer", "beneath your bed!"};
 
                     message = Privmsg(CHANNEL, where[r.Next(where.Length - 1)]);
 
@@ -2498,7 +2506,7 @@ namespace NarutoBot3
                     else
                     {
                         string randomUser = removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]);
-                        string[] who = { "probabbly", "maybe it was", "i'm sure it was", "it wasn't" };
+                        string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
 
                         message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + randomUser);
 
@@ -2528,8 +2536,8 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah", "Yes", "Correct" };
-                    string[] whyN = { "Nope", "No" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2599,8 +2607,8 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "should", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah", "Yes", "Correct" };
-                    string[] whyN = { "Nope", "No" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2627,7 +2635,7 @@ namespace NarutoBot3
                             }
                             else
                             {
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "I shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "I shouldn't " + replaced);
                             }
 
                         }
@@ -2639,7 +2647,7 @@ namespace NarutoBot3
                             }
                             else
                             {
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "you shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "you shouldn't " + replaced);
                             }
 
                         }
@@ -2651,7 +2659,7 @@ namespace NarutoBot3
                             }
                             else
                             {
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + split[1] + " shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " shouldn't " + replaced);
                             }
                         }
                     }
@@ -2670,14 +2678,14 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "did", true) == 0)
                 {
 
-                    string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
+                    string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
                     message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
                     //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "does", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah", "Yes", "Correct" };
-                    string[] whyN = { "Nope", "No" };
+                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think so.", "I believe that" };
+                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2703,7 +2711,7 @@ namespace NarutoBot3
                         }
                         else
                         {
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + subject + " does not " + replaced);
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject + " does not " + replaced);
                         }
 
                     }
