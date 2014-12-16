@@ -31,6 +31,7 @@ namespace NarutoBot3
             cb_twitter.Checked = Settings.Default.twitterEnabled;
             cb_Questions.Checked = Settings.Default.questionEnabled;
             cb_YTSearch.Checked = Settings.Default.youtubeSearchEnabled;
+            cb_greetings.Checked = Settings.Default.greetingsEnabled; 
         }
 
 
@@ -58,6 +59,7 @@ namespace NarutoBot3
             Settings.Default.conversionEnabled = cb_Convert.Checked;
             Settings.Default.nickEnabled = cb_nicks.Checked;
             Settings.Default.aniSearchEnabled = cb_Anime.Checked;
+            Settings.Default.greetingsEnabled = cb_greetings.Checked;
 
             Settings.Default.Save();
             this.Close();

@@ -39,6 +39,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cb_YTSearch = new System.Windows.Forms.CheckBox();
             this.cb_Time = new System.Windows.Forms.CheckBox();
             this.cb_Convert = new System.Windows.Forms.CheckBox();
             this.cb_Wiki = new System.Windows.Forms.CheckBox();
@@ -56,7 +57,7 @@
             this.cb_randomText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cb_YTSearch = new System.Windows.Forms.CheckBox();
+            this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -203,6 +204,16 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Helpful";
             // 
+            // cb_YTSearch
+            // 
+            this.cb_YTSearch.AutoSize = true;
+            this.cb_YTSearch.Location = new System.Drawing.Point(5, 111);
+            this.cb_YTSearch.Name = "cb_YTSearch";
+            this.cb_YTSearch.Size = new System.Drawing.Size(103, 17);
+            this.cb_YTSearch.TabIndex = 11;
+            this.cb_YTSearch.Text = "Youtube Search";
+            this.cb_YTSearch.UseVisualStyleBackColor = true;
+            // 
             // cb_Time
             // 
             this.cb_Time.AutoSize = true;
@@ -302,6 +313,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cb_greetings);
             this.groupBox4.Controls.Add(this.cb_Questions);
             this.groupBox4.Controls.Add(this.cb_Kill);
             this.groupBox4.Controls.Add(this.cb_hello);
@@ -412,15 +424,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Basic";
             // 
-            // cb_YTSearch
+            // cb_greetings
             // 
-            this.cb_YTSearch.AutoSize = true;
-            this.cb_YTSearch.Location = new System.Drawing.Point(5, 111);
-            this.cb_YTSearch.Name = "cb_YTSearch";
-            this.cb_YTSearch.Size = new System.Drawing.Size(103, 17);
-            this.cb_YTSearch.TabIndex = 11;
-            this.cb_YTSearch.Text = "Youtube Search";
-            this.cb_YTSearch.UseVisualStyleBackColor = true;
+            this.cb_greetings.AutoSize = true;
+            this.cb_greetings.Location = new System.Drawing.Point(6, 206);
+            this.cb_greetings.Name = "cb_greetings";
+            this.cb_greetings.Size = new System.Drawing.Size(71, 17);
+            this.cb_greetings.TabIndex = 12;
+            this.cb_greetings.Text = "Greetings";
+            this.cb_greetings.UseVisualStyleBackColor = true;
             // 
             // EnabledCommandsWindow
             // 
@@ -480,5 +492,6 @@
         private System.Windows.Forms.CheckBox cb_Kill;
         private System.Windows.Forms.CheckBox cb_Questions;
         private System.Windows.Forms.CheckBox cb_YTSearch;
+        private System.Windows.Forms.CheckBox cb_greetings;
     }
 }
