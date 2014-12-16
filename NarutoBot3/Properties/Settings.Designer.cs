@@ -646,5 +646,17 @@ namespace NarutoBot3.Properties {
                 this["UpdateSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool greetingsEnabled {
+            get {
+                return ((bool)(this["greetingsEnabled"]));
+            }
+            set {
+                this["greetingsEnabled"] = value;
+            }
+        }
     }
 }

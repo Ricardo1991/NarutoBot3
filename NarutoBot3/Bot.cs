@@ -405,14 +405,7 @@ namespace NarutoBot3
 
                         OnJoin(EventArgs.Empty);
 
-                        foreach (Greetings g in greet)
-                        {
-                            if (g.Nick == Who.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
-                            {
-                                string messagess = Privmsg(Client.HOME_CHANNEL, g.Greeting);
-                                Client.messageSender(messagess);
-                            }
-                        }
+                        greetUser(Who);
 
                         break;
 
@@ -1232,8 +1225,6 @@ namespace NarutoBot3
             string message = Notice(nick, "You didn't set a greeting yet"); ;
             string state = "disabled";
             bool found = false;
-
-            if (Settings.Default.silence || isMuted(nick)) return;
 
             foreach (Greetings g in greet)
             {
@@ -2870,6 +2861,22 @@ namespace NarutoBot3
                 string message = Privmsg(CHANNEL, "Here's a wiki for \"" + args + "\": " + "http://en.wikipedia.org/w/index.php?title=Special:Search&search=" + args.Replace(" ", "%20"));
                 Client.messageSender(message);
             }
+        }
+
+        void greetUser(string nick)
+        {
+            if(isMuted(nick) || !Settings.Default.greetingsEnabled) return;
+
+            foreach (Greetings g in greet)
+            {
+                if (g.Nick == nick.Replace("@", string.Empty).Replace("+", string.Empty) && g.Enabled == true)
+                {
+                    string messagess = Privmsg(Client.HOME_CHANNEL, g.Greeting);
+                    Client.messageSender(messagess);
+                }
+            }
+        
+        
         }
         public bool quitIRC(string nick)
         {
