@@ -1237,6 +1237,7 @@ namespace NarutoBot3
             string state = "disabled";
             bool found = false;
 
+            if (Settings.Default.silence || isMuted(nick)) return;
 
             foreach (Greetings g in greet)
             {
