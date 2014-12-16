@@ -58,13 +58,6 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            if (Settings.Default.UpdateSettings)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpdateSettings = false;
-                Settings.Default.Save();
-            }
-
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
