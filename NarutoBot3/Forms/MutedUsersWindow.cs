@@ -7,7 +7,7 @@ namespace NarutoBot3
 {
     public partial class MutedUsersWindow : Form
     {
-        static List<string> ban = new List<string>();
+        static List<string> mute = new List<string>();
         static List<string> tmp = new List<string>();
 
         bool foundRepeated = false;
@@ -15,18 +15,18 @@ namespace NarutoBot3
         public MutedUsersWindow()
         {
             InitializeComponent();
-            readBAN();
+            readMute();
         }
 
-        public void readBAN()
+        public void readMute()
         {
-            ban.Clear();
+            mute.Clear();
             StreamReader sr = new StreamReader("TextFiles/banned.txt");
             try
             {
                 while (sr.Peek() >= 0)
                 {
-                    ban.Add(sr.ReadLine());
+                    mute.Add(sr.ReadLine());
                 }
             }
             catch
@@ -36,13 +36,13 @@ namespace NarutoBot3
             sr.Close();
 
             listMuted.DataSource = null;
-            listMuted.DataSource = ban;
+            listMuted.DataSource = mute;
         }
-        static private void SaveBAN()
+        static private void saveMute()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/banned.txt", false))
             {
-                foreach (string rl in ban)
+                foreach (string rl in mute)
                 {
                     newTask.WriteLine(rl);
                 }
@@ -50,7 +50,7 @@ namespace NarutoBot3
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach (string ba in ban)
+            foreach (string ba in mute)
             {
                 if (ba == t_muted.Text)
                 {
@@ -60,10 +60,10 @@ namespace NarutoBot3
             }
             if (!foundRepeated)
             {
-                ban.Add(t_muted.Text);
-                listMuted.DataSource = ban;
-                SaveBAN();
-                readBAN();
+                mute.Add(t_muted.Text);
+                listMuted.DataSource = mute;
+                saveMute();
+                readMute();
             }
             else
                 MessageBox.Show("User is already Muted", "Duplicated", MessageBoxButtons.OK);
@@ -72,7 +72,7 @@ namespace NarutoBot3
         private void button2_Click(object sender, EventArgs e)
         {
             tmp.Clear();
-            foreach (string ba in ban)
+            foreach (string ba in mute)
             {
                 if (ba != listMuted.SelectedItem.ToString())
                 {
@@ -81,14 +81,14 @@ namespace NarutoBot3
                 }
             }
 
-            ban.Clear();
+            mute.Clear();
             foreach (string ba2 in tmp)
             {
-                ban.Add(ba2);
+                mute.Add(ba2);
             }
 
-            SaveBAN();
-            readBAN();
+            saveMute();
+            readMute();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace NarutoBot3
 
         private void muted_Shown(object sender, EventArgs e)
         {
-            readBAN();
+            readMute();
         }
     }
 }

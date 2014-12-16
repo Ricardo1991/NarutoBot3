@@ -16,6 +16,8 @@ namespace NarutoBot3
             t_BotNick.Text = Settings.Default.Nick;
             t_port.Text = Settings.Default.Port;
             t_RealName.Text = Settings.Default.RealName;
+
+            cb_silence.Checked = Settings.Default.silence;
         }
 
         private void b_Conect_Click(object sender, EventArgs e)
@@ -25,6 +27,7 @@ namespace NarutoBot3
             Settings.Default.Server = t_Server.Text;
             Settings.Default.Port = t_port.Text;
             Settings.Default.RealName = t_RealName.Text;
+            Settings.Default.silence = cb_silence.Checked;
             Settings.Default.Save();
 
 

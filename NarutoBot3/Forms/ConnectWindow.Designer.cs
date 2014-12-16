@@ -40,8 +40,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.t_port = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.t_RealName = new System.Windows.Forms.TextBox();
             this.l_RealName = new System.Windows.Forms.Label();
+            this.t_RealName = new System.Windows.Forms.TextBox();
+            this.cb_silence = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,7 +107,7 @@
             // 
             this.b_Conect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.b_Conect.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.b_Conect.Location = new System.Drawing.Point(106, 186);
+            this.b_Conect.Location = new System.Drawing.Point(106, 197);
             this.b_Conect.Name = "b_Conect";
             this.b_Conect.Size = new System.Drawing.Size(196, 30);
             this.b_Conect.TabIndex = 5;
@@ -118,7 +119,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(12, 186);
+            this.button1.Location = new System.Drawing.Point(12, 197);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 6;
@@ -150,6 +151,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.cb_silence);
             this.groupBox1.Controls.Add(this.l_RealName);
             this.groupBox1.Controls.Add(this.t_RealName);
             this.groupBox1.Controls.Add(this.l_BotNick);
@@ -162,10 +164,19 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(290, 168);
+            this.groupBox1.Size = new System.Drawing.Size(290, 179);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection Info";
+            // 
+            // l_RealName
+            // 
+            this.l_RealName.AutoSize = true;
+            this.l_RealName.Location = new System.Drawing.Point(6, 53);
+            this.l_RealName.Name = "l_RealName";
+            this.l_RealName.Size = new System.Drawing.Size(60, 13);
+            this.l_RealName.TabIndex = 0;
+            this.l_RealName.Text = "Real Name";
             // 
             // t_RealName
             // 
@@ -177,26 +188,27 @@
             this.t_RealName.TabIndex = 1;
             this.t_RealName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_RealName_KeyDown);
             // 
-            // l_RealName
+            // cb_silence
             // 
-            this.l_RealName.AutoSize = true;
-            this.l_RealName.Location = new System.Drawing.Point(6, 53);
-            this.l_RealName.Name = "l_RealName";
-            this.l_RealName.Size = new System.Drawing.Size(60, 13);
-            this.l_RealName.TabIndex = 0;
-            this.l_RealName.Text = "Real Name";
+            this.cb_silence.AutoSize = true;
+            this.cb_silence.Location = new System.Drawing.Point(204, 159);
+            this.cb_silence.Name = "cb_silence";
+            this.cb_silence.Size = new System.Drawing.Size(80, 17);
+            this.cb_silence.TabIndex = 5;
+            this.cb_silence.Text = "Silence Bot";
+            this.cb_silence.UseVisualStyleBackColor = true;
             // 
             // ConnectWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 225);
+            this.ClientSize = new System.Drawing.Size(314, 238);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.b_Conect);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(330, 264);
-            this.MinimumSize = new System.Drawing.Size(330, 264);
+            this.MaximumSize = new System.Drawing.Size(330, 277);
+            this.MinimumSize = new System.Drawing.Size(330, 277);
             this.Name = "ConnectWindow";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -222,5 +234,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label l_RealName;
         private System.Windows.Forms.TextBox t_RealName;
+        private System.Windows.Forms.CheckBox cb_silence;
     }
 }
