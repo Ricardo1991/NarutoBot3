@@ -688,7 +688,7 @@ namespace NarutoBot3
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            ircBot.ReadBan();
+            ircBot.ReadMute();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -785,11 +785,11 @@ namespace NarutoBot3
                     break;
                 case "Mute":
                     ircBot.muteUser(split[1]);
-                    ircBot.SaveBan();
+                    ircBot.SaveMute();
                     break;
                 case "Unmute":
                     ircBot.unmuteUSer(split[1]);
-                    ircBot.SaveBan();
+                    ircBot.SaveMute();
                     break;
                 case "Poke":
                     ircBot.pokeUser(split[1]);

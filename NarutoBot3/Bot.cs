@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NarutoBot3.Properties;
+using Newtonsoft.Json;
+using RedditSharp;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -10,14 +13,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using GoogleSearch;
-using GoogleTimeZone;
-using NarutoBot3.Properties;
-using Newtonsoft.Json;
-using RedditSharp;
 using TweetSharp;
-using YoutubeSearch;
-using YoutubeVideoInfo;
 
 namespace NarutoBot3
 {
@@ -26,7 +22,7 @@ namespace NarutoBot3
         private List<string> ops = new List<string>();
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
-        private List<string> ban = new List<string>();
+        private List<string> muted = new List<string>();
         private List<string> tri = new List<string>();
         private List<string> kill = new List<string>();
         private List<Greetings> greet = new List<Greetings>();
@@ -220,7 +216,7 @@ namespace NarutoBot3
         public void LoadSettings()
         {
             ReadOps();                  //operators
-            ReadBan();                  //banned users
+            ReadMute();                  //banned users
             ReadHelp();                 //help text
             ReadTrivia();               //trivia strings
             ReadGreetings();            //read greetings
@@ -1031,19 +1027,19 @@ namespace NarutoBot3
             }
         }
 
-        public void SaveBan()
+        public void SaveMute()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/banned.txt", false))
             {
-                foreach (string rl in ban)
+                foreach (string rl in muted)
                 {
                     newTask.WriteLine(rl);
                 }
             }
         }
-        public void ReadBan()
+        public void ReadMute()
         {
-            ban.Clear();
+            muted.Clear();
             if (File.Exists("TextFiles/banned.txt"))
             {
                 try
@@ -1051,7 +1047,7 @@ namespace NarutoBot3
                     StreamReader sr = new StreamReader("TextFiles/banned.txt");
                     while (sr.Peek() >= 0)
                     {
-                        ban.Add(sr.ReadLine());
+                        muted.Add(sr.ReadLine());
                     }
                     sr.Close();
                 }
@@ -2930,7 +2926,7 @@ namespace NarutoBot3
 
         public bool isMuted(string nick)
         {
-            foreach (string u in ban)
+            foreach (string u in muted)
             {
                 if (String.Compare(u, nick, true) == 0)
                     return true;
@@ -2944,7 +2940,7 @@ namespace NarutoBot3
                 return false;
             else
             {
-                ban.Add(nick);
+                muted.Add(nick);
                 return true;
             }
         }
@@ -2952,7 +2948,7 @@ namespace NarutoBot3
         {
             if (isMuted(nick))
             {
-                ban.Remove(nick);
+                muted.Remove(nick);
                 return true;
             }
             else return false;
