@@ -9,9 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NarutoBot3</RootNamespace>
     <AssemblyName>NarutoBot3</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,14 +26,13 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>3.6.2.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>3.7.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -81,6 +80,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ric.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -91,22 +92,11 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hammock, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Hammock.1.3.1\lib\4.0\Hammock.dll</HintPath>
-    </Reference>
-    <Reference Include="Hammock.ClientProfile, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Hammock.1.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\RedditSharp-master\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -120,9 +110,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="TweetSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Hammock">
+      <HintPath>..\packages\Hammock.1.3.1\lib\4.0\Hammock.dll</HintPath>
+    </Reference>
+    <Reference Include="Hammock.ClientProfile">
+      <HintPath>..\packages\Hammock.1.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
+    </Reference>
+    <Reference Include="TweetSharp">
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\TweetSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -134,29 +132,17 @@
     </Compile>
     <Compile Include="Bot.cs" />
     <Compile Include="JSON and XML classes\GoogleSearch.cs" />
-    <Compile Include="Forms\ColorkageURLWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ColorkageURLWindow.Designer.cs">
-      <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConnectWindow.Designer.cs">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\EnabledCommandsWindow.cs">
+    <Compile Include="Forms\SettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EnabledCommandsWindow.Designer.cs">
-      <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MangaETAWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MangaETAWindow.Designer.cs">
-      <DependentUpon>MangaETAWindow.cs</DependentUpon>
+    <Compile Include="Forms\SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Greetings.cs" />
     <Compile Include="Forms\HelpTextWindow.cs">
@@ -196,12 +182,6 @@
     <Compile Include="pastMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\RedditCredentials.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RedditCredentials.Designer.cs">
-      <DependentUpon>RedditCredentials.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MangaReleaseCheckerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,37 +194,19 @@
     <Compile Include="Forms\EditRulesWindow.Designer.cs">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SearchAnimeAPIWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SearchAnimeAPIWindow.Designer.cs">
-      <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="JSON and XML classes\GoogleTimeZone.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Forms\TwitterAPIKeysWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TwitterAPIKeysWindow.Designer.cs">
-      <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="JSON and XML classes\YoutubeSearch.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="YoutubeUtil.cs" />
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ColorkageURLWindow.resx">
-      <DependentUpon>ColorkageURLWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConnectWindow.resx">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\EnabledCommandsWindow.resx">
-      <DependentUpon>EnabledCommandsWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MangaETAWindow.resx">
-      <DependentUpon>MangaETAWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HelpTextWindow.resx">
       <DependentUpon>HelpTextWindow.cs</DependentUpon>
@@ -271,20 +233,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Forms\RedditCredentials.resx">
-      <DependentUpon>RedditCredentials.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MangaReleaseCheckerWindow.resx">
       <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SearchAnimeAPIWindow.resx">
-      <DependentUpon>SearchAnimeAPIWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TwitterAPIKeysWindow.resx">
-      <DependentUpon>TwitterAPIKeysWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NarutoBot3_TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -327,7 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\GitHub\RedditSharp\RedditSharp\RedditSharp.csproj">
-      <Project>{a368cb75-75f0-4489-904d-b5cebb0fe624}</Project>
+      <Project>{A368CB75-75F0-4489-904D-B5CEBB0FE624}</Project>
       <Name>RedditSharp</Name>
     </ProjectReference>
   </ItemGroup>

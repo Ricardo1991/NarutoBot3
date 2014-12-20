@@ -55,19 +55,12 @@
             this.t45 = new System.Windows.Forms.ToolStripMenuItem();
             this.t60 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.redditCredentialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.twitterAPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.operatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mutedUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButtonText = new System.Windows.Forms.ToolStripDropDownButton();
             this.rulesTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.ColorkageURLsButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeETAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -160,39 +153,39 @@
             // connectMenuItem1
             // 
             this.connectMenuItem1.Name = "connectMenuItem1";
-            this.connectMenuItem1.Size = new System.Drawing.Size(142, 22);
+            this.connectMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.connectMenuItem1.Text = "&Connect...";
             this.connectMenuItem1.Click += new System.EventHandler(this.connectMenuItem1_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disconnectToolStripMenuItem.Text = "&Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // changeNickToolStripMenuItem
             // 
             this.changeNickToolStripMenuItem.Name = "changeNickToolStripMenuItem";
-            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.changeNickToolStripMenuItem.Text = "Change &Nick";
             this.changeNickToolStripMenuItem.Click += new System.EventHandler(this.changeNickToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "&Quit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -206,10 +199,6 @@
             this.releaseCheckerToolStripMenuItem,
             this.randomTextIntervalToolStripMenuItem,
             this.toolStripSeparator6,
-            this.redditCredentialsToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.twitterAPIToolStripMenuItem,
-            this.toolStripSeparator3,
             this.operatorsToolStripMenuItem,
             this.mutedUsersToolStripMenuItem});
             this.toolStripButtonSettings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSettings.Image")));
@@ -225,26 +214,26 @@
             this.silencedToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.silencedToolStripMenuItem.Name = "silencedToolStripMenuItem";
             this.silencedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.silencedToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.silencedToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.silencedToolStripMenuItem.Text = "&Silenced";
             this.silencedToolStripMenuItem.Click += new System.EventHandler(this.silencedToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(214, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(201, 6);
             // 
             // commandsToolStripMenuItem
             // 
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
-            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.commandsToolStripMenuItem.Text = "Enable/Disable Commands";
-            this.commandsToolStripMenuItem.Click += new System.EventHandler(this.commandsToolStripMenuItem_Click);
+            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.commandsToolStripMenuItem.Text = "Settings";
+            this.commandsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // releaseCheckerToolStripMenuItem
             // 
             this.releaseCheckerToolStripMenuItem.Name = "releaseCheckerToolStripMenuItem";
-            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.releaseCheckerToolStripMenuItem.Text = "Chapter Release Checker";
             this.releaseCheckerToolStripMenuItem.Click += new System.EventHandler(this.releaseCheckerToolStripMenuItem_Click);
             // 
@@ -255,7 +244,7 @@
             this.t45,
             this.t60});
             this.randomTextIntervalToolStripMenuItem.Name = "randomTextIntervalToolStripMenuItem";
-            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.randomTextIntervalToolStripMenuItem.Text = "Random Text Interval";
             // 
             // t30
@@ -282,45 +271,19 @@
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(214, 6);
-            // 
-            // redditCredentialsToolStripMenuItem
-            // 
-            this.redditCredentialsToolStripMenuItem.Name = "redditCredentialsToolStripMenuItem";
-            this.redditCredentialsToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.redditCredentialsToolStripMenuItem.Text = "Reddit Credentials";
-            this.redditCredentialsToolStripMenuItem.Click += new System.EventHandler(this.redditCredentialsToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(217, 22);
-            this.toolStripMenuItem1.Text = "Anime and Time API";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-            // 
-            // twitterAPIToolStripMenuItem
-            // 
-            this.twitterAPIToolStripMenuItem.Name = "twitterAPIToolStripMenuItem";
-            this.twitterAPIToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.twitterAPIToolStripMenuItem.Text = "Twitter API";
-            this.twitterAPIToolStripMenuItem.Click += new System.EventHandler(this.twitterAPIToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(214, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(201, 6);
             // 
             // operatorsToolStripMenuItem
             // 
             this.operatorsToolStripMenuItem.Name = "operatorsToolStripMenuItem";
-            this.operatorsToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.operatorsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.operatorsToolStripMenuItem.Text = "Bot Operators";
             this.operatorsToolStripMenuItem.Click += new System.EventHandler(this.operatorsToolStripMenuItem_Click);
             // 
             // mutedUsersToolStripMenuItem
             // 
             this.mutedUsersToolStripMenuItem.Name = "mutedUsersToolStripMenuItem";
-            this.mutedUsersToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.mutedUsersToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.mutedUsersToolStripMenuItem.Text = "Ignored Users";
             this.mutedUsersToolStripMenuItem.Click += new System.EventHandler(this.mutedUsersToolStripMenuItem_Click);
             // 
@@ -331,9 +294,6 @@
             this.rulesTextToolStripMenuItem,
             this.helpTextToolStripMenuItem,
             this.toolStripSeparator4,
-            this.ColorkageURLsButton,
-            this.changeETAToolStripMenuItem,
-            this.toolStripSeparator7,
             this.reloadToolStripMenuItem1});
             this.toolStripButtonText.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonText.Image")));
             this.toolStripButtonText.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -345,40 +305,21 @@
             // rulesTextToolStripMenuItem
             // 
             this.rulesTextToolStripMenuItem.Name = "rulesTextToolStripMenuItem";
-            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rulesTextToolStripMenuItem.Text = "Rules Text";
             this.rulesTextToolStripMenuItem.Click += new System.EventHandler(this.rulesTextToolStripMenuItem_Click);
             // 
             // helpTextToolStripMenuItem
             // 
             this.helpTextToolStripMenuItem.Name = "helpTextToolStripMenuItem";
-            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.helpTextToolStripMenuItem.Text = "Help Text";
             this.helpTextToolStripMenuItem.Click += new System.EventHandler(this.helpTextToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(154, 6);
-            // 
-            // ColorkageURLsButton
-            // 
-            this.ColorkageURLsButton.Name = "ColorkageURLsButton";
-            this.ColorkageURLsButton.Size = new System.Drawing.Size(157, 22);
-            this.ColorkageURLsButton.Text = "Colorkage URLs";
-            this.ColorkageURLsButton.Click += new System.EventHandler(this.assignmentsURLToolStripMenuItem1_Click);
-            // 
-            // changeETAToolStripMenuItem
-            // 
-            this.changeETAToolStripMenuItem.Name = "changeETAToolStripMenuItem";
-            this.changeETAToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.changeETAToolStripMenuItem.Text = "Change ETA";
-            this.changeETAToolStripMenuItem.Click += new System.EventHandler(this.changeETAToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(154, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // reloadToolStripMenuItem1
             // 
@@ -391,7 +332,7 @@
             this.triviasToolStripMenuItem,
             this.killStringsToolStripMenuItem});
             this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
-            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.reloadToolStripMenuItem1.Text = "Reload...";
             // 
             // allToolStripMenuItem
@@ -579,7 +520,6 @@
         private System.Windows.Forms.ToolStripMenuItem operatorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commandsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem silencedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem mutedUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeNickToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSilence;
@@ -588,12 +528,9 @@
         private System.Windows.Forms.ToolStripMenuItem rulesTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem ColorkageURLsButton;
-        private System.Windows.Forms.ToolStripMenuItem changeETAToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox InterfaceUserList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem redditCredentialsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuUserList;
         private System.Windows.Forms.ToolStripMenuItem releaseCheckerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem randomTextIntervalToolStripMenuItem;
@@ -601,9 +538,7 @@
         private System.Windows.Forms.ToolStripMenuItem t45;
         private System.Windows.Forms.ToolStripMenuItem t60;
         private System.Windows.Forms.RichTextBox OutputBox;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
@@ -614,7 +549,6 @@
         private System.Windows.Forms.ToolStripMenuItem killStringsToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolstripLag;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem twitterAPIToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripHelp;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TextBox tbTopic;

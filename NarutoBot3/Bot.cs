@@ -206,7 +206,6 @@ namespace NarutoBot3
             Client = client;
             Output2 = output2;
         }
-
         ~Bot()
         {
             Dispose(false);
@@ -650,12 +649,6 @@ namespace NarutoBot3
                                 rules(whoSent, user);
                             }
 
-                        else if (String.Compare(cmd, Client.SYMBOL + "eta", true) == 0)
-                            {
-                                WriteMessage("* Received a eta request from " + user, Color.Pink);
-                                mangaETA(whoSent, user);
-                            }
-
                         else if (String.Compare(cmd, Client.SYMBOL + "quit", true) == 0)
                             {
                                 WriteMessage("* Received a quit request from " + user, Color.Pink);
@@ -695,16 +688,6 @@ namespace NarutoBot3
                                 me(Client.HOME_CHANNEL, arg, user);
                             }
 
-                        else if (String.Compare(cmd, Client.SYMBOL + "claims", true) == 0 || String.Compare(cmd, Client.SYMBOL + "c", true) == 0)
-                            {
-                                WriteMessage("* Received a claims request from " + user, Color.Pink);
-                                claims(whoSent, user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "assignments", true) == 0 || String.Compare(cmd, Client.SYMBOL + "a", true) == 0)
-                            {
-                                WriteMessage("* Received a assignments request from " + user, Color.Pink);
-                                assignments(whoSent, user);
-                            }
                         else if (String.Compare(cmd, Client.SYMBOL + "silence", true) == 0)
                             {
                                 WriteMessage("* Received a silence request from " + user, Color.Pink);
@@ -1567,25 +1550,6 @@ namespace NarutoBot3
                 }
             }
         }
-        void mangaETA(string CHANNEL, string nick)
-        {
-            if (Settings.Default.eta_Enabled == true)
-            {
-                if (isMuted(nick)) return;
-
-                string message;
-                if (Settings.Default.silence == true)
-                {
-                    message = Notice(nick, "The average time for the chapter release is " + eta + ".");
-                    Client.messageSender(message);
-                }
-                else
-                {
-                    message = Privmsg(CHANNEL, "The average time for the chapter release is " + eta + ".");
-                    Client.messageSender(message);
-                }
-            }
-        }
 
         void roll(string CHANNEL, string nick)
         {
@@ -1619,53 +1583,6 @@ namespace NarutoBot3
 
                 message = Privmsg(CHANNEL, "\x01" + "ACTION " + "pokes " + Client.userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty) + "\x01");
                 Client.messageSender(message);
-            }
-        }
-
-        void assignments(string CHANNEL, string nick)
-        {
-            string message;
-            if (isMuted(nick)) return;
-
-            if (Settings.Default.silence == true && Settings.Default.assign_Enabled == true)
-            {
-                if (isOperator(nick))
-                {
-                    message = Privmsg(CHANNEL, Settings.Default.currentAssignmentURL.Replace("\n", "").Replace("\r", ""));
-                    Client.messageSender(message);
-                    return;
-                }
-
-            }
-            else if (Settings.Default.assign_Enabled == true)
-            {
-                message = Privmsg(CHANNEL, Settings.Default.currentAssignmentURL.Replace("\n", "").Replace("\r", ""));
-                Client.messageSender(message);
-
-            }
-        }
-        void claims(string CHANNEL, string nick)
-        {
-            string message;
-            if (isMuted(nick)) return;
-
-            if (Settings.Default.silence == true && Settings.Default.claims_Enabled == true)
-            {
-
-                if (isOperator(nick))
-                {
-                    message = Privmsg(CHANNEL, Settings.Default.currentClaimsURL.Replace("\n", "").Replace("\r", ""));
-                    Client.messageSender(message);
-                    return;
-
-                }
-            }
-            else if (Settings.Default.claims_Enabled == true)
-            {
-
-                message = Privmsg(CHANNEL, Settings.Default.currentClaimsURL.Replace("\n", "").Replace("\r", ""));
-                Client.messageSender(message);
-
             }
         }
 

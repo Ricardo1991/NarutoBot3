@@ -19,19 +19,14 @@ namespace NarutoBot3
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
 
-        SearchAnimeAPIWindow animeAPI = new SearchAnimeAPIWindow();
         ConnectWindow Connect = new ConnectWindow();
-        EnabledCommandsWindow enableCommandsWindow = new EnabledCommandsWindow();
-        ColorkageURLs colorkageUrlsWindow = new ColorkageURLs();
+        SettingsWindow settingsWindow = new SettingsWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
         BotOperatorWindow operatorsWindow = new BotOperatorWindow();
         EditRulesWindow rulesWindow = new EditRulesWindow();
         HelpTextWindow helpWindow = new HelpTextWindow();
-        MangaETAWindow etaWindow = new MangaETAWindow();
         MutedUsersWindow mutedWindow = new MutedUsersWindow();
-        RedditCredentials redditcredentials = new RedditCredentials();
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
-        TwitterAPIKeysWindow twitterAPIWindow = new TwitterAPIKeysWindow();
 
         AboutBox aboutbox = new AboutBox();
 
@@ -562,17 +557,13 @@ namespace NarutoBot3
                 disconnect();
         }
 
-        private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            enableCommandsWindow.ShowDialog();
-            if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
-            {
-                Settings.Default.twitterEnabled = false;
-                Settings.Default.Save();
-            }
+            settingsWindow.ShowDialog();
+
+            if (Settings.Default.redditEnabled) ircBot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+            if (Settings.Default.twitterEnabled) ircBot.TwitterLogin();
+                
         }
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
@@ -662,15 +653,6 @@ namespace NarutoBot3
             rulesWindow.ShowDialog();
         }
 
-        private void assignmentsURLToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            colorkageUrlsWindow.Show();
-        }
-
-        private void changeETAToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            etaWindow.ShowDialog();
-        }
 
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -702,19 +684,6 @@ namespace NarutoBot3
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ircBot.ReadTrivia();
-        }
-
-        private void redditCredentialsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var result = redditcredentials.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                Settings.Default.redditEnabled = true;
-                ircBot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-                
-                Settings.Default.Save();
-            }
         }
 
         private void botSilence(object sender, EventArgs e)
@@ -864,16 +833,6 @@ namespace NarutoBot3
             rTime.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            animeAPI.ShowDialog();
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
-            {
-                Settings.Default.aniSearchEnabled = false;
-                Settings.Default.timeEnabled = false;
-                Settings.Default.Save();
-            }
-        }
 
         public string privmsg(string destinatary, string message)
         {
@@ -1033,25 +992,6 @@ namespace NarutoBot3
                 toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") +"s";
             }
             catch { }
-        }
-
-        private void twitterAPIToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var result = twitterAPIWindow.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
-                {
-                    Settings.Default.twitterEnabled = false;
-                    Settings.Default.Save();
-
-                }
-                else
-                    if(Settings.Default.twitterEnabled) ircBot.TwitterLogin();
-            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
