@@ -553,7 +553,7 @@ namespace NarutoBot3
 
                         break;
 
-                    case ("KICK"): ;
+                    case ("KICK"):
 
                         userTemp = new List<string>();
                         string kickedUser = parameters[1];

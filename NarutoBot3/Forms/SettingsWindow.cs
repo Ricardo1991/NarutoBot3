@@ -9,46 +9,7 @@ namespace NarutoBot3
         public SettingsWindow()
         {
             InitializeComponent();
-            cb_Kill.Checked = Settings.Default.killEnabled;
-            cb_Anime.Checked = Settings.Default.aniSearchEnabled;
-            cb_randomText.Checked = Settings.Default.randomTextEnabled;
-            cb_Wiki.Checked = Settings.Default.wikiEnabled;
-            cb_Poke.Checked = Settings.Default.pokeEnabled;
-            cb_vimeo.Checked = Settings.Default.vimeoEnabled;
-            cb_hello.Checked = Settings.Default.hello_Enabled;
-            cb_roll.Checked = Settings.Default.roll_Enabled;
-            cb_rules.Checked = Settings.Default.rules_Enabled;
-            cb_youtube.Checked = Settings.Default.youtube_Enabled;
-            cb_help.Checked = Settings.Default.help_Enabled;
-            cb_Convert.Checked = Settings.Default.conversionEnabled;
-            cb_nicks.Checked = Settings.Default.nickEnabled;
-            cb_Reddit.Checked = Settings.Default.redditEnabled;
-            cb_Time.Checked = Settings.Default.timeEnabled;
-            cb_Trivia.Checked = Settings.Default.triviaEnabled;
-            cb_twitter.Checked = Settings.Default.twitterEnabled;
-            cb_Questions.Checked = Settings.Default.questionEnabled;
-            cb_YTSearch.Checked = Settings.Default.youtubeSearchEnabled;
-            cb_greetings.Checked = Settings.Default.greetingsEnabled;
-
-
-            cb_TwitterEnabled.Checked = Settings.Default.twitterEnabled;
-            tb_AccessToken.Text = Settings.Default.twitterAccessToken;
-            tb_AccessTokenSecret.Text = Settings.Default.twitterAccessTokenSecret;
-            tb_ConsumerKey.Text = Settings.Default.twitterConsumerKey;
-            tb_ConsumerKeySecret.Text = Settings.Default.twitterConsumerKeySecret;
-
-            tb_API.Text = Settings.Default.apikey;
-            tb_cx.Text = Settings.Default.cxKey;
-            tb_MALuser.Text = Settings.Default.malUser;
-            tb_MALpass.Text = Settings.Default.malPass;
-
-
-            tb_User.Text = Settings.Default.redditUser;
-            tb_Pass.Text = Settings.Default.redditPass;
-            bt_Logout.Enabled = Settings.Default.redditEnabled;
-
         }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -166,11 +127,8 @@ namespace NarutoBot3
 
         private void bt_Logout_Click(object sender, EventArgs e)
         {
-            tb_User.Text = "";
-            tb_Pass.Text = "";
-
-            Settings.Default.redditUser = tb_User.Text;
-            Settings.Default.redditPass = tb_Pass.Text;
+            Settings.Default.redditUser = tb_User.Text = "";
+            Settings.Default.redditPass = tb_Pass.Text = "";
             Settings.Default.redditEnabled = false;
 
             Settings.Default.Save();
