@@ -2185,7 +2185,7 @@ namespace NarutoBot3
 
         private void parseQuestion(string CHANNEL, string user, string arg)
         {
-            string message="";
+            string message = "";
             Random r = new Random();
 
             if (isMuted(user)) return;
@@ -2202,7 +2202,7 @@ namespace NarutoBot3
             string[] where = { "somewhere in a far away land" , "on the youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place",
                                "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer", 
                                "beneath your bed!"};
-            string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
+            string[] whoDid = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
             string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google" };
             string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
             string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!" };
@@ -2329,7 +2329,7 @@ namespace NarutoBot3
                     if (arg == "who are you")
                         message = Privmsg(CHANNEL, "I'm a bot!");
                     else
-                        message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]));
+                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length - 1)] + " " + removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]));
                 }
 
                 else if (String.Compare(split[0], "what", true) == 0)

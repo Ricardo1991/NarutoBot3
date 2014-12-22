@@ -31,6 +31,7 @@ namespace NarutoBot3
             }
             catch
             {
+                
             }
 
             sr.Close();

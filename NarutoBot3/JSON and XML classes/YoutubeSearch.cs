@@ -50,17 +50,17 @@ namespace YoutubeSearch
 
     public class Default
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
     }
 
     public class Medium
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
     }
 
     public class High
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
     }
 }
 

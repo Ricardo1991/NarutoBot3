@@ -31,7 +31,7 @@ namespace NarutoBot3
         AboutBox aboutbox = new AboutBox();
 
         Bot ircBot;
-        public IRC_Client client;
+        private IRC_Client client;
 
         System.Timers.Timer aTime;      //To check for manga releases
         System.Timers.Timer rTime;      //To check for random text
@@ -201,11 +201,11 @@ namespace NarutoBot3
             ircBot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
 
             ircBot.Created += new EventHandler<EventArgs>(userListCreated);
-            ircBot.Joined += (sender, e) => userJoined(sender, e, ircBot.Who);
-            ircBot.Left += (sender, e) => userLeft(sender, e, ircBot.WhoLeft);
-            ircBot.NickChanged += (sender, e) => userNickChange(sender, e, ircBot.Who, ircBot.NewNick);
-            ircBot.Kicked += (sender, e) => userKicked(sender, e, ircBot.Who);
-            ircBot.ModeChanged += (sender, e) => userModeChanged(sender, e, ircBot.Who, ircBot.Mode);
+            ircBot.Joined += (sender, e) => userJoined(ircBot.Who);
+            ircBot.Left += (sender, e) => userLeft(ircBot.WhoLeft);
+            ircBot.NickChanged += (sender, e) => userNickChange(ircBot.Who, ircBot.NewNick);
+            ircBot.Kicked += (sender, e) => userKicked(ircBot.Who);
+            ircBot.ModeChanged += (sender, e) => userModeChanged(ircBot.Who, ircBot.Mode);
 
             ircBot.Timeout += new EventHandler<EventArgs>(timeout);
 
@@ -218,7 +218,7 @@ namespace NarutoBot3
 
             ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
 
-            ircBot.PongReceived += (sender, e) => updateLag(sender, e, ircBot.TimeDifference);
+            ircBot.PongReceived += (sender, e) => updateLag(ircBot.TimeDifference);
 
             ircBot.TopicChange += (sender, e) => changeTopic(sender, e, ircBot.Topic);
 
@@ -850,26 +850,25 @@ namespace NarutoBot3
             return result;
         }
 
-        private void userJoined(object sender, EventArgs e, string whoJoined)
+        private void userJoined(string whoJoined)
         {
             WriteMessage("** " + whoJoined + " joined", Color.Green);
             UpdateDataSource();
         }
 
-        private void userLeft(object sender, EventArgs e, string whoLeft)
+        private void userLeft(string whoLeft)
         {
             WriteMessage("** " + whoLeft + " parted", Color.Red);
             UpdateDataSource();
         }
-        private void userNickChange(object sender, EventArgs e, string whoJoined, string newNick)
+        private void userNickChange(string whoJoined, string newNick)
         {
             WriteMessage("** " + whoJoined + " is now known as " + newNick, Color.Yellow);
             UpdateDataSource();
         }
 
-        private void userModeChanged(object sender, EventArgs e, string user, string mode)
+        private void userModeChanged(string user, string mode)
         {
-
             switch (mode)
             {
                 case ("+o"):
@@ -907,7 +906,7 @@ namespace NarutoBot3
             UpdateDataSource();
         }
 
-        private void userKicked(object sender, EventArgs e, string userkicked)
+        private void userKicked(string userkicked)
         {
             WriteMessage("** " + userkicked + " was kicked", Color.Red);
             UpdateDataSource();
@@ -984,7 +983,7 @@ namespace NarutoBot3
             ircBot.pingSever();
         }
 
-        private void updateLag(object sender, EventArgs e, TimeSpan diff)
+        private void updateLag(TimeSpan diff)
         {
             try
             {

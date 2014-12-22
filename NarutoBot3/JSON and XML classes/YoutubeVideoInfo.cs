@@ -48,35 +48,35 @@
 
     public class Default
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
 
     public class Medium
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
 
     public class High
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
 
     public class Standard
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
 
     public class Maxres
     {
-        public string url { get; set; }
+        public System.Uri url { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
