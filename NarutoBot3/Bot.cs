@@ -2205,7 +2205,7 @@ namespace NarutoBot3
             string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
             string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google" };
             string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
-            string[] whyN = { "Nope", "No", "I don't think that", "I believe that", "Negative!" };
+            string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
 
             if (split.Length >= 1)
             {
@@ -2258,7 +2258,7 @@ namespace NarutoBot3
                 {
                     bool yes = false;
 
-                    if (r.Next(1, 3) == 1)
+                    if (r.Next(0, 1) == 1)
                         yes = true;
 
                     if (split.Length >= 2)
@@ -2277,7 +2277,7 @@ namespace NarutoBot3
                         if (yes)
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your","my") + " is " + replaced);
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + subject.Replace("your","my")  + " isn't " + replaced);
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject.Replace("your","my")  + " isn't " + replaced);
                     }
                     else
                     {
@@ -2385,21 +2385,21 @@ namespace NarutoBot3
                             if (yes)
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I do " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "I don't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "I don't " + replaced);
                         }
                         else if (split[1] == "i")
                         {
                             if (yes)
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you do " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "you don't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "you don't " + replaced);
                         }
                         else
                         {
                             if (yes)
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " do " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + split[1] + " don't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " don't " + replaced);
                         }
                     }
                     else
