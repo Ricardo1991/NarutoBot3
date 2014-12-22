@@ -67,9 +67,9 @@
             this.googleMalTab = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tb_MALpass = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tb_MALuser = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBoxAPI = new System.Windows.Forms.GroupBox();
             this.tb_API = new System.Windows.Forms.TextBox();
@@ -541,9 +541,9 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.tb_MALpass);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.textBox2);
+            this.groupBox3.Controls.Add(this.tb_MALuser);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Location = new System.Drawing.Point(6, 145);
             this.groupBox3.Name = "groupBox3";
@@ -561,13 +561,13 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Warning: The password is saved as clear text";
             // 
-            // textBox1
+            // tb_MALpass
             // 
-            this.textBox1.Location = new System.Drawing.Point(78, 64);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(122, 20);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.UseSystemPasswordChar = true;
+            this.tb_MALpass.Location = new System.Drawing.Point(78, 64);
+            this.tb_MALpass.Name = "tb_MALpass";
+            this.tb_MALpass.Size = new System.Drawing.Size(122, 20);
+            this.tb_MALpass.TabIndex = 3;
+            this.tb_MALpass.UseSystemPasswordChar = true;
             // 
             // label5
             // 
@@ -578,12 +578,12 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Password";
             // 
-            // textBox2
+            // tb_MALuser
             // 
-            this.textBox2.Location = new System.Drawing.Point(78, 28);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(122, 20);
-            this.textBox2.TabIndex = 2;
+            this.tb_MALuser.Location = new System.Drawing.Point(78, 28);
+            this.tb_MALuser.Name = "tb_MALuser";
+            this.tb_MALuser.Size = new System.Drawing.Size(122, 20);
+            this.tb_MALuser.TabIndex = 2;
             // 
             // label6
             // 
@@ -835,9 +835,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tb_MALpass;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tb_MALuser;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBoxAPI;
         private System.Windows.Forms.TextBox tb_API;

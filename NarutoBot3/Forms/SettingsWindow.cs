@@ -39,8 +39,8 @@ namespace NarutoBot3
 
             tb_API.Text = Settings.Default.apikey;
             tb_cx.Text = Settings.Default.cxKey;
-            tb_User.Text = Settings.Default.malUser;
-            tb_Pass.Text = Settings.Default.malPass;
+            tb_MALuser.Text = Settings.Default.malUser;
+            tb_MALpass.Text = Settings.Default.malPass;
 
 
             tb_User.Text = Settings.Default.redditUser;
@@ -81,10 +81,11 @@ namespace NarutoBot3
 
             Settings.Default.apikey = tb_API.Text;
             Settings.Default.cxKey = tb_cx.Text;
-            Settings.Default.malPass = tb_Pass.Text;
-            Settings.Default.malUser = tb_User.Text;
+            Settings.Default.malPass = tb_MALpass.Text;
+            Settings.Default.malUser = tb_MALuser.Text;
 
-
+            Settings.Default.redditUser = tb_User.Text;
+            Settings.Default.redditPass = tb_Pass.Text;
 
             if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
                 String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
@@ -137,8 +138,8 @@ namespace NarutoBot3
 
             tb_API.Text = Settings.Default.apikey;
             tb_cx.Text = Settings.Default.cxKey;
-            tb_User.Text = Settings.Default.malUser;
-            tb_Pass.Text = Settings.Default.malPass;
+            tb_MALuser.Text = Settings.Default.malUser;
+            tb_MALpass.Text = Settings.Default.malPass;
 
             tb_User.Text = Settings.Default.redditUser;
             tb_Pass.Text = Settings.Default.redditPass;
@@ -174,7 +175,5 @@ namespace NarutoBot3
 
             Settings.Default.Save();
         }
-
-
     }
 }
