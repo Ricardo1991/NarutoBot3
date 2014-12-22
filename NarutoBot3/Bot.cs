@@ -2187,7 +2187,6 @@ namespace NarutoBot3
         {
             string message="";
             Random r = new Random();
-            //StreamWriter w = new StreamWriter("TextFiles/questions.txt", true);
 
             if (isMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
@@ -2195,100 +2194,70 @@ namespace NarutoBot3
             arg = arg.ToLower().Replace("?", string.Empty).TrimStart(new char[]{' '});
             string[] split = arg.Split(new char[] { ' ' });
 
+            string[] howMany = { "I dont know, maybe something like", "Probably", "More than", "Less than", "I think it was", "I don't know, so i'll give you a random number:" };
+            string[] howIs = { "fine", "not fine", "lost", "being retarded again" };
+            string[] because = { "was lost", "is stupid", "asked me to", "was asked to", "has an inferiority complex", "is a terrible person" };
+            string[] when = { "maybe next week", "a few days ago", "last year", "yesterday", "tomorrow", "in a few hours", "nobody knows", "next year", "it was yesterday" };
+            string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
+            string[] where = { "somewhere in a far away land" , "on the youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place",
+                               "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer", 
+                               "beneath your bed!"};
+            string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
+            string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google" };
+            string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
+            string[] whyN = { "Nope", "No", "I don't think that", "I believe that", "Negative!" };
+
             if (split.Length >= 1)
             {
-
                 if (String.Compare(split[0], "how", true) == 0)
                 {
-                    if (split.Length >= 2)
-                    {
+                    if(split.Length >= 2){
                         if (String.Compare(split[1], "many", true) == 0)
                         {
                             if (arg == "how many killstrings do you have" || arg == "how many kills do you have")
-                            {
                                 message = Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
-                            
-                            }
                             else if (arg == "how many fucks do you give")
-                            {
                                 message = Privmsg(CHANNEL, "I always give 0 fucks.");
-                            }
                             else
-                            {
-                                string[] many = { "I dont know, maybe something like ", "Probably ", "More than ", "Less than ", "I think it was ", "I don't know, so i'll give you a random number: " };
-                                message = Privmsg(CHANNEL, many[r.Next(many.Length - 1)]) + r.Next(20);
-                                //message = Privmsg(CHANNEL, "I dont know, maybe something like " + r.Next(50));
-                                //w.WriteLine(arg);
-                            }
-                                
-
+                                message = Privmsg(CHANNEL, howMany[r.Next(howMany.Length - 1)] + " " +r.Next(20));
                         }
-                        else if (String.Compare(split[1], "are", true) == 0)
+
+                        else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
                         {
                             if (arg == "how are you" || arg == "how are you doing")
-                            {
                                 message = Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
-
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, "I dont know yet, ask later");
-                                //w.WriteLine(arg);
-                            }
-
                         }
+
                         else if (String.Compare(split[1], "is", true) == 0)
-                        { string[] howIs = { "fine", "not fine", "lost", "being retarded again" };
-                            if (split.Length == 3)
-                            {
-                                string subject = split[2];
-                                message = Privmsg(CHANNEL, subject + " is " + howIs[r.Next(howIs.Length - 1)]);
-                            }
-                            else
-                            {
-                                //w.WriteLine(arg);
-                            }
-
-                        }
-                        else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length - 1], "die", true) == 0)
                         {
-                            string target = util.getBetween(arg,"did", "die");
-                            killUser(CHANNEL, user, target);
+                            if (split.Length == 3)
+                                message = Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length - 1)]);
                         }
-                        //else w.WriteLine(arg);
+
+                        else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length - 1], "die", true) == 0)
+                            killUser(CHANNEL, user,  util.getBetween(arg, "did", "die"));
                     }
                     else
-                    {
                         message = Privmsg(CHANNEL, user + ", no idea...");
-                        //w.WriteLine(arg);
-                        Client.messageSender(message);
-                    }
                 }
 
-                if (String.Compare(split[0], "how's", true) == 0)
+                else if (String.Compare(split[0], "how's", true) == 0)
                 {
-                    message = Privmsg(CHANNEL, user + ", no idea...");
-                    //w.WriteLine(arg);
-                    Client.messageSender(message);
+                    message = Privmsg(CHANNEL, split[1] + " is " + howIs[r.Next(howIs.Length - 1)]);
                 }
+
                 else if (String.Compare(split[0], "why", true) == 0)
                 {
-                    string[] because = { "was lost", "is stupid", "asked me to", "was asked to", "has an inferiority complex", "is a terrible person"};
-
                     if (split.Length >= 2)
-                    {
                         message = Privmsg(CHANNEL, "Because " + removeUserMode(Client.userList[r.Next(Client.userList.Count)-1]) + " " + because[r.Next(because.Length - 1)]);
-                    }
-                    else
-                    {
-                        //w.WriteLine(arg);
-                    }
                 }
+
                 else if (String.Compare(split[0], "is", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah", "Yes", "Correct" };
-                    string[] whyN = { "Nope", "No" };
                     bool yes = false;
+
                     if (r.Next(1, 3) == 1)
                         yes = true;
 
@@ -2306,16 +2275,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                        {
-
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your","my") + " is " + replaced);
-                            
-                        }
                         else
-                        {
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + subject.Replace("your","my")  + " isn't " + replaced);
-                        }
-
                     }
                     else
                     {
@@ -2325,124 +2287,81 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
 
                     }
-                    //w.WriteLine(arg);
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
                 {
-                    string[] when = { "maybe next week", "a few days ago", "last year", "yesterday" , "tomorrow", "in a few hours", "nobody knows", "next year", "it was yesterday" };
-
                     message = Privmsg(CHANNEL, when[r.Next(when.Length - 1)]);
-
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "are", true) == 0)
                 {
                     if (arg == "are you real")
-                    {
                         message = Privmsg(CHANNEL, "Yes, i am real");
 
-                    }
                     else if (arg == "are you a real person" || arg == "are you a real human" || arg == "are you human")
-                    {
                         message = Privmsg(CHANNEL, "No, i'm a bot");
 
-                    }
                     else
-                    {
-                        string[] are = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
-                        message = Privmsg(CHANNEL, are[r.Next(are.Length - 1)]);
-                        //w.WriteLine(arg);
-                    }
-                    //w.WriteLine(arg);
+                        message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
+
                 }
+
                 else if (String.Compare(split[0], "can", true) == 0)
                 {
                     if (arg == "can you give me a nick" || arg == "can you make me a nick" || arg == "can you generate a nick" || arg == "can you create a nick" || arg == "can you make me a new nick")
-                    {
                         message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
-                    }
                     else if (arg.Contains("can you kill "))
-                    {
                         killUser(CHANNEL, user, util.getBetween(arg, "can you kill ", ""));
-                    }
                     else
-                    {
-                        string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                        //w.WriteLine(arg);
-                    }
                 }
+
                 else if (String.Compare(split[0], "would", true) == 0)
                 {
                     if (arg == "would you make me a nick" || arg == "would you generate a nick" || arg == "would you create a nick" || arg == "would you make me a new nick")
-                    {
                         message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
-                    }
                     else
-                    {
-                        string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably" };
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                        //w.WriteLine(arg);
-                    }
                 }
+
                 else if (String.Compare(split[0], "where", true) == 0)
                 {
-
-                    string[] where = { "somewhere in a far away land" , 
-                                         "on the youtube datacenter", "behind you", 
-                                         "in your house", "in Europe", "near Lygs", 
-                                         "that special place" , "in outer space",
-                                     "somewhere i belong", "On the shaddiest subreddit",
-                                     "on tumblr", "in space", "on your computer", "beneath your bed!"};
-
                     message = Privmsg(CHANNEL, where[r.Next(where.Length - 1)]);
 
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "who", true) == 0)
                 {
                     if (arg == "who are you")
-                    {
                         message = Privmsg(CHANNEL, "I'm a bot!");
-
-                    }
                     else
-                    {
-                        string randomUser = removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]);
-                        string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
-
-                        message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + randomUser);
-
-                        //w.WriteLine(arg);
-                    }
-
+                        message = Privmsg(CHANNEL, who[r.Next(who.Length - 1)] + " " + removeUserMode(Client.userList[r.Next(Client.userList.Count) - 1]));
                 }
+
                 else if (String.Compare(split[0], "what", true) == 0)
                 {
                     if (arg == "what are you")
-                    {
                         message = Privmsg(CHANNEL, "I'm a bot!");
-
+                    else
+                    {
+                        message = Privmsg(CHANNEL, what[r.Next(what.Length - 1)]);
                     }
-
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "what's", true) == 0)
                 {
-
-                    //w.WriteLine(arg);
+                    Privmsg(CHANNEL, what[r.Next(what.Length - 1)]);
                 }
+
                 else if (String.Compare(split[0], "if", true) == 0)
                 {
 
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
-                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2464,38 +2383,23 @@ namespace NarutoBot3
                         {
                             
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I do " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "I don't " + replaced);
-                            }
-
                         }
                         else if (split[1] == "i")
                         {
-
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you do " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + "you don't " + replaced);
-                            }
-
                         }
                         else
                         {
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " do " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + ", " + split[1] + " don't " + replaced);
-                            }
                         }
                     }
                     else
@@ -2504,16 +2408,11 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
                         else
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
-                    
                     }
-                    
-                    
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "should", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
-                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2535,37 +2434,23 @@ namespace NarutoBot3
                         {
 
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I should " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "I shouldn't " + replaced);
-                            }
-
                         }
                         else if (split[1] == "i")
                         {
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you should " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "you shouldn't " + replaced);
-                            }
-
                         }
                         else
                         {
                             if (yes)
-                            {
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " should " + replaced);
-                            }
                             else
-                            {
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " shouldn't " + replaced);
-                            }
                         }
                     }
                     else
@@ -2574,23 +2459,16 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
                         else
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
-
                     }
-
-
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "did", true) == 0)
                 {
-
-                    string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe that it did", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
                     message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
-                    //w.WriteLine(arg);
                 }
+
                 else if (String.Compare(split[0], "does", true) == 0)
                 {
-                    string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct!", "I think", "I believe that" };
-                    string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
                     bool yes = false;
                     if (r.Next(1, 3) == 1)
                         yes = true;
@@ -2611,15 +2489,9 @@ namespace NarutoBot3
                         subject = questionsRegex(subject);
 
                         if (yes)
-                        {
-
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject + " does " + replaced);
-                            
-                        }
                         else
-                        {
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject + " does not " + replaced);
-                        }
 
                     }
                     else
@@ -2628,20 +2500,14 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
                         else
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
-
                     }
-
                 }
             }
+
             else
-            {
                 message = Privmsg(CHANNEL, user + ", what?");
-                //w.WriteLine(arg);
-            
-            }
 
             if(!String.IsNullOrWhiteSpace(message)) Client.messageSender(message);
-            //w.Close();
         }
 
         public void nickGen(string CHANNEL, string nick, string args)
