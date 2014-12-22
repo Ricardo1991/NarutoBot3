@@ -2205,7 +2205,7 @@ namespace NarutoBot3
             string[] who = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
             string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google" };
             string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
-            string[] whyN = { "Nope,", "No,", "I don't think that", "I believe that", "Negative!" };
+            string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!" };
 
             if (split.Length >= 1)
             {
@@ -2278,14 +2278,6 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your","my") + " is " + replaced);
                         else
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject.Replace("your","my")  + " isn't " + replaced);
-                    }
-                    else
-                    {
-                        if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
-                        else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
-
                     }
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
@@ -2399,15 +2391,8 @@ namespace NarutoBot3
                             if (yes)
                                 message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " do " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " don't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " doesn't " + replaced);
                         }
-                    }
-                    else
-                    {
-                        if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
-                        else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
                     }
                 }
 
@@ -2493,13 +2478,6 @@ namespace NarutoBot3
                         else
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject + " does not " + replaced);
 
-                    }
-                    else
-                    {
-                        if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)]);
-                        else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)]);
                     }
                 }
             }
