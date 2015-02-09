@@ -602,27 +602,26 @@ namespace NarutoBot3
 
                 if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
                 {
-                    parsed[0] = parsed[0].ToLower();
 
-                    if (parsed[0] == "/me")  //Action send
+                    if (parsed[0].ToLower() == "/me")  //Action send
                             message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
 
-                    else if (parsed[0] == "/whois" )  //Action send
+                    else if (parsed[0].ToLower() == "/whois" )  //Action send
                             message = "WHOIS " + parsed[1] + "\n";
 
-                    else if (parsed[0] == "/whowas" )  //Action send
+                    else if (parsed[0].ToLower() == "/whowas" )  //Action send
                             message = "WHOWAS " + parsed[1] + "\n";
 
-                    else if (parsed[0] == "/nick" )  //Action send
+                    else if (parsed[0].ToLower() == "/nick" )  //Action send
                             changeNick(parsed[1]);
 
-                    else if (parsed[0] == "/ns" || parsed[0] == "/nickserv" )  //NickServ send
+                    else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv" )  //NickServ send
                             message = privmsg("NickServ", parsed[1]);
 
-                    else if (parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Chanserv send
+                    else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
                             message = privmsg("ChanServ", parsed[1]);
 
-                    else if (parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg")  //Action send
+                    else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
                     {
                         parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
                         if (parsed.Length >= 3)
@@ -635,12 +634,10 @@ namespace NarutoBot3
                         
                 }
                 else
-                    if (parsed[0] == "/me" || parsed[0] == "/whois" || parsed[0] == "/whowas" ||
-                        parsed[0] == "/query" || parsed[0] == "/pm" || parsed[0] == "/msg" ||
-                         parsed[0] == "/ns" || parsed[0] == "/nickserv" || parsed[0] == "/cs" || parsed[0] == "/chanserv")  //Action send
+                    if (parsed[0][0] == '/')
                         WriteMessage("Not enough arguments");
 
-                    else if (parsed[0][0] != '/') //Normal send
+                    else //Normal send
                         message = privmsg(HOME_CHANNEL, InputBox.Text);
                     
                 if(!String.IsNullOrWhiteSpace(message)) client.messageSender(message);

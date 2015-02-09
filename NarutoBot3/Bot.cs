@@ -280,16 +280,23 @@ namespace NarutoBot3
 
                 switch (command)
                 {
+                    case ("001"):
+                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
+                        break;
+
+                    case ("002"):
+                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
+                        break;
+
+                    case ("003"):
+                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
+                        break;
+
                     case ("004"): //server used for connection
                         Client.HOST_SERVER = parameters[1];
                         break;
 
-                    case ("433"): //Nickname is already in use.
-                        OnDuplicatedNick(EventArgs.Empty);
-                        WriteMessage("* " + command + " " + completeParameters);
-                        break;
-
-                    case ("005"):   
+                    case ("005"):
                         break;
 
                     case ("250"):
@@ -311,6 +318,11 @@ namespace NarutoBot3
                         break;
 
                     case ("266"):
+                        break;
+
+                    case ("332"):   //TOPIC
+                        Topic = completeParameters.Split(new char[] { ' ' }, 3)[2];
+                        OnTopicChange(EventArgs.Empty);
                         break;
 
                     case ("333"): //Topic author and time
@@ -348,13 +360,11 @@ namespace NarutoBot3
                         if (!String.IsNullOrEmpty(Client.HOST_SERVER))
                             OnConnectedWithServer(EventArgs.Empty);
 
-                        //pingSever();
-                            
                         break;
 
-                    case ("332"):   //TOPIC
-                        Topic = completeParameters.Split(new char[] {' '}, 3)[2];
-                        OnTopicChange(EventArgs.Empty);
+                    case ("433"): //Nickname is already in use.
+                        OnDuplicatedNick(EventArgs.Empty);
+                        WriteMessage("* " + command + " " + completeParameters);
                         break;
 
                     case ("TOPIC"):   //TOPIC
@@ -682,6 +692,11 @@ namespace NarutoBot3
                                     AddGreetings(arg, user);
                                 }
                             }
+                        else if (String.Compare(cmd, Client.SYMBOL + "greetmenow", true) == 0)
+                        {
+                                WriteMessage("* Received a greet me now request from " + user, Color.Pink);
+                                greetUser(user);
+                        }
                         else if (String.Compare(cmd, Client.SYMBOL + "me", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a me request from " + user, Color.Pink);
@@ -1262,9 +1277,9 @@ namespace NarutoBot3
 
             result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
 
-            if (Client.NICK.Length > 15)
+            if (Client.NICK.Length > 14)
             {
-                WriteMessage(Client.NICK.Truncate(16) + ":" + message);
+                WriteMessage(Client.NICK.Truncate(15) + ":" + message);
             }
                 
             else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console

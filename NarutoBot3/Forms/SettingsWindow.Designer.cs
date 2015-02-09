@@ -483,7 +483,6 @@
             // 
             // b_Login
             // 
-            this.b_Login.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.b_Login.Location = new System.Drawing.Point(178, 120);
             this.b_Login.Name = "b_Login";
             this.b_Login.Size = new System.Drawing.Size(75, 23);

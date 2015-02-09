@@ -61,7 +61,6 @@ namespace NarutoBot3
                 Settings.Default.timeEnabled = false;
                 Settings.Default.Save();
             }
-            
 
             Settings.Default.Save();
             this.Close();
