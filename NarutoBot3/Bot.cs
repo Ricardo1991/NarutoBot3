@@ -1177,7 +1177,6 @@ namespace NarutoBot3
                 catch
                 {
                 }
-
             }
         }
 
@@ -2512,6 +2511,9 @@ namespace NarutoBot3
             bool randomUpper = false;
             bool switchLetterNumb = false;
             bool Ique = false;
+            bool targeted = false;
+
+            string target = null;
             string message;
 
             if (isMuted(nick)) return;
@@ -2533,18 +2535,27 @@ namespace NarutoBot3
                         randomnumber = rnd.Next(0, 100) <= 30;
                         randomUpper = rnd.Next(0, 100) <= 30;
                         Ique = rnd.Next(0, 100) <= 10;
-                        break;
                     }
 
-                    switchLetterNumb = s.ToLower() == "sl";
-                    randomnumber = s.ToLower() == "rn";
-                    randomUpper = s.ToLower() == "ru";
-                    Ique = s.ToLower() == "iq";
+                    else if (s.ToLower() == "for")
+                    {
+                        targeted = true;
+                        target = util.getBetween(args, "for ", " ");
+                    }
+
+                    if(s.ToLower() == "sl") switchLetterNumb = true;
+                    else if(s.ToLower() == "rn") randomnumber = true;
+                    else if (s.ToLower() == "ru") randomUpper = true;
+                    else if (s.ToLower() == "iq") Ique = true;
                 }
 
                 string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
-                message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
+                if(targeted)
+                    message = Privmsg(CHANNEL, nick + " generated a nick for "+ target +": " + nick_);
+                else 
+                    message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
+
                 Client.messageSender(message);
             }
         }
