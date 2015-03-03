@@ -27,15 +27,14 @@ namespace NarutoBot3
         HelpTextWindow helpWindow = new HelpTextWindow();
         MutedUsersWindow mutedWindow = new MutedUsersWindow();
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
-
         AboutBox aboutbox = new AboutBox();
 
-        Bot ircBot;
+        private Bot bot;
         private IRC_Client client;
 
-        System.Timers.Timer aTime;      //To check for manga releases
-        System.Timers.Timer rTime;      //To check for random text
-        System.Timers.Timer dTime;      //To check for connection lost
+        System.Timers.Timer mangaReleaseTimer;      //To check for manga releases
+        System.Timers.Timer randomTextTimer;        //To check for random text
+        System.Timers.Timer timeoutTimer;           //To check for connection lost
 
         string HOME_CHANNEL;
         string HOST;
@@ -72,28 +71,23 @@ namespace NarutoBot3
 
         public void loadSettings()
         {
+            t30.Checked = false;
+            t45.Checked = false;
+            t60.Checked = false;
             switch (Settings.Default.randomTextInterval)
             {
                 case 30:
                     t30.Checked = true;
-                    t45.Checked = false;
-                    t60.Checked = false;
                     break;
                 case 45:
-                    t30.Checked = false;
                     t45.Checked = true;
-                    t60.Checked = false;
                     break;
                 case 60:
-                    t30.Checked = false;
-                    t45.Checked = false;
                     t60.Checked = true;
                     break;
                 default:
                     Settings.Default.randomTextInterval = 30;
                     t30.Checked = true;
-                    t45.Checked = false;
-                    t60.Checked = false;
                     break;
             }
 
@@ -117,16 +111,16 @@ namespace NarutoBot3
                     String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
                 Settings.Default.twitterEnabled = false;
 
-            aTime = new System.Timers.Timer(Settings.Default.checkInterval);
-            aTime.Enabled = false;
+            mangaReleaseTimer = new System.Timers.Timer(Settings.Default.checkInterval);
+            mangaReleaseTimer.Enabled = false;
 
-            rTime = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
-            rTime.Enabled = Settings.Default.randomTextEnabled;
-            rTime.Elapsed += (sender, e) => randomTextSender(sender, e);
+            randomTextTimer = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
+            randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
+            randomTextTimer.Elapsed += (sender, e) => randomTextSender(sender, e);
 
-            dTime = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-            dTime.Enabled = true;
-            dTime.Elapsed += new ElapsedEventHandler(pingServer);
+            timeoutTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
+            timeoutTimer.Enabled = true;
+            timeoutTimer.Elapsed += new ElapsedEventHandler(pingServer);
 
             Settings.Default.releaseEnabled = false;
 
@@ -148,7 +142,7 @@ namespace NarutoBot3
             Settings.Default.Save();
 
         }
-        public bool connect()//This is where the bot connects to the server and logs in
+        public bool connect()   //This is where the bot connects to the server and logs in
         {
             ChangeConnectingLabel("Connecting...");
 
@@ -157,13 +151,13 @@ namespace NarutoBot3
 
             if ( client.Connect() ) {
                 exitTheLoop = false;
-                dTime.Enabled = true;
+                timeoutTimer.Enabled = true;
 
                 return true;
             }
 
             else {
-                dTime.Enabled = false;
+                timeoutTimer.Enabled = false;
 
                 return false;
             } 
@@ -174,7 +168,7 @@ namespace NarutoBot3
             String buffer;
             String line;
 
-            ircBot = new Bot(ref client, ref OutputBox);
+            bot = new Bot(ref client, ref OutputBox);
 
             initializeBot();
 
@@ -188,7 +182,7 @@ namespace NarutoBot3
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
-                    ircBot.BotMessage(line);
+                    bot.processMessage(line);
                 }
                 catch
                 { }
@@ -197,40 +191,40 @@ namespace NarutoBot3
 
         private void initializeBot()
         {
-            ircBot.Connected += new EventHandler<EventArgs>(nowConnected);
-            ircBot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
+            bot.Connected += new EventHandler<EventArgs>(nowConnected);
+            bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
 
-            ircBot.Created += new EventHandler<EventArgs>(userListCreated);
-            ircBot.Joined += (sender, e) => userJoined(ircBot.Who);
-            ircBot.Left += (sender, e) => userLeft(ircBot.WhoLeft);
-            ircBot.NickChanged += (sender, e) => userNickChange(ircBot.Who, ircBot.NewNick);
-            ircBot.Kicked += (sender, e) => userKicked(ircBot.Who);
-            ircBot.ModeChanged += (sender, e) => userModeChanged(ircBot.Who, ircBot.Mode);
+            bot.Created += new EventHandler<EventArgs>(userListCreated);
+            bot.Joined += (sender, e) => userJoined(bot.Who);
+            bot.Left += (sender, e) => userLeft(bot.WhoLeft);
+            bot.NickChanged += (sender, e) => userNickChange(bot.Who, bot.NewNick);
+            bot.Kicked += (sender, e) => userKicked(bot.Who);
+            bot.ModeChanged += (sender, e) => userModeChanged(bot.Who, bot.Mode);
 
-            ircBot.Timeout += new EventHandler<EventArgs>(timeout);
+            bot.Timeout += new EventHandler<EventArgs>(timeout);
 
-            ircBot.BotNickChanged += (sender, e) => eventChangeTitle(sender, e);
+            bot.BotNickChanged += (sender, e) => eventChangeTitle(sender, e);
 
-            ircBot.BotSilenced += new EventHandler<EventArgs>(botSilence);
-            ircBot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
+            bot.BotSilenced += new EventHandler<EventArgs>(botSilence);
+            bot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
 
-            ircBot.Quit += new EventHandler<EventArgs>(letsQuit);
+            bot.Quit += new EventHandler<EventArgs>(letsQuit);
 
-            ircBot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
+            bot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
 
-            ircBot.PongReceived += (sender, e) => updateLag(ircBot.TimeDifference);
+            bot.PongReceived += (sender, e) => updateLag(bot.TimeDifference);
 
-            ircBot.TopicChange += (sender, e) => changeTopic(sender, e, ircBot.Topic);
+            bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
-            ircBot.LoadSettings();
+            bot.LoadSettings();
 
         }
 
-        private void changeTopic(object sender, EventArgs e, string p)
+        private void changeTopicTextBox(object sender, EventArgs e, string p)
         {
             if (tbTopic.InvokeRequired)
             {
-                SetEventCallback d = new SetEventCallback(changeTopic);
+                SetEventCallback d = new SetEventCallback(changeTopicTextBox);
                 this.Invoke(d, new object[] { sender, e, p });
             }
             else
@@ -239,7 +233,7 @@ namespace NarutoBot3
             }
         }
 
-        private void disconnect()
+        private void disconnectClient()
         {
             ChangeConnectingLabel("Disconnecting...");
             client.Disconnect();
@@ -247,7 +241,7 @@ namespace NarutoBot3
             Thread.Sleep(250);
 
             exitTheLoop = true;
-            dTime.Enabled = false;
+            timeoutTimer.Enabled = false;
             UpdateDataSource();
             OutputClean();
             ChangeTitle("NarutoBot");
@@ -260,7 +254,7 @@ namespace NarutoBot3
 
         public void isMangaOutEvent(object source, ElapsedEventArgs e)
         {
-            String readHtml;
+            String rawHTML;
             string url = Settings.Default.baseURL.TrimEnd('/') + "/" + Settings.Default.chapterNumber;
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -280,14 +274,14 @@ namespace NarutoBot3
                 Stream receiveStream = response.GetResponseStream();
                 StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
 
-                readHtml = readStream.ReadToEnd();
+                rawHTML = readStream.ReadToEnd();
             }
             catch
             {
                 return;
             }
 
-            if (!readHtml.Contains("is not released yet.")) //Not yet
+            if (!rawHTML.Contains("is not released yet.")) //Not yet
             {
                 string message;
 
@@ -301,7 +295,7 @@ namespace NarutoBot3
                 Settings.Default.releaseEnabled = false;
                 Settings.Default.Save();
 
-                aTime.Enabled = false;
+                mangaReleaseTimer.Enabled = false;
             }
         }
         
@@ -318,7 +312,7 @@ namespace NarutoBot3
 
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.ReadKills();
+            bot.ReadKills();
         }
 
         public void ChangeConnectingLabel(String message)
@@ -455,6 +449,7 @@ namespace NarutoBot3
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
             var result = Connect.ShowDialog();
+            DialogResult resultWarning;
 
             if (result == DialogResult.OK)
             {
@@ -463,12 +458,11 @@ namespace NarutoBot3
                 {
                     if (client.isConnected)
                     {
-                        DialogResult resultWarning;
                         resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                         if (resultWarning == System.Windows.Forms.DialogResult.OK)
                         {
-                            disconnect();
+                            disconnectClient();
                             Thread.Sleep(250);
 
                             ChangeConnectingLabel("Connecting...");
@@ -482,7 +476,6 @@ namespace NarutoBot3
                                 ChangeConnectingLabel("Disconnected");
                             }
                         }
-                        else return;
                     }
                     else
                     {
@@ -529,7 +522,7 @@ namespace NarutoBot3
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
             if (client.isConnected) 
-                disconnect();
+                disconnectClient();
 
             this.Close();
         }
@@ -554,28 +547,28 @@ namespace NarutoBot3
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) //Disconnect Button
         {
             if (client.isConnected)
-                disconnect();
+                disconnectClient();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             settingsWindow.ShowDialog();
 
-            if (Settings.Default.redditEnabled) ircBot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-            if (Settings.Default.twitterEnabled) ircBot.TwitterLogin();
+            if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+            if (Settings.Default.twitterEnabled) bot.TwitterLogin();
                 
         }
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
         {
             nickWindow.ShowDialog();
-            ircBot.changeNick(Settings.Default.Nick);
+            bot.changeNick(Settings.Default.Nick);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             operatorsWindow.ShowDialog();
-            ircBot.ReadOps();
+            bot.ReadOps();
         }
 
         private void input_KeyDown(object sender, KeyEventArgs e)
@@ -654,33 +647,33 @@ namespace NarutoBot3
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             helpWindow.ShowDialog();
-            ircBot.ReadHelp();
+            bot.ReadHelp();
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            ircBot.ReadMute();
+            bot.ReadMute();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.ReadRules();
+            bot.ReadRules();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.ReadHelp();
+            bot.ReadHelp();
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.ReadNickGen();
+            bot.ReadNickGen();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ircBot.ReadTrivia();
+            bot.ReadTrivia();
         }
 
         private void botSilence(object sender, EventArgs e)
@@ -693,7 +686,7 @@ namespace NarutoBot3
 
         private void timeout(object sender, EventArgs e)
         {
-            disconnect();
+            disconnectClient();
 
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
@@ -735,29 +728,29 @@ namespace NarutoBot3
             switch (split[0])
             {
                 case "Give":
-                    ircBot.giveOps(split[1]);
-                    ircBot.SaveOps();
+                    bot.giveOps(split[1]);
+                    bot.SaveOps();
                     break;
                 case "Take":
-                    ircBot.takeOps(split[1]);
-                    ircBot.SaveOps();
+                    bot.takeOps(split[1]);
+                    bot.SaveOps();
                     break;
                 case "Mute":
-                    ircBot.muteUser(split[1]);
-                    ircBot.SaveMute();
+                    bot.muteUser(split[1]);
+                    bot.SaveMute();
                     break;
                 case "Unmute":
-                    ircBot.unmuteUSer(split[1]);
-                    ircBot.SaveMute();
+                    bot.unmuteUSer(split[1]);
+                    bot.SaveMute();
                     break;
                 case "Poke":
-                    ircBot.pokeUser(split[1]);
+                    bot.pokeUser(split[1]);
                     break;
                 case "Whois":
-                    ircBot.whoisUser(split[1]);
+                    bot.whoisUser(split[1]);
                     break;
                 case "Kick":
-                    ircBot.kickUser(split[1]);
+                    bot.kickUser(split[1]);
                     break;
             } 
         }
@@ -788,14 +781,14 @@ namespace NarutoBot3
                 if (Settings.Default.releaseEnabled)
                 {
                     string message = privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + Settings.Default.chapterNumber + " for the chapter every " + Settings.Default.checkInterval + " seconds.");
-                    aTime.Interval = Settings.Default.checkInterval * 1000;
-                    aTime.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
-                    aTime.Enabled = true;
+                    mangaReleaseTimer.Interval = Settings.Default.checkInterval * 1000;
+                    mangaReleaseTimer.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
+                    mangaReleaseTimer.Enabled = true;
                     client.messageSender(message);
                 }
                 else
                 {
-                    aTime.Enabled = false;
+                    mangaReleaseTimer.Enabled = false;
                 }
             }
         }
@@ -807,7 +800,7 @@ namespace NarutoBot3
             t45.Checked = false;
             t60.Checked = false;
 
-            rTime.Interval = Settings.Default.randomTextInterval * 60 * 1000;
+            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
         private void t45_Click(object sender, EventArgs e)
@@ -817,7 +810,7 @@ namespace NarutoBot3
             t45.Checked = true;
             t60.Checked = false;
 
-            rTime.Interval = Settings.Default.randomTextInterval * 60 * 1000;
+            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
         private void t60_Click(object sender, EventArgs e)
@@ -827,7 +820,7 @@ namespace NarutoBot3
             t45.Checked = false;
             t60.Checked = true;
 
-            rTime.Interval = Settings.Default.randomTextInterval * 60 * 1000;
+            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
 
@@ -926,7 +919,7 @@ namespace NarutoBot3
         }
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            ircBot.randomTextSender(source, e);
+            bot.randomTextSender(source, e);
         }
 
         public void eventChangeTitle(object sender, EventArgs e)
@@ -939,7 +932,7 @@ namespace NarutoBot3
 
         public void letsQuit(object sender, EventArgs e)
         {
-            disconnect();
+            disconnectClient();
         }
 
         public bool changeNick(string nick)
@@ -966,7 +959,7 @@ namespace NarutoBot3
         {
             Random r = new Random();
 
-            disconnect();
+            disconnectClient();
 
             Settings.Default.Nick = client.NICK + r.Next(10);
             Settings.Default.Save();
@@ -977,7 +970,7 @@ namespace NarutoBot3
 
         private void pingServer(object sender, EventArgs e)
         {
-            ircBot.pingSever();
+            bot.pingSever();
         }
 
         private void updateLag(TimeSpan diff)

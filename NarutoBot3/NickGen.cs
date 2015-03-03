@@ -37,6 +37,11 @@ namespace NarutoBot3
             return Creator(rd_numb, rd_uppr, rd_switch, rd_ique);
         }
 
+        static public string replaceChar(int index, string word ,char newChar)
+        {
+            return word.Substring(0, index) + newChar + word.Substring(index + 1);
+        }
+
         static string letterSwitch(string nick_gen)//Used in the nick gen
         {
             Random rnd = new Random();
@@ -54,7 +59,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '3' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '3');
                             changed = 1;
                             letras = 0;
                         }
@@ -63,7 +68,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '4' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '4');
                             changed = 1;
                             letras = 0;
                         }
@@ -72,7 +77,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '7' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '7');
                             changed = 1;
                             letras = 0;
                         }
@@ -81,7 +86,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '0' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '0');
                             changed = 1;
                             letras = 0;
                         }
@@ -90,7 +95,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '1' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '1');
                             changed = 1;
                             letras = 0;
                         }
@@ -99,7 +104,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '5' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '5');
                             changed = 1;
                             letras = 0;
                         }
@@ -108,7 +113,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + '2' + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, '2');
                             changed = 1;
                             letras = 0;
                         }
@@ -122,16 +127,8 @@ namespace NarutoBot3
         static string randomNumber(string nick_gen, int size = 2)//Used in the nick gen
         {
             Random rnd = new Random();
-            switch (size)
-            {
-                case 1: nick_gen = nick_gen + rnd.Next(0, 9); break;
-                case 2: nick_gen = nick_gen + rnd.Next(0, 99); ; break;
-                case 3: nick_gen = nick_gen + rnd.Next(0, 999); ; break;
-                case 4: nick_gen = nick_gen + rnd.Next(0, 9999); ; break;
 
-                default: nick_gen = nick_gen + rnd.Next(0, 99); ; break;
-
-            }
+            nick_gen = nick_gen + rnd.Next(0, ( (int)Math.Pow(10, size)-1)); 
 
             return nick_gen;
         }
@@ -153,7 +150,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = nick_gen.Substring(0, i) + nick_gen[i].ToString().ToUpper() + nick_gen.Substring(i + 1);
+                            nick_gen = replaceChar(i, nick_gen, Char.ToUpper(nick_gen[i]));
                             changed = 1;
                             letras = 0;
                             
@@ -178,7 +175,7 @@ namespace NarutoBot3
 
         }
 
-        static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique) //Used to create nicks
+        static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool sufix) //Used to create nicks
         {
             Random rnd = new Random();
             int rd = rnd.Next(lineNumber);
@@ -194,7 +191,7 @@ namespace NarutoBot3
 
             nick_gen = part1 + part2;
 
-            if (rd_ique)
+            if (sufix)
                 nick_gen = addSuffix(nick_gen, "ique");
             if (rd_numb)
                 nick_gen = randomNumber(nick_gen);

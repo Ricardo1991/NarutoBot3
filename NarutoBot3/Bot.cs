@@ -215,7 +215,7 @@ namespace NarutoBot3
         public void LoadSettings()
         {
             ReadOps();                  //operators
-            ReadMute();                  //banned users
+            ReadMute();                 //banned users
             ReadHelp();                 //help text
             ReadTrivia();               //trivia strings
             ReadGreetings();            //read greetings
@@ -247,7 +247,7 @@ namespace NarutoBot3
             }
         }
 
-        public void BotMessage(string message)
+        public void processMessage(string message)
         {
             if (String.IsNullOrEmpty(message)) return;
 
@@ -1337,15 +1337,27 @@ namespace NarutoBot3
 
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            pastMessages.Sort((p, q) => p.WordsCount.CompareTo(q.WordsCount));
+            Random rd = new Random();
+            StringBuilder g = new StringBuilder();
             List<pastMessage> pastTemp = new List<pastMessage>();
+            int count;
+            int n, d;
+            string message;
+            string randomWords;
+            int numberSamples = rd.Next(2, 4);      //Number of messages to sample from
+
+
+            pastMessages.Sort((p, q) => p.WordsCount.CompareTo(q.WordsCount));
+
 
             foreach (pastMessage p in pastMessages)//remove messages with less than 8 Words
             {
                 if (p.WordsCount >= 8)
                     pastTemp.Add(p);
             }
+
             pastMessages.Clear();
+
             foreach (pastMessage p in pastTemp)
             {
                 pastMessages.Add(p);
@@ -1353,22 +1365,13 @@ namespace NarutoBot3
 
             if (pastMessages.Count < 10 || !Settings.Default.randomTextEnabled) return;
 
-            string message;
-            string randomWords;
-            StringBuilder g = new StringBuilder();
-            Random rd = new Random();
-
-            int numberSamples = rd.Next(2, 4);      //Number of messages to sample from
-            int count;
-            int n;
-            int d;
 
             for (count = 0; count <= numberSamples; count++)
             {
 
                 n = rd.Next(pastMessages.Count);
 
-                int start = rd.Next(pastMessages[n].WordsCount - 5);
+                int start = rd.Next(4);
                 int end;
                 do { end = rd.Next(pastMessages[n].WordsCount); } while (end <= start);
 
@@ -1384,8 +1387,6 @@ namespace NarutoBot3
 
             message = Privmsg(Client.HOME_CHANNEL, "\x02" + randomWords + "\x02");
             Client.messageSender(message);
-
-            //pastMessages.Clear();
 
         }
 
@@ -1447,6 +1448,7 @@ namespace NarutoBot3
                 return false;
             }
         }
+
         void opList(string nick)
         {
             string message;
@@ -1487,6 +1489,7 @@ namespace NarutoBot3
             }
 
         }
+
         public void silence(string nick)
         {
             string message;
@@ -1535,6 +1538,7 @@ namespace NarutoBot3
                 }
             }
         }
+
         void rules(string CHANNEL, string nick)
         {
             string message;
@@ -1638,6 +1642,7 @@ namespace NarutoBot3
 
             }
         }
+
         void toCelcius(string CHANNEL, string nick, string args)
         {
             string message;
@@ -1868,6 +1873,7 @@ namespace NarutoBot3
                 Client.messageSender(message);
             }
         }
+
         public void twitter(string CHANNEL, string nick, string line)
         {
             string author, tweet, message;
@@ -2136,6 +2142,7 @@ namespace NarutoBot3
 
             }
         }
+
         public void killUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();

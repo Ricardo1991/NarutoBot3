@@ -7,7 +7,7 @@ namespace NarutoBot3
         static public string getYoutubeIdFromURL(string url)
         {
             string id;
-            if (url.Contains("youtu.be"))
+            if (url.Contains("youtu.be") && !url.Contains("&feature=youtu.be"))
             {
                 id = util.getBetween(url, "youtu.be/", "?t");
             
