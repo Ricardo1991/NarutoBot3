@@ -438,9 +438,9 @@ namespace NarutoBot3
             }
             else
             {
-                client.userList.Sort();
+                bot.userList.Sort();
                 InterfaceUserList.DataSource = null;
-                InterfaceUserList.DataSource = client.userList;
+                InterfaceUserList.DataSource = bot.userList;
             }
         }
 

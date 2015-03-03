@@ -27,8 +27,6 @@ namespace NarutoBot3
         public StreamReader reader;
         public StreamWriter writer;
 
-        public List<string> userList = new List<string>();
-
         public IRC_Client(string home_channel, string host, int port, string nick, string realName)
         {
             HOME_CHANNEL = home_channel;
@@ -92,8 +90,6 @@ namespace NarutoBot3
 
         public void Disconnect()
         {
-            userList.Clear();
-
             try
             {
                 isConnected = false;
@@ -103,6 +99,7 @@ namespace NarutoBot3
             }
             catch { }
         }
+
         public void Dispose()
         {
             Dispose(true);
@@ -118,8 +115,6 @@ namespace NarutoBot3
                 writer.Close();
                 irc.Close();
             }
-            // free native resources if there are any.
-
         }
     }
 }
