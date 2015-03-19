@@ -605,7 +605,7 @@ namespace NarutoBot3
                     else if (parsed[0].ToLower() == "/whowas" )  //Action send
                             message = "WHOWAS " + parsed[1] + "\n";
 
-                    else if (parsed[0].ToLower() == "/nick" )  //Action send
+                    else if (parsed[0].ToLower() == "/Nick" )  //Action send
                             changeNick(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv" )  //NickServ send
@@ -729,19 +729,15 @@ namespace NarutoBot3
             {
                 case "Give":
                     bot.giveOps(split[1]);
-                    bot.SaveOps();
                     break;
                 case "Take":
                     bot.takeOps(split[1]);
-                    bot.SaveOps();
                     break;
                 case "Mute":
                     bot.muteUser(split[1]);
-                    bot.SaveMute();
                     break;
                 case "Unmute":
                     bot.unmuteUSer(split[1]);
-                    bot.SaveMute();
                     break;
                 case "Poke":
                     bot.pokeUser(split[1]);
@@ -945,7 +941,7 @@ namespace NarutoBot3
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
 
-            //do nick change to server
+            //do Nick change to server
             if (client.isConnected)
             {
                 client.messageSender("NICK " + client.NICK + "\n");

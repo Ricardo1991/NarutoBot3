@@ -171,6 +171,7 @@
     <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserList.cs" />
     <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />
     <Compile Include="NickGen.cs" />
     <Compile Include="Forms\BotOperatorWindow.cs">

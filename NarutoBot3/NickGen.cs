@@ -42,7 +42,7 @@ namespace NarutoBot3
             return word.Substring(0, index) + newChar + word.Substring(index + 1);
         }
 
-        static string letterSwitch(string nick_gen)//Used in the nick gen
+        static string letterSwitch(string nick_gen)//Used in the Nick gen
         {
             Random rnd = new Random();
             int changed = 0;
@@ -124,7 +124,7 @@ namespace NarutoBot3
             }
             return nick_gen;
         }
-        static string randomNumber(string nick_gen, int size = 2)//Used in the nick gen
+        static string randomNumber(string nick_gen, int size = 2)//Used in the Nick gen
         {
             Random rnd = new Random();
 
@@ -132,7 +132,7 @@ namespace NarutoBot3
 
             return nick_gen;
         }
-        static string randomUpper(string nick_gen)//Used in the nick gen
+        static string randomUpper(string nick_gen)//Used in the Nick gen
         {
             Random rnd = new Random();
             int changed = 0;
@@ -162,7 +162,7 @@ namespace NarutoBot3
 
             return nick_gen;
         }
-        static string addSuffix(string nick_gen, string suffix)//Used in the nick gen
+        static string addSuffix(string nick_gen, string suffix)//Used in the Nick gen
         {
             string last = nick_gen[nick_gen.Length - 1].ToString();
             if (last == "a".ToString() || last == "e".ToString() || last == "i".ToString() || last == "o".ToString() || last == "u".ToString())
