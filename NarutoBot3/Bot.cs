@@ -208,10 +208,6 @@ namespace NarutoBot3
 
         public void LoadSettings()
         {
-            //ReadOps();                  //operators
-            //ReadMute();                 //banned Users
-            //ReadGreetings();            //read greetings
-
             ReadHelp();                 //help text
             ReadTrivia();               //trivia strings
             ReadKills();                //Read the killstrings
@@ -983,15 +979,15 @@ namespace NarutoBot3
         public void ReadKills()
         {
             kill.Clear();
+
             if (File.Exists("TextFiles/kills.txt"))
             {
                 try
                 {
                     StreamReader sr = new StreamReader("TextFiles/kills.txt");
                     while (sr.Peek() >= 0)
-                    {
                         kill.Add(sr.ReadLine());
-                    }
+
                     sr.Close();
                 }
                 catch
@@ -1003,52 +999,6 @@ namespace NarutoBot3
             {
                 Settings.Default.killEnabled = false;
                 Settings.Default.Save();
-            }
-        }
-
-
-        public void ReadOps()
-        {
-            string s;
-            if (File.Exists("TextFiles/ops.txt"))
-            {
-                try
-                {
-                    StreamReader sr = new StreamReader("TextFiles/ops.txt");
-                    while (sr.Peek() >= 0)
-                    {
-                        s = sr.ReadLine();
-                        ul.opUser(s);
-                    }
-                    sr.Close();
-                    saveData();
-                }
-                catch
-                {
-                }
-                
-            }
-        }
-
-        public void ReadMute()
-        {
-            string s;
-            if (File.Exists("TextFiles/banned.txt"))
-            {
-                try
-                {
-                    StreamReader sr = new StreamReader("TextFiles/banned.txt");
-                    while (sr.Peek() >= 0)
-                    {
-                        s = sr.ReadLine();
-                        ul.muteUser(s);
-                    }
-                    sr.Close();
-                    saveData();
-                }
-                catch
-                {
-                }
             }
         }
 
@@ -1127,49 +1077,6 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
         }
-
-        public void ReadGreetings()
-        {
-            string nick, greeting, line;
-            string[] split;
-            bool enabled = false;
-
-            if (File.Exists("TextFiles/greetings.txt"))
-            {
-                try
-                {
-                    StreamReader sr = new StreamReader("TextFiles/greetings.txt");
-                    while (sr.Peek() >= 0)
-                    {
-                        line = sr.ReadLine();
-                        split = line.Split(new char[] { ':' }, 3);
-                        nick = split[0];
-                        greeting = split[2];
-
-                        switch (split[1])
-                        {
-                            case "False":
-                                enabled = false;
-                                break;
-                            case "True":
-                                enabled = true;
-                                break;
-                            default:
-                                enabled = false;
-                                break;
-                        }
-
-                        ul.setGreeting(nick, greeting, enabled);
-                    }
-                    sr.Close();
-                    saveData();
-                }
-                catch
-                {
-                }
-            }
-        }
-
 
         public void AddGreetings(string args, string nick)
         {
@@ -1394,8 +1301,6 @@ namespace NarutoBot3
             message = Notice(nick, targetUser + " was removed as a bot operator!");
             Client.messageSender(message);
             return true;
-
-
         }
 
         void opList(string nick)
