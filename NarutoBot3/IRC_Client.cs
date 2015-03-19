@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 
@@ -66,7 +65,6 @@ namespace NarutoBot3
         {
             messageSender(join_message);
             isConnected = true;
-        
         }
 
         public bool messageSender(string message)
@@ -83,7 +81,7 @@ namespace NarutoBot3
             }
         }
 
-        public string messageReader()
+        public string readLine()
         {
             return reader.ReadLine();
         }
