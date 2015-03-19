@@ -22,12 +22,13 @@ namespace NarutoBot3
         ConnectWindow Connect = new ConnectWindow();
         SettingsWindow settingsWindow = new SettingsWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
-        BotOperatorWindow operatorsWindow;
         EditRulesWindow rulesWindow = new EditRulesWindow();
         HelpTextWindow helpWindow = new HelpTextWindow();
-        MutedUsersWindow mutedWindow;
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
         AboutBox aboutbox = new AboutBox();
+
+        MutedUsersWindow mutedWindow;
+        BotOperatorWindow operatorsWindow;
 
         private Bot bot;
         private IRC_Client client;
@@ -178,7 +179,7 @@ namespace NarutoBot3
                 
                 try
                 {
-                    buffer = client.messageReader();
+                    buffer = client.readLine();
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 

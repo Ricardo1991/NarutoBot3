@@ -65,7 +65,7 @@
             this.groupBox1.Size = new System.Drawing.Size(225, 56);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Mute User";
+            this.groupBox1.Text = "Ignore User";
             // 
             // bMute
             // 
@@ -73,7 +73,7 @@
             this.bMute.Name = "bMute";
             this.bMute.Size = new System.Drawing.Size(75, 23);
             this.bMute.TabIndex = 2;
-            this.bMute.Text = "Mute";
+            this.bMute.Text = "Ignore";
             this.bMute.UseVisualStyleBackColor = true;
             this.bMute.Click += new System.EventHandler(this.bMute_Click);
             // 
@@ -83,7 +83,7 @@
             this.bUnmute.Name = "bUnmute";
             this.bUnmute.Size = new System.Drawing.Size(106, 23);
             this.bUnmute.TabIndex = 0;
-            this.bUnmute.Text = "Unmute Selected";
+            this.bUnmute.Text = "Remove Selected";
             this.bUnmute.UseVisualStyleBackColor = true;
             this.bUnmute.Click += new System.EventHandler(this.bUnmute_Click);
             // 
@@ -111,7 +111,7 @@
             this.Name = "MutedUsersWindow";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Muted Users";
+            this.Text = "Ignored Users";
             this.Shown += new System.EventHandler(this.muted_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
