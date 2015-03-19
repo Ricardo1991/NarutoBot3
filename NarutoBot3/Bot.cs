@@ -72,6 +72,7 @@ namespace NarutoBot3
 
         IRC_Client Client;
         RichTextBox Output2;
+        ColorScheme currentColorScheme = new ColorScheme();
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
         private Reddit reddit;
 
@@ -195,10 +196,11 @@ namespace NarutoBot3
                 Kicked(this, e);
         }
         
-        public Bot(ref IRC_Client client, ref RichTextBox output2)
+        public Bot(ref IRC_Client client, ref RichTextBox output2, ref ColorScheme color)
         {
             Client = client;
             Output2 = output2;
+            currentColorScheme = color;
         }
         ~Bot()
         {
@@ -350,7 +352,7 @@ namespace NarutoBot3
 
                     case ("372"): //MOTD
                         string motd = completeParameters.Split(new char[] { ' ' }, 2)[1];
-                        WriteMessage(motd, Color.MediumOrchid);
+                        WriteMessage(motd, currentColorScheme.Motd);
                         break;
 
                     case ("376"): //END OF MOTD
@@ -615,20 +617,20 @@ namespace NarutoBot3
                         if (whoSent == Client.NICK)
                         {
                             if (user.Length > 14)
-                                WriteMessage(user.Truncate(15) + " : " + msg, Color.DodgerBlue);
+                                WriteMessage(user.Truncate(15) + " : " + msg, currentColorScheme.Notice);
                             else if (user.Length >= 8)                       //Write the Message on the bot console
-                                WriteMessage(user + "\t: " + msg, Color.DodgerBlue);
+                                WriteMessage(user + "\t: " + msg, currentColorScheme.Notice);
                             else
-                                WriteMessage(user + "\t\t: " + msg, Color.DodgerBlue);
+                                WriteMessage(user + "\t\t: " + msg, currentColorScheme.Notice);
                         }
                         else if (msg.ToLower().Contains(Client.NICK.ToLower()))
                         {
                             if (user.Length > 14)
-                                WriteMessage(user.Truncate(15) + " : " + msg, Color.LightGreen);
+                                WriteMessage(user.Truncate(15) + " : " + msg, currentColorScheme.Mention);
                             else if (user.Length >= 8)                       //Write the Message on the bot console
-                                WriteMessage(user + "\t: " + msg, Color.LightGreen);
+                                WriteMessage(user + "\t: " + msg, currentColorScheme.Mention);
                             else
-                                WriteMessage(user + "\t\t: " + msg, Color.LightGreen);
+                                WriteMessage(user + "\t\t: " + msg, currentColorScheme.Mention);
                         }
                         else
                         {
@@ -646,7 +648,7 @@ namespace NarutoBot3
                                 || String.Compare(cmd.Replace(",",string.Empty), "hey", true) == 0)
                                 && arg.ToLower().Contains(Client.NICK.ToLower()))
                             {
-                                WriteMessage("* Received a hello from " + user, Color.Pink);
+                                WriteMessage("* Received a hello from " + user, currentColorScheme.BotReport);
                                 hello(whoSent, user);
                             }
 
@@ -657,166 +659,166 @@ namespace NarutoBot3
 
                         else if (String.Compare(cmd, Client.NICK+",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length-1]=='?')
                             {
-                                WriteMessage("* Received a question from " + user, Color.Pink);
+                                WriteMessage("* Received a question from " + user, currentColorScheme.BotReport);
                                 parseQuestion(Client.HOME_CHANNEL, user, arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "help", true) == 0)
                             {
-                                WriteMessage("* Received a help request from " + user, Color.Pink);
+                                WriteMessage("* Received a help request from " + user, currentColorScheme.BotReport);
                                 help(user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "rules", true) == 0)
                             {
-                                WriteMessage("* Received a rules request from " + user, Color.Pink);
+                                WriteMessage("* Received a rules request from " + user, currentColorScheme.BotReport);
                                 rules(whoSent, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "quit", true) == 0)
                             {
-                                WriteMessage("* Received a quit request from " + user, Color.Pink);
+                                WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
                                 if(quitIRC(user)) OnQuit(EventArgs.Empty);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "oplist", true) == 0)
                             {
-                                WriteMessage("* Received a oplist request from " + user, Color.Pink);
+                                WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
                                 opList(user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "roll", true) == 0)
                             {
-                                WriteMessage("* Received a roll request from " + user, Color.Pink);
+                                WriteMessage("* Received a roll request from " + user, currentColorScheme.BotReport);
                                 roll(whoSent, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "say", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a say request from " + user, Color.Pink);
+                                WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
                                 say(Client.HOME_CHANNEL, arg, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "greetme", true) == 0)
                             {
                                 if (String.IsNullOrEmpty(arg))
                                 {
-                                    WriteMessage("* Received a greet TOOGLE request from " + user, Color.Pink);
+                                    WriteMessage("* Received a greet TOOGLE request from " + user, currentColorScheme.BotReport);
                                     GreetToogle(user);
                                 }
                                 else
                                 {
-                                    WriteMessage("* Received a greet request from " + user, Color.Pink);
+                                    WriteMessage("* Received a greet request from " + user, currentColorScheme.BotReport);
                                     AddGreetings(arg, user);
                                 }
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "greetmenow", true) == 0)
                         {
-                                WriteMessage("* Received a greet me now request from " + user, Color.Pink);
+                                WriteMessage("* Received a greet me now request from " + user, currentColorScheme.BotReport);
                                 greetUser(user);
                         }
                         else if (String.Compare(cmd, Client.SYMBOL + "me", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a me request from " + user, Color.Pink);
+                                WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
                                 me(Client.HOME_CHANNEL, arg, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "silence", true) == 0)
                             {
-                                WriteMessage("* Received a silence request from " + user, Color.Pink);
+                                WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
                                 silence(user);
                             }
-                        else if (String.Compare(cmd, Client.SYMBOL + "rename", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, Client.SYMBOL + "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a rename request from " + user, Color.Pink);
+                                WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
                                 if (!ul.userIsOperator(user)) changeNick(arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "op", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a op request from " + user, Color.Pink);
+                                WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
                                 addBotOP(user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "deop", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a deop request from " + user, Color.Pink);
+                                WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
                                 removeBotOP(user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "toF", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a temp. conversion to F request from " + user, Color.Pink);
+                                WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
                                 toFahrenheit(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "toC", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a temp. conversion to C request from " + user, Color.Pink);
+                                WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
                                 toCelcius(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "time", true) == 0)
                             {
-                                WriteMessage("* Received a time request from " + user, Color.Pink);
+                                WriteMessage("* Received a time request from " + user, currentColorScheme.BotReport);
                                 time(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "wiki", true) == 0)
                             {
-                                WriteMessage("* Received a explain request from " + user, Color.Pink);
+                                WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
                                 explain(Client.HOME_CHANNEL, user, arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "anime", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a animeSearch request from " + user, Color.Pink);
+                                WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
                                 animeSearch(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
-                                WriteMessage("* Received a youtubeSearch request from " + user, Color.Pink);
+                                WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                                 youtubeSearch(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "poke", true) == 0)
                             {
-                                WriteMessage("* Received a poke request from " + user, Color.Pink);
+                                WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
                                 poke(Client.HOME_CHANNEL, user);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "trivia", true) == 0)
                             {
-                                WriteMessage("* Received a trivia request from " + user, Color.Pink);
+                                WriteMessage("* Received a trivia request from " + user, currentColorScheme.BotReport);
                                 trivia(Client.HOME_CHANNEL, user);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "Nick", true) == 0)
                             {
-                                WriteMessage("* Received a nickname request from " + user, Color.Pink);
+                                WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
                                 nickGen(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (String.Compare(cmd, Client.SYMBOL + "kill", true) == 0)
                             {
-                                WriteMessage("* Received a kill request from " + user, Color.Pink);
+                                WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
                                 killUser(Client.HOME_CHANNEL, user, arg);
                             }
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
-                                WriteMessage("* Detected an youtube video from  " + user, Color.Pink);
+                                WriteMessage("* Detected an youtube video from  " + user, currentColorScheme.BotReport);
                                 youtube(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
                             {
-                                WriteMessage("* Detected a short youtube video from  " + user, Color.Pink);
+                                WriteMessage("* Detected a short youtube video from  " + user, currentColorScheme.BotReport);
                                 youtube(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("vimeo.com"))
                             {
-                                WriteMessage("* Detected an vimeo video from  " + user, Color.Pink);
+                                WriteMessage("* Detected an vimeo video from  " + user, currentColorScheme.BotReport);
                                 vimeo(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
                             {
-                                WriteMessage("* Detected a reddit link from  " + user, Color.Pink);
+                                WriteMessage("* Detected a reddit link from  " + user, currentColorScheme.BotReport);
                                 redditLink(whoSent, user, msg);
                             }
 
                         else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
                             {
-                                WriteMessage("* Detected a twitter link from  " + user, Color.Pink);
+                                WriteMessage("* Detected a twitter link from  " + user, currentColorScheme.BotReport);
                                 twitter(whoSent, user, msg);
                             }
 
@@ -824,18 +826,18 @@ namespace NarutoBot3
                             {
                                 if (cmd.Contains("VERSION"))
                                 {
-                                    WriteMessage("* Received a CTCP version request from " + user, Color.Pink);
+                                    WriteMessage("* Received a CTCP version request from " + user, currentColorScheme.BotReport);
                                     ctcpVersion(user);
                                 }
 
                                 if (cmd.Contains("TIME"))
                                 {
-                                    WriteMessage("* Received a CTCP time request from " + user, Color.Pink);
+                                    WriteMessage("* Received a CTCP time request from " + user, currentColorScheme.BotReport);
                                     ctcpTime(user);
                                 }
                                 if (cmd.Contains("PING"))
                                 {
-                                    WriteMessage("* Received a CTCP ping request from " + user, Color.Pink);
+                                    WriteMessage("* Received a CTCP ping request from " + user, currentColorScheme.BotReport);
                                     ctcpPing(user, arg);
                                 }
                             }
@@ -870,23 +872,23 @@ namespace NarutoBot3
 
                             if (cmdd.Contains("VERSION"))
                             {
-                                WriteMessage("* Received a CTCP version request from " + userr, Color.Pink);
+                                WriteMessage("* Received a CTCP version request from " + userr, currentColorScheme.BotReport);
                                 ctcpVersion(userr);
                             }
 
                             if (cmdd.Contains("TIME"))
                             {
-                                WriteMessage("* Received a CTCP time request from " + userr, Color.Pink);
+                                WriteMessage("* Received a CTCP time request from " + userr, currentColorScheme.BotReport);
                                 ctcpTime(userr);
                             }
                             if (cmdd.Contains("PING"))
                             {
-                                WriteMessage("* Received a CTCP ping request from " + userr, Color.Pink);
+                                WriteMessage("* Received a CTCP ping request from " + userr, currentColorScheme.BotReport);
                                 
                                 ctcpPing(userr, argg);
                             }
                         }
-                        else WriteMessage(message, Color.DodgerBlue);
+                        else WriteMessage(message, currentColorScheme.Notice);
                         
                         break;
 
@@ -1162,7 +1164,7 @@ namespace NarutoBot3
         }
 
         /// <summary>
-        /// Sends a notice to the destinatary
+        /// Sends a Notice to the destinatary
         /// </summary>
         /// <param Name="destinatary">string with either a User or a channel, it's where the Message will be sent</param>
         /// <param Name="Message">String of text with the Message that will be delivered</param>
@@ -2621,7 +2623,7 @@ namespace NarutoBot3
         /// <summary>
         /// Writes a Message on the output window
         /// </summary>
-        /// <param name="Message">A sting with the Message to write</param>
+        /// <param Name="Message">A sting with the Message to write</param>
         public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
         {
             if (Output2.InvokeRequired)

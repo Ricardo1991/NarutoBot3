@@ -1,5 +1,6 @@
 ﻿using NarutoBot3.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -47,6 +48,9 @@ namespace NarutoBot3
 
         bool exitTheLoop = false;
 
+        public ColorScheme currentColorScheme = new ColorScheme();
+        List<ColorScheme> schemeColection = new List<ColorScheme>();
+
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
@@ -68,6 +72,9 @@ namespace NarutoBot3
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            schemeColection.Add(currentColorScheme);
+
         }
 
         public void loadSettings()
@@ -142,6 +149,22 @@ namespace NarutoBot3
 
             Settings.Default.Save();
 
+            //Load Color Scheme
+
+            //Apply UI Colors
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+            
+
         }
         public bool connect()   //This is where the bot connects to the server and logs in
         {
@@ -169,7 +192,7 @@ namespace NarutoBot3
             String buffer;
             String line;
 
-            bot = new Bot(ref client, ref OutputBox);
+            bot = new Bot(ref client, ref OutputBox, ref currentColorScheme);
 
             initializeBot();
 
@@ -840,18 +863,18 @@ namespace NarutoBot3
 
         private void userJoined(string whoJoined)
         {
-            WriteMessage("** " + whoJoined + " joined", Color.Green);
+            WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
             UpdateDataSource();
         }
 
         private void userLeft(string whoLeft)
         {
-            WriteMessage("** " + whoLeft + " parted", Color.Red);
+            WriteMessage("** " + whoLeft + " parted", currentColorScheme.Leave);
             UpdateDataSource();
         }
         private void userNickChange(string whoJoined, string newNick)
         {
-            WriteMessage("** " + whoJoined + " is now known as " + newNick, Color.Yellow);
+            WriteMessage("** " + whoJoined + " is now known as " + newNick, currentColorScheme.Rename);
             UpdateDataSource();
         }
 
@@ -860,34 +883,34 @@ namespace NarutoBot3
             switch (mode)
             {
                 case ("+o"):
-                    WriteMessage("** " + user + " was opped", Color.Blue);
+                    WriteMessage("** " + user + " was opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-o"):
-                    WriteMessage("** " + user + " was deopped", Color.Blue);
+                    WriteMessage("** " + user + " was deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+v"):
-                    WriteMessage("** " + user + " was voiced", Color.Blue);
+                    WriteMessage("** " + user + " was voiced", currentColorScheme.StatusChanged);
                     break;
                 case ("-v"):
-                    WriteMessage("** " + user + " was devoiced", Color.Blue);
+                    WriteMessage("** " + user + " was devoiced", currentColorScheme.StatusChanged);
                     break;
                 case ("+h"):
-                    WriteMessage("** " + user + " was half opped", Color.Blue);
+                    WriteMessage("** " + user + " was half opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-h"):
-                    WriteMessage("** " + user + " was half deopped", Color.Blue);
+                    WriteMessage("** " + user + " was half deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+q"):
-                    WriteMessage("** " + user + " was given Owner permissions", Color.Blue);
+                    WriteMessage("** " + user + " was given Owner permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-q"):
-                    WriteMessage("** " + user + " was removed as a Owner", Color.Blue);
+                    WriteMessage("** " + user + " was removed as a Owner", currentColorScheme.StatusChanged);
                     break;
                 case ("+a"):
-                    WriteMessage("** " + user + " was given Admin permissions", Color.Blue);
+                    WriteMessage("** " + user + " was given Admin permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-a"):
-                    WriteMessage("** " + user + " was removed as an Admin", Color.Blue);
+                    WriteMessage("** " + user + " was removed as an Admin", currentColorScheme.StatusChanged);
                     break;
             }
 
@@ -896,7 +919,7 @@ namespace NarutoBot3
 
         private void userKicked(string userkicked)
         {
-            WriteMessage("** " + userkicked + " was kicked", Color.Red);
+            WriteMessage("** " + userkicked + " was kicked", currentColorScheme.Leave);
             UpdateDataSource();
         }
 

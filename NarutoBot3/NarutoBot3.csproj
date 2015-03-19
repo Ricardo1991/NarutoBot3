@@ -131,6 +131,7 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Bot.cs" />
+    <Compile Include="colorScheme.cs" />
     <Compile Include="JSON and XML classes\GoogleSearch.cs" />
     <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>
