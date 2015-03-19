@@ -418,6 +418,8 @@ namespace NarutoBot3
 
                         OnJoin(EventArgs.Empty);
 
+                        ul.makeOnline(Who);
+
                         greetUser(Who);
 
                         break;
@@ -445,6 +447,8 @@ namespace NarutoBot3
                         userList.Sort();
                         userTemp.Clear();
 
+                        ul.makeOffline(WhoLeft);
+
                         OnLeave(EventArgs.Empty);
                         break;
 
@@ -467,6 +471,9 @@ namespace NarutoBot3
 
                         userList.Sort();
                         userTemp.Clear();
+
+                        ul.makeOffline(WhoLeft);
+
                         OnLeave(EventArgs.Empty);
                         break;
 
@@ -500,6 +507,10 @@ namespace NarutoBot3
                         Who = oldnick;
 
                         OnNickChange(EventArgs.Empty);
+
+                        ul.makeOffline(oldnick);
+                        ul.makeOnline(newnick);
+
                         userTemp.Clear();
                         break;
 
@@ -588,6 +599,9 @@ namespace NarutoBot3
 
                         userTemp.Clear();
                         Who = kickedUser;
+
+                        ul.makeOffline(kickedUser);
+
                         OnKick(EventArgs.Empty);
                         break;
 

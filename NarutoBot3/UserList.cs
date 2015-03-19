@@ -39,6 +39,20 @@ namespace NarutoBot3
             else users.Add(new User(n, true));
         }
 
+        public void makeOffline(String n)
+        {
+            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            if (hasUserByName(n))
+            {
+                foreach (User u in Users)
+                {
+                    if (u.Nick == n)
+                        u.IsOnline = false;
+                }
+            }
+            else users.Add(new User(n, false));
+        }
+
         public void opUser(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -165,10 +179,12 @@ namespace NarutoBot3
     {
         String nick;
         String greeting;
-        bool isOnline;
         bool isOperator;
         bool isMuted;
         bool greetingEnabled;
+
+        [JsonIgnore]
+        bool isOnline=false;
 
         [JsonConstructor]
         private User()
