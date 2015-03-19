@@ -22,10 +22,10 @@ namespace NarutoBot3
         ConnectWindow Connect = new ConnectWindow();
         SettingsWindow settingsWindow = new SettingsWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
-        BotOperatorWindow operatorsWindow = new BotOperatorWindow();
+        BotOperatorWindow operatorsWindow;
         EditRulesWindow rulesWindow = new EditRulesWindow();
         HelpTextWindow helpWindow = new HelpTextWindow();
-        MutedUsersWindow mutedWindow = new MutedUsersWindow();
+        MutedUsersWindow mutedWindow;
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
         AboutBox aboutbox = new AboutBox();
 
@@ -217,6 +217,9 @@ namespace NarutoBot3
             bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
             bot.LoadSettings();
+
+            operatorsWindow = new BotOperatorWindow(ref bot.ul);
+            mutedWindow = new MutedUsersWindow(ref bot.ul);
 
         }
 
@@ -568,7 +571,6 @@ namespace NarutoBot3
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             operatorsWindow.ShowDialog();
-            bot.ReadOps();
         }
 
         private void input_KeyDown(object sender, KeyEventArgs e)
@@ -605,7 +607,7 @@ namespace NarutoBot3
                     else if (parsed[0].ToLower() == "/whowas" )  //Action send
                             message = "WHOWAS " + parsed[1] + "\n";
 
-                    else if (parsed[0].ToLower() == "/nick" )  //Action send
+                    else if (parsed[0].ToLower() == "/Nick" )  //Action send
                             changeNick(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv" )  //NickServ send
@@ -653,7 +655,6 @@ namespace NarutoBot3
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mutedWindow.ShowDialog();
-            bot.ReadMute();
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -729,19 +730,15 @@ namespace NarutoBot3
             {
                 case "Give":
                     bot.giveOps(split[1]);
-                    bot.SaveOps();
                     break;
                 case "Take":
                     bot.takeOps(split[1]);
-                    bot.SaveOps();
                     break;
                 case "Mute":
                     bot.muteUser(split[1]);
-                    bot.SaveMute();
                     break;
                 case "Unmute":
                     bot.unmuteUSer(split[1]);
-                    bot.SaveMute();
                     break;
                 case "Poke":
                     bot.pokeUser(split[1]);
@@ -945,7 +942,7 @@ namespace NarutoBot3
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
 
-            //do nick change to server
+            //do Nick change to server
             if (client.isConnected)
             {
                 client.messageSender("NICK " + client.NICK + "\n");
@@ -964,7 +961,7 @@ namespace NarutoBot3
             Settings.Default.Nick = client.NICK + r.Next(10);
             Settings.Default.Save();
 
-            if (connect())//If connected with success, then start the bot
+            if (connect())  //If connected with success, then start the bot
                 backgroundWorker.RunWorkerAsync();
         }
 
