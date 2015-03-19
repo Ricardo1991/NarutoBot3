@@ -1314,7 +1314,7 @@ namespace NarutoBot3
                 foreach (User u in ul.Users)
                 {
                     if (u.IsOperator)
-                        Client.messageSender(Notice(nick, nick + " :->" + u.Nick));
+                        Client.messageSender(Notice(nick, "     -> " + u.Nick));
                 }
             }
         }
