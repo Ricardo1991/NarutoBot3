@@ -6,7 +6,7 @@ namespace NarutoBot3
     {
         private string name = "Cool";
 
-        private Color join = ColorTranslator.FromHtml("#8C8A8Ab");
+        private Color join = ColorTranslator.FromHtml("#8C8A8A");
         private Color leave = ColorTranslator.FromHtml("#D9A641");
         private Color rename = ColorTranslator.FromHtml("#4545E6");
         private Color statusChanged = ColorTranslator.FromHtml("#185555");
@@ -14,6 +14,9 @@ namespace NarutoBot3
         private Color mention = ColorTranslator.FromHtml("#2A8C2A");
         private Color botReport = ColorTranslator.FromHtml("#FFC0CB");
         private Color motd = ColorTranslator.FromHtml("#B955D3");
+        private Color ownMessage = ColorTranslator.FromHtml("#FFFFFF");
+
+
 
         private Color mainWindowBG = ColorTranslator.FromHtml("#333333");
         private Color mainWindowText = ColorTranslator.FromHtml("#C7C7C7");
@@ -25,7 +28,11 @@ namespace NarutoBot3
         private Color topicText = ColorTranslator.FromHtml("#C7C7C7");
 
 
-
+        public Color OwnMessage
+        {
+            get { return ownMessage; }
+            set { ownMessage = value; }
+        }
         public Color Leave
         {
             get { return leave;  }

@@ -854,9 +854,9 @@ namespace NarutoBot3
             if (client.NICK.Length > 15)
                 WriteMessage(client.NICK.Truncate(16) + ":" + message);
             else if (NICK.Length >= 8)                       //Write the Message on the bot console
-                WriteMessage(client.NICK + "\t: " + message);
+                WriteMessage(client.NICK + "\t: " + message, currentColorScheme.OwnMessage);
             else
-                WriteMessage(client.NICK + "\t\t: " + message);
+                WriteMessage(client.NICK + "\t\t: " + message, currentColorScheme.OwnMessage);
 
             return result;
         }
