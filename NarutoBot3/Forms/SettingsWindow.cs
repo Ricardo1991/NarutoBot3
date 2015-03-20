@@ -1,14 +1,24 @@
 ﻿using NarutoBot3.Properties;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NarutoBot3
 {
     public partial class SettingsWindow : Form
     {
-        public SettingsWindow()
+        public ColorScheme currentColorScheme = new ColorScheme();
+        List<ColorScheme> schemeColection = new List<ColorScheme>();
+
+        List<string> colorSchemeNames = new List<string>();
+
+        public SettingsWindow(ref ColorScheme currentS, ref List<ColorScheme> sCollection)
         {
             InitializeComponent();
+            this.currentColorScheme = currentS;
+            this.schemeColection = sCollection;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,6 +76,52 @@ namespace NarutoBot3
             this.Close();
         }
 
+        private bool schemeAlreadyExists(string name)
+        {
+            foreach (ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, name, true) == 0)
+                    return true;
+                else 
+                    return false;
+            }
+            return false;
+        }
+
+        private void updateSchemes()
+        {
+            schemeColection.Clear();
+            schemeColection.Add(currentColorScheme);
+
+            colorSchemeNames.Clear();
+            colorSchemeNames.Add(currentColorScheme.Name);
+
+            ColorScheme a = new ColorScheme();
+
+            string[] dirs = Directory.GetFiles(@"Themes", "*.json");
+
+            foreach (string dir in dirs)
+            {
+
+                TextReader stream = new StreamReader(dir);
+                string json = stream.ReadToEnd();
+                JsonConvert.PopulateObject(json, a);
+
+                stream.Close();
+
+
+                if (!schemeAlreadyExists(a.Name))
+                {
+                    colorSchemeNames.Add(a.Name);
+                    schemeColection.Add(a);
+                }
+                    
+
+                a = null;
+                
+            }
+        }
+
         private void EnabledCommandsWindow_Shown(object sender, EventArgs e)
         {
             cb_Kill.Checked = Settings.Default.killEnabled;
@@ -105,6 +161,9 @@ namespace NarutoBot3
             tb_Pass.Text = Settings.Default.redditPass;
             bt_Logout.Enabled = Settings.Default.redditEnabled;
 
+
+            //Read schemes
+
         }
 
         private void b_Login_Click(object sender, EventArgs e)
@@ -131,6 +190,15 @@ namespace NarutoBot3
             Settings.Default.redditEnabled = false;
 
             Settings.Default.Save();
+        }
+
+        private void bExport_Click(object sender, EventArgs e)
+        {
+            TextWriter WriteFileStream = new StreamWriter("Theme\\" + currentColorScheme.Name + ".json", false);
+
+            WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme));
+
+            WriteFileStream.Close();
         }
     }
 }

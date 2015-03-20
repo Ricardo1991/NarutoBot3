@@ -20,14 +20,17 @@ namespace NarutoBot3
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
 
+        public ColorScheme currentColorScheme = new ColorScheme();
+        List<ColorScheme> schemeColection = new List<ColorScheme>();
+
         ConnectWindow Connect = new ConnectWindow();
-        SettingsWindow settingsWindow = new SettingsWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
         EditRulesWindow rulesWindow = new EditRulesWindow();
         HelpTextWindow helpWindow = new HelpTextWindow();
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
         AboutBox aboutbox = new AboutBox();
 
+        SettingsWindow settingsWindow;
         MutedUsersWindow mutedWindow;
         BotOperatorWindow operatorsWindow;
 
@@ -48,8 +51,7 @@ namespace NarutoBot3
 
         bool exitTheLoop = false;
 
-        public ColorScheme currentColorScheme = new ColorScheme();
-        List<ColorScheme> schemeColection = new List<ColorScheme>();
+
 
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -61,9 +63,17 @@ namespace NarutoBot3
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
 
+            schemeColection.Add(currentColorScheme);
+
             lastCommand = "";
 
             var result = Connect.ShowDialog();
+
+            UserList a = new UserList();
+
+            operatorsWindow = new BotOperatorWindow(ref a);
+            mutedWindow = new MutedUsersWindow(ref a);
+            settingsWindow = new SettingsWindow(ref currentColorScheme, ref schemeColection);
 
             if (result == DialogResult.OK)
             {
@@ -72,9 +82,6 @@ namespace NarutoBot3
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            schemeColection.Add(currentColorScheme);
-
         }
 
         public void loadSettings()
@@ -171,6 +178,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Connecting...");
 
             loadSettings();
+
             client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
             if ( client.Connect() ) {
@@ -244,6 +252,7 @@ namespace NarutoBot3
 
             operatorsWindow = new BotOperatorWindow(ref bot.ul);
             mutedWindow = new MutedUsersWindow(ref bot.ul);
+            settingsWindow = new SettingsWindow(ref currentColorScheme, ref schemeColection);
 
         }
 
