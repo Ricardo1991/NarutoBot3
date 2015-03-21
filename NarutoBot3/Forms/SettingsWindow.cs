@@ -14,11 +14,23 @@ namespace NarutoBot3
 
         List<string> colorSchemeNames = new List<string>();
 
-        public SettingsWindow(ref ColorScheme currentS, ref List<ColorScheme> sCollection)
+
+        public event EventHandler<EventArgs> ThemeChanged;
+
+        public SettingsWindow(ref ColorScheme currentS)
         {
             InitializeComponent();
             this.currentColorScheme = currentS;
-            this.schemeColection = sCollection;
+            schemeColection.Add(currentColorScheme);
+
+            updateSchemes();
+        }
+
+        protected virtual void OnThemeChanged(EventArgs e)
+        {
+            if (ThemeChanged != null)
+                ThemeChanged(this, e);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -98,10 +110,11 @@ namespace NarutoBot3
 
             ColorScheme a = new ColorScheme();
 
-            string[] dirs = Directory.GetFiles(@"Themes", "*.json");
+            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
 
             foreach (string dir in dirs)
             {
+                a = new ColorScheme();
 
                 TextReader stream = new StreamReader(dir);
                 string json = stream.ReadToEnd();
@@ -120,6 +133,9 @@ namespace NarutoBot3
                 a = null;
                 
             }
+
+            themeList.DataSource = colorSchemeNames;
+            themeList.SelectedIndex = 0;
         }
 
         private void EnabledCommandsWindow_Shown(object sender, EventArgs e)
@@ -199,6 +215,12 @@ namespace NarutoBot3
             WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme));
 
             WriteFileStream.Close();
+        }
+
+        private void bApplyTheme_Click(object sender, EventArgs e)
+        {
+            currentColorScheme = schemeColection[themeList.SelectedIndex];
+            OnThemeChanged(EventArgs.Empty);
         }
     }
 }

@@ -1,0 +1,20 @@
+﻿{  
+   "OwnMessage":"255, 255, 255",
+   "Leave":"253, 151, 31",
+   "Rename":"102, 217, 239",
+   "StatusChanged":"230, 219, 116",
+   "Notice":"166, 226, 46",
+   "Mention":"166, 226, 46",
+   "BotReport":"249, 38, 114",
+   "Motd":"249, 38, 114",
+   "MainWindowBG":"39, 40, 34",
+   "MainWindowText":"255, 255, 255",
+   "UserListBG":"39, 40, 34",
+   "UserListText":"255, 255, 255",
+   "InputBG":"39, 40, 34",
+   "InputText":"255, 255, 255",
+   "Join":"166, 226, 46",
+   "TopicText":"255, 255, 255",
+   "TopicBG":"39, 40, 34",
+   "Name":"Monokai"
+}

@@ -196,12 +196,18 @@ namespace NarutoBot3
                 Kicked(this, e);
         }
         
-        public Bot(ref IRC_Client client, ref RichTextBox output2, ref ColorScheme color)
+        public Bot(ref IRC_Client client, ref RichTextBox output2, ColorScheme color)
         {
             Client = client;
             Output2 = output2;
             currentColorScheme = color;
+            
         }
+
+        public void updateTheme(ColorScheme newColorScheme){
+            currentColorScheme = newColorScheme;
+        }
+
         ~Bot()
         {
             Dispose(false);

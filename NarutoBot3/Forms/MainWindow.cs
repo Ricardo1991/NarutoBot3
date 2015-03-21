@@ -21,7 +21,6 @@ namespace NarutoBot3
         delegate void ChangeDataSource();
 
         public ColorScheme currentColorScheme = new ColorScheme();
-        List<ColorScheme> schemeColection = new List<ColorScheme>();
 
         ConnectWindow Connect = new ConnectWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
@@ -63,8 +62,6 @@ namespace NarutoBot3
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
 
-            schemeColection.Add(currentColorScheme);
-
             lastCommand = "";
 
             var result = Connect.ShowDialog();
@@ -73,7 +70,9 @@ namespace NarutoBot3
 
             operatorsWindow = new BotOperatorWindow(ref a);
             mutedWindow = new MutedUsersWindow(ref a);
-            settingsWindow = new SettingsWindow(ref currentColorScheme, ref schemeColection);
+            settingsWindow = new SettingsWindow(ref currentColorScheme);
+
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
             if (result == DialogResult.OK)
             {
@@ -200,7 +199,7 @@ namespace NarutoBot3
             String buffer;
             String line;
 
-            bot = new Bot(ref client, ref OutputBox, ref currentColorScheme);
+            bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
             initializeBot();
 
@@ -252,7 +251,9 @@ namespace NarutoBot3
 
             operatorsWindow = new BotOperatorWindow(ref bot.ul);
             mutedWindow = new MutedUsersWindow(ref bot.ul);
-            settingsWindow = new SettingsWindow(ref currentColorScheme, ref schemeColection);
+            settingsWindow = new SettingsWindow(ref currentColorScheme);
+
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
         }
 
@@ -590,8 +591,17 @@ namespace NarutoBot3
         {
             settingsWindow.ShowDialog();
 
-            if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-            if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+            try
+            {
+                if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+            }
+            catch {
+                Settings.Default.redditEnabled = false;
+                Settings.Default.twitterEnabled = false;
+                Settings.Default.Save();
+            }
+
                 
         }
 
@@ -1016,6 +1026,27 @@ namespace NarutoBot3
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             aboutbox.ShowDialog();
+        }
+
+        public void refreshTheme(object sender, EventArgs e){
+
+            currentColorScheme = settingsWindow.currentColorScheme;
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+
+            OutputBox.Clear();
+
+            if(bot != null)
+                bot.updateTheme(currentColorScheme);
         }
 
     }
