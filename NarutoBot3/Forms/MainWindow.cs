@@ -1,4 +1,5 @@
 ﻿using NarutoBot3.Properties;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +22,7 @@ namespace NarutoBot3
         delegate void ChangeDataSource();
 
         public ColorScheme currentColorScheme = new ColorScheme();
+        List<ColorScheme> schemeColection = new List<ColorScheme>();
 
         ConnectWindow Connect = new ConnectWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
@@ -50,13 +52,29 @@ namespace NarutoBot3
 
         bool exitTheLoop = false;
 
-
-
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
         {
             InitializeComponent();
+
+            loadThemes();
+
+            applyTheme(Settings.Default.themeName);
+
+            //Apply UI Colors
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+            /////
 
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
@@ -80,6 +98,55 @@ namespace NarutoBot3
                     backgroundWorker.RunWorkerAsync();
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void applyTheme(string p)
+        {
+            foreach(ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, p, true) == 0)
+                {
+                    currentColorScheme = c;
+                    return;
+                }
+            }
+        }
+
+        private bool schemeAlreadyExists(string name)
+        {
+            foreach (ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, name, true) == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
+
+        private void loadThemes()
+        {
+            schemeColection.Clear();
+            schemeColection.Add(currentColorScheme);
+
+            ColorScheme a = new ColorScheme();
+
+            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
+
+            foreach (string dir in dirs)
+            {
+                a = new ColorScheme();
+
+                TextReader stream = new StreamReader(dir);
+                string json = stream.ReadToEnd();
+                JsonConvert.PopulateObject(json, a);
+
+                stream.Close();
+                if (!schemeAlreadyExists(a.Name))
+                    schemeColection.Add(a);
+                a = null;
+
             }
         }
 
@@ -155,20 +222,7 @@ namespace NarutoBot3
 
             Settings.Default.Save();
 
-            //Load Color Scheme
 
-            //Apply UI Colors
-            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
-
-            this.tbTopic.BackColor = currentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = currentColorScheme.TopicText;
-
-            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
-
-            this.InputBox.BackColor = currentColorScheme.InputBG;
-            this.InputBox.ForeColor = currentColorScheme.InputText;
             
 
         }
@@ -558,7 +612,7 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
-            if (client.isConnected) 
+            if (client != null && client.isConnected) 
                 disconnectClient();
 
             this.Close();

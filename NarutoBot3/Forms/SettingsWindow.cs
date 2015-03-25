@@ -220,7 +220,9 @@ namespace NarutoBot3
         private void bApplyTheme_Click(object sender, EventArgs e)
         {
             currentColorScheme = schemeColection[themeList.SelectedIndex];
+            Settings.Default.themeName = currentColorScheme.Name;
             OnThemeChanged(EventArgs.Empty);
+            Settings.Default.Save();
         }
     }
 }
