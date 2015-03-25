@@ -1,5 +1,7 @@
 ﻿using NarutoBot3.Properties;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,14 +21,17 @@ namespace NarutoBot3
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
 
+        public ColorScheme currentColorScheme = new ColorScheme();
+        List<ColorScheme> schemeColection = new List<ColorScheme>();
+
         ConnectWindow Connect = new ConnectWindow();
-        SettingsWindow settingsWindow = new SettingsWindow();
         ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
         EditRulesWindow rulesWindow = new EditRulesWindow();
         HelpTextWindow helpWindow = new HelpTextWindow();
         MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
         AboutBox aboutbox = new AboutBox();
 
+        SettingsWindow settingsWindow;
         MutedUsersWindow mutedWindow;
         BotOperatorWindow operatorsWindow;
 
@@ -53,6 +58,24 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
+            loadThemes();
+
+            applyTheme(Settings.Default.themeName);
+
+            //Apply UI Colors
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+            /////
+
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
@@ -61,12 +84,69 @@ namespace NarutoBot3
 
             var result = Connect.ShowDialog();
 
+            UserList a = new UserList();
+
+            operatorsWindow = new BotOperatorWindow(ref a);
+            mutedWindow = new MutedUsersWindow(ref a);
+            settingsWindow = new SettingsWindow(ref currentColorScheme);
+
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
+
             if (result == DialogResult.OK)
             {
                 if (connect())          //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void applyTheme(string p)
+        {
+            foreach(ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, p, true) == 0)
+                {
+                    currentColorScheme = c;
+                    return;
+                }
+            }
+        }
+
+        private bool schemeAlreadyExists(string name)
+        {
+            foreach (ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, name, true) == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
+
+        private void loadThemes()
+        {
+            schemeColection.Clear();
+            schemeColection.Add(currentColorScheme);
+
+            ColorScheme a = new ColorScheme();
+
+            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
+
+            foreach (string dir in dirs)
+            {
+                a = new ColorScheme();
+
+                TextReader stream = new StreamReader(dir);
+                string json = stream.ReadToEnd();
+                JsonConvert.PopulateObject(json, a);
+
+                stream.Close();
+                if (!schemeAlreadyExists(a.Name))
+                    schemeColection.Add(a);
+                a = null;
+
             }
         }
 
@@ -142,12 +222,16 @@ namespace NarutoBot3
 
             Settings.Default.Save();
 
+
+            
+
         }
         public bool connect()   //This is where the bot connects to the server and logs in
         {
             ChangeConnectingLabel("Connecting...");
 
             loadSettings();
+
             client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
             if ( client.Connect() ) {
@@ -169,7 +253,7 @@ namespace NarutoBot3
             String buffer;
             String line;
 
-            bot = new Bot(ref client, ref OutputBox);
+            bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
             initializeBot();
 
@@ -221,6 +305,9 @@ namespace NarutoBot3
 
             operatorsWindow = new BotOperatorWindow(ref bot.ul);
             mutedWindow = new MutedUsersWindow(ref bot.ul);
+            settingsWindow = new SettingsWindow(ref currentColorScheme);
+
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
         }
 
@@ -525,7 +612,7 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
-            if (client.isConnected) 
+            if (client != null && client.isConnected) 
                 disconnectClient();
 
             this.Close();
@@ -558,8 +645,17 @@ namespace NarutoBot3
         {
             settingsWindow.ShowDialog();
 
-            if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-            if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+            try
+            {
+                if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+            }
+            catch {
+                Settings.Default.redditEnabled = false;
+                Settings.Default.twitterEnabled = false;
+                Settings.Default.Save();
+            }
+
                 
         }
 
@@ -831,27 +927,27 @@ namespace NarutoBot3
             if (client.NICK.Length > 15)
                 WriteMessage(client.NICK.Truncate(16) + ":" + message);
             else if (NICK.Length >= 8)                       //Write the Message on the bot console
-                WriteMessage(client.NICK + "\t: " + message);
+                WriteMessage(client.NICK + "\t: " + message, currentColorScheme.OwnMessage);
             else
-                WriteMessage(client.NICK + "\t\t: " + message);
+                WriteMessage(client.NICK + "\t\t: " + message, currentColorScheme.OwnMessage);
 
             return result;
         }
 
         private void userJoined(string whoJoined)
         {
-            WriteMessage("** " + whoJoined + " joined", Color.Green);
+            WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
             UpdateDataSource();
         }
 
         private void userLeft(string whoLeft)
         {
-            WriteMessage("** " + whoLeft + " parted", Color.Red);
+            WriteMessage("** " + whoLeft + " parted", currentColorScheme.Leave);
             UpdateDataSource();
         }
         private void userNickChange(string whoJoined, string newNick)
         {
-            WriteMessage("** " + whoJoined + " is now known as " + newNick, Color.Yellow);
+            WriteMessage("** " + whoJoined + " is now known as " + newNick, currentColorScheme.Rename);
             UpdateDataSource();
         }
 
@@ -860,34 +956,34 @@ namespace NarutoBot3
             switch (mode)
             {
                 case ("+o"):
-                    WriteMessage("** " + user + " was opped", Color.Blue);
+                    WriteMessage("** " + user + " was opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-o"):
-                    WriteMessage("** " + user + " was deopped", Color.Blue);
+                    WriteMessage("** " + user + " was deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+v"):
-                    WriteMessage("** " + user + " was voiced", Color.Blue);
+                    WriteMessage("** " + user + " was voiced", currentColorScheme.StatusChanged);
                     break;
                 case ("-v"):
-                    WriteMessage("** " + user + " was devoiced", Color.Blue);
+                    WriteMessage("** " + user + " was devoiced", currentColorScheme.StatusChanged);
                     break;
                 case ("+h"):
-                    WriteMessage("** " + user + " was half opped", Color.Blue);
+                    WriteMessage("** " + user + " was half opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-h"):
-                    WriteMessage("** " + user + " was half deopped", Color.Blue);
+                    WriteMessage("** " + user + " was half deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+q"):
-                    WriteMessage("** " + user + " was given Owner permissions", Color.Blue);
+                    WriteMessage("** " + user + " was given Owner permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-q"):
-                    WriteMessage("** " + user + " was removed as a Owner", Color.Blue);
+                    WriteMessage("** " + user + " was removed as a Owner", currentColorScheme.StatusChanged);
                     break;
                 case ("+a"):
-                    WriteMessage("** " + user + " was given Admin permissions", Color.Blue);
+                    WriteMessage("** " + user + " was given Admin permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-a"):
-                    WriteMessage("** " + user + " was removed as an Admin", Color.Blue);
+                    WriteMessage("** " + user + " was removed as an Admin", currentColorScheme.StatusChanged);
                     break;
             }
 
@@ -896,7 +992,7 @@ namespace NarutoBot3
 
         private void userKicked(string userkicked)
         {
-            WriteMessage("** " + userkicked + " was kicked", Color.Red);
+            WriteMessage("** " + userkicked + " was kicked", currentColorScheme.Leave);
             UpdateDataSource();
         }
 
@@ -984,6 +1080,27 @@ namespace NarutoBot3
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             aboutbox.ShowDialog();
+        }
+
+        public void refreshTheme(object sender, EventArgs e){
+
+            currentColorScheme = settingsWindow.currentColorScheme;
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+
+            OutputBox.Clear();
+
+            if(bot != null)
+                bot.updateTheme(currentColorScheme);
         }
 
     }

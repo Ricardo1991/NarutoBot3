@@ -1,0 +1,20 @@
+﻿{  
+   "OwnMessage":"255, 255, 255",
+   "Leave":"217, 166, 65",
+   "Rename":"69, 69, 230",
+   "StatusChanged":"24, 85, 85",
+   "Notice":"30, 144, 255",
+   "Mention":"42, 140, 42",
+   "BotReport":"255, 192, 203",
+   "Motd":"185, 85, 211",
+   "MainWindowBG":"51, 51, 51",
+   "MainWindowText":"199, 199, 199",
+   "UserListBG":"51, 51, 51",
+   "UserListText":"199, 199, 199",
+   "InputBG":"51, 51, 51",
+   "InputText":"199, 199, 199",
+   "Join":"140, 138, 138",
+   "TopicText":"199, 199, 199",
+   "TopicBG":"51, 51, 51",
+   "Name":"Cool"
+}

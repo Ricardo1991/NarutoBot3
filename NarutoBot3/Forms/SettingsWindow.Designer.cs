@@ -55,6 +55,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
+            this.tabAppearance = new System.Windows.Forms.TabPage();
+            this.bExport = new System.Windows.Forms.Button();
             this.redditCredentialsTab = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bt_Logout = new System.Windows.Forms.Button();
@@ -87,12 +89,15 @@
             this.label9 = new System.Windows.Forms.Label();
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
+            this.themeList = new System.Windows.Forms.ListBox();
+            this.bApplyTheme = new System.Windows.Forms.Button();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.settingsTabControl.SuspendLayout();
             this.enableDisableTab.SuspendLayout();
+            this.tabAppearance.SuspendLayout();
             this.redditCredentialsTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.googleMalTab.SuspendLayout();
@@ -410,6 +415,7 @@
             // settingsTabControl
             // 
             this.settingsTabControl.Controls.Add(this.enableDisableTab);
+            this.settingsTabControl.Controls.Add(this.tabAppearance);
             this.settingsTabControl.Controls.Add(this.redditCredentialsTab);
             this.settingsTabControl.Controls.Add(this.googleMalTab);
             this.settingsTabControl.Controls.Add(this.twitterCredentialsTab);
@@ -432,8 +438,30 @@
             this.enableDisableTab.Padding = new System.Windows.Forms.Padding(3);
             this.enableDisableTab.Size = new System.Drawing.Size(517, 302);
             this.enableDisableTab.TabIndex = 0;
-            this.enableDisableTab.Text = "Enable/Disable Commands";
+            this.enableDisableTab.Text = "Features";
             this.enableDisableTab.UseVisualStyleBackColor = true;
+            // 
+            // tabAppearance
+            // 
+            this.tabAppearance.Controls.Add(this.bApplyTheme);
+            this.tabAppearance.Controls.Add(this.themeList);
+            this.tabAppearance.Controls.Add(this.bExport);
+            this.tabAppearance.Location = new System.Drawing.Point(4, 22);
+            this.tabAppearance.Name = "tabAppearance";
+            this.tabAppearance.Size = new System.Drawing.Size(517, 302);
+            this.tabAppearance.TabIndex = 4;
+            this.tabAppearance.Text = "Appearance";
+            this.tabAppearance.UseVisualStyleBackColor = true;
+            // 
+            // bExport
+            // 
+            this.bExport.Location = new System.Drawing.Point(367, 266);
+            this.bExport.Name = "bExport";
+            this.bExport.Size = new System.Drawing.Size(138, 23);
+            this.bExport.TabIndex = 0;
+            this.bExport.Text = "Export Current Theme";
+            this.bExport.UseVisualStyleBackColor = true;
+            this.bExport.Click += new System.EventHandler(this.bExport_Click);
             // 
             // redditCredentialsTab
             // 
@@ -749,6 +777,24 @@
             this.b_ConsumerKey.TabIndex = 0;
             this.b_ConsumerKey.Text = "Consumer Key";
             // 
+            // themeList
+            // 
+            this.themeList.FormattingEnabled = true;
+            this.themeList.Location = new System.Drawing.Point(4, 4);
+            this.themeList.Name = "themeList";
+            this.themeList.Size = new System.Drawing.Size(136, 290);
+            this.themeList.TabIndex = 1;
+            // 
+            // bApplyTheme
+            // 
+            this.bApplyTheme.Location = new System.Drawing.Point(367, 237);
+            this.bApplyTheme.Name = "bApplyTheme";
+            this.bApplyTheme.Size = new System.Drawing.Size(138, 23);
+            this.bApplyTheme.TabIndex = 2;
+            this.bApplyTheme.Text = "Apply Selected Theme";
+            this.bApplyTheme.UseVisualStyleBackColor = true;
+            this.bApplyTheme.Click += new System.EventHandler(this.bApplyTheme_Click);
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -772,6 +818,7 @@
             this.groupBox2.PerformLayout();
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
+            this.tabAppearance.ResumeLayout(false);
             this.redditCredentialsTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -853,5 +900,9 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tb_ConsumerKey;
         private System.Windows.Forms.Label b_ConsumerKey;
+        private System.Windows.Forms.TabPage tabAppearance;
+        private System.Windows.Forms.Button bExport;
+        private System.Windows.Forms.ListBox themeList;
+        private System.Windows.Forms.Button bApplyTheme;
     }
 }

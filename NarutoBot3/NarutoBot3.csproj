@@ -131,6 +131,7 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Bot.cs" />
+    <Compile Include="colorScheme.cs" />
     <Compile Include="JSON and XML classes\GoogleSearch.cs" />
     <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>
@@ -251,6 +252,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Theme\Cool.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Theme\Monokai.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
