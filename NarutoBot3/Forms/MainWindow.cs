@@ -503,7 +503,7 @@ namespace NarutoBot3
             }
             else
             {
-                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+                string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
                 if (Settings.Default.showTimeStamps)
                 {

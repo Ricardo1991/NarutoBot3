@@ -78,6 +78,12 @@ namespace NarutoBot3
             }
         }
 
+        private void t_port_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                e.Handled = true;
+        }
+
         private void t_Server_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -131,5 +137,7 @@ namespace NarutoBot3
                 this.Close();
             }
         }
+
+
     }
 }

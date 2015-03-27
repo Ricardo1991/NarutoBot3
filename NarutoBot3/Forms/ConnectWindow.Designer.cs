@@ -40,9 +40,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.t_port = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_silence = new System.Windows.Forms.CheckBox();
             this.l_RealName = new System.Windows.Forms.Label();
             this.t_RealName = new System.Windows.Forms.TextBox();
-            this.cb_silence = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -145,6 +145,7 @@
             this.t_port.Size = new System.Drawing.Size(218, 20);
             this.t_port.TabIndex = 3;
             this.t_port.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_port_KeyDown);
+            this.t_port.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.t_port_KeyPress);
             // 
             // groupBox1
             // 
@@ -169,6 +170,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection Info";
             // 
+            // cb_silence
+            // 
+            this.cb_silence.AutoSize = true;
+            this.cb_silence.Location = new System.Drawing.Point(204, 159);
+            this.cb_silence.Name = "cb_silence";
+            this.cb_silence.Size = new System.Drawing.Size(80, 17);
+            this.cb_silence.TabIndex = 5;
+            this.cb_silence.Text = "Silence Bot";
+            this.cb_silence.UseVisualStyleBackColor = true;
+            // 
             // l_RealName
             // 
             this.l_RealName.AutoSize = true;
@@ -187,16 +198,6 @@
             this.t_RealName.Size = new System.Drawing.Size(218, 20);
             this.t_RealName.TabIndex = 1;
             this.t_RealName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_RealName_KeyDown);
-            // 
-            // cb_silence
-            // 
-            this.cb_silence.AutoSize = true;
-            this.cb_silence.Location = new System.Drawing.Point(204, 159);
-            this.cb_silence.Name = "cb_silence";
-            this.cb_silence.Size = new System.Drawing.Size(80, 17);
-            this.cb_silence.TabIndex = 5;
-            this.cb_silence.Text = "Silence Bot";
-            this.cb_silence.UseVisualStyleBackColor = true;
             // 
             // ConnectWindow
             // 
