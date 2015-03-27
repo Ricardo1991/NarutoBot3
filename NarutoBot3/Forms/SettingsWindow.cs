@@ -33,7 +33,7 @@ namespace NarutoBot3
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bSave_Click(object sender, EventArgs e)
         {
             Settings.Default.youtubeSearchEnabled = cb_YTSearch.Checked;
             Settings.Default.questionEnabled = cb_Questions.Checked;
