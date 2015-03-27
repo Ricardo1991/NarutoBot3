@@ -1152,18 +1152,12 @@ namespace NarutoBot3
 
             result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
 
-            if (Client.NICK.Length > 14)
-            {
-                WriteMessage(Client.NICK.Truncate(15) + ":" + message);
-            }
-                
-            else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console
-            {
-                WriteMessage(Client.NICK + "\t: " + message);
-            }
-            else {
-                WriteMessage(Client.NICK + "\t\t: " + message);
-            }
+            string alignedNick = Client.NICK.Truncate(13);
+            int tab = 15 - alignedNick.Length;
+
+            for (int i = 0; i < tab; i++)
+                alignedNick = alignedNick + " ";
+            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
                 
 
             return result;

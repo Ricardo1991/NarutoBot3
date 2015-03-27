@@ -221,11 +221,8 @@ namespace NarutoBot3
             REALNAME = Settings.Default.RealName;
 
             Settings.Default.Save();
-
-
-            
-
         }
+
         public bool connect()   //This is where the bot connects to the server and logs in
         {
             ChangeConnectingLabel("Connecting...");
@@ -942,7 +939,7 @@ namespace NarutoBot3
             string alignedNick = client.NICK.Truncate(13);
             int tab = 15 - alignedNick.Length;
 
-            for(int i=0;i<tab;i++)
+            for(int i = 0; i<tab; i++)
                 alignedNick = alignedNick + " ";
             WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
 

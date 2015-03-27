@@ -137,7 +137,5 @@ namespace NarutoBot3
                 this.Close();
             }
         }
-
-
     }
 }
