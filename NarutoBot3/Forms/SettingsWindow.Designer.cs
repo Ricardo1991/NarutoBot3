@@ -92,6 +92,7 @@
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.cbScroll = new System.Windows.Forms.CheckBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -108,6 +109,7 @@
             this.twitterCredentialsTab.SuspendLayout();
             this.AccessTokenBox.SuspendLayout();
             this.consumerBox.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -188,7 +190,7 @@
             this.groupBox6.Controls.Add(this.cb_Convert);
             this.groupBox6.Controls.Add(this.cb_Wiki);
             this.groupBox6.Controls.Add(this.cb_Anime);
-            this.groupBox6.Location = new System.Drawing.Point(6, 80);
+            this.groupBox6.Location = new System.Drawing.Point(6, 84);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(162, 169);
             this.groupBox6.TabIndex = 16;
@@ -259,7 +261,7 @@
             this.groupBox5.Controls.Add(this.cb_youtube);
             this.groupBox5.Controls.Add(this.cb_vimeo);
             this.groupBox5.Controls.Add(this.cb_twitter);
-            this.groupBox5.Location = new System.Drawing.Point(174, 10);
+            this.groupBox5.Location = new System.Drawing.Point(342, 10);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(162, 115);
             this.groupBox5.TabIndex = 15;
@@ -313,7 +315,7 @@
             this.groupBox4.Controls.Add(this.cb_Trivia);
             this.groupBox4.Controls.Add(this.cb_Poke);
             this.groupBox4.Controls.Add(this.cb_randomText);
-            this.groupBox4.Location = new System.Drawing.Point(342, 10);
+            this.groupBox4.Location = new System.Drawing.Point(174, 10);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(162, 243);
             this.groupBox4.TabIndex = 14;
@@ -406,7 +408,7 @@
             // 
             this.groupBox2.Controls.Add(this.cb_rules);
             this.groupBox2.Controls.Add(this.cb_help);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Location = new System.Drawing.Point(6, 10);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(162, 68);
             this.groupBox2.TabIndex = 12;
@@ -415,6 +417,9 @@
             // 
             // settingsTabControl
             // 
+            this.settingsTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.settingsTabControl.Controls.Add(this.enableDisableTab);
             this.settingsTabControl.Controls.Add(this.tabAppearance);
             this.settingsTabControl.Controls.Add(this.redditCredentialsTab);
@@ -444,8 +449,7 @@
             // 
             // tabAppearance
             // 
-            this.tabAppearance.Controls.Add(this.cbScroll);
-            this.tabAppearance.Controls.Add(this.cbTimeStamp);
+            this.tabAppearance.Controls.Add(this.groupBox7);
             this.tabAppearance.Controls.Add(this.bApplyTheme);
             this.tabAppearance.Controls.Add(this.themeList);
             this.tabAppearance.Location = new System.Drawing.Point(4, 22);
@@ -458,7 +462,7 @@
             // cbTimeStamp
             // 
             this.cbTimeStamp.AutoSize = true;
-            this.cbTimeStamp.Location = new System.Drawing.Point(147, 4);
+            this.cbTimeStamp.Location = new System.Drawing.Point(8, 22);
             this.cbTimeStamp.Name = "cbTimeStamp";
             this.cbTimeStamp.Size = new System.Drawing.Size(150, 17);
             this.cbTimeStamp.TabIndex = 3;
@@ -467,6 +471,7 @@
             // 
             // bApplyTheme
             // 
+            this.bApplyTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bApplyTheme.Location = new System.Drawing.Point(4, 274);
             this.bApplyTheme.Name = "bApplyTheme";
             this.bApplyTheme.Size = new System.Drawing.Size(136, 23);
@@ -477,6 +482,8 @@
             // 
             // themeList
             // 
+            this.themeList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.themeList.FormattingEnabled = true;
             this.themeList.Location = new System.Drawing.Point(4, 4);
             this.themeList.Name = "themeList";
@@ -800,12 +807,23 @@
             // cbScroll
             // 
             this.cbScroll.AutoSize = true;
-            this.cbScroll.Location = new System.Drawing.Point(147, 28);
+            this.cbScroll.Location = new System.Drawing.Point(8, 46);
             this.cbScroll.Name = "cbScroll";
             this.cbScroll.Size = new System.Drawing.Size(186, 17);
             this.cbScroll.TabIndex = 4;
             this.cbScroll.Text = "Automatically scroll chat to bottom";
             this.cbScroll.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.cbScroll);
+            this.groupBox7.Controls.Add(this.cbTimeStamp);
+            this.groupBox7.Location = new System.Drawing.Point(146, 4);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(200, 100);
+            this.groupBox7.TabIndex = 5;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Chat Window";
             // 
             // SettingsWindow
             // 
@@ -831,7 +849,6 @@
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabAppearance.ResumeLayout(false);
-            this.tabAppearance.PerformLayout();
             this.redditCredentialsTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -848,6 +865,8 @@
             this.AccessTokenBox.PerformLayout();
             this.consumerBox.ResumeLayout(false);
             this.consumerBox.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -918,5 +937,6 @@
         private System.Windows.Forms.Button bApplyTheme;
         private System.Windows.Forms.CheckBox cbTimeStamp;
         private System.Windows.Forms.CheckBox cbScroll;
+        private System.Windows.Forms.GroupBox groupBox7;
     }
 }
