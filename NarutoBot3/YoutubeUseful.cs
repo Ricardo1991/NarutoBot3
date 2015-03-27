@@ -2,7 +2,7 @@
 
 namespace NarutoBot3
 {
-    static class YoutubeUtil
+    static class YoutubeUseful
     {
         static public string getYoutubeIdFromURL(string url)
         {
@@ -10,15 +10,15 @@ namespace NarutoBot3
 
             if (url.Contains("youtu.be") && !url.Contains("&feature"))
             {
-                id = util.getBetween(url, "youtu.be/", "?t");
+                id = Useful.getBetween(url, "youtu.be/", "?t");
             
             }
             else
             {
                 if (url.Contains("?v="))
-                    id = util.getBetween(url, "?v=", "&");
+                    id = Useful.getBetween(url, "?v=", "&");
                 else
-                    id = util.getBetween(url, "&v=", "&");
+                    id = Useful.getBetween(url, "&v=", "&");
             }
 
             return id.Split(new char[] { ' ' }, 2)[0];

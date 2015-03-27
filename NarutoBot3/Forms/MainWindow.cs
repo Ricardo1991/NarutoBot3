@@ -58,39 +58,29 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            loadThemes();
-
-            applyTheme(Settings.Default.themeName);
-
-            //Apply UI Colors
-            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
-
-            this.tbTopic.BackColor = currentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = currentColorScheme.TopicText;
-
-            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
-
-            this.InputBox.BackColor = currentColorScheme.InputBG;
-            this.InputBox.ForeColor = currentColorScheme.InputText;
-            /////
-
+            //Events for BGWorker
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
+            ///
+
+            //Themes
+            loadThemes();
+            applyTheme(Settings.Default.themeName);
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
+            ///
 
             lastCommand = "";
 
-            var result = Connect.ShowDialog();
+            UserList uList = new UserList();
 
-            UserList a = new UserList();
-
-            operatorsWindow = new BotOperatorWindow(ref a);
-            mutedWindow = new MutedUsersWindow(ref a);
+            operatorsWindow = new BotOperatorWindow(ref uList);
+            mutedWindow = new MutedUsersWindow(ref uList);
             settingsWindow = new SettingsWindow(ref currentColorScheme);
 
-            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
+
+            //Show ConnectWindow Form and try to connect
+            var result = Connect.ShowDialog();
 
             if (result == DialogResult.OK)
             {
@@ -99,54 +89,30 @@ namespace NarutoBot3
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            ///
         }
 
-        private void applyTheme(string p)
+        public bool connect()   
         {
-            foreach(ColorScheme c in schemeColection)
+            ChangeConnectingLabel("Connecting...");
+
+            loadSettings();
+
+            client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
+
+            if (client.Connect())
             {
-                if (String.Compare(c.Name, p, true) == 0)
-                {
-                    currentColorScheme = c;
-                    return;
-                }
+                exitTheLoop = false;
+                timeoutTimer.Enabled = true;
+
+                return true;
             }
-        }
 
-        private bool schemeAlreadyExists(string name)
-        {
-            foreach (ColorScheme c in schemeColection)
+            else
             {
-                if (String.Compare(c.Name, name, true) == 0)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
+                timeoutTimer.Enabled = false;
 
-        private void loadThemes()
-        {
-            schemeColection.Clear();
-            schemeColection.Add(currentColorScheme);
-
-            ColorScheme a = new ColorScheme();
-
-            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
-
-            foreach (string dir in dirs)
-            {
-                a = new ColorScheme();
-
-                TextReader stream = new StreamReader(dir);
-                string json = stream.ReadToEnd();
-                JsonConvert.PopulateObject(json, a);
-
-                stream.Close();
-                if (!schemeAlreadyExists(a.Name))
-                    schemeColection.Add(a);
-                a = null;
-
+                return false;
             }
         }
 
@@ -175,11 +141,12 @@ namespace NarutoBot3
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
                 Settings.Default.aniSearchEnabled = false;
 
-            if (Settings.Default.apikey.Length < 5){
+            if (Settings.Default.apikey.Length < 5)
+            {
                 Settings.Default.timeEnabled = false;
                 Settings.Default.youtubeSearchEnabled = false;
             }
-            
+
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
 
@@ -205,11 +172,13 @@ namespace NarutoBot3
 
             Settings.Default.releaseEnabled = false;
 
-            if (Settings.Default.silence == true){
+            if (Settings.Default.silence == true)
+            {
                 silencedToolStripMenuItem.Checked = true;
                 toolStripStatusLabelSilence.Text = "Bot is Silenced";
             }
-            else{
+            else
+            {
                 silencedToolStripMenuItem.Checked = false;
                 toolStripStatusLabelSilence.Text = "";
             }
@@ -223,26 +192,69 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        public bool connect()   //This is where the bot connects to the server and logs in
+
+
+        private void applyTheme(string p)
         {
-            ChangeConnectingLabel("Connecting...");
+            foreach(ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, p, true) == 0)
+                {
+                    currentColorScheme = c;
 
-            loadSettings();
+                    //Apply UI Colors
+                    this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+                    this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
 
-            client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
+                    this.tbTopic.BackColor = currentColorScheme.TopicBG;
+                    this.tbTopic.ForeColor = currentColorScheme.TopicText;
 
-            if ( client.Connect() ) {
-                exitTheLoop = false;
-                timeoutTimer.Enabled = true;
+                    this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+                    this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
 
-                return true;
+                    this.InputBox.BackColor = currentColorScheme.InputBG;
+                    this.InputBox.ForeColor = currentColorScheme.InputText;
+                    /////
+                    return;
+                }
             }
+        }
 
-            else {
-                timeoutTimer.Enabled = false;
+        private bool schemeAlreadyExists(string name)
+        {
+            foreach (ColorScheme c in schemeColection)
+            {
+                if (String.Compare(c.Name, name, true) == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
 
-                return false;
-            } 
+        private void loadThemes()
+        {
+            schemeColection.Clear();
+            schemeColection.Add(currentColorScheme);
+
+            ColorScheme tmpScheme = new ColorScheme();
+
+            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
+
+            foreach (string dir in dirs)
+            {
+                tmpScheme = new ColorScheme();
+
+                TextReader stream = new StreamReader(dir);
+                string json = stream.ReadToEnd();
+                JsonConvert.PopulateObject(json, tmpScheme);
+
+                stream.Close();
+                if (!schemeAlreadyExists(tmpScheme.Name))
+                    schemeColection.Add(tmpScheme);
+                tmpScheme = null;
+
+            }
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
@@ -269,6 +281,11 @@ namespace NarutoBot3
                 catch
                 { }
             }
+        }
+
+        public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ChangeConnectingLabel("Disconnected");
         }
 
         private void initializeBot()
@@ -308,24 +325,11 @@ namespace NarutoBot3
 
         }
 
-        private void changeTopicTextBox(object sender, EventArgs e, string p)
-        {
-            if (tbTopic.InvokeRequired)
-            {
-                SetEventCallback d = new SetEventCallback(changeTopicTextBox);
-                this.Invoke(d, new object[] { sender, e, p });
-            }
-            else
-            {
-                tbTopic.Text = p;
-            }
-        }
-
         private void disconnectClient()
         {
             ChangeConnectingLabel("Disconnecting...");
             client.Disconnect();
-            
+
             Thread.Sleep(250);
 
             exitTheLoop = true;
@@ -334,134 +338,7 @@ namespace NarutoBot3
             OutputClean();
             ChangeTitle("NarutoBot");
         }
-        
-        public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            ChangeConnectingLabel("Disconnected");
-        }
 
-        public void isMangaOutEvent(object source, ElapsedEventArgs e)
-        {
-            String rawHTML;
-            string url = Settings.Default.baseURL.TrimEnd('/') + "/" + Settings.Default.chapterNumber;
-            var webClient = new WebClient();
-            webClient.Encoding = Encoding.UTF8;
-            HttpWebRequest request;
-
-            if (!Settings.Default.releaseEnabled) return;
-
-            try
-            {
-                request = (HttpWebRequest)WebRequest.Create(new Uri(url));
-                request.MaximumAutomaticRedirections = 4;
-                request.MaximumResponseHeadersLength = 4;
-                request.Timeout = 7 * 1000;   //7 seconds
-                request.Credentials = CredentialCache.DefaultCredentials;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                Stream receiveStream = response.GetResponseStream();
-                StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-
-                rawHTML = readStream.ReadToEnd();
-            }
-            catch
-            {
-                return;
-            }
-
-            if (!rawHTML.Contains("is not released yet.")) //Not yet
-            {
-                string message;
-
-                message = privmsg(client.HOME_CHANNEL, "*");
-                client.messageSender(message);
-                message = privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
-                client.messageSender(message);
-                message = privmsg(client.HOME_CHANNEL, "*");
-                client.messageSender(message);
-
-                Settings.Default.releaseEnabled = false;
-                Settings.Default.Save();
-
-                mangaReleaseTimer.Enabled = false;
-            }
-        }
-        
-        private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
-        {
-            Process myProcess = new Process();
-            string url = e.LinkText;
-            myProcess.StartInfo.UseShellExecute = true;
-            myProcess.StartInfo.FileName = url;
-            myProcess.Start();
-
-            myProcess.Close();
-        }
-
-        private void killToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadKills();
-        }
-
-        public void ChangeConnectingLabel(String message)
-        {
-            try
-            {
-                l_Status.Text = message;
-            }
-            catch { }
-        }
-        public void ChangeSilenceLabel(String message)
-        {
-            if (statusStripBottom.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(ChangeSilenceLabel);
-                this.Invoke(d, new object[] { message });
-            }
-            else
-            {
-                toolStripStatusLabelSilence.Text = message;
-
-            }
-        }
-        public void ChangeSilenceCheckBox(bool status)//toolStrip1
-        {
-            if (toolStripMenu.InvokeRequired)
-            {
-                SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
-                this.Invoke(d, new object[] { status });
-            }
-            else
-            {
-                silencedToolStripMenuItem.Checked = status;
-            }
-        }
-
-        public void ChangeTitle(String title)
-        {
-            if (this.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(ChangeTitle);
-                this.Invoke(d, new object[] { title });
-            }
-            else
-            {
-                this.Text = title;
-            }
-
-        }
-        public void ChangeInput(String title)
-        {
-            if (InputBox.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(ChangeInput);
-                this.Invoke(d, new object[] { title });
-            }
-            else
-            {
-                this.InputBox.Text = title;
-            }
-        }
         public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
@@ -517,7 +394,8 @@ namespace NarutoBot3
                 else
                     this.OutputBox.AppendText(message + "\n", color);
 
-                if (Settings.Default.autoScrollToBottom) {
+                if (Settings.Default.autoScrollToBottom)
+                {
                     OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
                     OutputBox.ScrollToCaret();                          //Now scroll it automatically
                 }
@@ -525,6 +403,167 @@ namespace NarutoBot3
             }
 
             //also, should make a log
+        }
+
+        public string privmsg(string destinatary, string message)
+        {
+            string result;
+
+            result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
+
+            string alignedNick = client.NICK.Truncate(13);
+            int tab = 15 - alignedNick.Length;
+
+            for (int i = 0; i < tab; i++)
+                alignedNick = alignedNick + " ";
+            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+
+
+            return result;
+        }
+
+        private void userJoined(string whoJoined)
+        {
+            WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
+            UpdateDataSource();
+        }
+
+        private void userLeft(string whoLeft)
+        {
+            WriteMessage("** " + whoLeft + " parted", currentColorScheme.Leave);
+            UpdateDataSource();
+        }
+        private void userNickChange(string whoJoined, string newNick)
+        {
+            WriteMessage("** " + whoJoined + " is now known as " + newNick, currentColorScheme.Rename);
+            UpdateDataSource();
+        }
+
+        private void userModeChanged(string user, string mode)
+        {
+            switch (mode)
+            {
+                case ("+o"):
+                    WriteMessage("** " + user + " was opped", currentColorScheme.StatusChanged);
+                    break;
+                case ("-o"):
+                    WriteMessage("** " + user + " was deopped", currentColorScheme.StatusChanged);
+                    break;
+                case ("+v"):
+                    WriteMessage("** " + user + " was voiced", currentColorScheme.StatusChanged);
+                    break;
+                case ("-v"):
+                    WriteMessage("** " + user + " was devoiced", currentColorScheme.StatusChanged);
+                    break;
+                case ("+h"):
+                    WriteMessage("** " + user + " was half opped", currentColorScheme.StatusChanged);
+                    break;
+                case ("-h"):
+                    WriteMessage("** " + user + " was half deopped", currentColorScheme.StatusChanged);
+                    break;
+                case ("+q"):
+                    WriteMessage("** " + user + " was given Owner permissions", currentColorScheme.StatusChanged);
+                    break;
+                case ("-q"):
+                    WriteMessage("** " + user + " was removed as a Owner", currentColorScheme.StatusChanged);
+                    break;
+                case ("+a"):
+                    WriteMessage("** " + user + " was given Admin permissions", currentColorScheme.StatusChanged);
+                    break;
+                case ("-a"):
+                    WriteMessage("** " + user + " was removed as an Admin", currentColorScheme.StatusChanged);
+                    break;
+            }
+
+            UpdateDataSource();
+        }
+
+        private void userKicked(string userkicked)
+        {
+            WriteMessage("** " + userkicked + " was kicked", currentColorScheme.Leave);
+            UpdateDataSource();
+        }
+
+        public bool changeNick(string nick)
+        {
+            client.NICK = Settings.Default.Nick = nick;
+            Settings.Default.Save();
+
+            if (!String.IsNullOrEmpty(client.HOST_SERVER))
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            else
+                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+
+            //do Nick change to server
+            if (client.isConnected)
+            {
+                client.messageSender("NICK " + client.NICK + "\n");
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ChangeConnectingLabel(String message)
+        {
+            try
+            {
+                l_Status.Text = message;
+            }
+            catch { }
+        }
+
+        public void ChangeSilenceLabel(String message)
+        {
+            if (statusStripBottom.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(ChangeSilenceLabel);
+                this.Invoke(d, new object[] { message });
+            }
+            else
+            {
+                toolStripStatusLabelSilence.Text = message;
+
+            }
+        }
+
+        public void ChangeSilenceCheckBox(bool status)//toolStrip1
+        {
+            if (toolStripMenu.InvokeRequired)
+            {
+                SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
+                this.Invoke(d, new object[] { status });
+            }
+            else
+            {
+                silencedToolStripMenuItem.Checked = status;
+            }
+        }
+
+        public void ChangeTitle(String title)
+        {
+            if (this.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(ChangeTitle);
+                this.Invoke(d, new object[] { title });
+            }
+            else
+            {
+                this.Text = title;
+            }
+
+        }
+        public void ChangeInput(String title)
+        {
+            if (InputBox.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(ChangeInput);
+                this.Invoke(d, new object[] { title });
+            }
+            else
+            {
+                this.InputBox.Text = title;
+            }
         }
 
         public void OutputClean()
@@ -559,7 +598,93 @@ namespace NarutoBot3
             }
         }
 
-        //UI Events
+        private void updateLag(TimeSpan diff)
+        {
+            try
+            {
+                int seconds = diff.Seconds * 60 + diff.Seconds;
+                toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") + "s";
+            }
+            catch { }
+        }
+
+        ////// Events
+
+        private void changeTopicTextBox(object sender, EventArgs e, string p)
+        {
+            if (tbTopic.InvokeRequired)
+            {
+                SetEventCallback d = new SetEventCallback(changeTopicTextBox);
+                this.Invoke(d, new object[] { sender, e, p });
+            }
+            else
+            {
+                tbTopic.Text = p;
+            }
+        }
+
+        public void isMangaOutEvent(object source, ElapsedEventArgs e)
+        {
+            String rawHTML;
+            string url = Settings.Default.baseURL.TrimEnd('/') + "/" + Settings.Default.chapterNumber;
+            var webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+            HttpWebRequest request;
+
+            if (!Settings.Default.releaseEnabled) return;
+
+            try
+            {
+                request = (HttpWebRequest)WebRequest.Create(new Uri(url));
+                request.MaximumAutomaticRedirections = 4;
+                request.MaximumResponseHeadersLength = 4;
+                request.Timeout = 7 * 1000;   //7 seconds
+                request.Credentials = CredentialCache.DefaultCredentials;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
+
+                rawHTML = readStream.ReadToEnd();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (!rawHTML.Contains("is not released yet.")) //Not yet
+            {
+                string message;
+
+                message = privmsg(client.HOME_CHANNEL, "*");
+                client.messageSender(message);
+                message = privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
+                client.messageSender(message);
+                message = privmsg(client.HOME_CHANNEL, "*");
+                client.messageSender(message);
+
+                Settings.Default.releaseEnabled = false;
+                Settings.Default.Save();
+
+                mangaReleaseTimer.Enabled = false;
+            }
+        }
+
+        private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            Process myProcess = new Process();
+            string url = e.LinkText;
+            myProcess.StartInfo.UseShellExecute = true;
+            myProcess.StartInfo.FileName = url;
+            myProcess.Start();
+
+            myProcess.Close();
+        }
+
+        private void killToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bot.ReadKills();
+        }
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
@@ -766,7 +891,6 @@ namespace NarutoBot3
             rulesWindow.ShowDialog();
         }
 
-
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             helpWindow.ShowDialog();
@@ -844,6 +968,7 @@ namespace NarutoBot3
             contextMenuUserList.Items.Add("Whois " + nick);
             contextMenuUserList.Items.Add("Kick " + nick + " (if operator)");
         }
+
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             string[] split = e.ClickedItem.Text.Split(' ');
@@ -941,92 +1066,13 @@ namespace NarutoBot3
             randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
-
-        public string privmsg(string destinatary, string message)
-        {
-            string result;
-
-            result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
-
-            string alignedNick = client.NICK.Truncate(13);
-            int tab = 15 - alignedNick.Length;
-
-            for(int i = 0; i<tab; i++)
-                alignedNick = alignedNick + " ";
-            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
-
-
-            return result;
-        }
-
-        private void userJoined(string whoJoined)
-        {
-            WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
-            UpdateDataSource();
-        }
-
-        private void userLeft(string whoLeft)
-        {
-            WriteMessage("** " + whoLeft + " parted", currentColorScheme.Leave);
-            UpdateDataSource();
-        }
-        private void userNickChange(string whoJoined, string newNick)
-        {
-            WriteMessage("** " + whoJoined + " is now known as " + newNick, currentColorScheme.Rename);
-            UpdateDataSource();
-        }
-
-        private void userModeChanged(string user, string mode)
-        {
-            switch (mode)
-            {
-                case ("+o"):
-                    WriteMessage("** " + user + " was opped", currentColorScheme.StatusChanged);
-                    break;
-                case ("-o"):
-                    WriteMessage("** " + user + " was deopped", currentColorScheme.StatusChanged);
-                    break;
-                case ("+v"):
-                    WriteMessage("** " + user + " was voiced", currentColorScheme.StatusChanged);
-                    break;
-                case ("-v"):
-                    WriteMessage("** " + user + " was devoiced", currentColorScheme.StatusChanged);
-                    break;
-                case ("+h"):
-                    WriteMessage("** " + user + " was half opped", currentColorScheme.StatusChanged);
-                    break;
-                case ("-h"):
-                    WriteMessage("** " + user + " was half deopped", currentColorScheme.StatusChanged);
-                    break;
-                case ("+q"):
-                    WriteMessage("** " + user + " was given Owner permissions", currentColorScheme.StatusChanged);
-                    break;
-                case ("-q"):
-                    WriteMessage("** " + user + " was removed as a Owner", currentColorScheme.StatusChanged);
-                    break;
-                case ("+a"):
-                    WriteMessage("** " + user + " was given Admin permissions", currentColorScheme.StatusChanged);
-                    break;
-                case ("-a"):
-                    WriteMessage("** " + user + " was removed as an Admin", currentColorScheme.StatusChanged);
-                    break;
-            }
-
-            UpdateDataSource();
-        }
-
-        private void userKicked(string userkicked)
-        {
-            WriteMessage("** " + userkicked + " was kicked", currentColorScheme.Leave);
-            UpdateDataSource();
-        }
-
         private void nowConnected(object sender, EventArgs e)
         {
             ChangeConnectingLabel("Connected");
             client.Join();
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
         }
+
         private void nowConnectedWithServer(object sender, EventArgs e)
         {
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
@@ -1036,6 +1082,7 @@ namespace NarutoBot3
         {
             UpdateDataSource();
         }
+
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
             bot.randomTextSender(source, e);
@@ -1054,26 +1101,6 @@ namespace NarutoBot3
             disconnectClient();
         }
 
-        public bool changeNick(string nick)
-        {
-            client.NICK = Settings.Default.Nick = nick;
-            Settings.Default.Save();
-
-            if (!String.IsNullOrEmpty(client.HOST_SERVER))
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
-            else
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
-
-            //do Nick change to server
-            if (client.isConnected)
-            {
-                client.messageSender("NICK " + client.NICK + "\n");
-                return true;
-            }
-
-            return false;
-        }
-
         public void duplicatedNick(object sender, EventArgs e)
         {
             Random r = new Random();
@@ -1090,16 +1117,6 @@ namespace NarutoBot3
         private void pingServer(object sender, EventArgs e)
         {
             bot.pingSever();
-        }
-
-        private void updateLag(TimeSpan diff)
-        {
-            try
-            {
-                int seconds = diff.Seconds * 60 + diff.Seconds;
-                toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") +"s";
-            }
-            catch { }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1129,60 +1146,4 @@ namespace NarutoBot3
         }
 
     }
-
-    public static class RichTextBoxExtensions
-    {
-        public static void AppendText(this RichTextBox box, string text, Color color)
-        {
-            if (box == null) return;
-
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
-        }
-    }
-    public static class StringExt
-    {
-        public static string Truncate(this string value, int maxLength)
-        {
-            if (string.IsNullOrEmpty(value)) return value;
-            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
-        }
-    }
-
-    static class getCompilationDate
-    {
-        static public DateTime RetrieveLinkerTimestamp()
-        {
-            string filePath = System.Reflection.Assembly.GetCallingAssembly().Location;
-            const int c_PeHeaderOffset = 60;
-            const int c_LinkerTimestampOffset = 8;
-            byte[] b = new byte[2048];
-            System.IO.Stream s = null;
-
-            try
-            {
-                s = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                s.Read(b, 0, 2048);
-            }
-            finally
-            {
-                if (s != null)
-                {
-                    s.Close();
-                }
-            }
-
-            int i = System.BitConverter.ToInt32(b, c_PeHeaderOffset);
-            int secondsSince1970 = System.BitConverter.ToInt32(b, i + c_LinkerTimestampOffset);
-            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0);
-            dt = dt.AddSeconds(secondsSince1970);
-            dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours);
-            return dt;
-        }
-    }
-
 }

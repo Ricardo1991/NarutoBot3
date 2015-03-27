@@ -199,8 +199,8 @@
     <Compile Include="JSON and XML classes\GoogleTimeZone.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="JSON and XML classes\YoutubeSearch.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="YoutubeUtil.cs" />
+    <Compile Include="Useful.cs" />
+    <Compile Include="YoutubeUseful.cs" />
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>

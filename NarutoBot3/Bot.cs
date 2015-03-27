@@ -80,15 +80,15 @@ namespace NarutoBot3
 
         private List<int> killsUsed = new List<int>();
 
+        private TwitterService service;
+
+        private RedditSharp.Things.AuthenticatedUser user;
+
         public string Topic
         {
             get { return topic; }
             set { topic = value; }
         }
-
-        private TwitterService service;
-
-        private RedditSharp.Things.AuthenticatedUser user;
         
         public TimeSpan TimeDifference
         {
@@ -1676,7 +1676,7 @@ namespace NarutoBot3
                 string title, duration;
                 YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
 
-                id = YoutubeUtil.getYoutubeIdFromURL(line);
+                id = YoutubeUseful.getYoutubeIdFromURL(line);
 
                 string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
 
@@ -1693,7 +1693,7 @@ namespace NarutoBot3
 
                 title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
 
-                duration = YoutubeUtil.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+                duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
 
                 message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02");
@@ -1711,7 +1711,7 @@ namespace NarutoBot3
             else
             {
 
-                string ID = util.getBetween(line, "/status/", "?");
+                string ID = Useful.getBetween(line, "/status/", "?");
                 long tweetID = Convert.ToInt64(ID);
 
                 TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID });
@@ -1817,9 +1817,9 @@ namespace NarutoBot3
 
                         if (a.entry == null)
                         {
-                            string score = util.getBetween(jsonAnime, "<score>", "</score>");
-                            string episodes = util.getBetween(jsonAnime, "<episodes>", "</episodes>");
-                            string title = util.getBetween(jsonAnime, "<title>", "</title>");
+                            string score = Useful.getBetween(jsonAnime, "<score>", "</score>");
+                            string episodes = Useful.getBetween(jsonAnime, "<episodes>", "</episodes>");
+                            string title = Useful.getBetween(jsonAnime, "<title>", "</title>");
 
                             if (episodes == "0")
                                 episodes = "?";
@@ -1844,10 +1844,10 @@ namespace NarutoBot3
                     {
                         string readHtml = webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
 
-                        string profile = util.getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
+                        string profile = Useful.getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
 
-                        string completed = util.getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
-                        completed = util.getBetween(completed, "<td align=\"center\">", "</td>");
+                        string completed = Useful.getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
+                        completed = Useful.getBetween(completed, "<td align=\"center\">", "</td>");
 
                         message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                     }
@@ -1899,7 +1899,7 @@ namespace NarutoBot3
                         catch { }
 
                         title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-                        duration = YoutubeUtil.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+                        duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
                         message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
                         Client.messageSender(message);
@@ -1926,15 +1926,15 @@ namespace NarutoBot3
                 int temp = 0;
 
                 string message;
-                string ID = util.getBetween(line, "vimeo.com/", "/");
+                string ID = Useful.getBetween(line, "vimeo.com/", "/");
                 string URLString = "http://vimeo.com/api/v2/video/" + ID.Replace("\r", "").Replace("\n", "") + ".xml";
 
                 var webClient = new WebClient();
                 webClient.Encoding = Encoding.UTF8;
                 string readHtml = webClient.DownloadString(URLString);
 
-                title = util.getBetween(readHtml, "<title>", "</title>");
-                duration = util.getBetween(readHtml, "<duration>", "</duration>");
+                title = Useful.getBetween(readHtml, "<title>", "</title>");
+                duration = Useful.getBetween(readHtml, "<duration>", "</duration>");
 
                 temp = Convert.ToInt32(duration);
 
@@ -2084,7 +2084,7 @@ namespace NarutoBot3
                         }
 
                         else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length - 1], "die", true) == 0)
-                            killUser(CHANNEL, user,  util.getBetween(arg, "did", "die"));
+                            killUser(CHANNEL, user,  Useful.getBetween(arg, "did", "die"));
                     }
                     else
                         message = Privmsg(CHANNEL, user + ", no idea...");
@@ -2151,7 +2151,7 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     else if (arg.Contains("can you kill "))
-                        killUser(CHANNEL, user, util.getBetween(arg, "can you kill ", ""));
+                        killUser(CHANNEL, user, Useful.getBetween(arg, "can you kill ", ""));
                     else
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
                 }
@@ -2373,7 +2373,7 @@ namespace NarutoBot3
                     else if (s.ToLower() == "for")
                     {
                         targeted = true;
-                        target = util.getBetween(args, "for ", " ");
+                        target = Useful.getBetween(args, "for ", " ");
                     }
 
                     if(s.ToLower() == "sl") switchLetterNumb = true;
@@ -2418,7 +2418,7 @@ namespace NarutoBot3
                 else return;
             }
 
-            subreddit = util.getBetween(url, "/r/", "/");
+            subreddit = Useful.getBetween(url, "/r/", "/");
 
             try
             {
@@ -2464,7 +2464,7 @@ namespace NarutoBot3
 
             catch   //403 error
             {
-                subreddit = util.getBetween(url, "/r/", "/");
+                subreddit = Useful.getBetween(url, "/r/", "/");
 
                 message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "this subreddit is private or the link was invalid" + "\x02");
                 Client.messageSender(message);
