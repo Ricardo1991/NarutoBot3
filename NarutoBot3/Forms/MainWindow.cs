@@ -478,7 +478,13 @@ namespace NarutoBot3
             }
             else
             {
-                this.OutputBox.AppendText(message + "\n");
+                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+
+                if (Settings.Default.showTimeStamps)
+                    this.OutputBox.AppendText(timeString + " " + message + "\n");
+
+                else
+                    this.OutputBox.AppendText(message + "\n");
             }
 
             //also, should make a log
@@ -497,7 +503,16 @@ namespace NarutoBot3
             }
             else
             {
-                this.OutputBox.AppendText(message + "\n", color);
+                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+
+                if (Settings.Default.showTimeStamps)
+                {
+                    this.OutputBox.AppendText(timeString + " ");
+                    this.OutputBox.AppendText(message + "\n", color);
+                }
+
+                else
+                    this.OutputBox.AppendText(message + "\n", color);
             }
 
             //also, should make a log
@@ -924,12 +939,13 @@ namespace NarutoBot3
 
             result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
 
-            if (client.NICK.Length > 15)
-                WriteMessage(client.NICK.Truncate(16) + ":" + message);
-            else if (NICK.Length >= 8)                       //Write the Message on the bot console
-                WriteMessage(client.NICK + "\t: " + message, currentColorScheme.OwnMessage);
-            else
-                WriteMessage(client.NICK + "\t\t: " + message, currentColorScheme.OwnMessage);
+            string alignedNick = client.NICK.Truncate(13);
+            int tab = 15 - alignedNick.Length;
+
+            for(int i=0;i<tab;i++)
+                alignedNick = alignedNick + " ";
+            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+
 
             return result;
         }

@@ -622,30 +622,30 @@ namespace NarutoBot3
                         //Write Message on Console
                         if (whoSent == Client.NICK)
                         {
-                            if (user.Length > 14)
-                                WriteMessage(user.Truncate(15) + " : " + msg, currentColorScheme.Notice);
-                            else if (user.Length >= 8)                       //Write the Message on the bot console
-                                WriteMessage(user + "\t: " + msg, currentColorScheme.Notice);
-                            else
-                                WriteMessage(user + "\t\t: " + msg, currentColorScheme.Notice);
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
                         }
                         else if (msg.ToLower().Contains(Client.NICK.ToLower()))
                         {
-                            if (user.Length > 14)
-                                WriteMessage(user.Truncate(15) + " : " + msg, currentColorScheme.Mention);
-                            else if (user.Length >= 8)                       //Write the Message on the bot console
-                                WriteMessage(user + "\t: " + msg, currentColorScheme.Mention);
-                            else
-                                WriteMessage(user + "\t\t: " + msg, currentColorScheme.Mention);
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
                         }
                         else
                         {
-                            if (user.Length > 14)
-                                WriteMessage(user.Truncate(15) + " : " + msg);
-                            else if (user.Length >= 8)                       //Write the Message on the bot console
-                                WriteMessage(user + "\t: " + msg);
-                            else
-                                WriteMessage(user + "\t\t: " + msg);
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg);
                         }
 
                         //StartParsing
@@ -2643,7 +2643,13 @@ namespace NarutoBot3
             }
             else
             {
-                this.Output2.AppendText(message + "\n");
+                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+
+                if (Settings.Default.showTimeStamps)
+                    this.Output2.AppendText(timeString + " " + message + "\n");
+
+                else
+                    this.Output2.AppendText(message + "\n");
             }
 
             //also, should make a log
@@ -2662,7 +2668,15 @@ namespace NarutoBot3
             }
             else
             {
-                this.Output2.AppendText(message + "\n", color);
+                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+
+                if(Settings.Default.showTimeStamps){
+                    this.Output2.AppendText(timeString + " ");
+                    this.Output2.AppendText(message + "\n", color);
+                }
+                    
+                else
+                    this.Output2.AppendText(message + "\n", color);
             }
 
             //also, should make a log

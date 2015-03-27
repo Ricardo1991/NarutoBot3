@@ -670,5 +670,17 @@ namespace NarutoBot3.Properties {
                 this["themeName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showTimeStamps {
+            get {
+                return ((bool)(this["showTimeStamps"]));
+            }
+            set {
+                this["showTimeStamps"] = value;
+            }
+        }
     }
 }
