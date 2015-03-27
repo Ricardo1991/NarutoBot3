@@ -56,7 +56,8 @@
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabAppearance = new System.Windows.Forms.TabPage();
-            this.bExport = new System.Windows.Forms.Button();
+            this.bApplyTheme = new System.Windows.Forms.Button();
+            this.themeList = new System.Windows.Forms.ListBox();
             this.redditCredentialsTab = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bt_Logout = new System.Windows.Forms.Button();
@@ -89,8 +90,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
-            this.themeList = new System.Windows.Forms.ListBox();
-            this.bApplyTheme = new System.Windows.Forms.Button();
+            this.cbTimeStamp = new System.Windows.Forms.CheckBox();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -443,9 +443,9 @@
             // 
             // tabAppearance
             // 
+            this.tabAppearance.Controls.Add(this.cbTimeStamp);
             this.tabAppearance.Controls.Add(this.bApplyTheme);
             this.tabAppearance.Controls.Add(this.themeList);
-            this.tabAppearance.Controls.Add(this.bExport);
             this.tabAppearance.Location = new System.Drawing.Point(4, 22);
             this.tabAppearance.Name = "tabAppearance";
             this.tabAppearance.Size = new System.Drawing.Size(517, 302);
@@ -453,15 +453,23 @@
             this.tabAppearance.Text = "Appearance";
             this.tabAppearance.UseVisualStyleBackColor = true;
             // 
-            // bExport
+            // bApplyTheme
             // 
-            this.bExport.Location = new System.Drawing.Point(367, 266);
-            this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(138, 23);
-            this.bExport.TabIndex = 0;
-            this.bExport.Text = "Export Current Theme";
-            this.bExport.UseVisualStyleBackColor = true;
-            this.bExport.Click += new System.EventHandler(this.bExport_Click);
+            this.bApplyTheme.Location = new System.Drawing.Point(4, 274);
+            this.bApplyTheme.Name = "bApplyTheme";
+            this.bApplyTheme.Size = new System.Drawing.Size(136, 23);
+            this.bApplyTheme.TabIndex = 2;
+            this.bApplyTheme.Text = "Apply Selected Theme";
+            this.bApplyTheme.UseVisualStyleBackColor = true;
+            this.bApplyTheme.Click += new System.EventHandler(this.bApplyTheme_Click);
+            // 
+            // themeList
+            // 
+            this.themeList.FormattingEnabled = true;
+            this.themeList.Location = new System.Drawing.Point(4, 4);
+            this.themeList.Name = "themeList";
+            this.themeList.Size = new System.Drawing.Size(136, 264);
+            this.themeList.TabIndex = 1;
             // 
             // redditCredentialsTab
             // 
@@ -777,23 +785,15 @@
             this.b_ConsumerKey.TabIndex = 0;
             this.b_ConsumerKey.Text = "Consumer Key";
             // 
-            // themeList
+            // cbTimeStamp
             // 
-            this.themeList.FormattingEnabled = true;
-            this.themeList.Location = new System.Drawing.Point(4, 4);
-            this.themeList.Name = "themeList";
-            this.themeList.Size = new System.Drawing.Size(136, 290);
-            this.themeList.TabIndex = 1;
-            // 
-            // bApplyTheme
-            // 
-            this.bApplyTheme.Location = new System.Drawing.Point(367, 237);
-            this.bApplyTheme.Name = "bApplyTheme";
-            this.bApplyTheme.Size = new System.Drawing.Size(138, 23);
-            this.bApplyTheme.TabIndex = 2;
-            this.bApplyTheme.Text = "Apply Selected Theme";
-            this.bApplyTheme.UseVisualStyleBackColor = true;
-            this.bApplyTheme.Click += new System.EventHandler(this.bApplyTheme_Click);
+            this.cbTimeStamp.AutoSize = true;
+            this.cbTimeStamp.Location = new System.Drawing.Point(147, 4);
+            this.cbTimeStamp.Name = "cbTimeStamp";
+            this.cbTimeStamp.Size = new System.Drawing.Size(117, 17);
+            this.cbTimeStamp.TabIndex = 3;
+            this.cbTimeStamp.Text = "Show Time Stamps";
+            this.cbTimeStamp.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -819,6 +819,7 @@
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabAppearance.ResumeLayout(false);
+            this.tabAppearance.PerformLayout();
             this.redditCredentialsTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -901,8 +902,8 @@
         private System.Windows.Forms.TextBox tb_ConsumerKey;
         private System.Windows.Forms.Label b_ConsumerKey;
         private System.Windows.Forms.TabPage tabAppearance;
-        private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.ListBox themeList;
         private System.Windows.Forms.Button bApplyTheme;
+        private System.Windows.Forms.CheckBox cbTimeStamp;
     }
 }

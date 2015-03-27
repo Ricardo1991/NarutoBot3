@@ -70,6 +70,8 @@ namespace NarutoBot3
             Settings.Default.redditUser = tb_User.Text;
             Settings.Default.redditPass = tb_Pass.Text;
 
+            Settings.Default.showTimeStamps = cbTimeStamp.Checked;
+
             if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
                 String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
                 String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
@@ -177,8 +179,10 @@ namespace NarutoBot3
             tb_Pass.Text = Settings.Default.redditPass;
             bt_Logout.Enabled = Settings.Default.redditEnabled;
 
-
+            cbTimeStamp.Checked = Settings.Default.showTimeStamps;
             //Read schemes
+
+            updateSchemes();
 
         }
 
