@@ -682,5 +682,17 @@ namespace NarutoBot3.Properties {
                 this["showTimeStamps"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool autoScrollToBottom {
+            get {
+                return ((bool)(this["autoScrollToBottom"]));
+            }
+            set {
+                this["autoScrollToBottom"] = value;
+            }
+        }
     }
 }

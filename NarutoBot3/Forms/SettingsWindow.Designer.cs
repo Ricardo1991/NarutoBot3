@@ -34,17 +34,17 @@
             this.cb_roll = new System.Windows.Forms.CheckBox();
             this.cb_youtube = new System.Windows.Forms.CheckBox();
             this.bSave = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.gb_FeaturesHelpful = new System.Windows.Forms.GroupBox();
             this.cb_YTSearch = new System.Windows.Forms.CheckBox();
             this.cb_Time = new System.Windows.Forms.CheckBox();
             this.cb_Convert = new System.Windows.Forms.CheckBox();
             this.cb_Wiki = new System.Windows.Forms.CheckBox();
             this.cb_Anime = new System.Windows.Forms.CheckBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.gb_FeaturesParser = new System.Windows.Forms.GroupBox();
             this.cb_Reddit = new System.Windows.Forms.CheckBox();
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
             this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.cb_Kill = new System.Windows.Forms.CheckBox();
@@ -52,14 +52,17 @@
             this.cb_Trivia = new System.Windows.Forms.CheckBox();
             this.cb_Poke = new System.Windows.Forms.CheckBox();
             this.cb_randomText = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gb_FeaturesBasic = new System.Windows.Forms.GroupBox();
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabAppearance = new System.Windows.Forms.TabPage();
+            this.gb_AppearanceChatWindow = new System.Windows.Forms.GroupBox();
+            this.cbScroll = new System.Windows.Forms.CheckBox();
+            this.cbTimeStamp = new System.Windows.Forms.CheckBox();
             this.bApplyTheme = new System.Windows.Forms.Button();
             this.themeList = new System.Windows.Forms.ListBox();
             this.redditCredentialsTab = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsRedditLogin = new System.Windows.Forms.GroupBox();
             this.bt_Logout = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.b_Login = new System.Windows.Forms.Button();
@@ -68,45 +71,45 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.googleMalTab = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsMAL = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tb_MALpass = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tb_MALuser = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.groupBoxAPI = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsGoogle = new System.Windows.Forms.GroupBox();
             this.tb_API = new System.Windows.Forms.TextBox();
-            this.cx_group = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsCX = new System.Windows.Forms.GroupBox();
             this.tb_cx = new System.Windows.Forms.TextBox();
             this.twitterCredentialsTab = new System.Windows.Forms.TabPage();
             this.cb_TwitterEnabled = new System.Windows.Forms.CheckBox();
-            this.AccessTokenBox = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsTwitterAccessTokens = new System.Windows.Forms.GroupBox();
             this.tb_AccessTokenSecret = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tb_AccessToken = new System.Windows.Forms.TextBox();
-            this.consumerBox = new System.Windows.Forms.GroupBox();
+            this.gb_CredentialsTwitterConsumer = new System.Windows.Forms.GroupBox();
             this.tb_ConsumerKeySecret = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
-            this.cbTimeStamp = new System.Windows.Forms.CheckBox();
-            this.groupBox6.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.gb_FeaturesHelpful.SuspendLayout();
+            this.gb_FeaturesParser.SuspendLayout();
+            this.gb_FeaturesFun.SuspendLayout();
+            this.gb_FeaturesBasic.SuspendLayout();
             this.settingsTabControl.SuspendLayout();
             this.enableDisableTab.SuspendLayout();
             this.tabAppearance.SuspendLayout();
+            this.gb_AppearanceChatWindow.SuspendLayout();
             this.redditCredentialsTab.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.gb_CredentialsRedditLogin.SuspendLayout();
             this.googleMalTab.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBoxAPI.SuspendLayout();
-            this.cx_group.SuspendLayout();
+            this.gb_CredentialsMAL.SuspendLayout();
+            this.gb_CredentialsGoogle.SuspendLayout();
+            this.gb_CredentialsCX.SuspendLayout();
             this.twitterCredentialsTab.SuspendLayout();
-            this.AccessTokenBox.SuspendLayout();
-            this.consumerBox.SuspendLayout();
+            this.gb_CredentialsTwitterAccessTokens.SuspendLayout();
+            this.gb_CredentialsTwitterConsumer.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -178,21 +181,21 @@
             this.bSave.TabIndex = 1;
             this.bSave.Text = "Save";
             this.bSave.UseVisualStyleBackColor = true;
-            this.bSave.Click += new System.EventHandler(this.button1_Click);
+            this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
-            // groupBox6
+            // gb_FeaturesHelpful
             // 
-            this.groupBox6.Controls.Add(this.cb_YTSearch);
-            this.groupBox6.Controls.Add(this.cb_Time);
-            this.groupBox6.Controls.Add(this.cb_Convert);
-            this.groupBox6.Controls.Add(this.cb_Wiki);
-            this.groupBox6.Controls.Add(this.cb_Anime);
-            this.groupBox6.Location = new System.Drawing.Point(6, 80);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(162, 169);
-            this.groupBox6.TabIndex = 16;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Helpful";
+            this.gb_FeaturesHelpful.Controls.Add(this.cb_YTSearch);
+            this.gb_FeaturesHelpful.Controls.Add(this.cb_Time);
+            this.gb_FeaturesHelpful.Controls.Add(this.cb_Convert);
+            this.gb_FeaturesHelpful.Controls.Add(this.cb_Wiki);
+            this.gb_FeaturesHelpful.Controls.Add(this.cb_Anime);
+            this.gb_FeaturesHelpful.Location = new System.Drawing.Point(6, 84);
+            this.gb_FeaturesHelpful.Name = "gb_FeaturesHelpful";
+            this.gb_FeaturesHelpful.Size = new System.Drawing.Size(162, 169);
+            this.gb_FeaturesHelpful.TabIndex = 16;
+            this.gb_FeaturesHelpful.TabStop = false;
+            this.gb_FeaturesHelpful.Text = "Helpful";
             // 
             // cb_YTSearch
             // 
@@ -252,18 +255,18 @@
             this.cb_Anime.Text = "Anime Search";
             this.cb_Anime.UseVisualStyleBackColor = true;
             // 
-            // groupBox5
+            // gb_FeaturesParser
             // 
-            this.groupBox5.Controls.Add(this.cb_Reddit);
-            this.groupBox5.Controls.Add(this.cb_youtube);
-            this.groupBox5.Controls.Add(this.cb_vimeo);
-            this.groupBox5.Controls.Add(this.cb_twitter);
-            this.groupBox5.Location = new System.Drawing.Point(174, 10);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(162, 115);
-            this.groupBox5.TabIndex = 15;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Link Parsers";
+            this.gb_FeaturesParser.Controls.Add(this.cb_Reddit);
+            this.gb_FeaturesParser.Controls.Add(this.cb_youtube);
+            this.gb_FeaturesParser.Controls.Add(this.cb_vimeo);
+            this.gb_FeaturesParser.Controls.Add(this.cb_twitter);
+            this.gb_FeaturesParser.Location = new System.Drawing.Point(342, 10);
+            this.gb_FeaturesParser.Name = "gb_FeaturesParser";
+            this.gb_FeaturesParser.Size = new System.Drawing.Size(162, 115);
+            this.gb_FeaturesParser.TabIndex = 15;
+            this.gb_FeaturesParser.TabStop = false;
+            this.gb_FeaturesParser.Text = "Link Parsers";
             // 
             // cb_Reddit
             // 
@@ -301,23 +304,23 @@
             this.cb_twitter.Text = "Twitter";
             this.cb_twitter.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // gb_FeaturesFun
             // 
-            this.groupBox4.Controls.Add(this.cb_greetings);
-            this.groupBox4.Controls.Add(this.cb_Questions);
-            this.groupBox4.Controls.Add(this.cb_Kill);
-            this.groupBox4.Controls.Add(this.cb_hello);
-            this.groupBox4.Controls.Add(this.cb_roll);
-            this.groupBox4.Controls.Add(this.cb_nicks);
-            this.groupBox4.Controls.Add(this.cb_Trivia);
-            this.groupBox4.Controls.Add(this.cb_Poke);
-            this.groupBox4.Controls.Add(this.cb_randomText);
-            this.groupBox4.Location = new System.Drawing.Point(342, 10);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(162, 243);
-            this.groupBox4.TabIndex = 14;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "For Fun";
+            this.gb_FeaturesFun.Controls.Add(this.cb_greetings);
+            this.gb_FeaturesFun.Controls.Add(this.cb_Questions);
+            this.gb_FeaturesFun.Controls.Add(this.cb_Kill);
+            this.gb_FeaturesFun.Controls.Add(this.cb_hello);
+            this.gb_FeaturesFun.Controls.Add(this.cb_roll);
+            this.gb_FeaturesFun.Controls.Add(this.cb_nicks);
+            this.gb_FeaturesFun.Controls.Add(this.cb_Trivia);
+            this.gb_FeaturesFun.Controls.Add(this.cb_Poke);
+            this.gb_FeaturesFun.Controls.Add(this.cb_randomText);
+            this.gb_FeaturesFun.Location = new System.Drawing.Point(174, 10);
+            this.gb_FeaturesFun.Name = "gb_FeaturesFun";
+            this.gb_FeaturesFun.Size = new System.Drawing.Size(162, 243);
+            this.gb_FeaturesFun.TabIndex = 14;
+            this.gb_FeaturesFun.TabStop = false;
+            this.gb_FeaturesFun.Text = "For Fun";
             // 
             // cb_greetings
             // 
@@ -401,19 +404,22 @@
             this.cb_randomText.Text = "Random Text";
             this.cb_randomText.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // gb_FeaturesBasic
             // 
-            this.groupBox2.Controls.Add(this.cb_rules);
-            this.groupBox2.Controls.Add(this.cb_help);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(162, 68);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Basic";
+            this.gb_FeaturesBasic.Controls.Add(this.cb_rules);
+            this.gb_FeaturesBasic.Controls.Add(this.cb_help);
+            this.gb_FeaturesBasic.Location = new System.Drawing.Point(6, 10);
+            this.gb_FeaturesBasic.Name = "gb_FeaturesBasic";
+            this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 68);
+            this.gb_FeaturesBasic.TabIndex = 12;
+            this.gb_FeaturesBasic.TabStop = false;
+            this.gb_FeaturesBasic.Text = "Basic";
             // 
             // settingsTabControl
             // 
+            this.settingsTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.settingsTabControl.Controls.Add(this.enableDisableTab);
             this.settingsTabControl.Controls.Add(this.tabAppearance);
             this.settingsTabControl.Controls.Add(this.redditCredentialsTab);
@@ -429,10 +435,10 @@
             // 
             // enableDisableTab
             // 
-            this.enableDisableTab.Controls.Add(this.groupBox2);
-            this.enableDisableTab.Controls.Add(this.groupBox4);
-            this.enableDisableTab.Controls.Add(this.groupBox5);
-            this.enableDisableTab.Controls.Add(this.groupBox6);
+            this.enableDisableTab.Controls.Add(this.gb_FeaturesBasic);
+            this.enableDisableTab.Controls.Add(this.gb_FeaturesFun);
+            this.enableDisableTab.Controls.Add(this.gb_FeaturesParser);
+            this.enableDisableTab.Controls.Add(this.gb_FeaturesHelpful);
             this.enableDisableTab.Location = new System.Drawing.Point(4, 22);
             this.enableDisableTab.Name = "enableDisableTab";
             this.enableDisableTab.Padding = new System.Windows.Forms.Padding(3);
@@ -443,7 +449,7 @@
             // 
             // tabAppearance
             // 
-            this.tabAppearance.Controls.Add(this.cbTimeStamp);
+            this.tabAppearance.Controls.Add(this.gb_AppearanceChatWindow);
             this.tabAppearance.Controls.Add(this.bApplyTheme);
             this.tabAppearance.Controls.Add(this.themeList);
             this.tabAppearance.Location = new System.Drawing.Point(4, 22);
@@ -453,8 +459,40 @@
             this.tabAppearance.Text = "Appearance";
             this.tabAppearance.UseVisualStyleBackColor = true;
             // 
+            // gb_AppearanceChatWindow
+            // 
+            this.gb_AppearanceChatWindow.Controls.Add(this.cbScroll);
+            this.gb_AppearanceChatWindow.Controls.Add(this.cbTimeStamp);
+            this.gb_AppearanceChatWindow.Location = new System.Drawing.Point(146, 4);
+            this.gb_AppearanceChatWindow.Name = "gb_AppearanceChatWindow";
+            this.gb_AppearanceChatWindow.Size = new System.Drawing.Size(354, 81);
+            this.gb_AppearanceChatWindow.TabIndex = 5;
+            this.gb_AppearanceChatWindow.TabStop = false;
+            this.gb_AppearanceChatWindow.Text = "Chat Window";
+            // 
+            // cbScroll
+            // 
+            this.cbScroll.AutoSize = true;
+            this.cbScroll.Location = new System.Drawing.Point(8, 46);
+            this.cbScroll.Name = "cbScroll";
+            this.cbScroll.Size = new System.Drawing.Size(186, 17);
+            this.cbScroll.TabIndex = 4;
+            this.cbScroll.Text = "Automatically scroll chat to bottom";
+            this.cbScroll.UseVisualStyleBackColor = true;
+            // 
+            // cbTimeStamp
+            // 
+            this.cbTimeStamp.AutoSize = true;
+            this.cbTimeStamp.Location = new System.Drawing.Point(8, 22);
+            this.cbTimeStamp.Name = "cbTimeStamp";
+            this.cbTimeStamp.Size = new System.Drawing.Size(150, 17);
+            this.cbTimeStamp.TabIndex = 3;
+            this.cbTimeStamp.Text = "Show time stamps on chat";
+            this.cbTimeStamp.UseVisualStyleBackColor = true;
+            // 
             // bApplyTheme
             // 
+            this.bApplyTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bApplyTheme.Location = new System.Drawing.Point(4, 274);
             this.bApplyTheme.Name = "bApplyTheme";
             this.bApplyTheme.Size = new System.Drawing.Size(136, 23);
@@ -465,6 +503,8 @@
             // 
             // themeList
             // 
+            this.themeList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.themeList.FormattingEnabled = true;
             this.themeList.Location = new System.Drawing.Point(4, 4);
             this.themeList.Name = "themeList";
@@ -473,7 +513,7 @@
             // 
             // redditCredentialsTab
             // 
-            this.redditCredentialsTab.Controls.Add(this.groupBox1);
+            this.redditCredentialsTab.Controls.Add(this.gb_CredentialsRedditLogin);
             this.redditCredentialsTab.Location = new System.Drawing.Point(4, 22);
             this.redditCredentialsTab.Name = "redditCredentialsTab";
             this.redditCredentialsTab.Padding = new System.Windows.Forms.Padding(3);
@@ -482,21 +522,21 @@
             this.redditCredentialsTab.Text = "Reddit Credentials";
             this.redditCredentialsTab.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // gb_CredentialsRedditLogin
             // 
-            this.groupBox1.Controls.Add(this.bt_Logout);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.b_Login);
-            this.groupBox1.Controls.Add(this.tb_Pass);
-            this.groupBox1.Controls.Add(this.tb_User);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(259, 149);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Login";
+            this.gb_CredentialsRedditLogin.Controls.Add(this.bt_Logout);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.label3);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.b_Login);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.tb_Pass);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.tb_User);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.label2);
+            this.gb_CredentialsRedditLogin.Controls.Add(this.label1);
+            this.gb_CredentialsRedditLogin.Location = new System.Drawing.Point(6, 6);
+            this.gb_CredentialsRedditLogin.Name = "gb_CredentialsRedditLogin";
+            this.gb_CredentialsRedditLogin.Size = new System.Drawing.Size(259, 149);
+            this.gb_CredentialsRedditLogin.TabIndex = 1;
+            this.gb_CredentialsRedditLogin.TabStop = false;
+            this.gb_CredentialsRedditLogin.Text = "Login";
             // 
             // bt_Logout
             // 
@@ -562,9 +602,9 @@
             // 
             // googleMalTab
             // 
-            this.googleMalTab.Controls.Add(this.groupBox3);
-            this.googleMalTab.Controls.Add(this.groupBoxAPI);
-            this.googleMalTab.Controls.Add(this.cx_group);
+            this.googleMalTab.Controls.Add(this.gb_CredentialsMAL);
+            this.googleMalTab.Controls.Add(this.gb_CredentialsGoogle);
+            this.googleMalTab.Controls.Add(this.gb_CredentialsCX);
             this.googleMalTab.Location = new System.Drawing.Point(4, 22);
             this.googleMalTab.Name = "googleMalTab";
             this.googleMalTab.Padding = new System.Windows.Forms.Padding(3);
@@ -573,19 +613,19 @@
             this.googleMalTab.Text = "Youtube and Anime Credentials";
             this.googleMalTab.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // gb_CredentialsMAL
             // 
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.tb_MALpass);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.tb_MALuser);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Location = new System.Drawing.Point(6, 145);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(481, 109);
-            this.groupBox3.TabIndex = 6;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "myAnimeList Credentials - for !anime";
+            this.gb_CredentialsMAL.Controls.Add(this.label4);
+            this.gb_CredentialsMAL.Controls.Add(this.tb_MALpass);
+            this.gb_CredentialsMAL.Controls.Add(this.label5);
+            this.gb_CredentialsMAL.Controls.Add(this.tb_MALuser);
+            this.gb_CredentialsMAL.Controls.Add(this.label6);
+            this.gb_CredentialsMAL.Location = new System.Drawing.Point(6, 145);
+            this.gb_CredentialsMAL.Name = "gb_CredentialsMAL";
+            this.gb_CredentialsMAL.Size = new System.Drawing.Size(481, 109);
+            this.gb_CredentialsMAL.TabIndex = 6;
+            this.gb_CredentialsMAL.TabStop = false;
+            this.gb_CredentialsMAL.Text = "myAnimeList Credentials - for !anime";
             // 
             // label4
             // 
@@ -629,15 +669,15 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Username";
             // 
-            // groupBoxAPI
+            // gb_CredentialsGoogle
             // 
-            this.groupBoxAPI.Controls.Add(this.tb_API);
-            this.groupBoxAPI.Location = new System.Drawing.Point(6, 75);
-            this.groupBoxAPI.Name = "groupBoxAPI";
-            this.groupBoxAPI.Size = new System.Drawing.Size(481, 63);
-            this.groupBoxAPI.TabIndex = 5;
-            this.groupBoxAPI.TabStop = false;
-            this.groupBoxAPI.Text = "Google API key - for !anime and !time";
+            this.gb_CredentialsGoogle.Controls.Add(this.tb_API);
+            this.gb_CredentialsGoogle.Location = new System.Drawing.Point(6, 75);
+            this.gb_CredentialsGoogle.Name = "gb_CredentialsGoogle";
+            this.gb_CredentialsGoogle.Size = new System.Drawing.Size(481, 63);
+            this.gb_CredentialsGoogle.TabIndex = 5;
+            this.gb_CredentialsGoogle.TabStop = false;
+            this.gb_CredentialsGoogle.Text = "Google API key - for !anime and !time";
             // 
             // tb_API
             // 
@@ -646,15 +686,15 @@
             this.tb_API.Size = new System.Drawing.Size(468, 20);
             this.tb_API.TabIndex = 0;
             // 
-            // cx_group
+            // gb_CredentialsCX
             // 
-            this.cx_group.Controls.Add(this.tb_cx);
-            this.cx_group.Location = new System.Drawing.Point(6, 6);
-            this.cx_group.Name = "cx_group";
-            this.cx_group.Size = new System.Drawing.Size(481, 63);
-            this.cx_group.TabIndex = 4;
-            this.cx_group.TabStop = false;
-            this.cx_group.Text = "Google Search Engine CX key - for !anime";
+            this.gb_CredentialsCX.Controls.Add(this.tb_cx);
+            this.gb_CredentialsCX.Location = new System.Drawing.Point(6, 6);
+            this.gb_CredentialsCX.Name = "gb_CredentialsCX";
+            this.gb_CredentialsCX.Size = new System.Drawing.Size(481, 63);
+            this.gb_CredentialsCX.TabIndex = 4;
+            this.gb_CredentialsCX.TabStop = false;
+            this.gb_CredentialsCX.Text = "Google Search Engine CX key - for !anime";
             // 
             // tb_cx
             // 
@@ -666,8 +706,8 @@
             // twitterCredentialsTab
             // 
             this.twitterCredentialsTab.Controls.Add(this.cb_TwitterEnabled);
-            this.twitterCredentialsTab.Controls.Add(this.AccessTokenBox);
-            this.twitterCredentialsTab.Controls.Add(this.consumerBox);
+            this.twitterCredentialsTab.Controls.Add(this.gb_CredentialsTwitterAccessTokens);
+            this.twitterCredentialsTab.Controls.Add(this.gb_CredentialsTwitterConsumer);
             this.twitterCredentialsTab.Location = new System.Drawing.Point(4, 22);
             this.twitterCredentialsTab.Name = "twitterCredentialsTab";
             this.twitterCredentialsTab.Padding = new System.Windows.Forms.Padding(3);
@@ -687,20 +727,20 @@
             this.cb_TwitterEnabled.Text = "Twitter Enabled";
             this.cb_TwitterEnabled.UseVisualStyleBackColor = true;
             // 
-            // AccessTokenBox
+            // gb_CredentialsTwitterAccessTokens
             // 
-            this.AccessTokenBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gb_CredentialsTwitterAccessTokens.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AccessTokenBox.Controls.Add(this.tb_AccessTokenSecret);
-            this.AccessTokenBox.Controls.Add(this.label7);
-            this.AccessTokenBox.Controls.Add(this.label8);
-            this.AccessTokenBox.Controls.Add(this.tb_AccessToken);
-            this.AccessTokenBox.Location = new System.Drawing.Point(3, 89);
-            this.AccessTokenBox.Name = "AccessTokenBox";
-            this.AccessTokenBox.Size = new System.Drawing.Size(377, 82);
-            this.AccessTokenBox.TabIndex = 5;
-            this.AccessTokenBox.TabStop = false;
-            this.AccessTokenBox.Text = "Access Tokens";
+            this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.tb_AccessTokenSecret);
+            this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.label7);
+            this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.label8);
+            this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.tb_AccessToken);
+            this.gb_CredentialsTwitterAccessTokens.Location = new System.Drawing.Point(3, 89);
+            this.gb_CredentialsTwitterAccessTokens.Name = "gb_CredentialsTwitterAccessTokens";
+            this.gb_CredentialsTwitterAccessTokens.Size = new System.Drawing.Size(377, 82);
+            this.gb_CredentialsTwitterAccessTokens.TabIndex = 5;
+            this.gb_CredentialsTwitterAccessTokens.TabStop = false;
+            this.gb_CredentialsTwitterAccessTokens.Text = "Access Tokens";
             // 
             // tb_AccessTokenSecret
             // 
@@ -736,20 +776,20 @@
             this.tb_AccessToken.Size = new System.Drawing.Size(242, 20);
             this.tb_AccessToken.TabIndex = 1;
             // 
-            // consumerBox
+            // gb_CredentialsTwitterConsumer
             // 
-            this.consumerBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gb_CredentialsTwitterConsumer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.consumerBox.Controls.Add(this.tb_ConsumerKeySecret);
-            this.consumerBox.Controls.Add(this.label9);
-            this.consumerBox.Controls.Add(this.tb_ConsumerKey);
-            this.consumerBox.Controls.Add(this.b_ConsumerKey);
-            this.consumerBox.Location = new System.Drawing.Point(6, 6);
-            this.consumerBox.Name = "consumerBox";
-            this.consumerBox.Size = new System.Drawing.Size(377, 77);
-            this.consumerBox.TabIndex = 4;
-            this.consumerBox.TabStop = false;
-            this.consumerBox.Text = "Consumer Keys";
+            this.gb_CredentialsTwitterConsumer.Controls.Add(this.tb_ConsumerKeySecret);
+            this.gb_CredentialsTwitterConsumer.Controls.Add(this.label9);
+            this.gb_CredentialsTwitterConsumer.Controls.Add(this.tb_ConsumerKey);
+            this.gb_CredentialsTwitterConsumer.Controls.Add(this.b_ConsumerKey);
+            this.gb_CredentialsTwitterConsumer.Location = new System.Drawing.Point(6, 6);
+            this.gb_CredentialsTwitterConsumer.Name = "gb_CredentialsTwitterConsumer";
+            this.gb_CredentialsTwitterConsumer.Size = new System.Drawing.Size(377, 77);
+            this.gb_CredentialsTwitterConsumer.TabIndex = 4;
+            this.gb_CredentialsTwitterConsumer.TabStop = false;
+            this.gb_CredentialsTwitterConsumer.Text = "Consumer Keys";
             // 
             // tb_ConsumerKeySecret
             // 
@@ -785,16 +825,6 @@
             this.b_ConsumerKey.TabIndex = 0;
             this.b_ConsumerKey.Text = "Consumer Key";
             // 
-            // cbTimeStamp
-            // 
-            this.cbTimeStamp.AutoSize = true;
-            this.cbTimeStamp.Location = new System.Drawing.Point(147, 4);
-            this.cbTimeStamp.Name = "cbTimeStamp";
-            this.cbTimeStamp.Size = new System.Drawing.Size(117, 17);
-            this.cbTimeStamp.TabIndex = 3;
-            this.cbTimeStamp.Text = "Show Time Stamps";
-            this.cbTimeStamp.UseVisualStyleBackColor = true;
-            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -808,34 +838,35 @@
             this.ShowInTaskbar = false;
             this.Text = "Settings";
             this.Shown += new System.EventHandler(this.EnabledCommandsWindow_Shown);
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.gb_FeaturesHelpful.ResumeLayout(false);
+            this.gb_FeaturesHelpful.PerformLayout();
+            this.gb_FeaturesParser.ResumeLayout(false);
+            this.gb_FeaturesParser.PerformLayout();
+            this.gb_FeaturesFun.ResumeLayout(false);
+            this.gb_FeaturesFun.PerformLayout();
+            this.gb_FeaturesBasic.ResumeLayout(false);
+            this.gb_FeaturesBasic.PerformLayout();
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabAppearance.ResumeLayout(false);
-            this.tabAppearance.PerformLayout();
+            this.gb_AppearanceChatWindow.ResumeLayout(false);
+            this.gb_AppearanceChatWindow.PerformLayout();
             this.redditCredentialsTab.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gb_CredentialsRedditLogin.ResumeLayout(false);
+            this.gb_CredentialsRedditLogin.PerformLayout();
             this.googleMalTab.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBoxAPI.ResumeLayout(false);
-            this.groupBoxAPI.PerformLayout();
-            this.cx_group.ResumeLayout(false);
-            this.cx_group.PerformLayout();
+            this.gb_CredentialsMAL.ResumeLayout(false);
+            this.gb_CredentialsMAL.PerformLayout();
+            this.gb_CredentialsGoogle.ResumeLayout(false);
+            this.gb_CredentialsGoogle.PerformLayout();
+            this.gb_CredentialsCX.ResumeLayout(false);
+            this.gb_CredentialsCX.PerformLayout();
             this.twitterCredentialsTab.ResumeLayout(false);
             this.twitterCredentialsTab.PerformLayout();
-            this.AccessTokenBox.ResumeLayout(false);
-            this.AccessTokenBox.PerformLayout();
-            this.consumerBox.ResumeLayout(false);
-            this.consumerBox.PerformLayout();
+            this.gb_CredentialsTwitterAccessTokens.ResumeLayout(false);
+            this.gb_CredentialsTwitterAccessTokens.PerformLayout();
+            this.gb_CredentialsTwitterConsumer.ResumeLayout(false);
+            this.gb_CredentialsTwitterConsumer.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -859,10 +890,10 @@
         private System.Windows.Forms.CheckBox cb_randomText;
         private System.Windows.Forms.CheckBox cb_Anime;
         private System.Windows.Forms.CheckBox cb_twitter;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gb_FeaturesHelpful;
+        private System.Windows.Forms.GroupBox gb_FeaturesParser;
+        private System.Windows.Forms.GroupBox gb_FeaturesFun;
+        private System.Windows.Forms.GroupBox gb_FeaturesBasic;
         private System.Windows.Forms.CheckBox cb_Kill;
         private System.Windows.Forms.CheckBox cb_Questions;
         private System.Windows.Forms.CheckBox cb_YTSearch;
@@ -872,7 +903,7 @@
         private System.Windows.Forms.TabPage redditCredentialsTab;
         private System.Windows.Forms.TabPage googleMalTab;
         private System.Windows.Forms.TabPage twitterCredentialsTab;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gb_CredentialsRedditLogin;
         private System.Windows.Forms.Button bt_Logout;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button b_Login;
@@ -880,23 +911,23 @@
         private System.Windows.Forms.TextBox tb_User;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gb_CredentialsMAL;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tb_MALpass;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tb_MALuser;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.GroupBox groupBoxAPI;
+        private System.Windows.Forms.GroupBox gb_CredentialsGoogle;
         private System.Windows.Forms.TextBox tb_API;
-        private System.Windows.Forms.GroupBox cx_group;
+        private System.Windows.Forms.GroupBox gb_CredentialsCX;
         private System.Windows.Forms.TextBox tb_cx;
         private System.Windows.Forms.CheckBox cb_TwitterEnabled;
-        private System.Windows.Forms.GroupBox AccessTokenBox;
+        private System.Windows.Forms.GroupBox gb_CredentialsTwitterAccessTokens;
         private System.Windows.Forms.TextBox tb_AccessTokenSecret;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox tb_AccessToken;
-        private System.Windows.Forms.GroupBox consumerBox;
+        private System.Windows.Forms.GroupBox gb_CredentialsTwitterConsumer;
         private System.Windows.Forms.TextBox tb_ConsumerKeySecret;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tb_ConsumerKey;
@@ -905,5 +936,7 @@
         private System.Windows.Forms.ListBox themeList;
         private System.Windows.Forms.Button bApplyTheme;
         private System.Windows.Forms.CheckBox cbTimeStamp;
+        private System.Windows.Forms.CheckBox cbScroll;
+        private System.Windows.Forms.GroupBox gb_AppearanceChatWindow;
     }
 }
