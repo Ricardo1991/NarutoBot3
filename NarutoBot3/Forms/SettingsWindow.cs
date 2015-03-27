@@ -71,6 +71,7 @@ namespace NarutoBot3
             Settings.Default.redditPass = tb_Pass.Text;
 
             Settings.Default.showTimeStamps = cbTimeStamp.Checked;
+            Settings.Default.autoScrollToBottom = cbScroll.Checked;
 
             if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
                 String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
@@ -180,6 +181,7 @@ namespace NarutoBot3
             bt_Logout.Enabled = Settings.Default.redditEnabled;
 
             cbTimeStamp.Checked = Settings.Default.showTimeStamps;
+            cbScroll.Checked = Settings.Default.autoScrollToBottom;
             //Read schemes
 
             updateSchemes();

@@ -482,6 +482,12 @@ namespace NarutoBot3
 
                 else
                     this.OutputBox.AppendText(message + "\n");
+
+                if (Settings.Default.autoScrollToBottom)
+                {
+                    OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
+                    OutputBox.ScrollToCaret();                          //Now scroll it automatically
+                }
             }
 
             //also, should make a log
@@ -510,6 +516,12 @@ namespace NarutoBot3
 
                 else
                     this.OutputBox.AppendText(message + "\n", color);
+
+                if (Settings.Default.autoScrollToBottom) {
+                    OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
+                    OutputBox.ScrollToCaret();                          //Now scroll it automatically
+                }
+
             }
 
             //also, should make a log

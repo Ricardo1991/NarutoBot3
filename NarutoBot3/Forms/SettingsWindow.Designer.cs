@@ -56,6 +56,7 @@
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabAppearance = new System.Windows.Forms.TabPage();
+            this.cbTimeStamp = new System.Windows.Forms.CheckBox();
             this.bApplyTheme = new System.Windows.Forms.Button();
             this.themeList = new System.Windows.Forms.ListBox();
             this.redditCredentialsTab = new System.Windows.Forms.TabPage();
@@ -90,7 +91,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
-            this.cbTimeStamp = new System.Windows.Forms.CheckBox();
+            this.cbScroll = new System.Windows.Forms.CheckBox();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -443,6 +444,7 @@
             // 
             // tabAppearance
             // 
+            this.tabAppearance.Controls.Add(this.cbScroll);
             this.tabAppearance.Controls.Add(this.cbTimeStamp);
             this.tabAppearance.Controls.Add(this.bApplyTheme);
             this.tabAppearance.Controls.Add(this.themeList);
@@ -452,6 +454,16 @@
             this.tabAppearance.TabIndex = 4;
             this.tabAppearance.Text = "Appearance";
             this.tabAppearance.UseVisualStyleBackColor = true;
+            // 
+            // cbTimeStamp
+            // 
+            this.cbTimeStamp.AutoSize = true;
+            this.cbTimeStamp.Location = new System.Drawing.Point(147, 4);
+            this.cbTimeStamp.Name = "cbTimeStamp";
+            this.cbTimeStamp.Size = new System.Drawing.Size(150, 17);
+            this.cbTimeStamp.TabIndex = 3;
+            this.cbTimeStamp.Text = "Show time stamps on chat";
+            this.cbTimeStamp.UseVisualStyleBackColor = true;
             // 
             // bApplyTheme
             // 
@@ -785,15 +797,15 @@
             this.b_ConsumerKey.TabIndex = 0;
             this.b_ConsumerKey.Text = "Consumer Key";
             // 
-            // cbTimeStamp
+            // cbScroll
             // 
-            this.cbTimeStamp.AutoSize = true;
-            this.cbTimeStamp.Location = new System.Drawing.Point(147, 4);
-            this.cbTimeStamp.Name = "cbTimeStamp";
-            this.cbTimeStamp.Size = new System.Drawing.Size(117, 17);
-            this.cbTimeStamp.TabIndex = 3;
-            this.cbTimeStamp.Text = "Show Time Stamps";
-            this.cbTimeStamp.UseVisualStyleBackColor = true;
+            this.cbScroll.AutoSize = true;
+            this.cbScroll.Location = new System.Drawing.Point(147, 28);
+            this.cbScroll.Name = "cbScroll";
+            this.cbScroll.Size = new System.Drawing.Size(186, 17);
+            this.cbScroll.TabIndex = 4;
+            this.cbScroll.Text = "Automatically scroll chat to bottom";
+            this.cbScroll.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -905,5 +917,6 @@
         private System.Windows.Forms.ListBox themeList;
         private System.Windows.Forms.Button bApplyTheme;
         private System.Windows.Forms.CheckBox cbTimeStamp;
+        private System.Windows.Forms.CheckBox cbScroll;
     }
 }
