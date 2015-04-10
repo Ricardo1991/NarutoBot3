@@ -1994,24 +1994,27 @@ namespace NarutoBot3
                     else
                         target = args.Trim();
 
-                    if(kill.Count<=10)
+                    if(kill.Count<=100){
                         killID = r.Next(kill.Count);
+                        killsUsed.Add(killID);
+                    }
+                        
                     else{
                         do
                             killID = r.Next(kill.Count);
                         while (killsUsed.Contains(killID));
-                    }
-                    
-                    if (killsUsed.Count >= 10){
-                        for (int i = 0; i == 8; i++)
-                            killsUsed[i + 1] = killsUsed[i];
+
+                        for (int i = 99; i > 0; i--)
+                            killsUsed[i - 1] = killsUsed[i];
+
+                        if (killsUsed[100] != null)
+                            killsUsed.Remove(killsUsed[100]);
 
                         killsUsed[0] = killID;
                     }
-                    else
-                        killsUsed.Add(killID);
+                    
 
-
+                        
                     temp = kill[killID];
                     if (temp.ToLower().Contains("<normal>"))
                     {
