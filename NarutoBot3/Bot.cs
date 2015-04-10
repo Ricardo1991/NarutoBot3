@@ -798,6 +798,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
                                 killUser(Client.HOME_CHANNEL, user, arg);
                             }
+                        else if (String.Compare(cmd, Client.SYMBOL + "lastkill", true) == 0)
+                            {
+                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                                lastKill(Client.HOME_CHANNEL, user);
+                            }
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("* Detected an youtube video from  " + user, currentColorScheme.BotReport);
@@ -1968,7 +1973,20 @@ namespace NarutoBot3
 
             }
         }
+        public void lastKill(string CHANNEL, string nick)
+        {
+            if (ul.userIsMuted(nick)) return;
+            if (String.IsNullOrEmpty(nick)) return;
 
+            if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
+            {
+                if (killsUsed.Count < 1) return;
+                string message = Privmsg(CHANNEL,"[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
+                Client.messageSender(message);
+            
+            
+            }
+        }
         public void killUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
@@ -1999,27 +2017,21 @@ namespace NarutoBot3
                     }
                         
                     else{
-                        do
-                            killID = r.Next(kill.Count);
+                        do killID = r.Next(kill.Count);
                         while (killsUsed.Contains(killID));
-
-                        if (killsUsed.Count >= 100)
-                        {
-                            for (int i = 99; i > 0; i--)
-                                killsUsed[i] = killsUsed[i - 1];
-
-                            if (killsUsed[100] != null)
-                                killsUsed.Remove(killsUsed[100]);
-                            killsUsed[0] = killID;
-                        }
-                        else
-                            killsUsed.Add(killID);
-
-
                     }
-                    
 
-                        
+                    for (int i = killsUsed.Count-1; i > 0; i--)
+                        killsUsed[i] = killsUsed[i - 1];
+
+                    if (killsUsed.Count == 100)
+                        killsUsed.Remove(killsUsed[100]);
+
+                    if (killsUsed.Count < 1) killsUsed.Add(killID);
+                    else killsUsed[0] = killID;
+
+
+
                     temp = kill[killID];
                     if (temp.ToLower().Contains("<normal>"))
                     {
