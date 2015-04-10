@@ -738,7 +738,7 @@ tells <target> to pray to the gains god, Arnold Schwarzenegger, to bless their w
 kisses <target>’s biceps
 asks how much <target> can bench press
 informs <target>’s mother that their squat game is weak
-ayyy lmao <target>
+ayyy lmao <target><NORMAL>
 asks why <target> is being a ratchet ass hoe
 informs <target> that if they do not get their act together, they will not be getting the toy they have been wanting all week
 informs <target> that <user>’s father will be hearing of this
