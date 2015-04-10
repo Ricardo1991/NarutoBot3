@@ -2018,7 +2018,7 @@ namespace NarutoBot3
                         temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
                         killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
 
-                        message = Privmsg(CHANNEL, killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty));
+                        message = Privmsg(CHANNEL, killString);
                     }
                     else {
                         killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
@@ -2353,7 +2353,7 @@ namespace NarutoBot3
 
             if (nickGenStrings.Count < 2)
             {
-                message = Privmsg(CHANNEL, "Nicks was not initialized properly");
+                message = Privmsg(CHANNEL, "Nickname generator was not initialized properly");
                 Client.messageSender(message);
                 return;
             }
@@ -2437,8 +2437,8 @@ namespace NarutoBot3
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                     Client.messageSender(message);
 
-                    if (comment.Body.ToString().Length > 250)
-                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Truncate(250).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
+                    if (comment.Body.ToString().Length > 300)
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
                     else
                         message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
 
@@ -2495,8 +2495,6 @@ namespace NarutoBot3
                     Client.messageSender(mensagem);
                 }
             }
-        
-        
         }
 
         void saveData()
@@ -2510,14 +2508,11 @@ namespace NarutoBot3
 
         void loadData()
         {
-
             TextReader stream = new StreamReader("data.json");
             string json = stream.ReadToEnd();
             JsonConvert.PopulateObject(json, ul.Users);
 
             stream.Close();
- 
-
         }
 
         bool quitIRC(string nick)
@@ -2698,13 +2693,13 @@ namespace NarutoBot3
         {
             if (!WaitingForPong)
             {
-                string timeStamp = GetTimestamp(DateTime.Now);
-                string message = "PING " + timeStamp;
+                string message = "PING " + GetTimestamp(DateTime.Now);
 
                 #if DEBUG
                     WriteMessage(message);
                 #endif
-                    Client.messageSender(message);
+
+                Client.messageSender(message);
 
                 WaitingForPong = true;
 
@@ -2728,6 +2723,8 @@ namespace NarutoBot3
                 WaitingForPong = false;
             }
         }
+
+
         public void Dispose()
         {
             Dispose(true);

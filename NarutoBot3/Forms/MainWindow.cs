@@ -58,6 +58,12 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
+            UserList uList = new UserList();
+
+            operatorsWindow = new BotOperatorWindow(ref uList);
+            mutedWindow = new MutedUsersWindow(ref uList);
+            settingsWindow = new SettingsWindow(ref currentColorScheme);
+
             //Events for BGWorker
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
@@ -72,17 +78,9 @@ namespace NarutoBot3
 
             lastCommand = "";
 
-            UserList uList = new UserList();
-
-            operatorsWindow = new BotOperatorWindow(ref uList);
-            mutedWindow = new MutedUsersWindow(ref uList);
-            settingsWindow = new SettingsWindow(ref currentColorScheme);
-
-
             //Show ConnectWindow Form and try to connect
-            var result = Connect.ShowDialog();
 
-            if (result == DialogResult.OK)
+            if (Connect.ShowDialog() == DialogResult.OK)
             {
                 if (connect())          //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();

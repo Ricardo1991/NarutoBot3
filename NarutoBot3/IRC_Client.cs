@@ -34,8 +34,6 @@ namespace NarutoBot3
             NICK = nick;
             REALNAME = realName;
 
-            irc = new TcpClient();
-
             user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME + "\n";
             nick_message = "NICK " + NICK + "\r\n";
             join_message = "JOIN " + HOME_CHANNEL + "\r\n";
@@ -43,9 +41,11 @@ namespace NarutoBot3
 
         public bool Connect()
         {
-            irc = null;
+            if (irc != null) irc.Close();
+
             irc = new TcpClient(HOST, PORT);
             stream = irc.GetStream();
+
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream) { AutoFlush = true };
 
@@ -64,6 +64,12 @@ namespace NarutoBot3
         public void Join()
         {
             messageSender(join_message);
+            isConnected = true;
+        }
+
+        public void Join(string channel)
+        {
+            messageSender("JOIN " + channel + "\r\n");
             isConnected = true;
         }
 
@@ -91,9 +97,15 @@ namespace NarutoBot3
             try
             {
                 isConnected = false;
-                writer.Close();
-                reader.Close();
-                irc.Close();
+
+                if (stream != null)
+                    stream.Close();
+                if(writer!=null)
+                    writer.Close();
+                if (reader != null)
+                    reader.Close();
+                if (irc != null)
+                    irc.Close();
             }
             catch { }
         }
@@ -108,10 +120,14 @@ namespace NarutoBot3
         {
             if (disposing)
             {
-                stream.Close();
-                reader.Close();
-                writer.Close();
-                irc.Close();
+                if(stream!=null)
+                    stream.Close();
+                if (writer != null)
+                    writer.Close();
+                if (reader != null)
+                    reader.Close();
+                if (irc != null)
+                    irc.Close();
             }
         }
     }
