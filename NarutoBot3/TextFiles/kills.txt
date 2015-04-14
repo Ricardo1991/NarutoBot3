@@ -144,7 +144,7 @@ kisses <target> romantically
 grinds against <target>’s genetalia
 asks <target> if they would like to dance, even though <target> has expressed thoroughly how they are not good dancers
 takes <target> out to see a show for war veterans
-insert text command that eliminates <target> here
+insert text command that eliminates <target> here<NORMAL>
 adds a new text command that kills <target>
 upgrades his operating system while <target> watches
 tells <target> that it is a good idea that they call their ex while they are drunk
@@ -256,8 +256,8 @@ informs <target> that their grandmother just passed away
 lets <target> know that we all know you raped your dog
 cremates <target> alive
 traps <target> in Desorienter’s dungeon
-tells <user>, that they are  a homosexual
-hey  <user> do you think I’m just going to listen to you and do whatever you say? You aren’t the boss of me, I’m my own woman, I do what I want <NORMAL>
+tells <user> that they are a homosexual
+hey <user> do you think I’m just going to listen to you and do whatever you say? You aren’t the boss of me, I’m my own woman, I do what I want <NORMAL>
 suggest to <user> that they shut up
 hey <user> shut up<NORMAL>
 hey <user>, why don’t you fuck off<NORMAL>
@@ -287,7 +287,7 @@ strips for <target> while wearing their fireman uniform
 oi m8 u avin a giggle <target>? <NORMAL>
 locks away <target> in des’s torture chamber, and tells them the safe word is Reecado
 tells <target> that discussing naruto on 4chan is a great idea
-hey remember <target> when ricardo said this? <Ricardo1991> i wonder if Tokyo Ghoul will have s2
+hey remember <target> when ricardo said this? <Ricardo1991> i wonder if Tokyo Ghoul will have s2<NORMAL>
 laughs at <target>’s haircut
 tells <target> that their facial hair looks like pubes
 asks <target> to fight them one on one in real life
