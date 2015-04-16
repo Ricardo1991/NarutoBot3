@@ -221,7 +221,7 @@ namespace NarutoBot3
             ReadKills();                //Read the killstrings
             ReadNickGen();              //For the Nick generator
 
-            loadData();
+            ul.loadData();
 
             reddit = new Reddit();
 
@@ -733,7 +733,7 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, Client.SYMBOL + "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
-                                if (!ul.userIsOperator(user)) changeNick(arg);
+                                if (ul.userIsOperator(user)) changeNick(arg);
                             }
 
                         else if (String.Compare(cmd, Client.SYMBOL + "op", true) == 0 && !String.IsNullOrEmpty(arg))
@@ -1094,7 +1094,7 @@ namespace NarutoBot3
         public void AddGreetings(string args, string nick)
         {
             ul.setGreeting(nick, args, true);
-            saveData();
+            ul.saveData();
         }
 
         void GreetToogle(string nick)
@@ -1113,7 +1113,7 @@ namespace NarutoBot3
                     message = Notice(nick, "Your Greeting is now " + state);
 
                     found = true;
-                    saveData();
+                    ul.saveData();
                 }
             }
 
@@ -2517,23 +2517,23 @@ namespace NarutoBot3
             }
         }
 
-        void saveData()
-        {
-            TextWriter WriteFileStream = new StreamWriter("data.json", false);
+        //public void saveData()
+        //{
+        //    TextWriter WriteFileStream = new StreamWriter("data.json", false);
 
-            WriteFileStream.Write(JsonConvert.SerializeObject(ul.Users));
+        //    WriteFileStream.Write(JsonConvert.SerializeObject(ul.Users));
 
-            WriteFileStream.Close();
-        }
+        //    WriteFileStream.Close();
+        //}
 
-        void loadData()
-        {
-            TextReader stream = new StreamReader("data.json");
-            string json = stream.ReadToEnd();
-            JsonConvert.PopulateObject(json, ul.Users);
+        //void loadData()
+        //{
+        //    TextReader stream = new StreamReader("data.json");
+        //    string json = stream.ReadToEnd();
+        //    JsonConvert.PopulateObject(json, ul.Users);
 
-            stream.Close();
-        }
+        //    stream.Close();
+        //}
 
         bool quitIRC(string nick)
         {
@@ -2585,25 +2585,24 @@ namespace NarutoBot3
         public void muteUser(string nick)
         {
             ul.muteUser(nick);
-            saveData();
+            ul.saveData();
         }
         public void unmuteUSer(string nick)
         {
             ul.unmuteUser(nick);
-            saveData();
-
+            ul.saveData();
         }
 
         public void giveOps(string nick)
         {
             ul.opUser(nick);
-            saveData();
+            ul.saveData();
 
         }
         public void takeOps(string nick)
         {
             ul.deopUser(nick);
-            saveData();
+            ul.saveData();
         }
 
         public bool changeNick(string nick)

@@ -759,6 +759,8 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
+            if(bot!=null) bot.ul.saveData();
+
             if (client != null && client.isConnected) 
                 disconnectClient();
 

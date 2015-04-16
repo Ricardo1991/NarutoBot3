@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace NarutoBot3
 {
@@ -12,6 +13,24 @@ namespace NarutoBot3
         {
             get { return users; }
             set { users = value; }
+        }
+
+        public void saveData()
+        {
+            TextWriter WriteFileStream = new StreamWriter("data.json", false);
+
+            WriteFileStream.Write(JsonConvert.SerializeObject(users));
+
+            WriteFileStream.Close();
+        }
+
+        public void loadData()
+        {
+            TextReader stream = new StreamReader("data.json");
+            string json = stream.ReadToEnd();
+            JsonConvert.PopulateObject(json, users);
+
+            stream.Close();
         }
 
         public bool hasUserByName(String name){

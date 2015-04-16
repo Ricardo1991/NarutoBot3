@@ -35,18 +35,22 @@ namespace NarutoBot3
 
             else
                 MessageBox.Show("User is already Muted", "Duplicated", MessageBoxButtons.OK);
+
+            ul.saveData();
         }
 
         private void bUnmute_Click(object sender, EventArgs e)
         {
             ul.unmuteUser(listMuted.SelectedItem.ToString());
             updateList();
+            ul.saveData();
         }
 
         private void bExit_Click(object sender, EventArgs e)
         {
             t_muted.Text = "";
             this.Close();
+            ul.saveData();
         }
 
         private void muted_Shown(object sender, EventArgs e)
