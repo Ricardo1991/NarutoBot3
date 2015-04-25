@@ -434,6 +434,7 @@ namespace NarutoBot3
 
                     case ("PART"):
                         WhoLeft = prefix.Substring(0, prefix.IndexOf("!"));
+                        quitMessage = completeParameters;
 
                         userTemp = new List<string>();
 
