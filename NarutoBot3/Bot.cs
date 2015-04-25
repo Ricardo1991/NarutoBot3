@@ -44,6 +44,9 @@ namespace NarutoBot3
         string whoLeft;
         public string WhoLeft{get { return whoLeft; }set { whoLeft = value; }}
 
+        string quitMessage;
+        public string QuitMessage{get { return quitMessage; } set { quitMessage = value; }}
+
         bool conneceted = false;
         public bool IsConnected{get { return conneceted; }set { conneceted = value; }}
 
@@ -460,6 +463,7 @@ namespace NarutoBot3
                     case ("QUIT"): 
                         
                         WhoLeft = prefix.Substring(0, prefix.IndexOf("!"));
+                        quitMessage = completeParameters;
 
                         userTemp = new List<string>();
 
@@ -477,6 +481,7 @@ namespace NarutoBot3
                         userTemp.Clear();
 
                         ul.makeOffline(WhoLeft);
+
 
                         OnLeave(EventArgs.Empty);
                         break;

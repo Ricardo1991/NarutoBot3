@@ -292,7 +292,7 @@ namespace NarutoBot3
 
             bot.Created += new EventHandler<EventArgs>(userListCreated);
             bot.Joined += (sender, e) => userJoined(bot.Who);
-            bot.Left += (sender, e) => userLeft(bot.WhoLeft);
+            bot.Left += (sender, e) => userLeft(bot.WhoLeft, bot.QuitMessage);
             bot.NickChanged += (sender, e) => userNickChange(bot.Who, bot.NewNick);
             bot.Kicked += (sender, e) => userKicked(bot.Who);
             bot.ModeChanged += (sender, e) => userModeChanged(bot.Who, bot.Mode);
@@ -425,9 +425,9 @@ namespace NarutoBot3
             UpdateDataSource();
         }
 
-        private void userLeft(string whoLeft)
+        private void userLeft(string whoLeft, string quitMessage)
         {
-            WriteMessage("** " + whoLeft + " parted", currentColorScheme.Leave);
+            WriteMessage("** " + whoLeft + " parted ("+quitMessage+")", currentColorScheme.Leave);
             UpdateDataSource();
         }
         private void userNickChange(string whoJoined, string newNick)
