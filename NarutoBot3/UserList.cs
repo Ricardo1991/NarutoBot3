@@ -35,6 +35,7 @@ namespace NarutoBot3
 
         public bool hasUserByName(String name){
             name = name.Replace("@", string.Empty).Replace("+", string.Empty);
+            name = name.Trim();
             foreach (User u in Users)
             {
                 if (u.Nick == name)
@@ -47,6 +48,7 @@ namespace NarutoBot3
         public void makeOnline(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -61,6 +63,7 @@ namespace NarutoBot3
         public void makeOffline(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -75,6 +78,7 @@ namespace NarutoBot3
         public void opUser(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -94,6 +98,7 @@ namespace NarutoBot3
         public void deopUser(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -113,6 +118,7 @@ namespace NarutoBot3
         public void muteUser(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -132,6 +138,7 @@ namespace NarutoBot3
         public void unmuteUser(String n)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -151,6 +158,7 @@ namespace NarutoBot3
         public void setGreeting(String n, String greeting, bool enabled)
         {
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
+            n = n.Trim();
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
@@ -175,6 +183,7 @@ namespace NarutoBot3
         public bool userIsOperator(String nick)
         {
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
             foreach (User u in Users)
             {
                 if (String.Compare(u.Nick, nick, true) == 0 && u.IsOperator) return true;
@@ -185,6 +194,7 @@ namespace NarutoBot3
         public bool userIsMuted(String nick)
         {
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
             foreach (User u in Users)
             {
                 if (String.Compare(u.Nick, nick, true) == 0 && u.IsMuted) return true;

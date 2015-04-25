@@ -856,7 +856,7 @@ makes <target> watch Desorienter’s top ten hentai countdown
 forces <target> to clean their room
 forces <target> to listen to Rya’s dumb stories
 forces <target> to listen to Avin’s problems
-forces <target> to listen to  gives Rekkiton pictures of themselves for his personal collection
+forces <target> to give Rekkiton pictures of themselves for his personal collection
 forces <target> to listen to treemplelife say oi to them
 forces <target> to listen to Ricardo praise his favorite animes
 forces <target> to listen to Desorienter talk about his favorite hentais
@@ -1006,7 +1006,7 @@ stands over <target>’s shoulder as they are trying to get work done
 hands <target> that memo they asked for at 3:30pm instead of at 3:25p like <target> requested
 shows up late to <target>’s birthday party
 requests a slow song, to dance with <target>
-<NORMAL> Hello <target>! Did you know, during the Nazi takeover of Western Europe, that Desorienter, single handily defeated France, Belgium and Norway? Thank you for subscribing to Desorienter facts.
+Hello <target>! Did you know, during the Nazi takeover of Western Europe, that Desorienter, single handily defeated France, Belgium and Norway? Thank you for subscribing to Desorienter facts.<NORMAL> 
 reads <target> a bedtime story
 gifts <target> with anal beads
 asks why <target> spends so much time on their hair, no one is going to care about it anyways

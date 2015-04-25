@@ -826,6 +826,10 @@ namespace NarutoBot3
                 InputBox.Text = lastCommand;
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+
+                InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
+                InputBox.ScrollToCaret();                          //Now scroll it automatically
+
             }
 
             if (e.KeyCode == Keys.Enter)
@@ -843,36 +847,40 @@ namespace NarutoBot3
 
                 if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
                 {
-
-                    if (parsed[0].ToLower() == "/me")  //Action send
+                    if (parsed[0][0] == '/')
+                    {
+                        if (parsed[0].ToLower() == "/me")  //Action send
                             message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
 
-                    else if (parsed[0].ToLower() == "/whois" )  //Action send
+                        else if (parsed[0].ToLower() == "/whois")  //Action send
                             message = "WHOIS " + parsed[1] + "\n";
 
-                    else if (parsed[0].ToLower() == "/whowas" )  //Action send
+                        else if (parsed[0].ToLower() == "/whowas")  //Action send
                             message = "WHOWAS " + parsed[1] + "\n";
 
-                    else if (parsed[0].ToLower() == "/Nick" )  //Action send
+                        else if (parsed[0].ToLower() == "/nick")  //Action send
                             changeNick(parsed[1]);
 
-                    else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv" )  //NickServ send
+                        else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
                             message = privmsg("NickServ", parsed[1]);
 
-                    else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
+                        else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
                             message = privmsg("ChanServ", parsed[1]);
 
-                    else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
-                    {
-                        parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
-                        if (parsed.Length >= 3)
-                            message = privmsg(parsed[1], parsed[2]);
-                        else
-                            WriteMessage("Not enough arguments");
+                        else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
+                        {
+                            parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
+                            if (parsed.Length >= 3)
+                                message = privmsg(parsed[1], parsed[2]);
+                            else
+                                WriteMessage("Not enough arguments");
+                        }
+                        else if (parsed[0].ToLower() == "/identify")
+                            message = privmsg("NickServ", "identify " + parsed[1]);
                     }
-                    else if (parsed[0][0] != '/') //Normal send
-                            message = privmsg(HOME_CHANNEL, InputBox.Text);
-                        
+                   
+                    else //Normal send
+                        message = privmsg(HOME_CHANNEL, InputBox.Text);  
                 }
                 else
                     if (parsed[0][0] == '/')

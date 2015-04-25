@@ -422,9 +422,9 @@ namespace NarutoBot3
 
                         OnJoin(EventArgs.Empty);
 
-                        ul.makeOnline(Who);
+                        ul.makeOnline(removeUserMode(Who));
 
-                        greetUser(Who);
+                        greetUser(removeUserMode(Who));
 
                         break;
 
@@ -615,6 +615,9 @@ namespace NarutoBot3
                         string msg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
                         string cmd = msg.Split(' ')[0];
                         string arg = "";
+
+
+                        user = removeUserMode(user);
 
                         if (msg.Length - 1 > cmd.Length)
                             arg = msg.Substring(cmd.Length+1); //the rest of msg
@@ -1099,21 +1102,22 @@ namespace NarutoBot3
 
         void GreetToogle(string nick)
         {
-            string message = Notice(nick, "You didn't set a Greeting yet"); ;
+            string message = Notice(nick, "You didn't set a Greeting yet");
             string state = "disabled";
-            bool found = false;
 
             foreach (User u in ul.Users)
             {
-                if (u.Nick == nick && !found)
+                if (u.Nick == nick)
                 {
                     u.GreetingEnabled = !u.GreetingEnabled;
 
                     if(u.GreetingEnabled) state = "enabled";
+                    message = string.Empty;
                     message = Notice(nick, "Your Greeting is now " + state);
 
-                    found = true;
                     ul.saveData();
+
+                    break;
                 }
             }
 
@@ -2024,12 +2028,11 @@ namespace NarutoBot3
                     for (int i = killsUsed.Count-1; i > 0; i--)
                         killsUsed[i] = killsUsed[i - 1];
 
-                    if (killsUsed.Count == 100)
-                        killsUsed.Remove(killsUsed[100]);
+                    if (killsUsed.Count >= 100)
+                        killsUsed.Remove(killsUsed[killsUsed.Count-1]);
 
                     if (killsUsed.Count < 1) killsUsed.Add(killID);
                     else killsUsed[0] = killID;
-
 
 
                     temp = kill[killID];
@@ -2061,18 +2064,22 @@ namespace NarutoBot3
             arg = arg.ToLower().Replace("?", string.Empty).TrimStart(new char[]{' '});
             string[] split = arg.Split(new char[] { ' ' });
 
-            string[] howMany = { "I dont know, maybe something like", "Probably", "More than", "Less than", "I think it was", "I don't know, so i'll give you a random number:" };
-            string[] howIs = { "fine", "not fine", "lost", "being retarded again" };
-            string[] because = { "was lost", "is stupid", "asked me to", "was asked to", "has an inferiority complex", "is a terrible person" };
-            string[] when = { "maybe next week", "a few days ago", "last year", "yesterday", "tomorrow", "in a few hours", "nobody knows", "next year", "it was yesterday" };
-            string[] why = { "I dont know, maybe...", "Yeah..", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so", "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know" };
+            string[] howMany = { "I dont know, maybe", "Probably", "More than", "Less than", "I think it was", "I don't know, so i'll give you a random number:" };
+            string[] howIs = { "fine", "not fine", "lost", "being retarded again", "not feeling well", "being annoying as always", "probably hungry" };
+            string[] because = { "was lost", "is stupid", "asked me to", "was asked to", "has an inferiority complex", "is a terrible person",
+                                   "felt like so", "wanted to", "liked it", "already had plans to do it", "wanted it that way"  };
+            string[] when = { "maybe next week", "a few days ago", "last year", "yesterday", "tomorrow", "in a few hours",
+                                "nobody knows", "next year", "it was yesterday", "I'm not sure", "next week" };
+            string[] why = { "I dont know, maybe.", "Yeah", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so", 
+                               "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know", "Because that was destined to be so" };
             string[] where = { "somewhere in a far away land" , "on the youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place",
                                "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer", 
                                "beneath your bed!"};
-            string[] whoDid = { "probably", "maybe it was", "i'm sure it was", "it wasn't" };
-            string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google" };
-            string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" };
-            string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!" };
+            string[] whoDid = { "probably", "maybe it was", "i'm sure it was", "it wasn't", "i suspect", "someone told me it was" };
+            string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google", "I'm not good with questions",
+                            "I'm under pressure, i can't answer you that","Stop bullying me!" };
+            string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct! ", "I think", "I believe that" ,""};
+            string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!", "Neps,", ""};
 
             if (split.Length >= 1)
             {
@@ -2405,9 +2412,9 @@ namespace NarutoBot3
                 string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 if(targeted)
-                    message = Privmsg(CHANNEL, nick + " generated a Nick for "+ target +": " + nick_);
+                    message = Privmsg(CHANNEL, nick + " generated a nick for "+ target +": " + nick_);
                 else 
-                    message = Privmsg(CHANNEL, nick + " generated the Nick " + nick_);
+                    message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
 
                 Client.messageSender(message);
             }
@@ -2509,31 +2516,14 @@ namespace NarutoBot3
 
             foreach (User u in ul.Users)
             {
-                if (String.Compare(u.Nick, nick.Replace("@", string.Empty).Replace("+", string.Empty), true) == 0 && u.GreetingEnabled)
+                if (String.Compare(u.Nick, nick, true) == 0 && u.GreetingEnabled)
                 {
                     string mensagem = Privmsg(Client.HOME_CHANNEL, u.Greeting);
                     Client.messageSender(mensagem);
+                    break;
                 }
             }
         }
-
-        //public void saveData()
-        //{
-        //    TextWriter WriteFileStream = new StreamWriter("data.json", false);
-
-        //    WriteFileStream.Write(JsonConvert.SerializeObject(ul.Users));
-
-        //    WriteFileStream.Close();
-        //}
-
-        //void loadData()
-        //{
-        //    TextReader stream = new StreamReader("data.json");
-        //    string json = stream.ReadToEnd();
-        //    JsonConvert.PopulateObject(json, ul.Users);
-
-        //    stream.Close();
-        //}
 
         bool quitIRC(string nick)
         {
