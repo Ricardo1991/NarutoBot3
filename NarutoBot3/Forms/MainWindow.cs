@@ -48,7 +48,8 @@ namespace NarutoBot3
         int PORT;
         string REALNAME;
 
-        string lastCommand;
+        List<String> lastCommand = new List<String>();
+        int lastCommandIndex = 0;
 
         bool exitTheLoop = false;
 
@@ -75,8 +76,6 @@ namespace NarutoBot3
             applyTheme(Settings.Default.themeName);
             settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
             ///
-
-            lastCommand = "";
 
             //Show ConnectWindow Form and try to connect
 
@@ -823,18 +822,22 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Up)
             {
-                InputBox.Text = lastCommand;
+                InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
                 InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
                 InputBox.ScrollToCaret();                          //Now scroll it automatically
 
+                if (lastCommandIndex+1 < lastCommand.Count)
+                    lastCommandIndex++;
+
             }
+            else lastCommandIndex = 0;
 
             if (e.KeyCode == Keys.Enter)
             {
-                lastCommand = InputBox.Text;
+                lastCommand.Add(InputBox.Text);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
