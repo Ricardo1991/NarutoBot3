@@ -616,6 +616,7 @@ namespace NarutoBot3
                         break;
 
                     case ("PRIVMSG"):
+
                         string user = prefix.Substring(0, prefix.IndexOf("!")); //Nick of the Sender
                         string whoSent = parameters[0];                         //Who sent is the source of the Message. (The Channel, or User if private Message)
                         string msg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
@@ -908,7 +909,23 @@ namespace NarutoBot3
                                 ctcpPing(userr, argg);
                             }
                         }
-                        else WriteMessage(message, currentColorScheme.Notice);
+                        else{
+                            string alignedNick = prefix;
+                            try{
+                                alignedNick = prefix.Substring(0, prefix.IndexOf("!"));  //Nick of the Sender
+                            }
+                            catch{}
+                            finally{
+                                alignedNick = alignedNick.Truncate(13);
+                            }
+                            
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + parameters[1], currentColorScheme.Notice);
+
+                        }
                         
                         break;
 
