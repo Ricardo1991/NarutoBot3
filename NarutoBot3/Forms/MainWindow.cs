@@ -829,7 +829,7 @@ namespace NarutoBot3
                 InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
                 InputBox.ScrollToCaret();                          //Now scroll it automatically
 
-                if (lastCommandIndex+1 < lastCommand.Count)
+                if (lastCommandIndex + 1 < lastCommand.Count)
                     lastCommandIndex++;
 
             }
