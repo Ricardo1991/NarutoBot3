@@ -822,15 +822,19 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Up)
             {
-                InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
-                e.Handled = true;
-                e.SuppressKeyPress = true;
+                if (lastCommand.Count > 0)
+                {
+                    InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
 
-                InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
-                InputBox.ScrollToCaret();                          //Now scroll it automatically
+                    InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
+                    InputBox.ScrollToCaret();                          //Now scroll it automatically
 
-                if (lastCommandIndex + 1 < lastCommand.Count)
-                    lastCommandIndex++;
+                    if (lastCommandIndex + 1 < lastCommand.Count)
+                        lastCommandIndex++;
+                }
+
 
             }
             else lastCommandIndex = 0;

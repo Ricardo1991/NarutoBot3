@@ -75,9 +75,43 @@ namespace NarutoBot3
 
         public bool messageSender(string message)
         {
+            string temp;
+            string header;
+            string footer = "\r\n";
+            bool isAction = false;
+
+            header = message.Split(new char[]{':'} , 2)[0]+":";
+
             try
             {
-                writer.WriteLine(message);
+                if (message.Length > 450)
+                {
+                    message = Useful.getBetween(message, header, "");
+                    message = message.Replace(footer, String.Empty);
+
+                    while (message.Length > (450 - header.Length - footer.Length))
+                    {
+                        if (message.Contains("\x01")){
+                            temp = header + message.Substring(0, 450 - header.Length - footer.Length) + "\x01" + footer;
+                            isAction = true;
+                        }
+
+                        else{
+                            temp = header + message.Substring(0, 450 - header.Length - footer.Length) + footer;
+                        }
+
+                        message = message.Substring(450 - header.Length - footer.Length);
+
+                        writer.WriteLine(temp);
+                        writer.Flush();
+                    }
+                    if (isAction) message = message.Replace("\x01", String.Empty);
+                    writer.WriteLine(header + message + footer);
+
+                }
+                else
+                    writer.WriteLine(message);
+
                 writer.Flush();
                 return true;
             }

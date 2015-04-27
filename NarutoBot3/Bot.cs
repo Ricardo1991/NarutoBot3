@@ -2043,7 +2043,7 @@ namespace NarutoBot3
                     else
                         target = args.Trim();
 
-                    if(kill.Count<=100){
+                    if(kill.Count <= 100){
                         killID = r.Next(kill.Count);
                     }
                         
