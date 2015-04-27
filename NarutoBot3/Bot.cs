@@ -2120,7 +2120,7 @@ namespace NarutoBot3
                             else if (arg == "how many fucks do you give")
                                 message = Privmsg(CHANNEL, "I always give 0 fucks.");
                             else
-                                message = Privmsg(CHANNEL, howMany[r.Next(howMany.Length - 1)] + " " +r.Next(20));
+                                message = Privmsg(CHANNEL, howMany[r.Next(howMany.Length - 1)] + " " + r.Next(21));
                         }
 
                         else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
@@ -2152,14 +2152,14 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "why", true) == 0)
                 {
                     if (split.Length >= 2)
-                        message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)-1]) + " " + because[r.Next(because.Length - 1)]);
+                        message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count - 1)]) + " " + because[r.Next(because.Length - 1)]);
                 }
 
                 else if (String.Compare(split[0], "is", true) == 0)
                 {
                     bool yes = false;
 
-                    if (r.Next(0, 1) == 1)
+                    if (r.Next(0, 2) == 1)
                         yes = true;
 
                     if (split.Length >= 2)
@@ -2176,9 +2176,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your","my") + " is " + replaced);
+                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + subject.Replace("your", "my") + " is " + replaced);
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject.Replace("your","my")  + " isn't " + replaced);
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + subject.Replace("your", "my") + " isn't " + replaced);
                     }
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
@@ -2230,7 +2230,7 @@ namespace NarutoBot3
                     if (arg == "who are you")
                         message = Privmsg(CHANNEL, "I'm a bot!");
                     else
-                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length - 1)] + " " + removeUserMode(userList[r.Next(userList.Count) - 1]));
+                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length - 1)] + " " + removeUserMode(userList[r.Next(userList.Count - 1)]));
                 }
 
                 else if (String.Compare(split[0], "what", true) == 0)
@@ -2256,7 +2256,7 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
                     bool yes = false;
-                    if (r.Next(1, 3) == 1)
+                    if (r.Next(0, 2) == 1)
                         yes = true;
 
                     if (split.Length >= 2)
@@ -2300,7 +2300,7 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "should", true) == 0)
                 {
                     bool yes = false;
-                    if (r.Next(1, 3) == 1)
+                    if (r.Next(0, 2) == 1)
                         yes = true;
 
                     if (split.Length >= 2)
@@ -2356,7 +2356,7 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "does", true) == 0)
                 {
                     bool yes = false;
-                    if (r.Next(1, 3) == 1)
+                    if (r.Next(0, 2) == 1)
                         yes = true;
 
                     if (split.Length >= 2)
