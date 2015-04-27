@@ -427,7 +427,7 @@ namespace NarutoBot3
 
         private void userLeft(string whoLeft, string quitMessage)
         {
-            WriteMessage("** " + whoLeft + " parted ("+quitMessage+")", currentColorScheme.Leave);
+            WriteMessage("** " + whoLeft + " parted ("+quitMessage.Trim()+")", currentColorScheme.Leave);
             UpdateDataSource();
         }
         private void userNickChange(string whoJoined, string newNick)

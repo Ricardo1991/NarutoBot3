@@ -2032,6 +2032,10 @@ namespace NarutoBot3
                     message = Privmsg(CHANNEL, nick + " lost his way");
                 }
                 
+                else if (args.ToLower() == "me baby".Trim())
+                {
+                    message = Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=dwkClIFBMEE");
+                }
                 else
                 {
                     if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")

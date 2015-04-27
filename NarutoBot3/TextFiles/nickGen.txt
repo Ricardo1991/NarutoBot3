@@ -89,6 +89,7 @@ Lift
 Shot
 Hot
 Cold
+Old
 Lick
 Toes
 Jim
@@ -124,6 +125,7 @@ Drunk
 Razer
 Booster
 Mass
+Assassin
 Effect
 Sim
 Citizen
@@ -158,6 +160,7 @@ Smeller
 Tall
 Short
 Retard
+Pants
 American
 Dude
 Meme
@@ -212,7 +215,10 @@ User
 Bit
 Coin
 File
+Socks
 Flower
+Bitter
+Asshole
 Grass
 Tree
 Disk
@@ -286,6 +292,7 @@ Gin
 Kin
 Tsuki
 Taio
+Killer
 Koi
 Senpai
 Sama
@@ -334,3 +341,10 @@ Transvestite
 Unusual
 Fuckfart
 Strange
+Speaker
+Candy
+Sweater
+Sweet
+Feline
+Tamer
+Hooker
