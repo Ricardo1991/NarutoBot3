@@ -974,7 +974,7 @@ namespace NarutoBot3
 
         }
 
-        static private char getUserMode(string user, List<string> userList)
+        static public char getUserMode(string user, List<string> userList)
         {
             foreach (string u in userList)
             {
@@ -1000,19 +1000,14 @@ namespace NarutoBot3
             return '0';
         }
 
-        static private string removeUserMode(string user)
+        static public string removeUserMode(string user)
         {
             char[] usermodes = { '@', '+', '%', '~', '&'};
             
-            if (user.Contains(user))
-            {
-                if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
-                {
-                    return user.Substring(1).Trim();
-                }
-                else return user.Trim();
-            }
-            return "";
+            if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
+                return user.Substring(1).Trim();
+
+            else return user.Trim();
         }
 
         public void ReadKills()

@@ -52,6 +52,7 @@ namespace NarutoBot3
         int lastCommandIndex = 0;
 
         bool exitTheLoop = false;
+        UserList uList;
 
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -59,7 +60,7 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            UserList uList = new UserList();
+            uList = new UserList();
 
             operatorsWindow = new BotOperatorWindow(ref uList);
             mutedWindow = new MutedUsersWindow(ref uList);
@@ -262,6 +263,8 @@ namespace NarutoBot3
             bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
             initializeBot();
+
+            uList = bot.ul;
 
             while (!exitTheLoop)
             { 
@@ -837,6 +840,26 @@ namespace NarutoBot3
 
 
             }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (lastCommand.Count > 0 && lastCommandIndex > 0)
+                {
+                    lastCommandIndex--;
+                    if (lastCommandIndex > 0)
+                        InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
+                    else
+                        InputBox.Text = "";
+
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+
+                    InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
+                    InputBox.ScrollToCaret();                          //Now scroll it automatically
+
+                }
+
+
+            }
             else lastCommandIndex = 0;
 
             if (e.KeyCode == Keys.Enter)
@@ -973,15 +996,27 @@ namespace NarutoBot3
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             contextMenuUserList.Items.Clear();
-            string nick = InterfaceUserList.SelectedItem.ToString().Replace("@", string.Empty).Replace("+", string.Empty);
+            string nick = Bot.removeUserMode(InterfaceUserList.SelectedItem.ToString());
 
-            contextMenuUserList.Items.Add("Give " + nick + " Ops");
-            contextMenuUserList.Items.Add("Take " + nick + " Ops");
-            contextMenuUserList.Items.Add("Mute " + nick);
-            contextMenuUserList.Items.Add("Unmute " + nick);
+            if (!uList.userIsOperator(nick))
+                contextMenuUserList.Items.Add("Give " + nick + " Bot Operator Status");
+            else
+                contextMenuUserList.Items.Add("Remove " + nick + " Bot Operator Status");
+
+            if (!uList.userIsMuted(nick))
+                contextMenuUserList.Items.Add("Ignore " + nick);
+            else
+                contextMenuUserList.Items.Add("Listen to " + nick);
+
+            contextMenuUserList.Items.Add(new ToolStripSeparator());
+
             contextMenuUserList.Items.Add("Poke " + nick);
             contextMenuUserList.Items.Add("Whois " + nick);
-            contextMenuUserList.Items.Add("Kick " + nick + " (if operator)");
+
+            if (Bot.getUserMode(NICK, bot.userList) == '@') { 
+                contextMenuUserList.Items.Add(new ToolStripSeparator());
+                contextMenuUserList.Items.Add("Kick " + nick);
+            }
         }
 
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -992,13 +1027,13 @@ namespace NarutoBot3
                 case "Give":
                     bot.giveOps(split[1]);
                     break;
-                case "Take":
+                case "Remove":
                     bot.takeOps(split[1]);
                     break;
-                case "Mute":
+                case "Ignore":
                     bot.muteUser(split[1]);
                     break;
-                case "Unmute":
+                case "Listen to":
                     bot.unmuteUSer(split[1]);
                     break;
                 case "Poke":
@@ -1019,7 +1054,7 @@ namespace NarutoBot3
             {
                 //select the item under the mouse pointer
                 InterfaceUserList.SelectedIndex = InterfaceUserList.IndexFromPoint(e.Location);
-                if (InterfaceUserList.SelectedIndex != -1)
+                if (InterfaceUserList != null && InterfaceUserList.SelectedIndex != -1)
                 {
                     contextMenuUserList.Show();
                 }
