@@ -275,7 +275,7 @@ namespace NarutoBot3
                 
                 try
                 {
-                    buffer = client.readLine();
+                    buffer = client.readMessage();
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
@@ -500,7 +500,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (client.isConnected)
             {
-                client.messageSender("NICK " + client.NICK + "\n");
+                client.sendMessage("NICK " + client.NICK + "\n");
                 return true;
             }
 
@@ -672,11 +672,11 @@ namespace NarutoBot3
                 string message;
 
                 message = privmsg(client.HOME_CHANNEL, "*");
-                client.messageSender(message);
+                client.sendMessage(message);
                 message = privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
-                client.messageSender(message);
+                client.sendMessage(message);
                 message = privmsg(client.HOME_CHANNEL, "*");
-                client.messageSender(message);
+                client.sendMessage(message);
 
                 Settings.Default.releaseEnabled = false;
                 Settings.Default.Save();
@@ -934,7 +934,7 @@ namespace NarutoBot3
                     else //Normal send
                         message = privmsg(HOME_CHANNEL, InputBox.Text);
                     
-                if(!String.IsNullOrWhiteSpace(message)) client.messageSender(message);
+                if(!String.IsNullOrWhiteSpace(message)) client.sendMessage(message);
                 ChangeInput("");
             }
         }
@@ -1094,7 +1094,7 @@ namespace NarutoBot3
                     mangaReleaseTimer.Interval = Settings.Default.checkInterval * 1000;
                     mangaReleaseTimer.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
                     mangaReleaseTimer.Enabled = true;
-                    client.messageSender(message);
+                    client.sendMessage(message);
                 }
                 else
                 {

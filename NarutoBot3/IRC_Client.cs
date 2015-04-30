@@ -50,8 +50,8 @@ namespace NarutoBot3
             writer = new StreamWriter(stream) { AutoFlush = true };
 
             try{
-                messageSender(user_message);
-                messageSender(nick_message);
+                sendMessage(user_message);
+                sendMessage(nick_message);
                 
                 return true;    //Weee, we connected!
             }
@@ -63,17 +63,17 @@ namespace NarutoBot3
 
         public void Join()
         {
-            messageSender(join_message);
+            sendMessage(join_message);
             isConnected = true;
         }
 
         public void Join(string channel)
         {
-            messageSender("JOIN " + channel + "\r\n");
+            sendMessage("JOIN " + channel + "\r\n");
             isConnected = true;
         }
 
-        public bool messageSender(string message)
+        public bool sendMessage(string message)
         {
             string temp;
             string header;
@@ -121,7 +121,7 @@ namespace NarutoBot3
             }
         }
 
-        public string readLine()
+        public string readMessage()
         {
             return reader.ReadLine();
         }

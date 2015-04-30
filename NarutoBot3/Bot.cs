@@ -273,7 +273,7 @@ namespace NarutoBot3
             {
                 var prefixend = message.IndexOf(":");
                 string pingcmd = message.Substring(prefixend+1);
-                Client.messageSender("PONG :" + pingcmd + "\r\n");
+                Client.sendMessage("PONG :" + pingcmd + "\r\n");
 
                 #if DEBUG
                 WriteMessage(message);
@@ -664,7 +664,7 @@ namespace NarutoBot3
 
                         else if (msg == "!anime best anime ever")
                             {
-                                Client.messageSender(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
 
                         else if (String.Compare(cmd, Client.NICK+",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length-1]=='?')
@@ -1133,7 +1133,7 @@ namespace NarutoBot3
                 }
             }
 
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
 
         public void ReadNickGen()//These are for the Nick gen
@@ -1216,13 +1216,13 @@ namespace NarutoBot3
         public void pokeUser(string nick)
         {
             string message = Privmsg(Client.HOME_CHANNEL, "\x01" + "ACTION stabs " + nick + " with a sharp knife" + "\x01");
-            Client.messageSender(message);
+            Client.sendMessage(message);
 
         }
         public void whoisUser(string nick)
         {
             string message = "WHOIS " + nick + "\n";
-            Client.messageSender(message);
+            Client.sendMessage(message);
 
         }
 
@@ -1277,7 +1277,7 @@ namespace NarutoBot3
             randomWords = g.ToString();
 
             message = Privmsg(Client.HOME_CHANNEL, "\x02" + randomWords + "\x02");
-            Client.messageSender(message);
+            Client.sendMessage(message);
 
         }
 
@@ -1301,7 +1301,7 @@ namespace NarutoBot3
 
             ul.opUser(targetUser);
             message = Notice(nick, targetUser + " was set as a bot operator!");
-            Client.messageSender(message);
+            Client.sendMessage(message);
             return true;
 
         }
@@ -1322,7 +1322,7 @@ namespace NarutoBot3
             takeOps(targetUser);
 
             message = Notice(nick, targetUser + " was removed as a bot operator!");
-            Client.messageSender(message);
+            Client.sendMessage(message);
             return true;
         }
 
@@ -1333,11 +1333,11 @@ namespace NarutoBot3
             if (ul.userIsOperator(nick))
             {
                 message = Notice(nick, "Bot operators:");
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 foreach (User u in ul.Users)
                 {
                     if (u.IsOperator)
-                        Client.messageSender(Notice(nick, "     -> " + u.Nick));
+                        Client.sendMessage(Notice(nick, "     -> " + u.Nick));
                 }
             }
         }
@@ -1346,14 +1346,14 @@ namespace NarutoBot3
         {
             if (ul.userIsOperator(nick))
             {
-                Client.messageSender(Privmsg(CHANNEL, args));
+                Client.sendMessage(Privmsg(CHANNEL, args));
             }
         }
 
         void me(string CHANNEL, string args, string nick)
         {
             if (ul.userIsOperator(nick))
-                Client.messageSender(Privmsg(CHANNEL, "\x01" + "ACTION " + args + "\x01"));
+                Client.sendMessage(Privmsg(CHANNEL, "\x01" + "ACTION " + args + "\x01"));
         }
 
         public void silence(string nick)
@@ -1372,7 +1372,7 @@ namespace NarutoBot3
                     message = Notice(nick, "The bot was muted");
                 }
 
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return;
             }
         }
@@ -1382,7 +1382,7 @@ namespace NarutoBot3
             if (!ul.userIsMuted(nick) && Settings.Default.hello_Enabled == true && Settings.Default.silence == false)
             {
                 string message = Privmsg(CHANNEL, "Hello " + nick + "!");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1395,7 +1395,7 @@ namespace NarutoBot3
                 foreach (string h in hlp)
                 {
                     message = Notice(nick, h.Replace("\n", "").Replace("\r", ""));
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
 
                 }
             }
@@ -1413,7 +1413,7 @@ namespace NarutoBot3
                     foreach (string h in rls)
                     {
                         message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                        Client.messageSender(message);
+                        Client.sendMessage(message);
 
                     }
                     return;
@@ -1425,7 +1425,7 @@ namespace NarutoBot3
                 foreach (string h in rls)
                 {
                     message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
                     return;
                 }
             }
@@ -1442,7 +1442,7 @@ namespace NarutoBot3
 
                 nick = nick.Replace("\r", "");
                 string message = Privmsg(CHANNEL, nick + " rolled a " + number);
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
         private void poke(string CHANNEL, string nick)
@@ -1462,7 +1462,7 @@ namespace NarutoBot3
                 while (removeUserMode(userList[userNumber]) == nick);
 
                 message = Privmsg(CHANNEL, "\x01" + "ACTION " + "pokes " + userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty) + "\x01");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1482,7 +1482,7 @@ namespace NarutoBot3
             catch
             {
                 message = Privmsg(CHANNEL, "Could not parse arguments");
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return;
             }
 
@@ -1490,12 +1490,12 @@ namespace NarutoBot3
             {
 
                 message = Privmsg(CHANNEL, cc + " C is " + Math.Round(f, 2) + " F");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
             else if (Settings.Default.conversionEnabled == true)
             {
                 message = Privmsg(CHANNEL, cc + " C is " + Math.Round(f, 2) + " F");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1515,19 +1515,19 @@ namespace NarutoBot3
             catch
             {
                 message = Privmsg(CHANNEL, "Could not parse arguments");
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return;
             }
 
             if (Settings.Default.silence == true && Settings.Default.conversionEnabled == true && ul.userIsOperator(nick))
             {
                 message = Privmsg(CHANNEL, f + " F is " + Math.Round(cc, 2) + " C");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
             else if (Settings.Default.conversionEnabled == true)
             {
                 message = Privmsg(CHANNEL, f + " F is " + Math.Round(cc, 2) + " C");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1542,7 +1542,7 @@ namespace NarutoBot3
                 int rt = rnd.Next(tri.Count - 1);
 
                 message = Privmsg(CHANNEL, tri[rt]);
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1679,7 +1679,7 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS + ". \"" + args + "\" is an invalid argument");
                 else
                     message = Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS);
-                Client.messageSender(message);
+                Client.sendMessage(message);
 
             }
         }
@@ -1718,7 +1718,7 @@ namespace NarutoBot3
 
 
                 message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02");
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1743,7 +1743,7 @@ namespace NarutoBot3
 
                 message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
                 
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -1874,7 +1874,7 @@ namespace NarutoBot3
                     }
             }
 
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
 
         public void youtubeSearch(string CHANNEL, string nick, string query)
@@ -1923,14 +1923,14 @@ namespace NarutoBot3
                         duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
                         message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                        Client.messageSender(message);
+                        Client.sendMessage(message);
 
                         break;
                 }
                 return;//Only shows 1 link
             }
             message = Privmsg(CHANNEL, "No results found");
-            Client.messageSender(message);
+            Client.sendMessage(message);
             return;
         }
 
@@ -1978,13 +1978,13 @@ namespace NarutoBot3
                     }
                     minutes = temp;
                     message = Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
 
                 }
                 else
                 {
                     message = Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
                 }
 
             }
@@ -1998,7 +1998,7 @@ namespace NarutoBot3
             {
                 if (killsUsed.Count < 1) return;
                 string message = Privmsg(CHANNEL,"[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
-                Client.messageSender(message);
+                Client.sendMessage(message);
             
             
             }
@@ -2065,7 +2065,7 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
                     }
                 }
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -2375,7 +2375,7 @@ namespace NarutoBot3
             else
                 message = Privmsg(CHANNEL, user + ", what?");
 
-            if(!String.IsNullOrWhiteSpace(message)) Client.messageSender(message);
+            if(!String.IsNullOrWhiteSpace(message)) Client.sendMessage(message);
         }
 
         public void nickGen(string CHANNEL, string nick, string args)
@@ -2397,7 +2397,7 @@ namespace NarutoBot3
             if (nickGenStrings.Count < 2)
             {
                 message = Privmsg(CHANNEL, "Nickname generator was not initialized properly");
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return;
             }
 
@@ -2432,7 +2432,7 @@ namespace NarutoBot3
                 else 
                     message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
 
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -2478,14 +2478,14 @@ namespace NarutoBot3
                     comment = reddit.GetComment(sub.Name, "t1_" + commentName, "t3_" + postName);
 
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
 
                     if (comment.Body.ToString().Length > 300)
                         message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
                     else
                         message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
 
-                    Client.messageSender(message);
+                    Client.sendMessage(message);
 
                 }
                 else
@@ -2495,12 +2495,12 @@ namespace NarutoBot3
                     if (post.IsSelfPost)
                     {
                         message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                        Client.messageSender(message);
+                        Client.sendMessage(message);
                     }
                     else
                     {
                         message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
-                        Client.messageSender(message);
+                        Client.sendMessage(message);
                     }
                 }
             }
@@ -2510,7 +2510,7 @@ namespace NarutoBot3
                 subreddit = Useful.getBetween(url, "/r/", "/");
 
                 message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "this subreddit is private or the link was invalid" + "\x02");
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return;
             }
         }
@@ -2522,7 +2522,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == false && Settings.Default.wikiEnabled == true)
             {
                 string message = Privmsg(CHANNEL, "Here's a wiki for \"" + args + "\": " + "http://en.wikipedia.org/w/index.php?title=Special:Search&search=" + args.Replace(" ", "%20"));
-                Client.messageSender(message);
+                Client.sendMessage(message);
             }
         }
 
@@ -2535,7 +2535,7 @@ namespace NarutoBot3
                 if (String.Compare(u.Nick, nick, true) == 0 && u.GreetingEnabled)
                 {
                     string mensagem = Privmsg(Client.HOME_CHANNEL, u.Greeting);
-                    Client.messageSender(mensagem);
+                    Client.sendMessage(mensagem);
                     break;
                 }
             }
@@ -2547,7 +2547,7 @@ namespace NarutoBot3
                 
                 timeoutTimer.Stop();
                 waitingForPong = false;
-                Client.messageSender("QUIT :Goodbye everyone!\n");
+                Client.sendMessage("QUIT :Goodbye everyone!\n");
 
                 return true;
             }
@@ -2572,18 +2572,18 @@ namespace NarutoBot3
             string complete = week + " " + month + " " + day + " " + hour;
 
             string message = Notice(u, "\x01" + "TIME " + complete + "\x01");
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
         public void ctcpVersion(string u)
         {
             string message = Notice(u, "\x01" + "VERSION " + botVersion + "\x01");
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
 
         public void ctcpPing(string u, string stamp)
         {
             string message = Notice(u, "\x01" + "PING " + stamp + "\x01");
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
         ////
 
@@ -2621,7 +2621,7 @@ namespace NarutoBot3
             if (Client.isConnected)
             {
                 string message = "NICK " + Client.NICK + "\n";
-                Client.messageSender(message);
+                Client.sendMessage(message);
                 return true;
             }
             else return false;
@@ -2724,7 +2724,7 @@ namespace NarutoBot3
                     WriteMessage(message);
                 #endif
 
-                Client.messageSender(message);
+                Client.sendMessage(message);
 
                 WaitingForPong = true;
 
@@ -2737,7 +2737,7 @@ namespace NarutoBot3
         public void kickUser(string userToBeKicked)
         {
             string message = "KICK " + Client.HOME_CHANNEL + " " + userToBeKicked;
-            Client.messageSender(message);
+            Client.sendMessage(message);
         }
 
         void checkIfTimeout(object sender, EventArgs e)
