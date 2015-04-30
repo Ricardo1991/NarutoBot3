@@ -60,6 +60,9 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
+            InputBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            InputBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+
             uList = new UserList();
 
             operatorsWindow = new BotOperatorWindow(ref uList);
@@ -595,6 +598,18 @@ namespace NarutoBot3
                 bot.userList.Sort();
                 InterfaceUserList.DataSource = null;
                 InterfaceUserList.DataSource = bot.userList;
+
+                var source = new AutoCompleteStringCollection();
+                List<string> temp = new List<string>();
+
+                foreach (string s in bot.userList.ToArray())
+                {
+                    temp.Add(Bot.removeUserMode(s));
+                }
+
+                source.AddRange(temp.ToArray());
+
+                InputBox.AutoCompleteCustomSource = source;
             }
         }
 
@@ -995,6 +1010,8 @@ namespace NarutoBot3
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
+            if (InterfaceUserList.SelectedIndex == -1) return;
+
             contextMenuUserList.Items.Clear();
             string nick = Bot.removeUserMode(InterfaceUserList.SelectedItem.ToString());
 

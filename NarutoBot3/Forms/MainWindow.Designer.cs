@@ -306,21 +306,21 @@
             // rulesTextToolStripMenuItem
             // 
             this.rulesTextToolStripMenuItem.Name = "rulesTextToolStripMenuItem";
-            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rulesTextToolStripMenuItem.Text = "Rules Text";
             this.rulesTextToolStripMenuItem.Click += new System.EventHandler(this.rulesTextToolStripMenuItem_Click);
             // 
             // helpTextToolStripMenuItem
             // 
             this.helpTextToolStripMenuItem.Name = "helpTextToolStripMenuItem";
-            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.helpTextToolStripMenuItem.Text = "Help Text";
             this.helpTextToolStripMenuItem.Click += new System.EventHandler(this.helpTextToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // reloadToolStripMenuItem1
             // 
@@ -333,7 +333,7 @@
             this.triviasToolStripMenuItem,
             this.killStringsToolStripMenuItem});
             this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
-            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.reloadToolStripMenuItem1.Text = "Reload...";
             // 
             // allToolStripMenuItem
@@ -404,6 +404,10 @@
             // InputBox
             // 
             this.InputBox.AcceptsReturn = true;
+            this.InputBox.AcceptsTab = true;
+            this.InputBox.AllowDrop = true;
+            this.InputBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.InputBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.InputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.InputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.InputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

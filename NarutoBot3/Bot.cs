@@ -552,31 +552,25 @@ namespace NarutoBot3
                             case ("+o"):
                                 userList.Add("@" + affectedUser);
                                 break;
-                            case ("-o"):
-                                userList.Add(affectedUser);
-                                break;
                             case ("+v"):
                                 userList.Add("+" + affectedUser);
-                                break;
-                            case ("-v"):
-                                userList.Add(affectedUser);
                                 break;
                             case ("+h"):
                                 userList.Add("%" + affectedUser);
                                 break;
-                            case ("-h"):
-                                userList.Add(affectedUser);
-                                break;
                             case ("+q"):
                                 userList.Add("~" + affectedUser);
-                                break;
-                            case ("-q"):
-                                userList.Add(affectedUser);
                                 break;
                             case ("+a"):
                                 userList.Add("&" + affectedUser);
                                 break;
+
+                            case ("-o"):
                             case ("-a"):
+                            case ("-q"):
+                            case ("-h"):
+                            case ("-v"):
+                            default:
                                 userList.Add(affectedUser);
                                 break;
                         }
