@@ -172,6 +172,11 @@
     <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UserList.cs" />
     <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />
     <Compile Include="NickGen.cs" />
@@ -227,14 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Forms\MangaReleaseCheckerWindow.resx">
       <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -252,6 +252,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Icon-16x16-warn.png" />
+    <None Include="Resources\profile_github.png" />
+    <None Include="Resources\Close_icon.png" />
+    <None Include="Resources\ico_info.png" />
+    <None Include="Resources\black-connected-16.png" />
+    <None Include="Resources\black-disconnected-16 %281%29.png" />
     <Content Include="Theme\Cool.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

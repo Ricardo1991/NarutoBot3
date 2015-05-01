@@ -35,9 +35,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStripBottom = new System.Windows.Forms.StatusStrip();
             this.l_Status = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelSilence = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolstripLag = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
+            this.InputBox = new System.Windows.Forms.TextBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tbTopic = new System.Windows.Forms.TextBox();
+            this.OutputBox = new System.Windows.Forms.RichTextBox();
+            this.InterfaceUserList = new System.Windows.Forms.ListBox();
+            this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.toolStripStatusLabelSilence = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripButtonNarutoBot = new System.Windows.Forms.ToolStripDropDownButton();
             this.connectMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,14 +77,8 @@
             this.triviasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.killStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripHelp = new System.Windows.Forms.ToolStripDropDownButton();
+            this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InputBox = new System.Windows.Forms.TextBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tbTopic = new System.Windows.Forms.TextBox();
-            this.OutputBox = new System.Windows.Forms.RichTextBox();
-            this.InterfaceUserList = new System.Windows.Forms.ListBox();
-            this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.statusStripBottom.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -105,17 +106,10 @@
             this.l_Status.Size = new System.Drawing.Size(79, 17);
             this.l_Status.Text = "Disconnected";
             // 
-            // toolStripStatusLabelSilence
-            // 
-            this.toolStripStatusLabelSilence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripStatusLabelSilence.Name = "toolStripStatusLabelSilence";
-            this.toolStripStatusLabelSilence.Size = new System.Drawing.Size(83, 17);
-            this.toolStripStatusLabelSilence.Text = "Bot is Silenced";
-            // 
             // toolstripLag
             // 
             this.toolstripLag.Name = "toolstripLag";
-            this.toolstripLag.Size = new System.Drawing.Size(847, 17);
+            this.toolstripLag.Size = new System.Drawing.Size(831, 17);
             this.toolstripLag.Spring = true;
             this.toolstripLag.Text = "0.000s";
             this.toolstripLag.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -133,6 +127,105 @@
             this.toolStripMenu.Size = new System.Drawing.Size(1024, 25);
             this.toolStripMenu.TabIndex = 2;
             this.toolStripMenu.Text = "toolStripMenu";
+            // 
+            // InputBox
+            // 
+            this.InputBox.AcceptsReturn = true;
+            this.InputBox.AcceptsTab = true;
+            this.InputBox.AllowDrop = true;
+            this.InputBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.InputBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.InputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.InputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.InputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.InputBox.Location = new System.Drawing.Point(0, 449);
+            this.InputBox.Name = "InputBox";
+            this.InputBox.Size = new System.Drawing.Size(1024, 20);
+            this.InputBox.TabIndex = 3;
+            this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.tbTopic);
+            this.splitContainer1.Panel1.Controls.Add(this.OutputBox);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.InterfaceUserList);
+            this.splitContainer1.Size = new System.Drawing.Size(1024, 424);
+            this.splitContainer1.SplitterDistance = 902;
+            this.splitContainer1.TabIndex = 4;
+            // 
+            // tbTopic
+            // 
+            this.tbTopic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.tbTopic.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tbTopic.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTopic.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.tbTopic.Location = new System.Drawing.Point(0, 0);
+            this.tbTopic.Name = "tbTopic";
+            this.tbTopic.ReadOnly = true;
+            this.tbTopic.Size = new System.Drawing.Size(902, 20);
+            this.tbTopic.TabIndex = 3;
+            // 
+            // OutputBox
+            // 
+            this.OutputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.OutputBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OutputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.OutputBox.Location = new System.Drawing.Point(0, 21);
+            this.OutputBox.Name = "OutputBox";
+            this.OutputBox.ReadOnly = true;
+            this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.OutputBox.Size = new System.Drawing.Size(902, 403);
+            this.OutputBox.TabIndex = 2;
+            this.OutputBox.Text = "";
+            this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
+            // 
+            // InterfaceUserList
+            // 
+            this.InterfaceUserList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.InterfaceUserList.ContextMenuStrip = this.contextMenuUserList;
+            this.InterfaceUserList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InterfaceUserList.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InterfaceUserList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
+            this.InterfaceUserList.FormattingEnabled = true;
+            this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
+            this.InterfaceUserList.Name = "InterfaceUserList";
+            this.InterfaceUserList.Size = new System.Drawing.Size(118, 424);
+            this.InterfaceUserList.TabIndex = 0;
+            this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.InterfaceUserList_MouseDown);
+            // 
+            // contextMenuUserList
+            // 
+            this.contextMenuUserList.Name = "contextMenuStrip1";
+            this.contextMenuUserList.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuUserList.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
+            this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // toolStripStatusLabelSilence
+            // 
+            this.toolStripStatusLabelSilence.Image = global::NarutoBot3.Properties.Resources.warning;
+            this.toolStripStatusLabelSilence.Name = "toolStripStatusLabelSilence";
+            this.toolStripStatusLabelSilence.Size = new System.Drawing.Size(99, 16);
+            this.toolStripStatusLabelSilence.Text = "Bot is Silenced";
             // 
             // toolStripButtonNarutoBot
             // 
@@ -153,6 +246,7 @@
             // 
             // connectMenuItem1
             // 
+            this.connectMenuItem1.Image = global::NarutoBot3.Properties.Resources.connect_black;
             this.connectMenuItem1.Name = "connectMenuItem1";
             this.connectMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.connectMenuItem1.Text = "&Connect...";
@@ -160,6 +254,7 @@
             // 
             // disconnectToolStripMenuItem
             // 
+            this.disconnectToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.disconnect_black;
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
             this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disconnectToolStripMenuItem.Text = "&Disconnect";
@@ -184,6 +279,7 @@
             // 
             // exitToolStripMenuItem
             // 
+            this.exitToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.close_black;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -306,21 +402,21 @@
             // rulesTextToolStripMenuItem
             // 
             this.rulesTextToolStripMenuItem.Name = "rulesTextToolStripMenuItem";
-            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rulesTextToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.rulesTextToolStripMenuItem.Text = "Rules Text";
             this.rulesTextToolStripMenuItem.Click += new System.EventHandler(this.rulesTextToolStripMenuItem_Click);
             // 
             // helpTextToolStripMenuItem
             // 
             this.helpTextToolStripMenuItem.Name = "helpTextToolStripMenuItem";
-            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.helpTextToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.helpTextToolStripMenuItem.Text = "Help Text";
             this.helpTextToolStripMenuItem.Click += new System.EventHandler(this.helpTextToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(124, 6);
             // 
             // reloadToolStripMenuItem1
             // 
@@ -333,7 +429,7 @@
             this.triviasToolStripMenuItem,
             this.killStringsToolStripMenuItem});
             this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
-            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
             this.reloadToolStripMenuItem1.Text = "Reload...";
             // 
             // allToolStripMenuItem
@@ -386,6 +482,7 @@
             // 
             this.toolStripHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gitHubToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.toolStripHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripHelp.Image")));
             this.toolStripHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -394,104 +491,21 @@
             this.toolStripHelp.Size = new System.Drawing.Size(36, 22);
             this.toolStripHelp.Text = "&Help";
             // 
+            // gitHubToolStripMenuItem
+            // 
+            this.gitHubToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.github_black;
+            this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.gitHubToolStripMenuItem.Text = "GitHub";
+            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.about_black;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // InputBox
-            // 
-            this.InputBox.AcceptsReturn = true;
-            this.InputBox.AcceptsTab = true;
-            this.InputBox.AllowDrop = true;
-            this.InputBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.InputBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.InputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.InputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.InputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.InputBox.Location = new System.Drawing.Point(0, 449);
-            this.InputBox.Name = "InputBox";
-            this.InputBox.Size = new System.Drawing.Size(1024, 20);
-            this.InputBox.TabIndex = 3;
-            this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.tbTopic);
-            this.splitContainer1.Panel1.Controls.Add(this.OutputBox);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.InterfaceUserList);
-            this.splitContainer1.Size = new System.Drawing.Size(1024, 424);
-            this.splitContainer1.SplitterDistance = 902;
-            this.splitContainer1.TabIndex = 4;
-            // 
-            // tbTopic
-            // 
-            this.tbTopic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.tbTopic.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tbTopic.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTopic.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.tbTopic.Location = new System.Drawing.Point(0, 0);
-            this.tbTopic.Name = "tbTopic";
-            this.tbTopic.ReadOnly = true;
-            this.tbTopic.Size = new System.Drawing.Size(902, 20);
-            this.tbTopic.TabIndex = 3;
-            // 
-            // OutputBox
-            // 
-            this.OutputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.OutputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.OutputBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.OutputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OutputBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.OutputBox.Location = new System.Drawing.Point(0, 21);
-            this.OutputBox.Name = "OutputBox";
-            this.OutputBox.ReadOnly = true;
-            this.OutputBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.OutputBox.Size = new System.Drawing.Size(902, 403);
-            this.OutputBox.TabIndex = 2;
-            this.OutputBox.Text = "";
-            this.OutputBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.output2_LinkClicked);
-            // 
-            // InterfaceUserList
-            // 
-            this.InterfaceUserList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.InterfaceUserList.ContextMenuStrip = this.contextMenuUserList;
-            this.InterfaceUserList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InterfaceUserList.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InterfaceUserList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(199)))), ((int)(((byte)(199)))));
-            this.InterfaceUserList.FormattingEnabled = true;
-            this.InterfaceUserList.Location = new System.Drawing.Point(0, 0);
-            this.InterfaceUserList.Name = "InterfaceUserList";
-            this.InterfaceUserList.Size = new System.Drawing.Size(118, 424);
-            this.InterfaceUserList.TabIndex = 0;
-            this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.InterfaceUserList_MouseDown);
-            // 
-            // contextMenuUserList
-            // 
-            this.contextMenuUserList.Name = "contextMenuStrip1";
-            this.contextMenuUserList.Size = new System.Drawing.Size(61, 4);
-            this.contextMenuUserList.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
-            this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // MainWindow
             // 
@@ -567,6 +581,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TextBox tbTopic;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
     }
 }
 

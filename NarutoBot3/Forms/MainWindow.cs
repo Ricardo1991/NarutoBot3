@@ -176,12 +176,12 @@ namespace NarutoBot3
             if (Settings.Default.silence == true)
             {
                 silencedToolStripMenuItem.Checked = true;
-                toolStripStatusLabelSilence.Text = "Bot is Silenced";
+                toolStripStatusLabelSilence.Visible = true;
             }
             else
             {
                 silencedToolStripMenuItem.Checked = false;
-                toolStripStatusLabelSilence.Text = "";
+                toolStripStatusLabelSilence.Visible = false;
             }
 
             HOME_CHANNEL = Settings.Default.Channel;
@@ -514,16 +514,16 @@ namespace NarutoBot3
             catch { }
         }
 
-        public void ChangeSilenceLabel(String message)
+        public void ChangeSilenceLabel(bool status)
         {
             if (statusStripBottom.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(ChangeSilenceLabel);
-                this.Invoke(d, new object[] { message });
+                SetBoolCallback d = new SetBoolCallback(ChangeSilenceLabel);
+                this.Invoke(d, new object[] { status });
             }
             else
             {
-                toolStripStatusLabelSilence.Text = message;
+                toolStripStatusLabelSilence.Visible = status;
 
             }
         }
@@ -685,13 +685,13 @@ namespace NarutoBot3
 
         private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            Process myProcess = new Process();
+            Process browser = new Process();
             string url = e.LinkText;
-            myProcess.StartInfo.UseShellExecute = true;
-            myProcess.StartInfo.FileName = url;
-            myProcess.Start();
+            browser.StartInfo.UseShellExecute = true;
+            browser.StartInfo.FileName = url;
+            browser.Start();
 
-            myProcess.Close();
+            browser.Close();
         }
 
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
@@ -788,13 +788,13 @@ namespace NarutoBot3
             {
                 silencedToolStripMenuItem.Checked = false;
                 Settings.Default.silence = false;
-                toolStripStatusLabelSilence.Text = "";
+                toolStripStatusLabelSilence.Visible = false;
             }
             else
             {
                 silencedToolStripMenuItem.Checked = true;
                 Settings.Default.silence = true;
-                toolStripStatusLabelSilence.Text = "Bot is Silenced";
+                toolStripStatusLabelSilence.Visible = true;
             }
             Settings.Default.Save();
         }
@@ -977,7 +977,7 @@ namespace NarutoBot3
         {
             ChangeSilenceCheckBox(true);
             Settings.Default.silence = true;
-            ChangeSilenceLabel("Bot is Silenced");
+            ChangeSilenceLabel(true);
             Settings.Default.Save();
         }
 
@@ -1001,7 +1001,7 @@ namespace NarutoBot3
         {
             ChangeSilenceCheckBox(false);
             Settings.Default.silence = false;
-            ChangeSilenceLabel("");
+            ChangeSilenceLabel(false);
 
             Settings.Default.Save();
         }
@@ -1013,25 +1013,29 @@ namespace NarutoBot3
             contextMenuUserList.Items.Clear();
             string nick = Bot.removeUserMode(InterfaceUserList.SelectedItem.ToString());
 
+            contextMenuUserList.Items.Add(nick);
+
+            contextMenuUserList.Items.Add(new ToolStripSeparator());
+
             if (!uList.userIsOperator(nick))
-                contextMenuUserList.Items.Add("Give " + nick + " Bot Operator Status", null, new EventHandler(delegate(Object o, EventArgs a) { bot.giveOps(nick); }));
+                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.giveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Remove " + nick + " Bot Operator Status", null, new EventHandler(delegate(Object o, EventArgs a) { bot.takeOps(nick); }));
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.takeOps(nick); }));
 
             if (!uList.userIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.muteUser(nick); }));
+                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate(Object o, EventArgs a) { bot.muteUser(nick); }));
             else
-                contextMenuUserList.Items.Add("Listen to " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.unmuteUser(nick); }));
+                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate(Object o, EventArgs a) { bot.unmuteUser(nick); }));
 
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            contextMenuUserList.Items.Add("Poke " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.pokeUser(nick); }));
-            contextMenuUserList.Items.Add("Whois " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.whoisUser(nick); }));
+            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate(Object o, EventArgs a) { bot.pokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate(Object o, EventArgs a) { bot.whoisUser(nick); }));
 
             if (Bot.getUserMode(NICK, bot.userList) == '@') { 
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.kickUser(nick); }));
+                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate(Object o, EventArgs a) { bot.kickUser(nick); }));
             }
         }
 
@@ -1181,6 +1185,18 @@ namespace NarutoBot3
 
             if(bot != null)
                 bot.updateTheme(currentColorScheme);
+        }
+
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process browser = new Process();
+
+            string url = "https://github.com/Ricardo1991/NarutoBot3";
+            browser.StartInfo.UseShellExecute = true;
+            browser.StartInfo.FileName = url;
+            browser.Start();
+
+            browser.Close();
         }
 
     }
