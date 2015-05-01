@@ -1014,56 +1014,29 @@ namespace NarutoBot3
             string nick = Bot.removeUserMode(InterfaceUserList.SelectedItem.ToString());
 
             if (!uList.userIsOperator(nick))
-                contextMenuUserList.Items.Add("Give " + nick + " Bot Operator Status");
+                contextMenuUserList.Items.Add("Give " + nick + " Bot Operator Status", null, new EventHandler(delegate(Object o, EventArgs a) { bot.giveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Remove " + nick + " Bot Operator Status");
+                contextMenuUserList.Items.Add("Remove " + nick + " Bot Operator Status", null, new EventHandler(delegate(Object o, EventArgs a) { bot.takeOps(nick); }));
 
             if (!uList.userIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore " + nick);
+                contextMenuUserList.Items.Add("Ignore " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.muteUser(nick); }));
             else
-                contextMenuUserList.Items.Add("Listen to " + nick);
+                contextMenuUserList.Items.Add("Listen to " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.unmuteUser(nick); }));
+
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            contextMenuUserList.Items.Add("Poke " + nick);
-            contextMenuUserList.Items.Add("Whois " + nick);
+            contextMenuUserList.Items.Add("Poke " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.pokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.whoisUser(nick); }));
 
             if (Bot.getUserMode(NICK, bot.userList) == '@') { 
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick " + nick);
+                contextMenuUserList.Items.Add("Kick " + nick, null, new EventHandler(delegate(Object o, EventArgs a) { bot.kickUser(nick); }));
             }
         }
 
-        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            string[] split = e.ClickedItem.Text.Split(' ');
-            switch (split[0])
-            {
-                case "Give":
-                    bot.giveOps(split[1]);
-                    break;
-                case "Remove":
-                    bot.takeOps(split[1]);
-                    break;
-                case "Ignore":
-                    bot.muteUser(split[1]);
-                    break;
-                case "Listen to":
-                    bot.unmuteUSer(split[1]);
-                    break;
-                case "Poke":
-                    bot.pokeUser(split[1]);
-                    break;
-                case "Whois":
-                    bot.whoisUser(split[1]);
-                    break;
-                case "Kick":
-                    bot.kickUser(split[1]);
-                    break;
-            } 
-        }
 
-        private void listBox1_MouseDown(object sender, MouseEventArgs e)
+        private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {

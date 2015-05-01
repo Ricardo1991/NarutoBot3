@@ -2560,7 +2560,7 @@ namespace NarutoBot3
             ul.muteUser(nick);
             ul.saveData();
         }
-        public void unmuteUSer(string nick)
+        public void unmuteUser(string nick)
         {
             ul.unmuteUser(nick);
             ul.saveData();

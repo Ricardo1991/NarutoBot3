@@ -478,7 +478,7 @@
             this.InterfaceUserList.Name = "InterfaceUserList";
             this.InterfaceUserList.Size = new System.Drawing.Size(118, 424);
             this.InterfaceUserList.TabIndex = 0;
-            this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
+            this.InterfaceUserList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.InterfaceUserList_MouseDown);
             // 
             // contextMenuUserList
             // 
@@ -486,7 +486,6 @@
             this.contextMenuUserList.Size = new System.Drawing.Size(61, 4);
             this.contextMenuUserList.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             this.contextMenuUserList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            this.contextMenuUserList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
             // 
             // imageList1
             // 
