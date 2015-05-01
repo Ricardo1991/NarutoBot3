@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace NarutoBot3
 {
-    class Useful
+    public static class Useful
     {
         public static string Base64Encode(string plainText)
         {
@@ -61,7 +61,7 @@ namespace NarutoBot3
         }
     }
 
-    static class getCompilationDate
+    public static class getCompilationDate
     {
         static public DateTime RetrieveLinkerTimestamp()
         {

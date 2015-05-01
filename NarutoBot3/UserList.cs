@@ -12,7 +12,6 @@ namespace NarutoBot3
         public List<User> Users
         {
             get { return users; }
-            set { users = value; }
         }
 
         public void saveData()

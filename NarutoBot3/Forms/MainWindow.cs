@@ -318,8 +318,6 @@ namespace NarutoBot3
 
             bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
-            bot.LoadSettings();
-
             operatorsWindow = new BotOperatorWindow(ref bot.ul);
             mutedWindow = new MutedUsersWindow(ref bot.ul);
             settingsWindow = new SettingsWindow(ref currentColorScheme);

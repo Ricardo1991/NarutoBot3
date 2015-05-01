@@ -30,8 +30,6 @@ namespace NarutoBot3
 
         public UserList ul = new UserList();
 
-        string eta = Settings.Default.eta;
-
         string mode;
         public string Mode{ get { return mode; } set { mode = value; } }
 
@@ -74,7 +72,7 @@ namespace NarutoBot3
         private TimeSpan timeDifference;
 
         IRC_Client Client;
-        RichTextBox Output2;
+        RichTextBox OutputBox;
         ColorScheme currentColorScheme = new ColorScheme();
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
         private Reddit reddit;
@@ -199,26 +197,12 @@ namespace NarutoBot3
                 Kicked(this, e);
         }
         
-        public Bot(ref IRC_Client client, ref RichTextBox output2, ColorScheme color)
+        public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
         {
             Client = client;
-            Output2 = output2;
+            OutputBox = output;
             currentColorScheme = color;
-            
-        }
 
-        public void updateTheme(ColorScheme newColorScheme){
-            currentColorScheme = newColorScheme;
-        }
-
-        ~Bot()
-        {
-            Dispose(false);
-            return;
-        }
-
-        public void LoadSettings()
-        {
             ReadHelp();                 //help text
             ReadTrivia();               //trivia strings
             ReadKills();                //Read the killstrings
@@ -230,44 +214,55 @@ namespace NarutoBot3
 
             if (Settings.Default.redditUserEnabled)
             {
-                try { 
-                    user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true); 
+                try
+                {
+                    user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true);
                 }
                 catch { }
             }
 
             if (Settings.Default.twitterEnabled)
             {
-                try {
+                try
+                {
                     service = new TwitterService(Settings.Default.twitterConsumerKey, Settings.Default.twitterConsumerKeySecret);
 
                     service.AuthenticateWith(Settings.Default.twitterAccessToken, Settings.Default.twitterAccessTokenSecret);
                 }
 
-                catch {
+                catch
+                {
                     Settings.Default.twitterEnabled = false;
                     Settings.Default.Save();
                 }
             }
+        }
 
-            
+        ~Bot()
+        {
+            Dispose(false);
+            return;
+        }
+
+        public void updateTheme(ColorScheme newColorScheme){
+            if(newColorScheme != null)
+                currentColorScheme = newColorScheme;
         }
 
         public void processMessage(string message)
         {
-            if (String.IsNullOrEmpty(message)) return;
-
-            Who = "";
-            WhoLeft = "";
-            NewNick = "";
-
             string prefix;
             string command;
             string[] parameters;
             string completeParameters;
             List<string> userTemp = new List<string>();
-
             bool found;
+
+            Who = "";
+            WhoLeft = "";
+            NewNick = "";
+
+            if (String.IsNullOrEmpty(message)) return;
 
             if (message.Contains("PING :"))
             {
@@ -278,6 +273,7 @@ namespace NarutoBot3
                 #if DEBUG
                 WriteMessage(message);
                 #endif
+                return;
             }
 
             else
@@ -287,13 +283,7 @@ namespace NarutoBot3
                 switch (command)
                 {
                     case ("001"):
-                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
-                        break;
-
                     case ("002"):
-                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
-                        break;
-
                     case ("003"):
                         WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
                         break;
@@ -303,38 +293,21 @@ namespace NarutoBot3
                         break;
 
                     case ("005"):
-                        break;
-
                     case ("250"):
-                        break;
-
                     case ("251"):
-                        break;
-
                     case ("252"):
-                        break;
-
                     case ("254"):
-                        break;
-
                     case ("255"):
-                        break;
-
                     case ("265"):
-                        break;
-
                     case ("266"):
+                    case ("333"): //Topic author and time
+                    case ("366"): //End of /NAMES
+                    case ("375"): //START OF MOTD
                         break;
 
                     case ("332"):   //TOPIC
                         Topic = completeParameters.Split(new char[] { ' ' }, 3)[2];
                         OnTopicChange(EventArgs.Empty);
-                        break;
-
-                    case ("333"): //Topic author and time
-                        break;
-
-                    case ("366"): //End of /NAMES
                         break;
 
                     case ("353"): //USERLIST
@@ -356,8 +329,6 @@ namespace NarutoBot3
                         OnCreate(EventArgs.Empty);
                         break;
 
-                    case ("375"): //START OF MOTD
-                        break;
 
                     case ("372"): //MOTD
                         string motd = completeParameters.Split(new char[] { ' ' }, 2)[1];
@@ -924,8 +895,6 @@ namespace NarutoBot3
                         break;
 
                     default:
-                        //string text = completeParameters.Split(new char[] {' '}, 2)[1];
-                        //WriteMessage(text);
                         WriteMessage("* " + command + " " + completeParameters);
                         break;
                 }
@@ -970,22 +939,20 @@ namespace NarutoBot3
 
         static public char getUserMode(string user, List<string> userList)
         {
+            user = user.Trim();
+
             foreach (string u in userList)
             {
-                if (u.Contains(user))
+                if (String.Compare(u, user, true) == 0 )
                 {
-                    switch (u.Substring(0, 1))
+                    switch (u[0])
                     {
-                        case "@":
-                            return '@';
-                        case "+":
-                            return '+';
-                        case "%":
-                            return '%';
-                        case "~":
-                            return '~';
-                        case "&":
-                            return '&';
+                        case '@':
+                        case '+':
+                        case '%':
+                        case '~':
+                        case '&':
+                            return u[0];
                         default:
                             return '0';
                     }
@@ -2646,12 +2613,12 @@ namespace NarutoBot3
         /// <param Name="Message">A sting with the Message to write</param>
         public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
         {
-            if (Output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 try
                 {
                     MethodInvoker invoker = () => WriteMessage(message);
-                    Output2.Invoke(invoker);
+                    OutputBox.Invoke(invoker);
                 }
                 catch { }
             }
@@ -2660,15 +2627,15 @@ namespace NarutoBot3
                 string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
                 if (Settings.Default.showTimeStamps)
-                    this.Output2.AppendText(timeString + " " + message + "\n");
+                    this.OutputBox.AppendText(timeString + " " + message + "\n");
 
                 else
-                    this.Output2.AppendText(message + "\n");
+                    this.OutputBox.AppendText(message + "\n");
 
                 if (Settings.Default.autoScrollToBottom)
                 {
-                    Output2.SelectionStart = Output2.Text.Length;       //Set the current caret position at the end
-                    Output2.ScrollToCaret();                          //Now scroll it automatically
+                    OutputBox.SelectionStart = OutputBox.Text.Length;       //Set the current caret position at the end
+                    OutputBox.ScrollToCaret();                          //Now scroll it automatically
                 }
             }
 
@@ -2677,12 +2644,12 @@ namespace NarutoBot3
         }
         public void WriteMessage(String message, Color color) //Writes Message on the TextBox (bot console)
         {
-            if (Output2.InvokeRequired)
+            if (OutputBox.InvokeRequired)
             {
                 try
                 {
                     MethodInvoker invoker = () => WriteMessage(message, color);
-                    Output2.Invoke(invoker);
+                    OutputBox.Invoke(invoker);
                 }
                 catch { }
             }
@@ -2691,17 +2658,17 @@ namespace NarutoBot3
                 string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
                 if(Settings.Default.showTimeStamps){
-                    this.Output2.AppendText(timeString + " ");
-                    this.Output2.AppendText(message + "\n", color);
+                    this.OutputBox.AppendText(timeString + " ");
+                    this.OutputBox.AppendText(message + "\n", color);
                 }
                     
                 else
-                    this.Output2.AppendText(message + "\n", color);
+                    this.OutputBox.AppendText(message + "\n", color);
 
                 if (Settings.Default.autoScrollToBottom)
                 {
-                    Output2.SelectionStart = Output2.Text.Length;       //Set the current caret position at the end
-                    Output2.ScrollToCaret();                          //Now scroll it automatically
+                    OutputBox.SelectionStart = OutputBox.Text.Length;       //Set the current caret position at the end
+                    OutputBox.ScrollToCaret();                          //Now scroll it automatically
                 }
             }
 
@@ -2764,7 +2731,7 @@ namespace NarutoBot3
             }
             userList.Clear();
             Client.Disconnect();
-            Output2.Clear();
+            OutputBox.Clear();
         }
 
         private string questionsRegex(string rest)

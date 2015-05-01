@@ -10,9 +10,9 @@ namespace NarutoBot3
 
         public string HOME_CHANNEL;
         public string HOST;
+        public char SYMBOL = '!';
         public int PORT;
         public string NICK;
-        public string SYMBOL = "!";
         public string REALNAME;
 
         public string HOST_SERVER;
@@ -130,6 +130,8 @@ namespace NarutoBot3
         {
             try
             {
+                if (writer != null) sendMessage("QUIT Goodbye!\r\n");
+
                 isConnected = false;
 
                 if (stream != null)
