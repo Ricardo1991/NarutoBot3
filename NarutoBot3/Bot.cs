@@ -601,7 +601,7 @@ namespace NarutoBot3
 
                             for (int i = 0; i < tab; i++)
                                 alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
+                            WriteMessage(alignedNick + "| " + msg, currentColorScheme.Notice);
                         }
                         else if (msg.ToLower().Contains(Client.NICK.ToLower()))
                         {
@@ -610,7 +610,7 @@ namespace NarutoBot3
 
                             for (int i = 0; i < tab; i++)
                                 alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
+                            WriteMessage(alignedNick + "| " + msg, currentColorScheme.Mention);
                         }
                         else
                         {
@@ -619,7 +619,7 @@ namespace NarutoBot3
 
                             for (int i = 0; i < tab; i++)
                                 alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg);
+                            WriteMessage(alignedNick + "| " + msg);
                         }
 
                         //StartParsing
@@ -891,7 +891,7 @@ namespace NarutoBot3
 
                             for (int i = 0; i < tab; i++)
                                 alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + parameters[1], currentColorScheme.Notice);
+                            WriteMessage(alignedNick + "| " + parameters[1], currentColorScheme.Notice);
 
                         }
                         
@@ -1146,7 +1146,7 @@ namespace NarutoBot3
 
             for (int i = 0; i < tab; i++)
                 alignedNick = alignedNick + " ";
-            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+            WriteMessage(alignedNick + "| " + message, currentColorScheme.OwnMessage);
                 
 
             return result;
