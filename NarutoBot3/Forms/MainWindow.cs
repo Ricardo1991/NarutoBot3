@@ -106,8 +106,6 @@ namespace NarutoBot3
                 exitTheLoop = false;
                 timeoutTimer.Enabled = true;
 
-                doAutojoinCommand();
-
                 return true;
             }
 
@@ -338,6 +336,9 @@ namespace NarutoBot3
 
         private void disconnectClient()
         {
+            if(bot!=null) bot.userList.Clear();
+
+            InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
             client.Disconnect();
 
@@ -891,6 +892,7 @@ namespace NarutoBot3
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
+                if (String.IsNullOrEmpty(InputBox.Text)) return;
 
                 parseInputMessage(InputBox.Text);
 
@@ -904,8 +906,7 @@ namespace NarutoBot3
             string message = "";
 
             if (!client.isConnected) return;
-            if (String.IsNullOrEmpty(InputBox.Text)) return;
-
+            
             if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
             {
                 if (parsed[0][0] == '/')
@@ -1129,6 +1130,8 @@ namespace NarutoBot3
             ChangeConnectingLabel("Connected");
             client.Join();
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+
+            doAutojoinCommand();
         }
 
         private void nowConnectedWithServer(object sender, EventArgs e)
@@ -1163,13 +1166,17 @@ namespace NarutoBot3
         {
             Random r = new Random();
 
-            disconnectClient();
+            if (!client.isConnected)
+            {
+                disconnectClient();
 
-            Settings.Default.Nick = client.NICK + r.Next(10);
-            Settings.Default.Save();
+                Settings.Default.Nick = client.NICK + r.Next(10);
+                Settings.Default.Save();
 
-            if (connect())  //If connected with success, then start the bot
-                backgroundWorker.RunWorkerAsync();
+                if (connect())  //If connected with success, then start the bot
+                    backgroundWorker.RunWorkerAsync();
+            }
+            
         }
 
         private void pingServer(object sender, EventArgs e)
