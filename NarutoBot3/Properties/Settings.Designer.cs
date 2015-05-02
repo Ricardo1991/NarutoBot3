@@ -694,5 +694,17 @@ namespace NarutoBot3.Properties {
                 this["autoScrollToBottom"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autojoinCommand {
+            get {
+                return ((string)(this["autojoinCommand"]));
+            }
+            set {
+                this["autojoinCommand"] = value;
+            }
+        }
     }
 }

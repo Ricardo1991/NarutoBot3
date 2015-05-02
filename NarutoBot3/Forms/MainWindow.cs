@@ -106,6 +106,8 @@ namespace NarutoBot3
                 exitTheLoop = false;
                 timeoutTimer.Enabled = true;
 
+                doAutojoinCommand();
+
                 return true;
             }
 
@@ -115,6 +117,14 @@ namespace NarutoBot3
 
                 return false;
             }
+        }
+
+        private void doAutojoinCommand()
+        {
+            if(!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
+            {
+                parseInputMessage(Settings.Default.autojoinCommand);
+            }        
         }
 
         public void loadSettings()
@@ -881,60 +891,66 @@ namespace NarutoBot3
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
-                string message = "";
 
-                if (!client.isConnected) return;
-                if (String.IsNullOrEmpty(InputBox.Text)) return;
+                parseInputMessage(InputBox.Text);
 
-                string[] parsed = InputBox.Text.Split(new char[] {' '}, 2); //parsed[0] is the command (first word), parsed[1] is the rest              
-
-                if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
-                {
-                    if (parsed[0][0] == '/')
-                    {
-                        if (parsed[0].ToLower() == "/me")  //Action send
-                            message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
-
-                        else if (parsed[0].ToLower() == "/whois")  //Action send
-                            message = "WHOIS " + parsed[1] + "\n";
-
-                        else if (parsed[0].ToLower() == "/whowas")  //Action send
-                            message = "WHOWAS " + parsed[1] + "\n";
-
-                        else if (parsed[0].ToLower() == "/nick")  //Action send
-                            changeNick(parsed[1]);
-
-                        else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
-                            message = privmsg("NickServ", parsed[1]);
-
-                        else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
-                            message = privmsg("ChanServ", parsed[1]);
-
-                        else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
-                        {
-                            parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
-                            if (parsed.Length >= 3)
-                                message = privmsg(parsed[1], parsed[2]);
-                            else
-                                WriteMessage("Not enough arguments");
-                        }
-                        else if (parsed[0].ToLower() == "/identify")
-                            message = privmsg("NickServ", "identify " + parsed[1]);
-                    }
-                   
-                    else //Normal send
-                        message = privmsg(HOME_CHANNEL, InputBox.Text);  
-                }
-                else
-                    if (parsed[0][0] == '/')
-                        WriteMessage("Not enough arguments");
-
-                    else //Normal send
-                        message = privmsg(HOME_CHANNEL, InputBox.Text);
-                    
-                if(!String.IsNullOrWhiteSpace(message)) client.sendMessage(message);
                 ChangeInput("");
             }
+        }
+
+        private void parseInputMessage(string inmessage)
+        {
+            string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest    
+            string message = "";
+
+            if (!client.isConnected) return;
+            if (String.IsNullOrEmpty(InputBox.Text)) return;
+
+            if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
+            {
+                if (parsed[0][0] == '/')
+                {
+                    if (parsed[0].ToLower() == "/me")  //Action send
+                        message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
+
+                    else if (parsed[0].ToLower() == "/whois")  //Action send
+                        message = "WHOIS " + parsed[1] + "\n";
+
+                    else if (parsed[0].ToLower() == "/whowas")  //Action send
+                        message = "WHOWAS " + parsed[1] + "\n";
+
+                    else if (parsed[0].ToLower() == "/nick")  //Action send
+                        changeNick(parsed[1]);
+
+                    else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
+                        message = privmsg("NickServ", parsed[1]);
+
+                    else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
+                        message = privmsg("ChanServ", parsed[1]);
+
+                    else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
+                    {
+                        parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
+                        if (parsed.Length >= 3)
+                            message = privmsg(parsed[1], parsed[2]);
+                        else
+                            WriteMessage("Not enough arguments");
+                    }
+                    else if (parsed[0].ToLower() == "/identify")
+                        message = privmsg("NickServ", "identify " + parsed[1]);
+                }
+
+                else //Normal send
+                    message = privmsg(HOME_CHANNEL, InputBox.Text);
+            }
+            else
+                if (parsed[0][0] == '/')
+                    WriteMessage("Not enough arguments");
+
+                else //Normal send
+                    message = privmsg(HOME_CHANNEL, InputBox.Text);
+
+            if (!String.IsNullOrWhiteSpace(message)) client.sendMessage(message);
         }
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)

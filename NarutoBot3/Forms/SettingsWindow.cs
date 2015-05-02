@@ -35,6 +35,8 @@ namespace NarutoBot3
 
         private void bSave_Click(object sender, EventArgs e)
         {
+            Settings.Default.autojoinCommand = cb_ConnectCommand.Text;
+
             Settings.Default.youtubeSearchEnabled = cb_YTSearch.Checked;
             Settings.Default.questionEnabled = cb_Questions.Checked;
             Settings.Default.killEnabled = cb_Kill.Checked;
@@ -143,6 +145,8 @@ namespace NarutoBot3
 
         private void EnabledCommandsWindow_Shown(object sender, EventArgs e)
         {
+
+            cb_ConnectCommand.Text = Settings.Default.autojoinCommand;
             cb_Kill.Checked = Settings.Default.killEnabled;
             cb_Anime.Checked = Settings.Default.aniSearchEnabled;
             cb_randomText.Checked = Settings.Default.randomTextEnabled;
