@@ -588,7 +588,6 @@ namespace NarutoBot3
                         string cmd = msg.Split(' ')[0];
                         string arg = "";
 
-
                         user = removeUserMode(user);
 
                         if (msg.Length - 1 > cmd.Length)
@@ -633,151 +632,156 @@ namespace NarutoBot3
                                 hello(whoSent, user);
                             }
 
-                        else if (msg == "!anime best anime ever")
-                            {
-                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
-                            }
-
-                        else if (String.Compare(cmd, Client.NICK+",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length-1]=='?')
+                        else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length - 1] == '?')
                             {
                                 WriteMessage("* Received a question from " + user, currentColorScheme.BotReport);
                                 parseQuestion(Client.HOME_CHANNEL, user, arg);
                             }
+                        else if (cmd[0] == Client.SYMBOL)   //Bot Command
+                            {
+                                cmd = cmd.Substring(1);
 
-                        else if (String.Compare(cmd, Client.SYMBOL + "help", true) == 0)
-                            {
-                                WriteMessage("* Received a help request from " + user, currentColorScheme.BotReport);
-                                help(user);
-                            }
-
-                        else if (String.Compare(cmd, Client.SYMBOL + "rules", true) == 0)
-                            {
-                                WriteMessage("* Received a rules request from " + user, currentColorScheme.BotReport);
-                                rules(whoSent, user);
-                            }
-
-                        else if (String.Compare(cmd, Client.SYMBOL + "quit", true) == 0)
-                            {
-                                WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
-                                if(quitIRC(user)) OnQuit(EventArgs.Empty);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "oplist", true) == 0)
-                            {
-                                WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
-                                opList(user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "roll", true) == 0)
-                            {
-                                WriteMessage("* Received a roll request from " + user, currentColorScheme.BotReport);
-                                roll(whoSent, user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "say", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
-                                say(Client.HOME_CHANNEL, arg, user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "greetme", true) == 0)
-                            {
-                                if (String.IsNullOrEmpty(arg))
+                            if (msg == "!anime best anime ever")
                                 {
-                                    WriteMessage("* Received a greet TOOGLE request from " + user, currentColorScheme.BotReport);
-                                    GreetToogle(user);
+                                    Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                                 }
-                                else
+                            else if (String.Compare(cmd, "help", true) == 0)
                                 {
-                                    WriteMessage("* Received a greet request from " + user, currentColorScheme.BotReport);
-                                    AddGreetings(arg, user);
+                                    WriteMessage("* Received a help request from " + user, currentColorScheme.BotReport);
+                                    help(user);
                                 }
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "greetmenow", true) == 0)
-                        {
-                                WriteMessage("* Received a greet me now request from " + user, currentColorScheme.BotReport);
-                                greetUser(user);
-                        }
-                        else if (String.Compare(cmd, Client.SYMBOL + "me", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
-                                me(Client.HOME_CHANNEL, arg, user);
+
+                            else if (String.Compare(cmd, "rules", true) == 0)
+                                {
+                                    WriteMessage("* Received a rules request from " + user, currentColorScheme.BotReport);
+                                    rules(whoSent, user);
+                                }
+
+                            else if (String.Compare(cmd, "quit", true) == 0)
+                                {
+                                    WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
+                                    if(quitIRC(user)) OnQuit(EventArgs.Empty);
+                                }
+                            else if (String.Compare(cmd, "oplist", true) == 0)
+                                {
+                                    WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
+                                    opList(user);
+                                }
+                            else if (String.Compare(cmd, "roll", true) == 0)
+                                {
+                                    WriteMessage("* Received a roll request from " + user, currentColorScheme.BotReport);
+                                    roll(whoSent, user);
+                                }
+                            else if (String.Compare(cmd, "say", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
+                                    say(Client.HOME_CHANNEL, arg, user);
+                                }
+                            else if (String.Compare(cmd, "greetme", true) == 0)
+                                {
+                                    if (String.IsNullOrEmpty(arg))
+                                    {
+                                        WriteMessage("* Received a greet TOOGLE request from " + user, currentColorScheme.BotReport);
+                                        GreetToogle(user);
+                                    }
+                                    else
+                                    {
+                                        WriteMessage("* Received a greet request from " + user, currentColorScheme.BotReport);
+                                        AddGreetings(arg, user);
+                                    }
+                                }
+                            else if (String.Compare(cmd, "greetmenow", true) == 0)
+                                {
+                                        WriteMessage("* Received a greet me now request from " + user, currentColorScheme.BotReport);
+                                        greetUser(user);
+                                }
+                            else if (String.Compare(cmd, "me", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
+                                    me(Client.HOME_CHANNEL, arg, user);
+                                }
+
+                            else if (String.Compare(cmd, "silence", true) == 0)
+                                {
+                                    WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
+                                    silence(user);
+                                }
+                            else if (String.Compare(cmd, "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
+                                    if (ul.userIsOperator(user)) changeNick(arg);
+                                }
+
+                            else if (String.Compare(cmd, "op", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
+                                    addBotOP(user, arg);
+                                }
+                            else if (String.Compare(cmd, "deop", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
+                                    removeBotOP(user, arg);
+                                }
+                            else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
+                                    toFahrenheit(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
+                                    toCelcius(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "time", true) == 0)
+                                {
+                                    WriteMessage("* Received a time request from " + user, currentColorScheme.BotReport);
+                                    time(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "wiki", true) == 0)
+                                {
+                                    WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
+                                    explain(Client.HOME_CHANNEL, user, arg);
+                                }
+
+                            else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
+                                    animeSearch(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
+                                    youtubeSearch(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "poke", true) == 0)
+                                {
+                                    WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
+                                    poke(Client.HOME_CHANNEL, user);
+                                }
+
+                            else if (String.Compare(cmd, "trivia", true) == 0)
+                                {
+                                    WriteMessage("* Received a trivia request from " + user, currentColorScheme.BotReport);
+                                    trivia(Client.HOME_CHANNEL, user);
+                                }
+                            else if (String.Compare(cmd, "Nick", true) == 0)
+                                {
+                                    WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
+                                    nickGen(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "kill", true) == 0)
+                                {
+                                    WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
+                                    killUser(Client.HOME_CHANNEL, user, arg);
+                                }
+                            else if (String.Compare(cmd, "lastkill", true) == 0)
+                                {
+                                    WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                                    lastKill(Client.HOME_CHANNEL, user);
+                                }
+
                             }
 
-                        else if (String.Compare(cmd, Client.SYMBOL + "silence", true) == 0)
-                            {
-                                WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
-                                silence(user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
-                                if (ul.userIsOperator(user)) changeNick(arg);
-                            }
-
-                        else if (String.Compare(cmd, Client.SYMBOL + "op", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
-                                addBotOP(user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "deop", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
-                                removeBotOP(user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "toF", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
-                                toFahrenheit(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "toC", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
-                                toCelcius(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "time", true) == 0)
-                            {
-                                WriteMessage("* Received a time request from " + user, currentColorScheme.BotReport);
-                                time(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "wiki", true) == 0)
-                            {
-                                WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
-                                explain(Client.HOME_CHANNEL, user, arg);
-                            }
-
-                        else if (String.Compare(cmd, Client.SYMBOL + "anime", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
-                                animeSearch(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
-                                youtubeSearch(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "poke", true) == 0)
-                            {
-                                WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
-                                poke(Client.HOME_CHANNEL, user);
-                            }
-
-                        else if (String.Compare(cmd, Client.SYMBOL + "trivia", true) == 0)
-                            {
-                                WriteMessage("* Received a trivia request from " + user, currentColorScheme.BotReport);
-                                trivia(Client.HOME_CHANNEL, user);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "Nick", true) == 0)
-                            {
-                                WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
-                                nickGen(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "kill", true) == 0)
-                            {
-                                WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
-                                killUser(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (String.Compare(cmd, Client.SYMBOL + "lastkill", true) == 0)
-                            {
-                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
-                                lastKill(Client.HOME_CHANNEL, user);
-                            }
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
                             {
                                 WriteMessage("* Detected an youtube video from  " + user, currentColorScheme.BotReport);
@@ -810,19 +814,17 @@ namespace NarutoBot3
 
                         else if (message.Contains("\x01"))
                             {
-                                if (cmd.Contains("VERSION"))
-                                {
+                                if (cmd.Contains("VERSION")){
                                     WriteMessage("* Received a CTCP version request from " + user, currentColorScheme.BotReport);
                                     ctcpVersion(user);
                                 }
 
-                                if (cmd.Contains("TIME"))
-                                {
+                                else if (cmd.Contains("TIME")){
                                     WriteMessage("* Received a CTCP time request from " + user, currentColorScheme.BotReport);
                                     ctcpTime(user);
                                 }
-                                if (cmd.Contains("PING"))
-                                {
+
+                                else if (cmd.Contains("PING")){
                                     WriteMessage("* Received a CTCP ping request from " + user, currentColorScheme.BotReport);
                                     ctcpPing(user, arg);
                                 }
@@ -842,40 +844,41 @@ namespace NarutoBot3
                     case ("NOTICE"):
                         if (message.Contains("\x01"))
                         {
-                            string userr;
-                            if (prefix.Contains('!'))
-                                userr = prefix.Substring(0, prefix.IndexOf("!"));   //Nick of the Sender
-                            else userr = prefix;
-                            //string whoSentt = parameters[0];                        //Who sent is the source of the Message. (The Channel, or User if private Message)
-                            string msgg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty);
-                            msgg=msgg.Trim();
-                            string cmdd = msgg.Split(' ')[0];
+                            string userN;
                             string argg;
-                            if (msgg.Length - 1 > cmdd.Length)
-                                argg = msgg.Substring(cmdd.Length);                 //the rest of msg
+                            string msgN = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                            string cmdN = msgN.Split(' ')[0];
+
+                            if (prefix.Contains('!'))
+                                userN = prefix.Substring(0, prefix.IndexOf("!"));   //Nick of the Sender
+                            else userN = prefix;
+                            
+                            if (msgN.Length - 1 > cmdN.Length)
+                                argg = msgN.Substring(cmdN.Length);                 //the rest of msg
                             else argg = "";
-                            //string commandS = msgg.Substring(msgg.IndexOf("\x01") + 1, msgg.Length - 2);
 
-                            if (cmdd.Contains("VERSION"))
+                            if (cmdN.Contains("VERSION"))
                             {
-                                WriteMessage("* Received a CTCP version request from " + userr, currentColorScheme.BotReport);
-                                ctcpVersion(userr);
+                                WriteMessage("* Received a CTCP version request from " + userN, currentColorScheme.BotReport);
+                                ctcpVersion(userN);
                             }
 
-                            if (cmdd.Contains("TIME"))
+                            else if (cmdN.Contains("TIME"))
                             {
-                                WriteMessage("* Received a CTCP time request from " + userr, currentColorScheme.BotReport);
-                                ctcpTime(userr);
+                                WriteMessage("* Received a CTCP time request from " + userN, currentColorScheme.BotReport);
+                                ctcpTime(userN);
                             }
-                            if (cmdd.Contains("PING"))
+
+                            else if (cmdN.Contains("PING"))
                             {
-                                WriteMessage("* Received a CTCP ping request from " + userr, currentColorScheme.BotReport);
+                                WriteMessage("* Received a CTCP ping request from " + userN, currentColorScheme.BotReport);
                                 
-                                ctcpPing(userr, argg);
+                                ctcpPing(userN, argg);
                             }
                         }
                         else{
                             string alignedNick = prefix;
+
                             try{
                                 alignedNick = prefix.Substring(0, prefix.IndexOf("!"));  //Nick of the Sender
                             }
@@ -925,8 +928,6 @@ namespace NarutoBot3
             command = commandAndParameters.First();
             if (commandAndParameters.Length > 1)
                 parameters = commandAndParameters.Skip(1).ToArray();
-
-
 
             if (!String.IsNullOrEmpty(trailing))
                 parameters = parameters.Concat(new string[] { trailing }).ToArray();
