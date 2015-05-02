@@ -428,7 +428,7 @@ namespace NarutoBot3
 
             for (int i = 0; i < tab; i++)
                 alignedNick = alignedNick + " ";
-            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+            WriteMessage(alignedNick + "| " + message, currentColorScheme.OwnMessage);
 
 
             return result;
