@@ -789,7 +789,8 @@ namespace NarutoBot3
                                     {
                                         printQuote(Client.HOME_CHANNEL, arg, user);
                                     }
-                                    else if (arg.ToLower().Split(new char[]{ ' '},1)[0] == "add")  //add
+
+                                    else if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
                                     {
                                         addQuote(Client.HOME_CHANNEL, arg, user);
                                     }
@@ -2590,7 +2591,7 @@ namespace NarutoBot3
             }
             else if (args[0] == '#')
             {
-                string split = args.Split(new char[] { ' ' }, 1)[0];
+                string split = args.Split(new char[] { ' ' }, 2)[0];
                 int number = Convert.ToInt32(split.Replace("#",string.Empty));
 
                 if (number <= quotes.Count)
