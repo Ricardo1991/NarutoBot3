@@ -37,6 +37,7 @@ namespace NarutoBot3
         {
             Settings.Default.autojoinCommand = cb_ConnectCommand.Text;
 
+            Settings.Default.quotesEnabled = cbQuotes.Checked;
             Settings.Default.youtubeSearchEnabled = cb_YTSearch.Checked;
             Settings.Default.questionEnabled = cb_Questions.Checked;
             Settings.Default.killEnabled = cb_Kill.Checked;
@@ -147,6 +148,8 @@ namespace NarutoBot3
         {
 
             cb_ConnectCommand.Text = Settings.Default.autojoinCommand;
+
+            cbQuotes.Checked = Settings.Default.quotesEnabled;
             cb_Kill.Checked = Settings.Default.killEnabled;
             cb_Anime.Checked = Settings.Default.aniSearchEnabled;
             cb_randomText.Checked = Settings.Default.randomTextEnabled;

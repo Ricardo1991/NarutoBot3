@@ -23,6 +23,7 @@ namespace NarutoBot3
         private List<string> hlp = new List<string>();
         private List<string> tri = new List<string>();
         private List<string> kill = new List<string>();
+        private List<string> quotes = new List<string>();
         private List<string> nickGenStrings;
         private List<pastMessage> pastMessages = new List<pastMessage>();
 
@@ -207,6 +208,7 @@ namespace NarutoBot3
             ReadTrivia();               //trivia strings
             ReadKills();                //Read the killstrings
             ReadNickGen();              //For the Nick generator
+            ReadQuotes();
 
             ul.loadData();
 
@@ -779,7 +781,20 @@ namespace NarutoBot3
                                     WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
                                     lastKill(Client.HOME_CHANNEL, user);
                                 }
+                            else if (String.Compare(cmd, "quote", true) == 0)
+                                {
+                                    WriteMessage("* Received a quote request from " + user, currentColorScheme.BotReport);
 
+                                    if (String.IsNullOrEmpty(arg) || arg[0] == '#') //lookup or random
+                                    {
+                                        printQuote(Client.HOME_CHANNEL, arg, user);
+                                    }
+                                    else if (arg.ToLower().Split(new char[]{ ' '},1)[0] == "add")  //add
+                                    {
+                                        addQuote(Client.HOME_CHANNEL, arg, user);
+                                    }
+
+                                }
                             }
 
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
@@ -1129,6 +1144,44 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
         }
+
+        public void ReadQuotes()
+        {
+            quotes = new List<string>();
+            quotes.Clear();
+
+            if (File.Exists("TextFiles/quotes.txt"))
+            {
+                try
+                {
+                    StreamReader sr = new StreamReader("TextFiles/quotes.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        quotes.Add(sr.ReadLine());
+                    }
+                    sr.Close();
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+                Settings.Default.quotesEnabled = false;
+                Settings.Default.Save();
+            }
+        }
+
+        public void saveQuotes(){
+            using (StreamWriter newTask = new StreamWriter("TextFiles/quotes.txt", false))
+            {
+                foreach (string q in quotes)
+                {
+                    newTask.WriteLine(q);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Sends a Message to the destinatary
@@ -2496,7 +2549,7 @@ namespace NarutoBot3
 
         void greetUser(string nick)
         {
-           if (ul.userIsMuted(nick) || !Settings.Default.greetingsEnabled) return;
+            if (ul.userIsMuted(nick) || !Settings.Default.greetingsEnabled) return;
 
             foreach (User u in ul.Users)
             {
@@ -2520,6 +2573,44 @@ namespace NarutoBot3
                 return true;
             }
             return false;
+        }
+
+        void printQuote(string CHANNEL, string args, string nick)
+        {
+            Random r = new Random();
+            int i;
+            string message = "";
+
+            if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
+
+            if (String.IsNullOrWhiteSpace(args) && quotes.Count>0) //pring random
+            {
+                i = r.Next(quotes.Count);
+                message = Privmsg(CHANNEL, quotes[i]);
+            }
+            else if (args[0] == '#')
+            {
+                string split = args.Split(new char[] { ' ' }, 1)[0];
+                int number = Convert.ToInt32(split.Replace("#",string.Empty));
+
+                if (number <= quotes.Count)
+                    message = Privmsg(CHANNEL, quotes[number - 1]);
+                else
+                    message = Privmsg(CHANNEL, "Quote "+ number +" not found");
+            }
+
+            Client.sendMessage(message);
+
+        }
+
+        void addQuote(string CHANNEL, string args, string nick)
+        {
+            if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
+
+            if (quotes != null)
+                quotes.Add(Useful.getBetween(args, "add ", null));
+
+            saveQuotes();
         }
 
         ///////////////////////////////////

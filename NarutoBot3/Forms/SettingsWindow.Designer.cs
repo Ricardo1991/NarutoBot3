@@ -57,6 +57,8 @@
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabInterface = new System.Windows.Forms.TabPage();
+            this.gb_autocommand = new System.Windows.Forms.GroupBox();
+            this.cb_ConnectCommand = new System.Windows.Forms.TextBox();
             this.gb_AppearanceChatWindow = new System.Windows.Forms.GroupBox();
             this.cbScroll = new System.Windows.Forms.CheckBox();
             this.cbTimeStamp = new System.Windows.Forms.CheckBox();
@@ -95,9 +97,8 @@
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.gb_autocommand = new System.Windows.Forms.GroupBox();
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cb_ConnectCommand = new System.Windows.Forms.TextBox();
+            this.cbQuotes = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -105,6 +106,7 @@
             this.settingsTabControl.SuspendLayout();
             this.enableDisableTab.SuspendLayout();
             this.tabInterface.SuspendLayout();
+            this.gb_autocommand.SuspendLayout();
             this.gb_AppearanceChatWindow.SuspendLayout();
             this.redditCredentialsTab.SuspendLayout();
             this.gb_CredentialsRedditLogin.SuspendLayout();
@@ -116,7 +118,6 @@
             this.gb_CredentialsTwitterAccessTokens.SuspendLayout();
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            this.gb_autocommand.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -200,7 +201,7 @@
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Anime);
             this.gb_FeaturesHelpful.Location = new System.Drawing.Point(6, 84);
             this.gb_FeaturesHelpful.Name = "gb_FeaturesHelpful";
-            this.gb_FeaturesHelpful.Size = new System.Drawing.Size(162, 169);
+            this.gb_FeaturesHelpful.Size = new System.Drawing.Size(162, 202);
             this.gb_FeaturesHelpful.TabIndex = 16;
             this.gb_FeaturesHelpful.TabStop = false;
             this.gb_FeaturesHelpful.Text = "Helpful";
@@ -314,6 +315,7 @@
             // 
             // gb_FeaturesFun
             // 
+            this.gb_FeaturesFun.Controls.Add(this.cbQuotes);
             this.gb_FeaturesFun.Controls.Add(this.cb_greetings);
             this.gb_FeaturesFun.Controls.Add(this.cb_Questions);
             this.gb_FeaturesFun.Controls.Add(this.cb_Kill);
@@ -325,7 +327,7 @@
             this.gb_FeaturesFun.Controls.Add(this.cb_randomText);
             this.gb_FeaturesFun.Location = new System.Drawing.Point(174, 10);
             this.gb_FeaturesFun.Name = "gb_FeaturesFun";
-            this.gb_FeaturesFun.Size = new System.Drawing.Size(162, 243);
+            this.gb_FeaturesFun.Size = new System.Drawing.Size(162, 276);
             this.gb_FeaturesFun.TabIndex = 14;
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
@@ -467,6 +469,23 @@
             this.tabInterface.TabIndex = 4;
             this.tabInterface.Text = "Client and Interface";
             this.tabInterface.UseVisualStyleBackColor = true;
+            // 
+            // gb_autocommand
+            // 
+            this.gb_autocommand.Controls.Add(this.cb_ConnectCommand);
+            this.gb_autocommand.Location = new System.Drawing.Point(146, 92);
+            this.gb_autocommand.Name = "gb_autocommand";
+            this.gb_autocommand.Size = new System.Drawing.Size(354, 53);
+            this.gb_autocommand.TabIndex = 6;
+            this.gb_autocommand.TabStop = false;
+            this.gb_autocommand.Text = "Connect Command";
+            // 
+            // cb_ConnectCommand
+            // 
+            this.cb_ConnectCommand.Location = new System.Drawing.Point(8, 20);
+            this.cb_ConnectCommand.Name = "cb_ConnectCommand";
+            this.cb_ConnectCommand.Size = new System.Drawing.Size(340, 20);
+            this.cb_ConnectCommand.TabIndex = 0;
             // 
             // gb_AppearanceChatWindow
             // 
@@ -838,26 +857,19 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // gb_autocommand
-            // 
-            this.gb_autocommand.Controls.Add(this.cb_ConnectCommand);
-            this.gb_autocommand.Location = new System.Drawing.Point(146, 92);
-            this.gb_autocommand.Name = "gb_autocommand";
-            this.gb_autocommand.Size = new System.Drawing.Size(354, 53);
-            this.gb_autocommand.TabIndex = 6;
-            this.gb_autocommand.TabStop = false;
-            this.gb_autocommand.Text = "Connect Command";
-            // 
             // eventLog1
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // cb_ConnectCommand
+            // cbQuotes
             // 
-            this.cb_ConnectCommand.Location = new System.Drawing.Point(8, 20);
-            this.cb_ConnectCommand.Name = "cb_ConnectCommand";
-            this.cb_ConnectCommand.Size = new System.Drawing.Size(340, 20);
-            this.cb_ConnectCommand.TabIndex = 0;
+            this.cbQuotes.AutoSize = true;
+            this.cbQuotes.Location = new System.Drawing.Point(6, 230);
+            this.cbQuotes.Name = "cbQuotes";
+            this.cbQuotes.Size = new System.Drawing.Size(60, 17);
+            this.cbQuotes.TabIndex = 13;
+            this.cbQuotes.Text = "Quotes";
+            this.cbQuotes.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -883,6 +895,8 @@
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabInterface.ResumeLayout(false);
+            this.gb_autocommand.ResumeLayout(false);
+            this.gb_autocommand.PerformLayout();
             this.gb_AppearanceChatWindow.ResumeLayout(false);
             this.gb_AppearanceChatWindow.PerformLayout();
             this.redditCredentialsTab.ResumeLayout(false);
@@ -902,8 +916,6 @@
             this.gb_CredentialsTwitterConsumer.ResumeLayout(false);
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            this.gb_autocommand.ResumeLayout(false);
-            this.gb_autocommand.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.ResumeLayout(false);
 
@@ -980,5 +992,6 @@
         private System.Windows.Forms.TextBox cb_ConnectCommand;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Diagnostics.EventLog eventLog1;
+        private System.Windows.Forms.CheckBox cbQuotes;
     }
 }

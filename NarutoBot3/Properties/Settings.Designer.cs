@@ -706,5 +706,17 @@ namespace NarutoBot3.Properties {
                 this["autojoinCommand"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool quotesEnabled {
+            get {
+                return ((bool)(this["quotesEnabled"]));
+            }
+            set {
+                this["quotesEnabled"] = value;
+            }
+        }
     }
 }
