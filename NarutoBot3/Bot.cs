@@ -783,6 +783,11 @@ namespace NarutoBot3
                                     }
 
                                 }
+                            else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a choose request from " + user, currentColorScheme.BotReport);
+                                    choose(Client.HOME_CHANNEL, user, arg);
+                                }
                             }
 
                         else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
@@ -906,6 +911,7 @@ namespace NarutoBot3
                 }
             }
         }
+
 
         static void parseMessage(string message, out string prefix, out string command, out string[] parameters, out string completeParameters)
         {
@@ -2600,6 +2606,21 @@ namespace NarutoBot3
 
             saveQuotes();
         }
+
+        private void choose(string CHANNEL, string user, string arg)
+        {
+            if (ul.userIsMuted(user) || !Settings.Default.chooseEnabled) return;
+
+            Random r = new Random();
+            string[] choices = arg.Split(new char[] { ' ' });
+            string message;
+
+            int random = r.Next(choices.Length);
+
+            message = Privmsg(CHANNEL, user+": "+ choices[random]);
+
+        }
+
 
         ///////////////////////////////////
         //     Commands Functions End    //

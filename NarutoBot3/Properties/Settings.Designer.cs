@@ -718,5 +718,17 @@ namespace NarutoBot3.Properties {
                 this["quotesEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool chooseEnabled {
+            get {
+                return ((bool)(this["chooseEnabled"]));
+            }
+            set {
+                this["chooseEnabled"] = value;
+            }
+        }
     }
 }
