@@ -2625,6 +2625,7 @@ namespace NarutoBot3
 
             message = Privmsg(CHANNEL, user+": "+ choices[random]);
 
+            Client.sendMessage(message);
         }
 
 
