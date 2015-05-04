@@ -2024,6 +2024,7 @@ namespace NarutoBot3
             string target;
             string killString, temp;
             int killID;
+            string randomTarget;
 
             if (ul.userIsMuted(nick)) return;
             if (String.IsNullOrEmpty(nick)) return;
@@ -2065,17 +2066,22 @@ namespace NarutoBot3
                     if (killsUsed.Count < 1) killsUsed.Add(killID);
                     else killsUsed[0] = killID;
 
+                    do
+                    {
+                        randomTarget = userList[r.Next(userList.Count)];
+                    } while (string.Compare(target, randomTarget, true) == 0 || userList.Count<2);
+
 
                     temp = kill[killID];
                     if (temp.ToLower().Contains("<normal>"))
                     {
                         temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim()).Replace("<random>", randomTarget.Trim());
 
                         message = Privmsg(CHANNEL, killString);
                     }
                     else {
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim()).Replace("<random>", randomTarget.Trim());
 
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
                     }
