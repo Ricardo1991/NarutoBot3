@@ -59,6 +59,7 @@ namespace NarutoBot3
             Settings.Default.aniSearchEnabled = cb_Anime.Checked;
             Settings.Default.greetingsEnabled = cb_greetings.Checked;
             Settings.Default.chooseEnabled = cb_choose.Checked;
+            Settings.Default.funkEnabled = cbFunk.Checked;
 
 
             Settings.Default.twitterAccessToken = tb_AccessToken.Text;
@@ -172,6 +173,7 @@ namespace NarutoBot3
             cb_YTSearch.Checked = Settings.Default.youtubeSearchEnabled;
             cb_greetings.Checked = Settings.Default.greetingsEnabled;
             cb_choose.Checked = Settings.Default.chooseEnabled;
+            cbFunk.Checked = Settings.Default.funkEnabled;
 
             cb_TwitterEnabled.Checked = Settings.Default.twitterEnabled;
             tb_AccessToken.Text = Settings.Default.twitterAccessToken;

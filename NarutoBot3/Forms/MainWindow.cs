@@ -1223,5 +1223,26 @@ namespace NarutoBot3
             browser.Close();
         }
 
+        private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bot.ReadQuotes();
+        }
+
+        private void funkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bot.ReadFunk();
+        }
+
+        private void allToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bot.ReadFunk();
+            bot.ReadQuotes();
+            bot.ReadKills();
+            bot.ReadTrivia();
+            bot.ReadNickGen();
+            bot.ReadHelp();
+            bot.ReadRules();
+        }
+
     }
 }

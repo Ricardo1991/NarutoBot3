@@ -1,9 +1,40 @@
-﻿using System;
+﻿using NarutoBot3.Properties;
+using Newtonsoft.Json;
+using System;
+using System.Net;
+using System.Text;
 
 namespace NarutoBot3
 {
     static class YoutubeUseful
     {
+
+        static public string getYoutubeInfoFromID(string id)
+        {
+            string jsonYoutube = "";
+            string title, duration;
+            YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
+
+            string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
+
+            var webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+
+            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+            try
+            {
+                jsonYoutube = webClient.DownloadString(getString);
+                JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
+            }
+            catch { }
+
+            title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+            duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+
+            return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
+
+        }
+
         static public string getYoutubeIdFromURL(string url)
         {
             string id;
