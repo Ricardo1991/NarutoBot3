@@ -820,14 +820,15 @@ namespace NarutoBot3
         {
             settingsWindow.ShowDialog();
 
+            if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+
             try
             {
                 if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-                if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+                
             }
             catch {
                 Settings.Default.redditEnabled = false;
-                Settings.Default.twitterEnabled = false;
                 Settings.Default.Save();
             }
 

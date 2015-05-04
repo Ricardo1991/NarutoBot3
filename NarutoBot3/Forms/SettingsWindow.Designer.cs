@@ -46,6 +46,7 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
+            this.cbQuotes = new System.Windows.Forms.CheckBox();
             this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.cb_Kill = new System.Windows.Forms.CheckBox();
@@ -98,7 +99,6 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbQuotes = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -331,6 +331,16 @@
             this.gb_FeaturesFun.TabIndex = 14;
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
+            // 
+            // cbQuotes
+            // 
+            this.cbQuotes.AutoSize = true;
+            this.cbQuotes.Location = new System.Drawing.Point(6, 230);
+            this.cbQuotes.Name = "cbQuotes";
+            this.cbQuotes.Size = new System.Drawing.Size(60, 17);
+            this.cbQuotes.TabIndex = 13;
+            this.cbQuotes.Text = "Quotes";
+            this.cbQuotes.UseVisualStyleBackColor = true;
             // 
             // cb_greetings
             // 
@@ -763,7 +773,7 @@
             this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.label7);
             this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.label8);
             this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.tb_AccessToken);
-            this.gb_CredentialsTwitterAccessTokens.Location = new System.Drawing.Point(3, 89);
+            this.gb_CredentialsTwitterAccessTokens.Location = new System.Drawing.Point(6, 89);
             this.gb_CredentialsTwitterAccessTokens.Name = "gb_CredentialsTwitterAccessTokens";
             this.gb_CredentialsTwitterAccessTokens.Size = new System.Drawing.Size(377, 82);
             this.gb_CredentialsTwitterAccessTokens.TabIndex = 5;
@@ -860,16 +870,6 @@
             // eventLog1
             // 
             this.eventLog1.SynchronizingObject = this;
-            // 
-            // cbQuotes
-            // 
-            this.cbQuotes.AutoSize = true;
-            this.cbQuotes.Location = new System.Drawing.Point(6, 230);
-            this.cbQuotes.Name = "cbQuotes";
-            this.cbQuotes.Size = new System.Drawing.Size(60, 17);
-            this.cbQuotes.TabIndex = 13;
-            this.cbQuotes.Text = "Quotes";
-            this.cbQuotes.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 

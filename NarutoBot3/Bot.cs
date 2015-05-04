@@ -224,20 +224,7 @@ namespace NarutoBot3
             }
 
             if (Settings.Default.twitterEnabled)
-            {
-                try
-                {
-                    service = new TwitterService(Settings.Default.twitterConsumerKey, Settings.Default.twitterConsumerKeySecret);
-
-                    service.AuthenticateWith(Settings.Default.twitterAccessToken, Settings.Default.twitterAccessTokenSecret);
-                }
-
-                catch
-                {
-                    Settings.Default.twitterEnabled = false;
-                    Settings.Default.Save();
-                }
-            }
+                TwitterLogin();
         }
 
         ~Bot()
