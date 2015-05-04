@@ -24,6 +24,7 @@ namespace NarutoBot3
         private List<string> tri = new List<string>();
         private List<string> kill = new List<string>();
         private List<string> quotes = new List<string>();
+        private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
         private List<pastMessage> pastMessages = new List<pastMessage>();
 
@@ -209,6 +210,7 @@ namespace NarutoBot3
             ReadKills();                //Read the killstrings
             ReadNickGen();              //For the Nick generator
             ReadQuotes();
+            ReadFunk();
 
             ul.loadData();
 
@@ -768,7 +770,7 @@ namespace NarutoBot3
                                     WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
                                     lastKill(Client.HOME_CHANNEL, user);
                                 }
-                            else if (String.Compare(cmd, "quote", true) == 0)
+                            else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
                                 {
                                     WriteMessage("* Received a quote request from " + user, currentColorScheme.BotReport);
 
@@ -788,15 +790,26 @@ namespace NarutoBot3
                                     WriteMessage("* Received a choose request from " + user, currentColorScheme.BotReport);
                                     choose(Client.HOME_CHANNEL, user, arg);
                                 }
+                            else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
+                                {
+                                    WriteMessage("* Received a funk request from " + user, currentColorScheme.BotReport);
+
+                                    if (String.IsNullOrEmpty(arg)) //lookup or random
+                                    {
+                                        printFunk(Client.HOME_CHANNEL, arg, user);
+                                    }
+
+                                    else
+                                    {
+                                        addFunk(Client.HOME_CHANNEL, arg, user);
+                                    }
+
+                                }
                             }
 
-                        else if (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v=")))
-                            {
-                                WriteMessage("* Detected an youtube video from  " + user, currentColorScheme.BotReport);
-                                youtube(whoSent, user, msg);
-                            }
 
-                        else if (msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false))
+                        else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
+                            || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
                             {
                                 WriteMessage("* Detected a short youtube video from  " + user, currentColorScheme.BotReport);
                                 youtube(whoSent, user, msg);
@@ -1170,6 +1183,44 @@ namespace NarutoBot3
             using (StreamWriter newTask = new StreamWriter("TextFiles/quotes.txt", false))
             {
                 foreach (string q in quotes)
+                {
+                    newTask.WriteLine(q);
+                }
+            }
+        }
+
+        public void ReadFunk()
+        {
+            funk = new List<string>();
+            funk.Clear();
+
+            if (File.Exists("TextFiles/funk.txt"))
+            {
+                try
+                {
+                    StreamReader sr = new StreamReader("TextFiles/funk.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        funk.Add(sr.ReadLine());
+                    }
+                    sr.Close();
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+                Settings.Default.funkEnabled = false;
+                Settings.Default.Save();
+            }
+        }
+
+        public void saveFunk()
+        {
+            using (StreamWriter newTask = new StreamWriter("TextFiles/funk.txt", false))
+            {
+                foreach (string q in funk)
                 {
                     newTask.WriteLine(q);
                 }
@@ -1706,33 +1757,13 @@ namespace NarutoBot3
 
             if (!Settings.Default.silence && Settings.Default.youtube_Enabled)
             {
-                string id;
+                string id = YoutubeUseful.getYoutubeIdFromURL(line);
                 string message;
-                string jsonYoutube="";
-                string title, duration;
-                YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
 
-                id = YoutubeUseful.getYoutubeIdFromURL(line);
-
-                string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
-
-                var webClient = new WebClient();
-                webClient.Encoding = Encoding.UTF8;
-
-                webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
-                try
-                {
-                    jsonYoutube = webClient.DownloadString(getString);
-                    JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
-                }
-                catch { }
-
-                title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-
-                duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+                string result = YoutubeUseful.getYoutubeInfoFromID(id);
 
 
-                message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02");
+                message = Privmsg(CHANNEL, result);
                 Client.sendMessage(message);
             }
         }
@@ -2626,6 +2657,46 @@ namespace NarutoBot3
             message = Privmsg(CHANNEL, user+": "+ choices[random]);
 
             Client.sendMessage(message);
+        }
+
+        void printFunk(string CHANNEL, string args, string nick)
+        {
+            Random r = new Random();
+            int i;
+            string message = "";
+
+            if (ul.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
+
+            if (String.IsNullOrWhiteSpace(args) && funk.Count > 0) //pring random
+            {
+                i = r.Next(funk.Count);
+                message = Privmsg(CHANNEL, funk[i]);
+            }
+
+            Client.sendMessage(message);
+
+        }
+
+        void addFunk(string CHANNEL, string args, string nick)
+        {
+            if (ul.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
+
+            if (funk == null)
+                funk = new List<string>();
+
+            if ((args.Contains("youtu.be") && (args.Contains("?v=") == false && args.Contains("&v=") == false))
+                            || (args.Contains("youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
+            {
+                string id = YoutubeUseful.getYoutubeIdFromURL(args);
+
+                string result = YoutubeUseful.getYoutubeInfoFromID(id);
+
+                args = result + " : " + args;
+            }
+
+            funk.Add(args);
+
+            saveFunk();
         }
 
 
