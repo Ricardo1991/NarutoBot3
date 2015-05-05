@@ -742,5 +742,17 @@ namespace NarutoBot3.Properties {
                 this["funkEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool shuffleEnabled {
+            get {
+                return ((bool)(this["shuffleEnabled"]));
+            }
+            set {
+                this["shuffleEnabled"] = value;
+            }
+        }
     }
 }

@@ -790,6 +790,11 @@ namespace NarutoBot3
                                     WriteMessage("* Received a choose request from " + user, currentColorScheme.BotReport);
                                     choose(Client.HOME_CHANNEL, user, arg);
                                 }
+                            else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a shuffle request from " + user, currentColorScheme.BotReport);
+                                    shuffle(Client.HOME_CHANNEL, user, arg);
+                                }
                             else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
                                 {
                                     WriteMessage("* Received a funk request from " + user, currentColorScheme.BotReport);
@@ -1004,7 +1009,13 @@ namespace NarutoBot3
                 {
                     StreamReader sr = new StreamReader("TextFiles/kills.txt");
                     while (sr.Peek() >= 0)
-                        kill.Add(sr.ReadLine());
+                    {
+                        string killS = sr.ReadLine();
+
+                        if(killS.Length > 1 && (killS[0] != '/' && killS[1] != '/'))
+                            kill.Add(sr.ReadLine());
+                    }
+                        
 
                     sr.Close();
                 }
@@ -2655,6 +2666,32 @@ namespace NarutoBot3
             int random = r.Next(choices.Length);
 
             message = Privmsg(CHANNEL, user+": "+ choices[random]);
+
+            Client.sendMessage(message);
+        }
+
+        private void shuffle(string CHANNEL, string user, string arg)
+        {
+            if (ul.userIsMuted(user) || !Settings.Default.shuffleEnabled) return;
+
+            Random r = new Random();
+            string message;
+            string[] choices = arg.Split(new char[] { ' ' });
+            List<string> sList = new List<string>();
+
+            foreach(string s in choices){
+                sList.Add(s);
+            }
+
+            message = Privmsg(CHANNEL, user + ": ");
+
+            while (sList.Count > 0)
+            {
+                int random = r.Next(sList.Count);
+                message = message + sList[random];
+                sList.Remove(sList[random]);
+            }
+
 
             Client.sendMessage(message);
         }
