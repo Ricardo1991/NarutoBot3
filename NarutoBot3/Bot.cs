@@ -2683,17 +2683,17 @@ namespace NarutoBot3
                 sList.Add(s);
             }
 
-            message = Privmsg(CHANNEL, user + ": ");
+            message = "";
 
             while (sList.Count > 0)
             {
                 int random = r.Next(sList.Count);
-                message = message + sList[random];
+                message = message + " " + sList[random];
                 sList.Remove(sList[random]);
             }
 
 
-            Client.sendMessage(message);
+
         }
 
         void printFunk(string CHANNEL, string args, string nick)
