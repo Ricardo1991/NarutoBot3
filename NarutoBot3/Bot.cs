@@ -2694,6 +2694,7 @@ namespace NarutoBot3
 
 
 
+            Client.sendMessage(Privmsg(CHANNEL, user + ":" + message));
         }
 
         void printFunk(string CHANNEL, string args, string nick)
