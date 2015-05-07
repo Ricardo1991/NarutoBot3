@@ -60,8 +60,8 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
-            InputBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            InputBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            //InputBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //InputBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             uList = new UserList();
 
@@ -616,9 +616,10 @@ namespace NarutoBot3
                     temp.Add(Bot.removeUserMode(s));
                 }
 
-                source.AddRange(temp.ToArray());
+                //source.AddRange(temp.ToArray());
 
-                InputBox.AutoCompleteCustomSource = source;
+                //InputBox.AutoCompleteCustomSource = source;
+                InputBox.Values = temp.ToArray();
             }
         }
 
