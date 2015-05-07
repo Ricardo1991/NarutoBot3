@@ -293,6 +293,10 @@
       <Project>{A368CB75-75F0-4489-904D-B5CEBB0FE624}</Project>
       <Name>RedditSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AutoComplete\AutoComplete.csproj">
+      <Project>{88b1a2d4-0b5f-4586-92df-878e37f855f4}</Project>
+      <Name>AutoComplete</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

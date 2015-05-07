@@ -7,30 +7,52 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NarutoBot3", "NarutoBot3\Na
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditSharp", "..\..\..\GitHub\RedditSharp\RedditSharp\RedditSharp.csproj", "{A368CB75-75F0-4489-904D-B5CEBB0FE624}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoComplete", "AutoComplete\AutoComplete.csproj", "{88B1A2D4-0B5F-4586-92DF-878E37F855F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|x64.ActiveCfg = Debug|x64
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|x64.Build.0 = Debug|x64
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Debug|x64.Deploy.0 = Debug|x64
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|x64.ActiveCfg = Release|x64
 		{5BE3AB18-EBB7-4211-9E15-1D1FFE89CBEB}.Release|x64.Build.0 = Release|x64
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Debug|x64.Build.0 = Debug|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A368CB75-75F0-4489-904D-B5CEBB0FE624}.Release|x64.ActiveCfg = Release|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{88B1A2D4-0B5F-4586-92DF-878E37F855F4}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

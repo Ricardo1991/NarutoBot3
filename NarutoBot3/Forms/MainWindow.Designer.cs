@@ -74,7 +74,7 @@
             this.toolStripHelp = new System.Windows.Forms.ToolStripDropDownButton();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InputBox = new AutoCompleteTextBox();
+            this.InputBox = new AutoComplete.AutoCompleteTextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbTopic = new System.Windows.Forms.TextBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
@@ -440,8 +440,6 @@
             this.InputBox.AcceptsReturn = true;
             this.InputBox.AcceptsTab = true;
             this.InputBox.AllowDrop = true;
-            //this.InputBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            //this.InputBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.InputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.InputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.InputBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -451,6 +449,7 @@
             this.InputBox.Size = new System.Drawing.Size(1024, 20);
             this.InputBox.TabIndex = 3;
             this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
+            this.InputBox.Values = null;
             // 
             // splitContainer1
             // 
@@ -576,7 +575,7 @@
         private System.Windows.Forms.ToolStripMenuItem mutedUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeNickToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSilence;
-        private AutoCompleteTextBox InputBox;
+        private AutoComplete.AutoCompleteTextBox InputBox;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButtonText;
         private System.Windows.Forms.ToolStripMenuItem rulesTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTextToolStripMenuItem;

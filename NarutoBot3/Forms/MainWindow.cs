@@ -1,5 +1,6 @@
 ﻿using NarutoBot3.Properties;
 using Newtonsoft.Json;
+using AutoComplete;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -59,9 +60,6 @@ namespace NarutoBot3
         public MainWindow()
         {
             InitializeComponent();
-
-            //InputBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            //InputBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             uList = new UserList();
 

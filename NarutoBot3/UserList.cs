@@ -25,11 +25,19 @@ namespace NarutoBot3
 
         public void loadData()
         {
-            TextReader stream = new StreamReader("data.json");
-            string json = stream.ReadToEnd();
-            JsonConvert.PopulateObject(json, users);
+            try
+            {
+                TextReader stream = new StreamReader("data.json");
+                string json = stream.ReadToEnd();
+                JsonConvert.PopulateObject(json, users);
+                stream.Close();
+            }
+            catch
+            {
+                users = new List<User>();
+            }
 
-            stream.Close();
+            
         }
 
         public bool hasUserByName(String name){
