@@ -61,7 +61,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap about_black {
             get {
@@ -71,7 +71,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap close_black {
             get {
@@ -81,7 +81,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap connect_black {
             get {
@@ -91,7 +91,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap disconnect_black {
             get {
@@ -101,7 +101,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap github_black {
             get {
@@ -111,7 +111,7 @@ namespace NarutoBot3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of Type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap warning {
             get {

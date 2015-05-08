@@ -242,12 +242,9 @@ namespace NarutoBot3
 
         public void processMessage(string message)
         {
-            string prefix;
-            string command;
-            string[] parameters;
-            string completeParameters;
             List<string> userTemp = new List<string>();
             bool found;
+            Message messageObject;
 
             Who = "";
             WhoLeft = "";
@@ -255,715 +252,676 @@ namespace NarutoBot3
 
             if (String.IsNullOrEmpty(message)) return;
 
-            if (message.Contains("PING :"))
+            messageObject = new Message(message);
+
+            switch (messageObject.Type)
             {
-                var prefixend = message.IndexOf(":");
-                string pingcmd = message.Substring(prefixend+1);
-                Client.sendMessage("PONG :" + pingcmd + "\r\n");
+                case ("PING"):
+                    Client.sendMessage("PONG :" + messageObject.SplitMessage[0] + "\r\n");
 
-                #if DEBUG
-                WriteMessage(message);
-                #endif
-                return;
-            }
+                    #if DEBUG
+                    WriteMessage(message);
+                    #endif
 
-            else
-            {
-                parseMessage(message, out prefix, out command, out parameters, out completeParameters);
+                    break;
+                case ("001"):
+                case ("002"):
+                case ("003"):
+                    WriteMessage(messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1]);
+                    break;
 
-                switch (command)
-                {
-                    case ("001"):
-                    case ("002"):
-                    case ("003"):
-                        WriteMessage(completeParameters.Split(new char[] { ' ' }, 2)[1]);
-                        break;
+                case ("004"): //server used for connection
+                    Client.HOST_SERVER = messageObject.SplitMessage[1];
+                    break;
 
-                    case ("004"): //server used for connection
-                        Client.HOST_SERVER = parameters[1];
-                        break;
+                case ("005"):
+                case ("250"):
+                case ("251"):
+                case ("252"):
+                case ("254"):
+                case ("255"):
+                case ("265"):
+                case ("266"):
+                case ("333"): //Topic author and time
+                case ("366"): //End of /NAMES
+                case ("375"): //START OF MOTD
+                    break;
 
-                    case ("005"):
-                    case ("250"):
-                    case ("251"):
-                    case ("252"):
-                    case ("254"):
-                    case ("255"):
-                    case ("265"):
-                    case ("266"):
-                    case ("333"): //Topic author and time
-                    case ("366"): //End of /NAMES
-                    case ("375"): //START OF MOTD
-                        break;
+                case ("332"):   //TOPIC
+                    Topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 3)[2];
+                    OnTopicChange(EventArgs.Empty);
+                    break;
 
-                    case ("332"):   //TOPIC
-                        Topic = completeParameters.Split(new char[] { ' ' }, 3)[2];
-                        OnTopicChange(EventArgs.Empty);
-                        break;
+                case ("353"): //USERLIST
 
-                    case ("353"): //USERLIST
-                       
-                        foreach(string s in parameters[3].Split(' '))
-                        {
-                            found = false;
-                            foreach (string u in userList)
-                                if (s == u) found = true;
-                            if (!found) userList.Add(s);
-
-                            if (!ul.hasUserByName(s))
-                            {
-                                ul.makeOnline(s);
-                            }
-                        }
-                            
-                        userList.Sort();
-                        OnCreate(EventArgs.Empty);
-                        break;
-
-
-                    case ("372"): //MOTD
-                        string motd = completeParameters.Split(new char[] { ' ' }, 2)[1];
-                        WriteMessage(motd, currentColorScheme.Motd);
-                        break;
-
-                    case ("376"): //END OF MOTD
-                        IsConnected = true;
-                        OnConnect(EventArgs.Empty);
-
-                        if (!String.IsNullOrEmpty(Client.HOST_SERVER))
-                            OnConnectedWithServer(EventArgs.Empty);
-
-                        break;
-
-                    case ("433"): //Nickname is already in use.
-                        OnDuplicatedNick(EventArgs.Empty);
-                        WriteMessage("* " + command + " " + completeParameters);
-                        break;
-
-                    case ("TOPIC"):   //TOPIC
-                        Topic = completeParameters.Split(new char[] { ' ' }, 2)[1];
-                        OnTopicChange(EventArgs.Empty);
-                        break;
-
-
-                    case ("PONG"):
-                        string[] split = message.Split(':');
-                        string pongcmd = split[2];
-
-                        #if DEBUG
-                            WriteMessage(message);
-                        #endif
-
-                        if (WaitingForPong)
-                        {
-                            string currentStamp = GetTimestamp(DateTime.Now);
-                            string format = "mmssffff";
-
-                            DateTime now, then;
-
-                            now = DateTime.ParseExact(currentStamp, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
-                            then = DateTime.ParseExact(pongcmd, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
-
-                            TimeDifference = now.Subtract(then);
-
-                            WaitingForPong = false;
-                            timeoutTimer.Stop();
-
-                            OnPongReceived(EventArgs.Empty);
-                        }
-
-                        break;
-
-                    case ("JOIN"):
-                        Who = prefix.Substring(0, prefix.IndexOf("!"));
+                    foreach (string s in messageObject.SplitMessage[3].Split(' '))
+                    {
                         found = false;
+                        foreach (string u in userList)
+                            if (s == u) found = true;
+                        if (!found) userList.Add(s);
 
-                        foreach(string s in userList)
-                        { if (s == Who) found = true; }
+                        if (!ul.hasUserByName(s))
+                        {
+                            ul.makeOnline(s);
+                        }
+                    }
+                            
+                    userList.Sort();
+                    OnCreate(EventArgs.Empty);
+                    break;
 
-                        if(!found)userList.Add(Who);
 
-                        userList.Sort();
+                case ("372"): //MOTD
+                    string motd = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
+                    WriteMessage(motd, currentColorScheme.Motd);
+                    break;
 
-                        OnJoin(EventArgs.Empty);
+                case ("376"): //END OF MOTD
+                    IsConnected = true;
+                    OnConnect(EventArgs.Empty);
 
-                        ul.makeOnline(removeUserMode(Who));
+                    if (!String.IsNullOrEmpty(Client.HOST_SERVER))
+                        OnConnectedWithServer(EventArgs.Empty);
 
-                        greetUser(removeUserMode(Who));
+                    break;
 
+                case ("433"): //Nickname is already in use.
+                    OnDuplicatedNick(EventArgs.Empty);
+                    WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
+                    break;
+
+                case ("TOPIC"):   //TOPIC
+                    Topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
+                    OnTopicChange(EventArgs.Empty);
+                    break;
+
+
+                case ("PONG"):
+                    string[] split = message.Split(':');
+                    string pongcmd = split[2];
+
+                    #if DEBUG
+                        WriteMessage(message);
+                    #endif
+
+                    if (WaitingForPong)
+                    {
+                        string currentStamp = GetTimestamp(DateTime.Now);
+                        string format = "mmssffff";
+
+                        DateTime now, then;
+
+                        now = DateTime.ParseExact(currentStamp, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
+                        then = DateTime.ParseExact(pongcmd, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
+
+                        TimeDifference = now.Subtract(then);
+
+                        WaitingForPong = false;
+                        timeoutTimer.Stop();
+
+                        OnPongReceived(EventArgs.Empty);
+                    }
+
+                    break;
+
+                case ("JOIN"):
+                    Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    found = false;
+
+                    foreach(string s in userList)
+                    { if (s == Who) found = true; }
+
+                    if(!found)userList.Add(Who);
+
+                    userList.Sort();
+
+                    OnJoin(EventArgs.Empty);
+
+                    ul.makeOnline(removeUserMode(Who));
+
+                    greetUser(removeUserMode(Who));
+
+                    break;
+
+
+                case ("PART"):
+                    WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    quitMessage = messageObject.CompleteMessage;
+
+                    userTemp = new List<string>();
+
+                    foreach (string userP in userList)
+                    {
+                        if (removeUserMode(userP) != removeUserMode(WhoLeft))
+                        {
+                            userTemp.Add(userP);
+                        }
+                    }
+                    userList.Clear();
+
+                    foreach (string userO in userTemp)
+                    {
+                        userList.Add(userO);
+                    }
+
+                    userList.Sort();
+                    userTemp.Clear();
+
+                    ul.makeOffline(WhoLeft);
+
+                    OnLeave(EventArgs.Empty);
+                    break;
+
+
+                case ("QUIT"):
+
+                    WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    quitMessage = messageObject.CompleteMessage;
+
+                    userTemp = new List<string>();
+
+                    foreach (string userB in userList)
+                    {
+                        if (removeUserMode(userB) != removeUserMode(WhoLeft))
+                            userTemp.Add(userB);
+                    }
+                    userList.Clear();
+
+                    foreach (string userN in userTemp)
+                        userList.Add(userN);
+
+                    userList.Sort();
+                    userTemp.Clear();
+
+                    ul.makeOffline(WhoLeft);
+
+
+                    OnLeave(EventArgs.Empty);
+                    break;
+
+
+                case ("NICK"):
+                    string oldnick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    string newnick = messageObject.CompleteMessage;
+                    char mode = getUserMode(oldnick, userList);
+
+                    if (mode != '0')
+                        newnick = mode + newnick;
+
+                    userTemp = new List<string>();
+
+                    foreach (string userC in userList)
+                    {
+                        if (removeUserMode(userC) != removeUserMode(oldnick))
+                            userTemp.Add(userC);
+                    }
+                    userList.Clear();
+
+                    foreach (string use in userTemp)
+                    {
+                        userList.Add(use);
+                    }
+                    userList.Add(newnick);
+                    userList.Sort();
+
+
+                    NewNick = newnick;
+                    Who = oldnick;
+
+                    OnNickChange(EventArgs.Empty);
+
+                    ul.makeOffline(oldnick);
+                    ul.makeOnline(newnick);
+
+                    userTemp.Clear();
+                    break;
+
+
+                case ("MODE"):
+
+                    userTemp = new List<string>();
+                    string modechange = messageObject.SplitMessage[1];
+
+                    if (messageObject.SplitMessage.Length < 3)
                         break;
 
+                    string affectedUser = messageObject.SplitMessage[2];
 
-                    case ("PART"):
-                        WhoLeft = prefix.Substring(0, prefix.IndexOf("!"));
-                        quitMessage = completeParameters;
-
-                        userTemp = new List<string>();
-
-                        foreach (string userP in userList)
-                        {
-                            if (removeUserMode(userP) != removeUserMode(WhoLeft))
-                            {
-                                userTemp.Add(userP);
-                            }
-                        }
-                        userList.Clear();
-
-                        foreach (string userO in userTemp)
-                        {
-                            userList.Add(userO);
-                        }
-
-                        userList.Sort();
-                        userTemp.Clear();
-
-                        ul.makeOffline(WhoLeft);
-
-                        OnLeave(EventArgs.Empty);
-                        break;
-
-
-                    case ("QUIT"): 
-                        
-                        WhoLeft = prefix.Substring(0, prefix.IndexOf("!"));
-                        quitMessage = completeParameters;
-
-                        userTemp = new List<string>();
-
-                        foreach (string userB in userList)
-                        {
-                            if (removeUserMode(userB) != removeUserMode(WhoLeft))
-                                userTemp.Add(userB);
-                        }
-                        userList.Clear();
-
-                        foreach (string userN in userTemp)
-                            userList.Add(userN);
-
-                        userList.Sort();
-                        userTemp.Clear();
-
-                        ul.makeOffline(WhoLeft);
-
-
-                        OnLeave(EventArgs.Empty);
-                        break;
-
-
-                    case ("NICK"):
-                        string oldnick = prefix.Substring(0, prefix.IndexOf("!"));
-                        string newnick = completeParameters;
-                        char mode = getUserMode(oldnick, userList);
-
-                        if (mode != '0')
-                            newnick = mode + newnick;
-
-                        userTemp = new List<string>();
-
-                        foreach (string userC in userList)
-                        {
-                            if (removeUserMode(userC) != removeUserMode(oldnick))
-                                userTemp.Add(userC);
-                        }
-                        userList.Clear();
-
-                        foreach (string use in userTemp)
-                        {
-                            userList.Add(use);
-                        }
-                        userList.Add(newnick);
-                        userList.Sort();
-
-
-                        NewNick = newnick;
-                        Who = oldnick;
-
-                        OnNickChange(EventArgs.Empty);
-
-                        ul.makeOffline(oldnick);
-                        ul.makeOnline(newnick);
-
-                        userTemp.Clear();
-                        break;
-
-
-                    case ("MODE"):
-
-                        userTemp = new List<string>();
-                        string modechange = parameters[1];
-
-                        if (parameters.Length < 3)
-                            break;
-                        string affectedUser = parameters[2];
-
-                        foreach (string userD in userList)
-                        {
-                            if (removeUserMode(userD)!= removeUserMode(affectedUser))
-                                userTemp.Add(userD);
+                    foreach (string userD in userList)
+                    {
+                        if (removeUserMode(userD)!= removeUserMode(affectedUser))
+                            userTemp.Add(userD);
        
-                        }
-                        userList.Clear();
+                    }
+                    userList.Clear();
 
-                        foreach (string userD in userTemp)
+                    foreach (string userD in userTemp)
+                    {
+                        userList.Add(userD);
+                    }
+
+                    switch (modechange)
+                    {
+                        case ("+o"):
+                            userList.Add("@" + affectedUser);
+                            break;
+                        case ("+v"):
+                            userList.Add("+" + affectedUser);
+                            break;
+                        case ("+h"):
+                            userList.Add("%" + affectedUser);
+                            break;
+                        case ("+q"):
+                            userList.Add("~" + affectedUser);
+                            break;
+                        case ("+a"):
+                            userList.Add("&" + affectedUser);
+                            break;
+
+                        case ("-o"):
+                        case ("-a"):
+                        case ("-q"):
+                        case ("-h"):
+                        case ("-v"):
+                        default:
+                            userList.Add(affectedUser);
+                            break;
+                    }
+
+                    Who = affectedUser;
+                    OnModeChange(EventArgs.Empty);
+                    userList.Sort();
+                    userTemp.Clear();
+
+                    break;
+
+                case ("KICK"):
+
+                    userTemp = new List<string>();
+                    string kickedUser = messageObject.SplitMessage[1];
+
+                    foreach (string userR in userList)
+                    {
+                        if (removeUserMode(userR) != removeUserMode(kickedUser))
+                            userTemp.Add(userR);
+                    }
+
+                    userList.Clear();
+
+                    foreach (string userT in userTemp)
+                    {
+                        userList.Add(userT);
+                    }
+                    userList.Sort();
+
+                    userTemp.Clear();
+                    Who = kickedUser;
+
+                    ul.makeOffline(kickedUser);
+
+                    OnKick(EventArgs.Empty);
+                    break;
+
+                case ("PRIVMSG"):
+
+                    string user = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!")); //Nick of the Sender
+                    string whoSent = messageObject.Source;                         //Who sent is the Source of the Message. (The Channel, or User if private Message)
+                    string msg = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                    string cmd = msg.Split(' ')[0];
+                    string arg = "";
+
+                    user = removeUserMode(user);
+
+                    if (msg.Length - 1 > cmd.Length)
+                        arg = msg.Substring(cmd.Length+1); //the rest of msg
+
+                    //Write Message on Console
+                    if (whoSent == Client.NICK)
+                    {
+                        string alignedNick = user.Truncate(13);
+                        int tab = 15 - alignedNick.Length;
+
+                        for (int i = 0; i < tab; i++)
+                            alignedNick = alignedNick + " ";
+                        WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
+                    }
+                    else if (msg.ToLower().Contains(Client.NICK.ToLower()))
+                    {
+                        string alignedNick = user.Truncate(13);
+                        int tab = 15 - alignedNick.Length;
+
+                        for (int i = 0; i < tab; i++)
+                            alignedNick = alignedNick + " ";
+                        WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
+                    }
+                    else
+                    {
+                        string alignedNick = user.Truncate(13);
+                        int tab = 15 - alignedNick.Length;
+
+                        for (int i = 0; i < tab; i++)
+                            alignedNick = alignedNick + " ";
+                        WriteMessage(alignedNick + ": " + msg);
+                    }
+
+                    //StartParsing
+                    if ((String.Compare(cmd.Replace(",",string.Empty), "hello", true) == 0
+                            || String.Compare(cmd.Replace(",", string.Empty), "hi", true) == 0
+                            || String.Compare(cmd.Replace(",",string.Empty), "hey", true) == 0)
+                            && arg.ToLower().Contains(Client.NICK.ToLower()))
                         {
-                            userList.Add(userD);
+                            WriteMessage("* Received a hello from " + user, currentColorScheme.BotReport);
+                            hello(whoSent, user);
                         }
 
-                        switch (modechange)
+                    else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length - 1] == '?')
                         {
-                            case ("+o"):
-                                userList.Add("@" + affectedUser);
-                                break;
-                            case ("+v"):
-                                userList.Add("+" + affectedUser);
-                                break;
-                            case ("+h"):
-                                userList.Add("%" + affectedUser);
-                                break;
-                            case ("+q"):
-                                userList.Add("~" + affectedUser);
-                                break;
-                            case ("+a"):
-                                userList.Add("&" + affectedUser);
-                                break;
+                            WriteMessage("* Received a question from " + user, currentColorScheme.BotReport);
+                            parseQuestion(Client.HOME_CHANNEL, user, arg);
+                        }
+                    else if (cmd[0] == Client.SYMBOL)   //Bot Command
+                        {
+                            cmd = cmd.Substring(1);
 
-                            case ("-o"):
-                            case ("-a"):
-                            case ("-q"):
-                            case ("-h"):
-                            case ("-v"):
-                            default:
-                                userList.Add(affectedUser);
-                                break;
+                        if (msg == "!anime best anime ever")
+                            {
+                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                            }
+                        else if (String.Compare(cmd, "help", true) == 0)
+                            {
+                                WriteMessage("* Received a help request from " + user, currentColorScheme.BotReport);
+                                help(user);
+                            }
+
+                        else if (String.Compare(cmd, "rules", true) == 0)
+                            {
+                                WriteMessage("* Received a rules request from " + user, currentColorScheme.BotReport);
+                                rules(whoSent, user);
+                            }
+
+                        else if (String.Compare(cmd, "quit", true) == 0)
+                            {
+                                WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
+                                if(quitIRC(user)) OnQuit(EventArgs.Empty);
+                            }
+                        else if (String.Compare(cmd, "oplist", true) == 0)
+                            {
+                                WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
+                                opList(user);
+                            }
+                        else if (String.Compare(cmd, "roll", true) == 0)
+                            {
+                                WriteMessage("* Received a roll request from " + user, currentColorScheme.BotReport);
+                                roll(whoSent, user);
+                            }
+                        else if (String.Compare(cmd, "say", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
+                                say(Client.HOME_CHANNEL, arg, user);
+                            }
+                        else if (String.Compare(cmd, "greetme", true) == 0)
+                            {
+                                if (String.IsNullOrEmpty(arg))
+                                {
+                                    WriteMessage("* Received a greet TOOGLE request from " + user, currentColorScheme.BotReport);
+                                    GreetToogle(user);
+                                }
+                                else
+                                {
+                                    WriteMessage("* Received a greet request from " + user, currentColorScheme.BotReport);
+                                    AddGreetings(arg, user);
+                                }
+                            }
+                        else if (String.Compare(cmd, "greetmenow", true) == 0)
+                            {
+                                    WriteMessage("* Received a greet me now request from " + user, currentColorScheme.BotReport);
+                                    greetUser(user);
+                            }
+                        else if (String.Compare(cmd, "me", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
+                                me(Client.HOME_CHANNEL, arg, user);
+                            }
+
+                        else if (String.Compare(cmd, "silence", true) == 0)
+                            {
+                                WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
+                                silence(user);
+                            }
+                        else if (String.Compare(cmd, "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
+                                if (ul.userIsOperator(user)) changeNick(arg);
+                            }
+
+                        else if (String.Compare(cmd, "op", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
+                                addBotOP(user, arg);
+                            }
+                        else if (String.Compare(cmd, "deop", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
+                                removeBotOP(user, arg);
+                            }
+                        else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
+                                toFahrenheit(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
+                                toCelcius(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "time", true) == 0)
+                            {
+                                WriteMessage("* Received a time request from " + user, currentColorScheme.BotReport);
+                                time(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "wiki", true) == 0)
+                            {
+                                WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
+                                explain(Client.HOME_CHANNEL, user, arg);
+                            }
+
+                        else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
+                                animeSearch(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
+                                youtubeSearch(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "poke", true) == 0)
+                            {
+                                WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
+                                poke(Client.HOME_CHANNEL, user);
+                            }
+
+                        else if (String.Compare(cmd, "trivia", true) == 0)
+                            {
+                                WriteMessage("* Received a trivia request from " + user, currentColorScheme.BotReport);
+                                trivia(Client.HOME_CHANNEL, user);
+                            }
+                        else if (String.Compare(cmd, "Nick", true) == 0)
+                            {
+                                WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
+                                nickGen(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "kill", true) == 0)
+                            {
+                                WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
+                                killUser(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "lastkill", true) == 0)
+                            {
+                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                                lastKill(Client.HOME_CHANNEL, user);
+                            }
+                        else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
+                            {
+                                WriteMessage("* Received a quote request from " + user, currentColorScheme.BotReport);
+
+                                if (String.IsNullOrEmpty(arg) || arg[0] == '#') //lookup or random
+                                {
+                                    printQuote(Client.HOME_CHANNEL, arg, user);
+                                }
+
+                                else if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
+                                {
+                                    addQuote(Client.HOME_CHANNEL, arg, user);
+                                }
+
+                            }
+                        else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a choose request from " + user, currentColorScheme.BotReport);
+                                choose(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a shuffle request from " + user, currentColorScheme.BotReport);
+                                shuffle(Client.HOME_CHANNEL, user, arg);
+                            }
+                        else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
+                            {
+                                WriteMessage("* Received a funk request from " + user, currentColorScheme.BotReport);
+
+                                if (String.IsNullOrEmpty(arg)) //lookup or random
+                                {
+                                    printFunk(Client.HOME_CHANNEL, arg, user);
+                                }
+
+                                else
+                                {
+                                    addFunk(Client.HOME_CHANNEL, arg, user);
+                                }
+
+                            }
                         }
 
-                        Who = affectedUser;
-                        OnModeChange(EventArgs.Empty);
-                        userList.Sort();
-                        userTemp.Clear();
 
-                        break;
-
-                    case ("KICK"):
-
-                        userTemp = new List<string>();
-                        string kickedUser = parameters[1];
-
-                        foreach (string userR in userList)
+                    else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
+                        || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
                         {
-                            if (removeUserMode(userR) != removeUserMode(kickedUser))
-                                userTemp.Add(userR);
+                            WriteMessage("* Detected a short youtube video from  " + user, currentColorScheme.BotReport);
+                            youtube(whoSent, user, msg);
                         }
 
-                        userList.Clear();
-
-                        foreach (string userT in userTemp)
+                    else if (msg.Contains("vimeo.com"))
                         {
-                            userList.Add(userT);
-                        }
-                        userList.Sort();
-
-                        userTemp.Clear();
-                        Who = kickedUser;
-
-                        ul.makeOffline(kickedUser);
-
-                        OnKick(EventArgs.Empty);
-                        break;
-
-                    case ("PRIVMSG"):
-
-                        string user = prefix.Substring(0, prefix.IndexOf("!")); //Nick of the Sender
-                        string whoSent = parameters[0];                         //Who sent is the source of the Message. (The Channel, or User if private Message)
-                        string msg = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
-                        string cmd = msg.Split(' ')[0];
-                        string arg = "";
-
-                        user = removeUserMode(user);
-
-                        if (msg.Length - 1 > cmd.Length)
-                            arg = msg.Substring(cmd.Length+1); //the rest of msg
-
-                        //Write Message on Console
-                        if (whoSent == Client.NICK)
-                        {
-                            string alignedNick = user.Truncate(13);
-                            int tab = 15 - alignedNick.Length;
-
-                            for (int i = 0; i < tab; i++)
-                                alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
-                        }
-                        else if (msg.ToLower().Contains(Client.NICK.ToLower()))
-                        {
-                            string alignedNick = user.Truncate(13);
-                            int tab = 15 - alignedNick.Length;
-
-                            for (int i = 0; i < tab; i++)
-                                alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
-                        }
-                        else
-                        {
-                            string alignedNick = user.Truncate(13);
-                            int tab = 15 - alignedNick.Length;
-
-                            for (int i = 0; i < tab; i++)
-                                alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + msg);
+                            WriteMessage("* Detected an vimeo video from  " + user, currentColorScheme.BotReport);
+                            vimeo(whoSent, user, msg);
                         }
 
-                        //StartParsing
-                        if ((String.Compare(cmd.Replace(",",string.Empty), "hello", true) == 0
-                                || String.Compare(cmd.Replace(",", string.Empty), "hi", true) == 0
-                                || String.Compare(cmd.Replace(",",string.Empty), "hey", true) == 0)
-                                && arg.ToLower().Contains(Client.NICK.ToLower()))
-                            {
-                                WriteMessage("* Received a hello from " + user, currentColorScheme.BotReport);
-                                hello(whoSent, user);
-                            }
-
-                        else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length - 1] == '?')
-                            {
-                                WriteMessage("* Received a question from " + user, currentColorScheme.BotReport);
-                                parseQuestion(Client.HOME_CHANNEL, user, arg);
-                            }
-                        else if (cmd[0] == Client.SYMBOL)   //Bot Command
-                            {
-                                cmd = cmd.Substring(1);
-
-                            if (msg == "!anime best anime ever")
-                                {
-                                    Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
-                                }
-                            else if (String.Compare(cmd, "help", true) == 0)
-                                {
-                                    WriteMessage("* Received a help request from " + user, currentColorScheme.BotReport);
-                                    help(user);
-                                }
-
-                            else if (String.Compare(cmd, "rules", true) == 0)
-                                {
-                                    WriteMessage("* Received a rules request from " + user, currentColorScheme.BotReport);
-                                    rules(whoSent, user);
-                                }
-
-                            else if (String.Compare(cmd, "quit", true) == 0)
-                                {
-                                    WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
-                                    if(quitIRC(user)) OnQuit(EventArgs.Empty);
-                                }
-                            else if (String.Compare(cmd, "oplist", true) == 0)
-                                {
-                                    WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
-                                    opList(user);
-                                }
-                            else if (String.Compare(cmd, "roll", true) == 0)
-                                {
-                                    WriteMessage("* Received a roll request from " + user, currentColorScheme.BotReport);
-                                    roll(whoSent, user);
-                                }
-                            else if (String.Compare(cmd, "say", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
-                                    say(Client.HOME_CHANNEL, arg, user);
-                                }
-                            else if (String.Compare(cmd, "greetme", true) == 0)
-                                {
-                                    if (String.IsNullOrEmpty(arg))
-                                    {
-                                        WriteMessage("* Received a greet TOOGLE request from " + user, currentColorScheme.BotReport);
-                                        GreetToogle(user);
-                                    }
-                                    else
-                                    {
-                                        WriteMessage("* Received a greet request from " + user, currentColorScheme.BotReport);
-                                        AddGreetings(arg, user);
-                                    }
-                                }
-                            else if (String.Compare(cmd, "greetmenow", true) == 0)
-                                {
-                                        WriteMessage("* Received a greet me now request from " + user, currentColorScheme.BotReport);
-                                        greetUser(user);
-                                }
-                            else if (String.Compare(cmd, "me", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
-                                    me(Client.HOME_CHANNEL, arg, user);
-                                }
-
-                            else if (String.Compare(cmd, "silence", true) == 0)
-                                {
-                                    WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
-                                    silence(user);
-                                }
-                            else if (String.Compare(cmd, "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
-                                    if (ul.userIsOperator(user)) changeNick(arg);
-                                }
-
-                            else if (String.Compare(cmd, "op", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
-                                    addBotOP(user, arg);
-                                }
-                            else if (String.Compare(cmd, "deop", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
-                                    removeBotOP(user, arg);
-                                }
-                            else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
-                                    toFahrenheit(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
-                                    toCelcius(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "time", true) == 0)
-                                {
-                                    WriteMessage("* Received a time request from " + user, currentColorScheme.BotReport);
-                                    time(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "wiki", true) == 0)
-                                {
-                                    WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
-                                    explain(Client.HOME_CHANNEL, user, arg);
-                                }
-
-                            else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
-                                    animeSearch(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
-                                    youtubeSearch(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "poke", true) == 0)
-                                {
-                                    WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
-                                    poke(Client.HOME_CHANNEL, user);
-                                }
-
-                            else if (String.Compare(cmd, "trivia", true) == 0)
-                                {
-                                    WriteMessage("* Received a trivia request from " + user, currentColorScheme.BotReport);
-                                    trivia(Client.HOME_CHANNEL, user);
-                                }
-                            else if (String.Compare(cmd, "Nick", true) == 0)
-                                {
-                                    WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
-                                    nickGen(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "kill", true) == 0)
-                                {
-                                    WriteMessage("* Received a kill request from " + user, currentColorScheme.BotReport);
-                                    killUser(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "lastkill", true) == 0)
-                                {
-                                    WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
-                                    lastKill(Client.HOME_CHANNEL, user);
-                                }
-                            else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
-                                {
-                                    WriteMessage("* Received a quote request from " + user, currentColorScheme.BotReport);
-
-                                    if (String.IsNullOrEmpty(arg) || arg[0] == '#') //lookup or random
-                                    {
-                                        printQuote(Client.HOME_CHANNEL, arg, user);
-                                    }
-
-                                    else if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
-                                    {
-                                        addQuote(Client.HOME_CHANNEL, arg, user);
-                                    }
-
-                                }
-                            else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a choose request from " + user, currentColorScheme.BotReport);
-                                    choose(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a shuffle request from " + user, currentColorScheme.BotReport);
-                                    shuffle(Client.HOME_CHANNEL, user, arg);
-                                }
-                            else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
-                                {
-                                    WriteMessage("* Received a funk request from " + user, currentColorScheme.BotReport);
-
-                                    if (String.IsNullOrEmpty(arg)) //lookup or random
-                                    {
-                                        printFunk(Client.HOME_CHANNEL, arg, user);
-                                    }
-
-                                    else
-                                    {
-                                        addFunk(Client.HOME_CHANNEL, arg, user);
-                                    }
-
-                                }
-                            }
-
-
-                        else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
-                            || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
-                            {
-                                WriteMessage("* Detected a short youtube video from  " + user, currentColorScheme.BotReport);
-                                youtube(whoSent, user, msg);
-                            }
-
-                        else if (msg.Contains("vimeo.com"))
-                            {
-                                WriteMessage("* Detected an vimeo video from  " + user, currentColorScheme.BotReport);
-                                vimeo(whoSent, user, msg);
-                            }
-
-                        else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
-                            {
-                                WriteMessage("* Detected a reddit link from  " + user, currentColorScheme.BotReport);
-                                redditLink(whoSent, user, msg);
-                            }
-
-                        else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
-                            {
-                                WriteMessage("* Detected a twitter link from  " + user, currentColorScheme.BotReport);
-                                twitter(whoSent, user, msg);
-                            }
-
-                        else if (message.Contains("\x01"))
-                            {
-                                if (cmd.Contains("VERSION")){
-                                    WriteMessage("* Received a CTCP version request from " + user, currentColorScheme.BotReport);
-                                    ctcpVersion(user);
-                                }
-
-                                else if (cmd.Contains("TIME")){
-                                    WriteMessage("* Received a CTCP time request from " + user, currentColorScheme.BotReport);
-                                    ctcpTime(user);
-                                }
-
-                                else if (cmd.Contains("PING")){
-                                    WriteMessage("* Received a CTCP ping request from " + user, currentColorScheme.BotReport);
-                                    ctcpPing(user, arg);
-                                }
-                            }
-
-                        else //No parsing, just a normal Message
-                            {
-                                if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
-                                {
-                                    pastMessage p = new pastMessage(user, msg);
-                                    pastMessages.Add(p);
-                                }
-                            }
-
-                        break;
-
-                    case ("NOTICE"):
-                        if (message.Contains("\x01"))
+                    else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
                         {
-                            string userN;
-                            string argg;
-                            string msgN = parameters[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
-                            string cmdN = msgN.Split(' ')[0];
+                            WriteMessage("* Detected a reddit link from  " + user, currentColorScheme.BotReport);
+                            redditLink(whoSent, user, msg);
+                        }
 
-                            if (prefix.Contains('!'))
-                                userN = prefix.Substring(0, prefix.IndexOf("!"));   //Nick of the Sender
-                            else userN = prefix;
+                    else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
+                        {
+                            WriteMessage("* Detected a twitter link from  " + user, currentColorScheme.BotReport);
+                            twitter(whoSent, user, msg);
+                        }
+
+                    else if (message.Contains("\x01"))
+                        {
+                            if (cmd.Contains("VERSION")){
+                                WriteMessage("* Received a CTCP version request from " + user, currentColorScheme.BotReport);
+                                ctcpVersion(user);
+                            }
+
+                            else if (cmd.Contains("TIME")){
+                                WriteMessage("* Received a CTCP time request from " + user, currentColorScheme.BotReport);
+                                ctcpTime(user);
+                            }
+
+                            else if (cmd.Contains("PING")){
+                                WriteMessage("* Received a CTCP ping request from " + user, currentColorScheme.BotReport);
+                                ctcpPing(user, arg);
+                            }
+                        }
+
+                    else //No parsing, just a normal Message
+                        {
+                            if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
+                            {
+                                pastMessage p = new pastMessage(user, msg);
+                                pastMessages.Add(p);
+                            }
+                        }
+
+                    break;
+
+                case ("NOTICE"):
+                    if (message.Contains("\x01"))
+                    {
+                        string userN;
+                        string argg;
+                        string msgN = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                        string cmdN = msgN.Split(' ')[0];
+
+                        if (messageObject.Sender.Contains('!'))
+                            userN = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));   //Nick of the Sender
+                        else userN = messageObject.Sender;
                             
-                            if (msgN.Length - 1 > cmdN.Length)
-                                argg = msgN.Substring(cmdN.Length);                 //the rest of msg
-                            else argg = "";
+                        if (msgN.Length - 1 > cmdN.Length)
+                            argg = msgN.Substring(cmdN.Length);                 //the rest of msg
+                        else argg = "";
 
-                            if (cmdN.Contains("VERSION"))
-                            {
-                                WriteMessage("* Received a CTCP version request from " + userN, currentColorScheme.BotReport);
-                                ctcpVersion(userN);
-                            }
+                        if (cmdN.Contains("VERSION"))
+                        {
+                            WriteMessage("* Received a CTCP version request from " + userN, currentColorScheme.BotReport);
+                            ctcpVersion(userN);
+                        }
 
-                            else if (cmdN.Contains("TIME"))
-                            {
-                                WriteMessage("* Received a CTCP time request from " + userN, currentColorScheme.BotReport);
-                                ctcpTime(userN);
-                            }
+                        else if (cmdN.Contains("TIME"))
+                        {
+                            WriteMessage("* Received a CTCP time request from " + userN, currentColorScheme.BotReport);
+                            ctcpTime(userN);
+                        }
 
-                            else if (cmdN.Contains("PING"))
-                            {
-                                WriteMessage("* Received a CTCP ping request from " + userN, currentColorScheme.BotReport);
+                        else if (cmdN.Contains("PING"))
+                        {
+                            WriteMessage("* Received a CTCP ping request from " + userN, currentColorScheme.BotReport);
                                 
-                                ctcpPing(userN, argg);
-                            }
+                            ctcpPing(userN, argg);
                         }
-                        else{
-                            string alignedNick = prefix;
+                    }
+                    else{
+                        string alignedNick = messageObject.Sender;
 
-                            try{
-                                alignedNick = prefix.Substring(0, prefix.IndexOf("!"));  //Nick of the Sender
-                            }
-                            catch{}
-                            finally{
-                                alignedNick = alignedNick.Truncate(13);
-                            }
+                        try{
+                            alignedNick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));  //Nick of the Sender
+                        }
+                        catch{}
+                        finally{
+                            alignedNick = alignedNick.Truncate(13);
+                        }
                             
-                            int tab = 15 - alignedNick.Length;
+                        int tab = 15 - alignedNick.Length;
 
-                            for (int i = 0; i < tab; i++)
-                                alignedNick = alignedNick + " ";
-                            WriteMessage(alignedNick + ": " + parameters[1], currentColorScheme.Notice);
+                        for (int i = 0; i < tab; i++)
+                            alignedNick = alignedNick + " ";
+                        WriteMessage(alignedNick + ": " + messageObject.SplitMessage[1], currentColorScheme.Notice);
 
-                        }
+                    }
                         
-                        break;
+                    break;
 
-                    default:
-                        WriteMessage("* " + command + " " + completeParameters);
-                        break;
-                }
+                default:
+                    WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
+                    break;
             }
+            
         }
 
-
-        static void parseMessage(string message, out string prefix, out string command, out string[] parameters, out string completeParameters)
-        {
-            int prefixEnd = -1, trailingStart = message.Length;
-            string trailing = null;
-            prefix = command = String.Empty;
-            parameters = new string[] { };
-
-            if (message.StartsWith(":"))
-            {
-                prefixEnd = message.IndexOf(" ");
-                prefix = message.Substring(1, prefixEnd - 1);
-            }
-
-            trailingStart = message.IndexOf(" :");
-            if (trailingStart >= 0)
-                trailing = message.Substring(trailingStart + 2);
-            else
-                trailingStart = message.Length;
-
-            var commandAndParameters = message.Substring(prefixEnd + 1, trailingStart - prefixEnd - 1).Split(' ');
-
-            command = commandAndParameters.First();
-            if (commandAndParameters.Length > 1)
-                parameters = commandAndParameters.Skip(1).ToArray();
-
-            if (!String.IsNullOrEmpty(trailing))
-                parameters = parameters.Concat(new string[] { trailing }).ToArray();
-
-            completeParameters = "";
-            foreach (string s in parameters)
-                completeParameters = completeParameters + s + " ";
-
-        }
 
         static public char getUserMode(string user, List<string> userList)
         {

@@ -614,9 +614,9 @@ namespace NarutoBot3
                     temp.Add(Bot.removeUserMode(s));
                 }
 
-                //source.AddRange(temp.ToArray());
+                //Source.AddRange(temp.ToArray());
 
-                //InputBox.AutoCompleteCustomSource = source;
+                //InputBox.AutoCompleteCustomSource = Source;
                 InputBox.Values = temp.ToArray();
             }
         }
