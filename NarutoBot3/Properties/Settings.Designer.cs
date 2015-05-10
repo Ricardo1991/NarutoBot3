@@ -754,5 +754,17 @@ namespace NarutoBot3.Properties {
                 this["shuffleEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool giphyEnabled {
+            get {
+                return ((bool)(this["giphyEnabled"]));
+            }
+            set {
+                this["giphyEnabled"] = value;
+            }
+        }
     }
 }

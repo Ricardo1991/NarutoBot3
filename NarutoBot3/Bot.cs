@@ -11,9 +11,11 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
+using System.Web;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using TweetSharp;
+using GiphySearch;
 
 namespace NarutoBot3
 {
@@ -736,6 +738,12 @@ namespace NarutoBot3
                                 WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                                 youtubeSearch(Client.HOME_CHANNEL, user, arg);
                             }
+                        else if (String.Compare(cmd, "giphy", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a giphy request from " + user, currentColorScheme.BotReport);
+                                giphySearch(Client.HOME_CHANNEL, user, arg);
+                            }
+
                         else if (String.Compare(cmd, "poke", true) == 0)
                             {
                                 WriteMessage("* Received a poke request from " + user, currentColorScheme.BotReport);
@@ -1945,6 +1953,42 @@ namespace NarutoBot3
                 return;//Only shows 1 link
             }
             message = Privmsg(CHANNEL, "No results found");
+            Client.sendMessage(message);
+            return;
+        }
+
+        public void giphySearch(string CHANNEL, string nick, string query)
+        {
+            if (ul.userIsMuted(nick)) return;
+            if (Settings.Default.silence == true || Settings.Default.giphyEnabled == false) return;
+
+            string message = Privmsg(CHANNEL, "No results found"); ;
+            string request = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=1&offset=0&q=";
+            string jsonResult;
+            GiphyResult g = new GiphyResult();
+
+            request += HttpUtility.UrlEncode(query);
+
+            var webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+
+            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+
+            try
+            {
+                jsonResult = webClient.DownloadString(request);
+                JsonConvert.PopulateObject(jsonResult, g);
+            }
+            catch { }
+
+            foreach (var searchResult in g.data)
+            {
+                message = Privmsg(CHANNEL, query + ": " + searchResult.url);
+                Client.sendMessage(message);
+                return;
+            }
+
+
             Client.sendMessage(message);
             return;
         }
