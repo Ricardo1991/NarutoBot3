@@ -1963,7 +1963,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == true || Settings.Default.giphyEnabled == false) return;
 
             string message = Privmsg(CHANNEL, "No results found"); ;
-            string request = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=1&offset=0&q=";
+            string request = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=";
             string jsonResult;
             GiphyResult g = new GiphyResult();
 
@@ -1981,13 +1981,11 @@ namespace NarutoBot3
             }
             catch { }
 
-            foreach (var searchResult in g.data)
-            {
-                message = Privmsg(CHANNEL, query + ": " + searchResult.url);
+            if (g != null) {
+                message = Privmsg(CHANNEL, query + ": " + g.data.url);
                 Client.sendMessage(message);
                 return;
             }
-
 
             Client.sendMessage(message);
             return;
