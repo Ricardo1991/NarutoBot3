@@ -7,24 +7,11 @@ namespace NarutoBot3
     static class NickGen
     {
         static int lineNumber;
+        static List<string> nickStrings;
 
         public static int LineNumber
         {
-            get { return lineNumber; }
             set { lineNumber = value; }
-        }
-
-        static List<string> nickStrings;
-
-        static public string GenerateNick(List<string> _nickStrings, int lineNumber)
-        {
-            nickStrings = new List<string>();
-            LineNumber = lineNumber;
-
-            foreach (string s in _nickStrings)
-                nickStrings.Add(s);
-
-            return Creator(false,false,false,false);
         }
 
         static public string GenerateNick(List<string> _nickStrings, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
@@ -203,8 +190,6 @@ namespace NarutoBot3
                 nick_gen = randomUpper(nick_gen);
 
             return nick_gen;
-        }  
-
+        }
     }
-
 }

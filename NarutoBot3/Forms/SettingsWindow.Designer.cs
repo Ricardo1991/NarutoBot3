@@ -48,6 +48,7 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
+            this.cbGiphy = new System.Windows.Forms.CheckBox();
             this.cbFunk = new System.Windows.Forms.CheckBox();
             this.cbQuotes = new System.Windows.Forms.CheckBox();
             this.cb_greetings = new System.Windows.Forms.CheckBox();
@@ -102,7 +103,6 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbGiphy = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -360,6 +360,16 @@
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
             // 
+            // cbGiphy
+            // 
+            this.cbGiphy.AutoSize = true;
+            this.cbGiphy.Location = new System.Drawing.Point(6, 253);
+            this.cbGiphy.Name = "cbGiphy";
+            this.cbGiphy.Size = new System.Drawing.Size(53, 17);
+            this.cbGiphy.TabIndex = 15;
+            this.cbGiphy.Text = "Giphy";
+            this.cbGiphy.UseVisualStyleBackColor = true;
+            // 
             // cbFunk
             // 
             this.cbFunk.AutoSize = true;
@@ -609,14 +619,14 @@
             this.gb_CredentialsRedditLogin.Controls.Add(this.label1);
             this.gb_CredentialsRedditLogin.Location = new System.Drawing.Point(6, 6);
             this.gb_CredentialsRedditLogin.Name = "gb_CredentialsRedditLogin";
-            this.gb_CredentialsRedditLogin.Size = new System.Drawing.Size(259, 149);
+            this.gb_CredentialsRedditLogin.Size = new System.Drawing.Size(505, 110);
             this.gb_CredentialsRedditLogin.TabIndex = 1;
             this.gb_CredentialsRedditLogin.TabStop = false;
             this.gb_CredentialsRedditLogin.Text = "Login";
             // 
             // bt_Logout
             // 
-            this.bt_Logout.Location = new System.Drawing.Point(9, 120);
+            this.bt_Logout.Location = new System.Drawing.Point(343, 75);
             this.bt_Logout.Name = "bt_Logout";
             this.bt_Logout.Size = new System.Drawing.Size(75, 23);
             this.bt_Logout.TabIndex = 6;
@@ -627,7 +637,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 90);
+            this.label3.Location = new System.Drawing.Point(7, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(222, 13);
             this.label3.TabIndex = 5;
@@ -635,7 +645,7 @@
             // 
             // b_Login
             // 
-            this.b_Login.Location = new System.Drawing.Point(178, 120);
+            this.b_Login.Location = new System.Drawing.Point(424, 75);
             this.b_Login.Name = "b_Login";
             this.b_Login.Size = new System.Drawing.Size(75, 23);
             this.b_Login.TabIndex = 4;
@@ -647,7 +657,7 @@
             // 
             this.tb_Pass.Location = new System.Drawing.Point(91, 49);
             this.tb_Pass.Name = "tb_Pass";
-            this.tb_Pass.Size = new System.Drawing.Size(162, 20);
+            this.tb_Pass.Size = new System.Drawing.Size(408, 20);
             this.tb_Pass.TabIndex = 3;
             this.tb_Pass.UseSystemPasswordChar = true;
             // 
@@ -655,7 +665,7 @@
             // 
             this.tb_User.Location = new System.Drawing.Point(91, 18);
             this.tb_User.Name = "tb_User";
-            this.tb_User.Size = new System.Drawing.Size(162, 20);
+            this.tb_User.Size = new System.Drawing.Size(408, 20);
             this.tb_User.TabIndex = 2;
             // 
             // label2
@@ -698,7 +708,7 @@
             this.gb_CredentialsMAL.Controls.Add(this.label6);
             this.gb_CredentialsMAL.Location = new System.Drawing.Point(6, 145);
             this.gb_CredentialsMAL.Name = "gb_CredentialsMAL";
-            this.gb_CredentialsMAL.Size = new System.Drawing.Size(481, 109);
+            this.gb_CredentialsMAL.Size = new System.Drawing.Size(481, 151);
             this.gb_CredentialsMAL.TabIndex = 6;
             this.gb_CredentialsMAL.TabStop = false;
             this.gb_CredentialsMAL.Text = "myAnimeList Credentials - for !anime";
@@ -813,7 +823,7 @@
             this.gb_CredentialsTwitterAccessTokens.Controls.Add(this.tb_AccessToken);
             this.gb_CredentialsTwitterAccessTokens.Location = new System.Drawing.Point(6, 89);
             this.gb_CredentialsTwitterAccessTokens.Name = "gb_CredentialsTwitterAccessTokens";
-            this.gb_CredentialsTwitterAccessTokens.Size = new System.Drawing.Size(377, 82);
+            this.gb_CredentialsTwitterAccessTokens.Size = new System.Drawing.Size(499, 82);
             this.gb_CredentialsTwitterAccessTokens.TabIndex = 5;
             this.gb_CredentialsTwitterAccessTokens.TabStop = false;
             this.gb_CredentialsTwitterAccessTokens.Text = "Access Tokens";
@@ -823,7 +833,7 @@
             this.tb_AccessTokenSecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tb_AccessTokenSecret.Location = new System.Drawing.Point(129, 46);
             this.tb_AccessTokenSecret.Name = "tb_AccessTokenSecret";
-            this.tb_AccessTokenSecret.Size = new System.Drawing.Size(242, 20);
+            this.tb_AccessTokenSecret.Size = new System.Drawing.Size(364, 20);
             this.tb_AccessTokenSecret.TabIndex = 1;
             // 
             // label7
@@ -849,7 +859,7 @@
             this.tb_AccessToken.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tb_AccessToken.Location = new System.Drawing.Point(129, 20);
             this.tb_AccessToken.Name = "tb_AccessToken";
-            this.tb_AccessToken.Size = new System.Drawing.Size(242, 20);
+            this.tb_AccessToken.Size = new System.Drawing.Size(364, 20);
             this.tb_AccessToken.TabIndex = 1;
             // 
             // gb_CredentialsTwitterConsumer
@@ -862,7 +872,7 @@
             this.gb_CredentialsTwitterConsumer.Controls.Add(this.b_ConsumerKey);
             this.gb_CredentialsTwitterConsumer.Location = new System.Drawing.Point(6, 6);
             this.gb_CredentialsTwitterConsumer.Name = "gb_CredentialsTwitterConsumer";
-            this.gb_CredentialsTwitterConsumer.Size = new System.Drawing.Size(377, 77);
+            this.gb_CredentialsTwitterConsumer.Size = new System.Drawing.Size(499, 77);
             this.gb_CredentialsTwitterConsumer.TabIndex = 4;
             this.gb_CredentialsTwitterConsumer.TabStop = false;
             this.gb_CredentialsTwitterConsumer.Text = "Consumer Keys";
@@ -872,7 +882,7 @@
             this.tb_ConsumerKeySecret.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tb_ConsumerKeySecret.Location = new System.Drawing.Point(129, 47);
             this.tb_ConsumerKeySecret.Name = "tb_ConsumerKeySecret";
-            this.tb_ConsumerKeySecret.Size = new System.Drawing.Size(242, 20);
+            this.tb_ConsumerKeySecret.Size = new System.Drawing.Size(364, 20);
             this.tb_ConsumerKeySecret.TabIndex = 1;
             // 
             // label9
@@ -889,7 +899,7 @@
             this.tb_ConsumerKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tb_ConsumerKey.Location = new System.Drawing.Point(129, 21);
             this.tb_ConsumerKey.Name = "tb_ConsumerKey";
-            this.tb_ConsumerKey.Size = new System.Drawing.Size(242, 20);
+            this.tb_ConsumerKey.Size = new System.Drawing.Size(364, 20);
             this.tb_ConsumerKey.TabIndex = 1;
             // 
             // b_ConsumerKey
@@ -908,16 +918,6 @@
             // eventLog1
             // 
             this.eventLog1.SynchronizingObject = this;
-            // 
-            // cbGiphy
-            // 
-            this.cbGiphy.AutoSize = true;
-            this.cbGiphy.Location = new System.Drawing.Point(6, 253);
-            this.cbGiphy.Name = "cbGiphy";
-            this.cbGiphy.Size = new System.Drawing.Size(53, 17);
-            this.cbGiphy.TabIndex = 15;
-            this.cbGiphy.Text = "Giphy";
-            this.cbGiphy.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 

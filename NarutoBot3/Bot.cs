@@ -87,7 +87,7 @@ namespace NarutoBot3
 
         private TwitterService service;
 
-        private RedditSharp.Things.AuthenticatedUser user;
+        private RedditSharp.Things.AuthenticatedUser redditUser;
 
         public string Topic
         {
@@ -222,7 +222,7 @@ namespace NarutoBot3
             {
                 try
                 {
-                    user = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true);
+                    redditUser = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true);
                 }
                 catch { }
             }
@@ -454,10 +454,10 @@ namespace NarutoBot3
 
                     string oldnick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     string newnick = messageObject.CompleteMessage;
-                    char mode = getUserMode(oldnick, userList);
+                    char userMode = getUserMode(oldnick, userList);
 
-                    if (mode != '0')
-                        newnick = mode + newnick;
+                    if (userMode != '0')
+                        newnick = userMode + newnick;
 
                     userTemp = new List<string>();
 
@@ -1642,10 +1642,8 @@ namespace NarutoBot3
                     case "fet": location = FET; timezoneS = "FET";
                         break;
 
-                    case "eet": location = EET; timezoneS = "EET";
-                        break;
-                    case "stillbutterfly": location = EET; timezoneS = "EET";
-                        break;
+                    case "eet":
+                    case "stillbutterfly":
                     case "romania": location = EET; timezoneS = "EET";
                         break;
 
@@ -1654,13 +1652,12 @@ namespace NarutoBot3
                     case "wer": location = WER; timezoneS = "WER";
                         break;
 
-                    case "gmt": location = GMT; timezoneS = "GMT";
-                        break;
-                    case "utc": wantUTC = true; timezoneS = "UTC";
-                        break;
+                    case "gmt":
                     case "masterrace": location = GMT; timezoneS = "GMT";
                         break;
 
+                    case "utc": wantUTC = true; timezoneS = "UTC";
+                        break;
                     case "brt": location = BRT; timezoneS = "BRT";
                         break;
                     case "art": location = ART; timezoneS = "ART";
@@ -1674,8 +1671,7 @@ namespace NarutoBot3
                     case "cst": location = CST; timezoneS = "CST";
                         break;
 
-                    case "mst": location = MST; timezoneS = "MST";
-                        break;
+                    case "mst":
                     case "jhoudiey": location = MST; timezoneS = "MST";
                         break;
 
@@ -3002,7 +2998,7 @@ namespace NarutoBot3
 
         internal void redditLogin(string userName, string password)
         {
-            user = reddit.LogIn(userName, password);
+            redditUser = reddit.LogIn(userName, password);
         }
     }
 }
