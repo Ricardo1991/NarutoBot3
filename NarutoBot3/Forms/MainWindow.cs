@@ -606,7 +606,6 @@ namespace NarutoBot3
                 InterfaceUserList.DataSource = null;
                 InterfaceUserList.DataSource = bot.userList;
 
-                var source = new AutoCompleteStringCollection();
                 List<string> temp = new List<string>();
 
                 foreach (string s in bot.userList.ToArray())
@@ -614,9 +613,6 @@ namespace NarutoBot3
                     temp.Add(Bot.removeUserMode(s));
                 }
 
-                //Source.AddRange(temp.ToArray());
-
-                //InputBox.AutoCompleteCustomSource = Source;
                 InputBox.Values = temp.ToArray();
             }
         }

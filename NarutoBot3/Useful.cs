@@ -16,23 +16,37 @@ namespace NarutoBot3
         public static string getBetween(string strSource, string strStart, string strEnd)
         {
             int Start, End;
+
+            if (string.IsNullOrWhiteSpace(strSource)) return string.Empty;
+
+            
             if (String.IsNullOrEmpty(strEnd))
             {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                if (String.IsNullOrEmpty(strStart))
+                    Start = 0;
+                else
+                    Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+
                 End = strSource.Length;
                 return strSource.Substring(Start, End - Start);
             }
 
             else if (strSource.Contains(strStart) && strSource.Contains(strEnd))
             {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                if (String.IsNullOrEmpty(strStart))
+                    Start = 0;
+                else
+                    Start = strSource.IndexOf(strStart, 0) + strStart.Length;
                 End = strSource.IndexOf(strEnd, Start);
                 if (End < 0) End = strSource.Length;
                 return strSource.Substring(Start, End - Start);
             }
             else
             {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                if (String.IsNullOrEmpty(strStart))
+                    Start = 0;
+                else
+                    Start = strSource.IndexOf(strStart, 0) + strStart.Length;
                 End = strSource.Length;
                 return strSource.Substring(Start, End - Start);
             }

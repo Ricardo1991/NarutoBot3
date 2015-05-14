@@ -80,6 +80,8 @@ namespace NarutoBot3
             string footer = "\r\n";
             bool isAction = false;
 
+            if (string.IsNullOrWhiteSpace(message)) return false;
+
             header = message.Split(new char[]{':'} , 2)[0]+":";
 
             try

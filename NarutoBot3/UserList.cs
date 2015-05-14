@@ -41,6 +41,8 @@ namespace NarutoBot3
         }
 
         public bool hasUserByName(String name){
+            if (string.IsNullOrWhiteSpace(name)) return false;
+
             name = name.Replace("@", string.Empty).Replace("+", string.Empty);
             name = name.Trim();
             foreach (User u in Users)
@@ -54,6 +56,7 @@ namespace NarutoBot3
 
         public void makeOnline(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -69,6 +72,8 @@ namespace NarutoBot3
 
         public void makeOffline(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
+
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -84,6 +89,7 @@ namespace NarutoBot3
 
         public void opUser(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -104,6 +110,8 @@ namespace NarutoBot3
 
         public void deopUser(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
+
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -124,6 +132,7 @@ namespace NarutoBot3
 
         public void muteUser(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -144,6 +153,7 @@ namespace NarutoBot3
 
         public void unmuteUser(String n)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -164,6 +174,7 @@ namespace NarutoBot3
 
         public void setGreeting(String n, String greeting, bool enabled)
         {
+            if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
             if (hasUserByName(n))
@@ -189,6 +200,8 @@ namespace NarutoBot3
 
         public bool userIsOperator(String nick)
         {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
             foreach (User u in Users)
@@ -200,6 +213,8 @@ namespace NarutoBot3
 
         public bool userIsMuted(String nick)
         {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
             foreach (User u in Users)

@@ -228,14 +228,14 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        private void bExport_Click(object sender, EventArgs e)
-        {
-            TextWriter WriteFileStream = new StreamWriter("Theme\\" + currentColorScheme.Name + ".json", false);
+        //private void bExport_Click(object sender, EventArgs e)
+        //{
+        //    TextWriter WriteFileStream = new StreamWriter("Theme\\" + currentColorScheme.Name + ".json", false);
 
-            WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme));
+        //    WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme));
 
-            WriteFileStream.Close();
-        }
+        //    WriteFileStream.Close();
+        //}
 
         private void bApplyTheme_Click(object sender, EventArgs e)
         {
