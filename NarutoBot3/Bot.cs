@@ -1,4 +1,5 @@
-﻿using NarutoBot3.Properties;
+﻿using GiphySearch;
+using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using RedditSharp;
 using System;
@@ -15,7 +16,6 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using TweetSharp;
-using GiphySearch;
 
 namespace NarutoBot3
 {
@@ -259,20 +259,23 @@ namespace NarutoBot3
             switch (messageObject.Type)
             {
                 case ("PING"):
+
                     Client.sendMessage("PONG :" + messageObject.SplitMessage[0] + "\r\n");
 
                     #if DEBUG
-                    WriteMessage(message);
+                        WriteMessage(message);
                     #endif
-
                     break;
+
                 case ("001"):
                 case ("002"):
                 case ("003"):
+
                     WriteMessage(messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1]);
                     break;
 
                 case ("004"): //server used for connection
+
                     Client.HOST_SERVER = messageObject.SplitMessage[1];
                     break;
 
@@ -287,11 +290,13 @@ namespace NarutoBot3
                 case ("333"): //Topic author and time
                 case ("366"): //End of /NAMES
                 case ("375"): //START OF MOTD
+
                     break;
 
-                case ("332"):   //TOPIC
-                    Topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 3)[2];
-                    OnTopicChange(EventArgs.Empty);
+                case ("332"): //TOPIC
+
+                    topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 3)[2];
+                    OnTopicChange(EventArgs.Empty); //tell the ui the topic changed
                     break;
 
                 case ("353"): //USERLIST
@@ -300,13 +305,13 @@ namespace NarutoBot3
                     {
                         found = false;
                         foreach (string u in userList)
-                            if (s == u) found = true;
-                        if (!found) userList.Add(s);
+                            if (string.Compare(s, u, true) == 0 ) found = true;
+
+                        if (!found) 
+                            userList.Add(s);
 
                         if (!ul.hasUserByName(s))
-                        {
                             ul.makeOnline(s);
-                        }
                     }
                             
                     userList.Sort();
@@ -315,11 +320,13 @@ namespace NarutoBot3
 
 
                 case ("372"): //MOTD
+
                     string motd = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
                     WriteMessage(motd, currentColorScheme.Motd);
                     break;
 
                 case ("376"): //END OF MOTD
+
                     IsConnected = true;
                     OnConnect(EventArgs.Empty);
 
@@ -329,17 +336,19 @@ namespace NarutoBot3
                     break;
 
                 case ("433"): //Nickname is already in use.
+
                     OnDuplicatedNick(EventArgs.Empty);
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
 
                 case ("TOPIC"):   //TOPIC
+
                     Topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
                     OnTopicChange(EventArgs.Empty);
                     break;
 
-
                 case ("PONG"):
+
                     string[] split = message.Split(':');
                     string pongcmd = split[2];
 
@@ -368,13 +377,16 @@ namespace NarutoBot3
                     break;
 
                 case ("JOIN"):
+
                     Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     found = false;
 
                     foreach(string s in userList)
-                    { if (s == Who) found = true; }
+                        if (string.Compare(s, Who, true) == 0) 
+                            found = true; 
 
-                    if(!found)userList.Add(Who);
+                    if (!found)
+                        userList.Add(Who);
 
                     userList.Sort();
 
@@ -388,24 +400,20 @@ namespace NarutoBot3
 
 
                 case ("PART"):
+
                     WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
 
                     foreach (string userP in userList)
-                    {
-                        if (removeUserMode(userP) != removeUserMode(WhoLeft))
-                        {
+                        if (string.Compare(removeUserMode(userP), removeUserMode(WhoLeft), true) != 0)
                             userTemp.Add(userP);
-                        }
-                    }
+                        
                     userList.Clear();
 
                     foreach (string userO in userTemp)
-                    {
                         userList.Add(userO);
-                    }
 
                     userList.Sort();
                     userTemp.Clear();
@@ -424,10 +432,9 @@ namespace NarutoBot3
                     userTemp = new List<string>();
 
                     foreach (string userB in userList)
-                    {
-                        if (removeUserMode(userB) != removeUserMode(WhoLeft))
+                        if (string.Compare(removeUserMode(userB), removeUserMode(WhoLeft), true) != 0)
                             userTemp.Add(userB);
-                    }
+
                     userList.Clear();
 
                     foreach (string userN in userTemp)
@@ -444,6 +451,7 @@ namespace NarutoBot3
 
 
                 case ("NICK"):
+
                     string oldnick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     string newnick = messageObject.CompleteMessage;
                     char mode = getUserMode(oldnick, userList);
@@ -454,16 +462,13 @@ namespace NarutoBot3
                     userTemp = new List<string>();
 
                     foreach (string userC in userList)
-                    {
-                        if (removeUserMode(userC) != removeUserMode(oldnick))
+                        if (string.Compare(removeUserMode(userC) , removeUserMode(oldnick), true) != 0)
                             userTemp.Add(userC);
-                    }
                     userList.Clear();
 
                     foreach (string use in userTemp)
-                    {
                         userList.Add(use);
-                    }
+
                     userList.Add(newnick);
                     userList.Sort();
 
@@ -491,17 +496,13 @@ namespace NarutoBot3
                     string affectedUser = messageObject.SplitMessage[2];
 
                     foreach (string userD in userList)
-                    {
-                        if (removeUserMode(userD)!= removeUserMode(affectedUser))
+                        if (string.Compare(removeUserMode(userD), removeUserMode(affectedUser), true) != 0)
                             userTemp.Add(userD);
        
-                    }
                     userList.Clear();
 
                     foreach (string userD in userTemp)
-                    {
                         userList.Add(userD);
-                    }
 
                     switch (modechange)
                     {
@@ -544,17 +545,14 @@ namespace NarutoBot3
                     string kickedUser = messageObject.SplitMessage[1];
 
                     foreach (string userR in userList)
-                    {
-                        if (removeUserMode(userR) != removeUserMode(kickedUser))
+                        if (string.Compare(removeUserMode(userR) , removeUserMode(kickedUser),true) != 0)
                             userTemp.Add(userR);
-                    }
 
                     userList.Clear();
 
                     foreach (string userT in userTemp)
-                    {
                         userList.Add(userT);
-                    }
+
                     userList.Sort();
 
                     userTemp.Clear();
@@ -579,7 +577,7 @@ namespace NarutoBot3
                         arg = msg.Substring(cmd.Length+1); //the rest of msg
 
                     //Write Message on Console
-                    if (whoSent == Client.NICK)
+                    if (string.Compare(whoSent, Client.NICK, true) == 0)
                     {
                         string alignedNick = user.Truncate(13);
                         int tab = 15 - alignedNick.Length;
@@ -626,7 +624,7 @@ namespace NarutoBot3
                         {
                             cmd = cmd.Substring(1);
 
-                        if (msg == "!anime best anime ever")
+                        if (string.Compare(msg, "!anime best anime ever", true) == 0)
                             {
                                 Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
@@ -781,7 +779,7 @@ namespace NarutoBot3
 
                                 else if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
                                 {
-                                    addQuote(Client.HOME_CHANNEL, arg, user);
+                                    addQuote(arg, user);
                                 }
 
                             }
@@ -800,15 +798,10 @@ namespace NarutoBot3
                                 WriteMessage("* Received a funk request from " + user, currentColorScheme.BotReport);
 
                                 if (String.IsNullOrEmpty(arg)) //lookup or random
-                                {
                                     printFunk(Client.HOME_CHANNEL, arg, user);
-                                }
 
                                 else
-                                {
-                                    addFunk(Client.HOME_CHANNEL, arg, user);
-                                }
-
+                                    addFunk(arg, user);
                             }
                         }
 
@@ -933,6 +926,8 @@ namespace NarutoBot3
 
         static public char getUserMode(string user, List<string> userList)
         {
+            if (string.IsNullOrWhiteSpace(user)) return '0';
+
             user = user.Trim();
 
             foreach (string u in userList)
@@ -2650,7 +2645,7 @@ namespace NarutoBot3
 
         }
 
-        void addQuote(string CHANNEL, string args, string nick)
+        void addQuote(string args, string nick)
         {
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
@@ -2720,7 +2715,7 @@ namespace NarutoBot3
 
         }
 
-        void addFunk(string CHANNEL, string args, string nick)
+        void addFunk(string args, string nick)
         {
             if (ul.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
 
@@ -2956,7 +2951,7 @@ namespace NarutoBot3
             OutputBox.Clear();
         }
 
-        private string questionsRegex(string rest)
+        private static string questionsRegex(string rest)
         {
             var someVariable1 = "you";
             var someVariable2 = "me";
