@@ -1812,7 +1812,6 @@ namespace NarutoBot3
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
                                     message = Privmsg(CHANNEL, "[title] " + title);
-
                                     Client.sendMessage(message);
                                 }
                                 
@@ -2682,6 +2681,7 @@ namespace NarutoBot3
             Random r = new Random();
             int i;
             string message = "";
+            List<string> temp = new List<string>;
 
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
@@ -2699,6 +2699,16 @@ namespace NarutoBot3
                     message = Privmsg(CHANNEL, quotes[number - 1]);
                 else
                     message = Privmsg(CHANNEL, "Quote "+ number +" not found");
+            }
+            else{
+                foreach(string s in quotes){
+                    if(s.Contains(args))
+                        temp.Add(s);
+                }
+
+                if(temp.Count>0)
+                    message = Privmsg(CHANNEL, temp[r.Next(temp.Count-1)]);
+                else message = Privmsg(CHANNEL, "No quotes found");
             }
 
             Client.sendMessage(message);
