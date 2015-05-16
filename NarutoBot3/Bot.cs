@@ -79,6 +79,7 @@ namespace NarutoBot3
         RichTextBox OutputBox;
         ColorScheme currentColorScheme = new ColorScheme();
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
+
         private Reddit reddit;
 
         string topic;
@@ -86,8 +87,6 @@ namespace NarutoBot3
         private List<int> killsUsed = new List<int>();
 
         private TwitterService service;
-
-        private RedditSharp.Things.AuthenticatedUser redditUser;
 
         public string Topic
         {
@@ -222,7 +221,7 @@ namespace NarutoBot3
             {
                 try
                 {
-                    redditUser = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true);
+                    reddit.User = reddit.LogIn(Settings.Default.redditUser, Settings.Default.redditPass, true);
                 }
                 catch { }
             }
@@ -1816,11 +1815,13 @@ namespace NarutoBot3
 
                                 html = reader.ReadToEnd();
 
-                                if (!html.Contains("<title>")) return;
+                                if (!html.Contains("<title")) return;
 
-                                title = Useful.getBetween(html, "<title>", "</title>");
+                                title = Useful.getBetween(Useful.getBetween(html, "<title", "</title>"), ">", "</title>");
                                 title = title.Replace("\n", string.Empty).Replace("\r", string.Empty);
                                 title = HttpUtility.HtmlDecode(title);
+
+                                if (title.Contains("gyazo")) return;    //avoid those pages
 
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
@@ -3085,7 +3086,7 @@ namespace NarutoBot3
 
         internal void redditLogin(string userName, string password)
         {
-            redditUser = reddit.LogIn(userName, password);
+            reddit.User = reddit.LogIn(userName, password, true);
         }
     }
 }
