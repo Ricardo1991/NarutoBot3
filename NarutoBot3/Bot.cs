@@ -1801,12 +1801,26 @@ namespace NarutoBot3
                     if (headers.ContainsKey("Content-Type")){
                         if (headers["Content-Type"].Contains("text/html"))
                         {
-                            var webClient = new WebClient();
-                            webClient.Encoding = Encoding.UTF8;
+                            WebRequest request = WebRequest.Create(url);
+                            request.Proxy = null;
+                            request.Timeout = 30000;
+                            
                             try
                             {
-                                html = webClient.DownloadString(url);
+                                //request.Headers.Add("user-agent", Settings.Default.UserAgent);
+
+                                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                                Stream dataStream = response.GetResponseStream();
+                                StreamReader reader = new StreamReader(dataStream);
+
+                                html = reader.ReadToEnd();
+
+                                if (!html.Contains("<title>")) return;
+
                                 title = Useful.getBetween(html, "<title>", "</title>");
+                                title = title.Replace("\n", string.Empty).Replace("\r", string.Empty);
+                                title = HttpUtility.HtmlDecode(title);
 
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
@@ -1846,7 +1860,7 @@ namespace NarutoBot3
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
-            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
             string name = "";
 
@@ -1971,7 +1985,7 @@ namespace NarutoBot3
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
-            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
             try
             {
@@ -2025,7 +2039,7 @@ namespace NarutoBot3
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
-            webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
+            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
             try
             {
