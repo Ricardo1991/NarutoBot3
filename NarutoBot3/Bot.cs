@@ -772,14 +772,13 @@ namespace NarutoBot3
                             {
                                 WriteMessage("* Received a quote request from " + user, currentColorScheme.BotReport);
 
-                                if (String.IsNullOrEmpty(arg) || arg[0] == '#') //lookup or random
-                                {
-                                    printQuote(Client.HOME_CHANNEL, arg, user);
-                                }
-
-                                else if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
+                                if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
                                 {
                                     addQuote(arg, user);
+                                }
+                                else //lookup or random
+                                {
+                                    printQuote(Client.HOME_CHANNEL, arg, user);
                                 }
 
                             }
@@ -2702,7 +2701,7 @@ namespace NarutoBot3
             }
             else{
                 foreach(string s in quotes){
-                    if(s.Contains(args))
+                    if(s.ToLower().Contains(args.ToLower()))
                         temp.Add(s);
                 }
 
