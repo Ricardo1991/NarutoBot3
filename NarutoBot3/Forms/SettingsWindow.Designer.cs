@@ -103,6 +103,7 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
+            this.cbPageTitle = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -293,13 +294,14 @@
             // 
             // gb_FeaturesParser
             // 
+            this.gb_FeaturesParser.Controls.Add(this.cbPageTitle);
             this.gb_FeaturesParser.Controls.Add(this.cb_Reddit);
             this.gb_FeaturesParser.Controls.Add(this.cb_youtube);
             this.gb_FeaturesParser.Controls.Add(this.cb_vimeo);
             this.gb_FeaturesParser.Controls.Add(this.cb_twitter);
             this.gb_FeaturesParser.Location = new System.Drawing.Point(342, 10);
             this.gb_FeaturesParser.Name = "gb_FeaturesParser";
-            this.gb_FeaturesParser.Size = new System.Drawing.Size(162, 115);
+            this.gb_FeaturesParser.Size = new System.Drawing.Size(162, 133);
             this.gb_FeaturesParser.TabIndex = 15;
             this.gb_FeaturesParser.TabStop = false;
             this.gb_FeaturesParser.Text = "Link Parsers";
@@ -919,6 +921,16 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
+            // cbPageTitle
+            // 
+            this.cbPageTitle.AutoSize = true;
+            this.cbPageTitle.Location = new System.Drawing.Point(6, 110);
+            this.cbPageTitle.Name = "cbPageTitle";
+            this.cbPageTitle.Size = new System.Drawing.Size(94, 17);
+            this.cbPageTitle.TabIndex = 12;
+            this.cbPageTitle.Text = "Get Page Title";
+            this.cbPageTitle.UseVisualStyleBackColor = true;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1045,5 +1057,6 @@
         private System.Windows.Forms.CheckBox cbFunk;
         private System.Windows.Forms.CheckBox cbShuffle;
         private System.Windows.Forms.CheckBox cbGiphy;
+        private System.Windows.Forms.CheckBox cbPageTitle;
     }
 }

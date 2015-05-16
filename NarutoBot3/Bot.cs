@@ -809,26 +809,31 @@ namespace NarutoBot3
                     else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
                         || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
                         {
-                            WriteMessage("* Detected a short youtube video from  " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected a short youtube video from " + user, currentColorScheme.BotReport);
                             youtube(whoSent, user, msg);
                         }
 
                     else if (msg.Contains("vimeo.com"))
                         {
-                            WriteMessage("* Detected an vimeo video from  " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected an vimeo video from " + user, currentColorScheme.BotReport);
                             vimeo(whoSent, user, msg);
                         }
 
                     else if (msg.Contains("reddit.com") && msg.Contains("/r/") && msg.Contains("/comments/"))
                         {
-                            WriteMessage("* Detected a reddit link from  " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected a reddit link from " + user, currentColorScheme.BotReport);
                             redditLink(whoSent, user, msg);
                         }
 
                     else if (msg.Contains("twitter.com") && msg.Contains("/status/"))
                         {
-                            WriteMessage("* Detected a twitter link from  " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected a twitter link from " + user, currentColorScheme.BotReport);
                             twitter(whoSent, user, msg);
+                        }
+                    else if (msg.Contains("http://") || msg.Contains("https://"))
+                        {
+                            WriteMessage("* Detected an ulr from " + user, currentColorScheme.BotReport);
+                            urlTitle(whoSent, user, msg);
                         }
 
                     else if (message.Contains("\x01"))
@@ -1758,6 +1763,65 @@ namespace NarutoBot3
                 message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
                 
                 Client.sendMessage(message);
+            }
+        }
+
+        public void urlTitle(string CHANNEL, string nick, string line)
+        {
+            string title, message, url=null, html;
+            string[] split;
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+
+            if (ul.userIsMuted(nick)) return;
+
+            if (Settings.Default.silence == true || Settings.Default.urlTitleEnabled == false) return;
+
+            else
+            {
+                split = line.Split(new char[] { ' ' });
+
+                foreach (string s in split){
+                    if (s.Contains("http"))
+                    {
+                        url = s;
+                        break;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    WebRequest webRequest = HttpWebRequest.Create(url);
+
+                    webRequest.Method = "HEAD";
+                    using (WebResponse webResponse = webRequest.GetResponse())
+                    {
+                        foreach (string header in webResponse.Headers)
+                            headers.Add(header, webResponse.Headers[header]);
+                    }
+
+                    if (headers.ContainsKey("Content-Type")){
+                        if (headers["Content-Type"].Contains("text/html"))
+                        {
+                            var webClient = new WebClient();
+                            webClient.Encoding = Encoding.UTF8;
+                            try
+                            {
+                                html = webClient.DownloadString(url);
+                                title = Useful.getBetween(html, "<title>", "</title>");
+
+                                if (!string.IsNullOrWhiteSpace(title))
+                                {
+                                    message = Privmsg(CHANNEL, "[title] " + title);
+
+                                    Client.sendMessage(message);
+                                }
+                                
+
+                            }
+                            catch { }
+                        }
+                    }
+                }
             }
         }
 

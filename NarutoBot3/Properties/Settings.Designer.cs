@@ -766,5 +766,17 @@ namespace NarutoBot3.Properties {
                 this["giphyEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool urlTitleEnabled {
+            get {
+                return ((bool)(this["urlTitleEnabled"]));
+            }
+            set {
+                this["urlTitleEnabled"] = value;
+            }
+        }
     }
 }
