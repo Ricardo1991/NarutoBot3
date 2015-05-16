@@ -2681,7 +2681,7 @@ namespace NarutoBot3
             Random r = new Random();
             int i;
             string message = "";
-            List<string> temp = new List<string>;
+            List<string> temp = new List<string>();
 
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
