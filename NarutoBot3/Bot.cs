@@ -1818,13 +1818,14 @@ namespace NarutoBot3
                                 if (!html.Contains("<title")) return;
 
                                 title = Useful.getBetween(Useful.getBetween(html, "<title", "</title>"), ">", "</title>");
-                                title = title.Replace("\n", string.Empty).Replace("\r", string.Empty);
-                                title = HttpUtility.HtmlDecode(title);
-
-                                if (title.Contains("gyazo")) return;    //avoid those pages
-
+                                
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
+                                   
+                                    title = title.Replace("\n", string.Empty).Replace("\r", string.Empty);
+                                    title = HttpUtility.HtmlDecode(title);
+                                    if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
+
                                     message = Privmsg(CHANNEL, "[title] " + title);
                                     Client.sendMessage(message);
                                 }
