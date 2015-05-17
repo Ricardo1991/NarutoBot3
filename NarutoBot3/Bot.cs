@@ -830,7 +830,7 @@ namespace NarutoBot3
                         }
                     else if (msg.Contains("http://") || msg.Contains("https://"))
                         {
-                            WriteMessage("* Detected an ulr from " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected an url from " + user, currentColorScheme.BotReport);
                             urlTitle(whoSent, user, msg);
                         }
 
@@ -1768,6 +1768,7 @@ namespace NarutoBot3
         {
             string title, message, url=null, html;
             string[] split;
+            bool skip = false;
             Dictionary<string, string> headers = new Dictionary<string, string>();
 
             if (ul.userIsMuted(nick)) return;
@@ -1791,14 +1792,23 @@ namespace NarutoBot3
                     WebRequest webRequest = HttpWebRequest.Create(url);
 
                     webRequest.Method = "HEAD";
-                    using (WebResponse webResponse = webRequest.GetResponse())
+                    try
                     {
-                        foreach (string header in webResponse.Headers)
-                            headers.Add(header, webResponse.Headers[header]);
+                        using (WebResponse webResponse = webRequest.GetResponse())
+                        {
+                            foreach (string header in webResponse.Headers)
+                                headers.Add(header, webResponse.Headers[header]);
+                        }
+                    }
+                    catch (WebException ex)
+                    {
+                        if (ex.Message.Contains("405"))
+                            skip = true;
                     }
 
-                    if (headers.ContainsKey("Content-Type")){
-                        if (headers["Content-Type"].Contains("text/html"))
+                    if (headers.ContainsKey("Content-Type") || skip)
+                    {
+                        if (headers["Content-Type"].Contains("text/html") || skip)
                         {
                             WebRequest request = WebRequest.Create(url);
                             request.Proxy = null;
@@ -1821,8 +1831,8 @@ namespace NarutoBot3
                                 
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
-                                   
-                                    title = title.Replace("\n", string.Empty).Replace("\r", string.Empty);
+
+                                    title = title.Replace('\n', '\0').Replace('\r', '\0').Replace('\t', '\0');
                                     title = HttpUtility.HtmlDecode(title);
                                     if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
 
@@ -2047,17 +2057,25 @@ namespace NarutoBot3
             {
                 jsonResult = webClient.DownloadString(request);
                 JsonConvert.PopulateObject(jsonResult, g);
-            }
-            catch { }
 
-            if (g.data != null) {
-                message = Privmsg(CHANNEL, query + ": " + g.data.url);
+                if (g.data != null)
+                {
+                    message = Privmsg(CHANNEL, query + ": " + g.data.url);
+                    Client.sendMessage(message);
+                    return;
+                }
+                else
+                {
+                    Client.sendMessage(message);
+                    return;
+                }
+            }
+            catch
+            {
                 Client.sendMessage(message);
                 return;
             }
 
-            Client.sendMessage(message);
-            return;
         }
 
         public void vimeo(string CHANNEL, string nick, string line)
