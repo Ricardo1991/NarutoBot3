@@ -1768,7 +1768,6 @@ namespace NarutoBot3
         {
             string title, message, url=null, html;
             string[] split;
-            bool skip = false;
             Dictionary<string, string> headers = new Dictionary<string, string>();
 
             if (ul.userIsMuted(nick)) return;
@@ -1802,13 +1801,12 @@ namespace NarutoBot3
                     }
                     catch (WebException ex)
                     {
-                        if (ex.Message.Contains("405"))
-                            skip = true;
+
                     }
 
-                    if (headers.ContainsKey("Content-Type") || skip)
+                    if (headers.ContainsKey("Content-Type"))
                     {
-                        if (headers["Content-Type"].Contains("text/html") || skip)
+                        if (headers["Content-Type"].Contains("text/html"))
                         {
                             WebRequest request = WebRequest.Create(url);
                             request.Proxy = null;
