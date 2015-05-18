@@ -415,23 +415,6 @@ namespace NarutoBot3
             //also, should make a log
         }
 
-        public string privmsg(string destinatary, string message)
-        {
-            string result;
-
-            result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
-
-            string alignedNick = client.NICK.Truncate(13);
-            int tab = 15 - alignedNick.Length;
-
-            for (int i = 0; i < tab; i++)
-                alignedNick = alignedNick + " ";
-            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
-
-
-            return result;
-        }
-
         private void userJoined(string whoJoined)
         {
             WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
@@ -675,11 +658,11 @@ namespace NarutoBot3
             {
                 string message;
 
-                message = privmsg(client.HOME_CHANNEL, "*");
+                message = bot.Privmsg(client.HOME_CHANNEL, "*");
                 client.sendMessage(message);
-                message = privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
+                message = bot.Privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
                 client.sendMessage(message);
-                message = privmsg(client.HOME_CHANNEL, "*");
+                message = bot.Privmsg(client.HOME_CHANNEL, "*");
                 client.sendMessage(message);
 
                 Settings.Default.releaseEnabled = false;
@@ -908,7 +891,7 @@ namespace NarutoBot3
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
+                        message = bot.Privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
 
                     else if (parsed[0].ToLower() == "/whois")  //Action send
                         message = "WHOIS " + parsed[1] + "\n";
@@ -920,32 +903,32 @@ namespace NarutoBot3
                         changeNick(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
-                        message = privmsg("NickServ", parsed[1]);
+                        message = bot.Privmsg("NickServ", parsed[1]);
 
                     else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
-                        message = privmsg("ChanServ", parsed[1]);
+                        message = bot.Privmsg("ChanServ", parsed[1]);
 
                     else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
                     {
                         parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
                         if (parsed.Length >= 3)
-                            message = privmsg(parsed[1], parsed[2]);
+                            message = bot.Privmsg(parsed[1], parsed[2]);
                         else
                             WriteMessage("Not enough arguments");
                     }
                     else if (parsed[0].ToLower() == "/identify")
-                        message = privmsg("NickServ", "identify " + parsed[1]);
+                        message = bot.Privmsg("NickServ", "identify " + parsed[1]);
                 }
 
                 else //Normal send
-                    message = privmsg(HOME_CHANNEL, InputBox.Text);
+                    message = bot.Privmsg(HOME_CHANNEL, InputBox.Text);
             }
             else
                 if (parsed[0][0] == '/')
                     WriteMessage("Not enough arguments");
 
                 else //Normal send
-                    message = privmsg(HOME_CHANNEL, InputBox.Text);
+                    message = bot.Privmsg(HOME_CHANNEL, InputBox.Text);
 
             if (!String.IsNullOrWhiteSpace(message)) client.sendMessage(message);
         }
@@ -1078,7 +1061,7 @@ namespace NarutoBot3
             {
                 if (Settings.Default.releaseEnabled)
                 {
-                    string message = privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + Settings.Default.chapterNumber + " for the chapter every " + Settings.Default.checkInterval + " seconds.");
+                    string message = bot.Privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + Settings.Default.chapterNumber + " for the chapter every " + Settings.Default.checkInterval + " seconds.");
                     mangaReleaseTimer.Interval = Settings.Default.checkInterval * 1000;
                     mangaReleaseTimer.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
                     mangaReleaseTimer.Enabled = true;

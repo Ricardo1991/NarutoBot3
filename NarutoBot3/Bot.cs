@@ -578,33 +578,51 @@ namespace NarutoBot3
                         arg = msg.Substring(cmd.Length+1); //the rest of msg
 
                     //Write Message on Console
-                    if (string.Compare(whoSent, Client.NICK, true) == 0)
+                    if (msg.Contains("\x01"+"ACTION "))
                     {
-                        string alignedNick = user.Truncate(13);
-                        int tab = 15 - alignedNick.Length;
+                        msg = msg.Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
 
-                        for (int i = 0; i < tab; i++)
-                            alignedNick = alignedNick + " ";
-                        WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
-                    }
-                    else if (msg.ToLower().Contains(Client.NICK.ToLower()))
-                    {
-                        string alignedNick = user.Truncate(13);
-                        int tab = 15 - alignedNick.Length;
-
-                        for (int i = 0; i < tab; i++)
-                            alignedNick = alignedNick + " ";
-                        WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
+                        if (string.Compare(whoSent, Client.NICK, true) == 0)
+                            WriteMessage("             * : " + user + " " + msg, currentColorScheme.Notice);
+                        
+                        else if (msg.ToLower().Contains(Client.NICK.ToLower()))
+                            WriteMessage("             * : " + user + " " + msg, currentColorScheme.Mention);
+                        
+                        else
+                            WriteMessage("             * : " + user + " " + msg);
                     }
                     else
                     {
-                        string alignedNick = user.Truncate(13);
-                        int tab = 15 - alignedNick.Length;
+                        if (string.Compare(whoSent, Client.NICK, true) == 0)
+                        {
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
 
-                        for (int i = 0; i < tab; i++)
-                            alignedNick = alignedNick + " ";
-                        WriteMessage(alignedNick + ": " + msg);
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Notice);
+                        }
+                        else if (msg.ToLower().Contains(Client.NICK.ToLower()))
+                        {
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg, currentColorScheme.Mention);
+                        }
+                        else
+                        {
+                            string alignedNick = user.Truncate(13);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + msg);
+                        }
+
                     }
+
 
                     //StartParsing
                     if ((String.Compare(cmd.Replace(",",string.Empty), "hello", true) == 0
@@ -1216,14 +1234,23 @@ namespace NarutoBot3
 
             result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
 
-            string alignedNick = Client.NICK.Truncate(13);
-            int tab = 15 - alignedNick.Length;
+            if (message.Contains("\x01"+"ACTION "))
+            {
+                message = Client.NICK + " " + message.Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
 
-            for (int i = 0; i < tab; i++)
-                alignedNick = alignedNick + " ";
-            WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
-                
+                WriteMessage("             * : " + message, currentColorScheme.OwnMessage);
+            }
+            else
+            {
+                string alignedNick = Client.NICK.Truncate(13);
+                int tab = 15 - alignedNick.Length;
 
+                for (int i = 0; i < tab; i++)
+                    alignedNick = alignedNick + " ";
+
+                WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+
+            }
             return result;
         }
 
