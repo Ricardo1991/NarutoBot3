@@ -1791,7 +1791,7 @@ namespace NarutoBot3
                                 headers.Add(header, webResponse.Headers[header]);
                         }
                     }
-                    catch (WebException ex)
+                    catch
                     {
 
                     }
@@ -2693,7 +2693,7 @@ namespace NarutoBot3
                 
                 timeoutTimer.Stop();
                 waitingForPong = false;
-                Client.sendMessage("QUIT :Goodbye everyone!\n");
+                Client.Disconnect("Goodbye!");
 
                 return true;
             }
@@ -3046,7 +3046,7 @@ namespace NarutoBot3
                 if(timeoutTimer!=null) timeoutTimer.Close();
             }
             userList.Clear();
-            Client.Disconnect();
+            Client.Disconnect("Goodbye!");
             OutputBox.Clear();
         }
 

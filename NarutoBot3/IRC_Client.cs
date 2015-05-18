@@ -128,11 +128,11 @@ namespace NarutoBot3
             return reader.ReadLine();
         }
 
-        public void Disconnect()
+        public void Disconnect(string quitMessage)
         {
             try
             {
-                if (writer != null) sendMessage("QUIT Goodbye!\r\n");
+                if (writer != null) sendMessage("QUIT "+quitMessage+"\r\n");
 
                 isConnected = false;
 
