@@ -51,6 +51,14 @@ namespace NarutoBot3
         string quitMessage;
         public string QuitMessage{get { return quitMessage; } set { quitMessage = value; }}
 
+        string joinMessage;
+
+        public string JoinMessage
+        {
+            get { return joinMessage; }
+            set { joinMessage = value; }
+        }
+
         bool conneceted = false;
         public bool IsConnected{get { return conneceted; }set { conneceted = value; }}
 
@@ -380,6 +388,7 @@ namespace NarutoBot3
                 case ("JOIN"):
 
                     Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    JoinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!")+1);
                     found = false;
 
                     foreach(string s in userList)

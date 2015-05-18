@@ -303,7 +303,7 @@ namespace NarutoBot3
             bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
 
             bot.Created += new EventHandler<EventArgs>(userListCreated);
-            bot.Joined += (sender, e) => userJoined(bot.Who);
+            bot.Joined += (sender, e) => userJoined(bot.Who, bot.JoinMessage);
             bot.Left += (sender, e) => userLeft(bot.WhoLeft, bot.QuitMessage);
             bot.NickChanged += (sender, e) => userNickChange(bot.Who, bot.NewNick);
             bot.Kicked += (sender, e) => userKicked(bot.Who);
@@ -415,9 +415,9 @@ namespace NarutoBot3
             //also, should make a log
         }
 
-        private void userJoined(string whoJoined)
+        private void userJoined(string whoJoined, string joinMessage)
         {
-            WriteMessage("** " + whoJoined + " joined", currentColorScheme.Join);
+            WriteMessage("** " + whoJoined + " (" + joinMessage + ") joined", currentColorScheme.Join);
             UpdateDataSource();
         }
 
