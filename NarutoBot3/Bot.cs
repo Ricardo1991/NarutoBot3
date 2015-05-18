@@ -825,9 +825,9 @@ namespace NarutoBot3
 
 
                     else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
-                        || (msg.Contains("Youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
+                        || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
                         {
-                            WriteMessage("* Detected a short Youtube video from " + user, currentColorScheme.BotReport);
+                            WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                             youtube(whoSent, user, msg);
                         }
 
@@ -2011,7 +2011,7 @@ namespace NarutoBot3
 
             query = query.Replace(" ", "%20");
 
-            string getString = "https://www.googleapis.com/Youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=10&type=video&safeSearch=none";
+            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=10&type=video&safeSearch=none";
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2027,12 +2027,12 @@ namespace NarutoBot3
 
             foreach (var searchResult in y.items)
             {
-                switch (searchResult.id.kind)
+                switch (searchResult.id.kind.ToLower())
                 {
-                    case "Youtube#video":
+                    case "youtube#video":
 
 
-                        getString = "https://www.googleapis.com/Youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + searchResult.id.videoId;
+                        getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + searchResult.id.videoId;
                         try
                         {
                             jsonYoutube = webClient.DownloadString(getString);
@@ -2043,7 +2043,7 @@ namespace NarutoBot3
                         title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
                         duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
-                        message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.Youtube.com/watch?v=" + searchResult.id.videoId);
+                        message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
                         Client.sendMessage(message);
 
                         break;
@@ -2176,7 +2176,7 @@ namespace NarutoBot3
                 
                 else if (args.ToLower() == "me baby".Trim())
                 {
-                    message = Privmsg(CHANNEL, "WASSA WASSA https://www.Youtube.com/watch?v=dwkClIFBMEE");
+                    message = Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=dwkClIFBMEE");
                 }
                 else
                 {
@@ -2848,7 +2848,7 @@ namespace NarutoBot3
                 funk = new List<string>();
 
             if ((args.Contains("youtu.be") && (args.Contains("?v=") == false && args.Contains("&v=") == false))
-                            || (args.Contains("Youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
+                            || (args.Contains("youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
             {
                 string id = YoutubeUseful.getYoutubeIdFromURL(args);
 
