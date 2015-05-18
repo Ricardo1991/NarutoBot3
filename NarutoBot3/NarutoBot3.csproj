@@ -179,6 +179,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Stats.cs" />
     <Compile Include="UserList.cs" />
     <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />
     <Compile Include="NickGen.cs" />
