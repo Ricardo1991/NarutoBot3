@@ -1825,12 +1825,13 @@ namespace NarutoBot3
 
                                 if (!html.Contains("<title")) return;
 
-                                title = Useful.getBetween(Useful.getBetween(html, "<title", "</title>"), ">", "</title>");
+                                string temp = Useful.getBetween(html, "<title", "</title>");
+                                title = Useful.getBetween(temp, ">", "</title>");
                                 
                                 if (!string.IsNullOrWhiteSpace(title))
                                 {
 
-                                    title = title.Replace('\n', '\0').Replace('\r', '\0').Replace('\t', '\0');
+                                    title = title.Replace('\n', ' ').Replace('\r', ' ').Replace('\t', ' ').Trim();
                                     title = HttpUtility.HtmlDecode(title);
                                     if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
 
