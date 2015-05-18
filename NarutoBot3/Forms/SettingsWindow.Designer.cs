@@ -63,6 +63,8 @@
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabInterface = new System.Windows.Forms.TabPage();
+            this.gbQuitMessage = new System.Windows.Forms.GroupBox();
+            this.tbQuitMessage = new System.Windows.Forms.TextBox();
             this.gb_autocommand = new System.Windows.Forms.GroupBox();
             this.cb_ConnectCommand = new System.Windows.Forms.TextBox();
             this.gb_AppearanceChatWindow = new System.Windows.Forms.GroupBox();
@@ -104,8 +106,7 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.gbQuitMessage = new System.Windows.Forms.GroupBox();
-            this.tbQuitMessage = new System.Windows.Forms.TextBox();
+            this.gbTheme = new System.Windows.Forms.GroupBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -113,6 +114,7 @@
             this.settingsTabControl.SuspendLayout();
             this.enableDisableTab.SuspendLayout();
             this.tabInterface.SuspendLayout();
+            this.gbQuitMessage.SuspendLayout();
             this.gb_autocommand.SuspendLayout();
             this.gb_AppearanceChatWindow.SuspendLayout();
             this.redditCredentialsTab.SuspendLayout();
@@ -126,7 +128,7 @@
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
-            this.gbQuitMessage.SuspendLayout();
+            this.gbTheme.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -532,17 +534,33 @@
             // 
             // tabInterface
             // 
+            this.tabInterface.Controls.Add(this.gbTheme);
             this.tabInterface.Controls.Add(this.gbQuitMessage);
             this.tabInterface.Controls.Add(this.gb_autocommand);
             this.tabInterface.Controls.Add(this.gb_AppearanceChatWindow);
-            this.tabInterface.Controls.Add(this.bApplyTheme);
-            this.tabInterface.Controls.Add(this.themeList);
             this.tabInterface.Location = new System.Drawing.Point(4, 22);
             this.tabInterface.Name = "tabInterface";
             this.tabInterface.Size = new System.Drawing.Size(517, 302);
             this.tabInterface.TabIndex = 4;
             this.tabInterface.Text = "Client and Interface";
             this.tabInterface.UseVisualStyleBackColor = true;
+            // 
+            // gbQuitMessage
+            // 
+            this.gbQuitMessage.Controls.Add(this.tbQuitMessage);
+            this.gbQuitMessage.Location = new System.Drawing.Point(146, 152);
+            this.gbQuitMessage.Name = "gbQuitMessage";
+            this.gbQuitMessage.Size = new System.Drawing.Size(354, 53);
+            this.gbQuitMessage.TabIndex = 7;
+            this.gbQuitMessage.TabStop = false;
+            this.gbQuitMessage.Text = "Quit Message";
+            // 
+            // tbQuitMessage
+            // 
+            this.tbQuitMessage.Location = new System.Drawing.Point(8, 19);
+            this.tbQuitMessage.Name = "tbQuitMessage";
+            this.tbQuitMessage.Size = new System.Drawing.Size(340, 20);
+            this.tbQuitMessage.TabIndex = 0;
             // 
             // gb_autocommand
             // 
@@ -595,9 +613,9 @@
             // bApplyTheme
             // 
             this.bApplyTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApplyTheme.Location = new System.Drawing.Point(4, 274);
+            this.bApplyTheme.Location = new System.Drawing.Point(6, 266);
             this.bApplyTheme.Name = "bApplyTheme";
-            this.bApplyTheme.Size = new System.Drawing.Size(136, 23);
+            this.bApplyTheme.Size = new System.Drawing.Size(124, 23);
             this.bApplyTheme.TabIndex = 2;
             this.bApplyTheme.Text = "Apply Selected Theme";
             this.bApplyTheme.UseVisualStyleBackColor = true;
@@ -608,9 +626,9 @@
             this.themeList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.themeList.FormattingEnabled = true;
-            this.themeList.Location = new System.Drawing.Point(4, 4);
+            this.themeList.Location = new System.Drawing.Point(6, 19);
             this.themeList.Name = "themeList";
-            this.themeList.Size = new System.Drawing.Size(136, 264);
+            this.themeList.Size = new System.Drawing.Size(124, 238);
             this.themeList.TabIndex = 1;
             // 
             // redditCredentialsTab
@@ -935,22 +953,16 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // gbQuitMessage
+            // gbTheme
             // 
-            this.gbQuitMessage.Controls.Add(this.tbQuitMessage);
-            this.gbQuitMessage.Location = new System.Drawing.Point(146, 152);
-            this.gbQuitMessage.Name = "gbQuitMessage";
-            this.gbQuitMessage.Size = new System.Drawing.Size(354, 53);
-            this.gbQuitMessage.TabIndex = 7;
-            this.gbQuitMessage.TabStop = false;
-            this.gbQuitMessage.Text = "Quit Message";
-            // 
-            // tbQuitMessage
-            // 
-            this.tbQuitMessage.Location = new System.Drawing.Point(8, 19);
-            this.tbQuitMessage.Name = "tbQuitMessage";
-            this.tbQuitMessage.Size = new System.Drawing.Size(340, 20);
-            this.tbQuitMessage.TabIndex = 0;
+            this.gbTheme.Controls.Add(this.themeList);
+            this.gbTheme.Controls.Add(this.bApplyTheme);
+            this.gbTheme.Location = new System.Drawing.Point(4, 4);
+            this.gbTheme.Name = "gbTheme";
+            this.gbTheme.Size = new System.Drawing.Size(136, 295);
+            this.gbTheme.TabIndex = 8;
+            this.gbTheme.TabStop = false;
+            this.gbTheme.Text = "Themes";
             // 
             // SettingsWindow
             // 
@@ -976,6 +988,8 @@
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabInterface.ResumeLayout(false);
+            this.gbQuitMessage.ResumeLayout(false);
+            this.gbQuitMessage.PerformLayout();
             this.gb_autocommand.ResumeLayout(false);
             this.gb_autocommand.PerformLayout();
             this.gb_AppearanceChatWindow.ResumeLayout(false);
@@ -998,8 +1012,7 @@
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
-            this.gbQuitMessage.ResumeLayout(false);
-            this.gbQuitMessage.PerformLayout();
+            this.gbTheme.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1083,5 +1096,6 @@
         private System.Windows.Forms.CheckBox cbPageTitle;
         private System.Windows.Forms.GroupBox gbQuitMessage;
         private System.Windows.Forms.TextBox tbQuitMessage;
+        private System.Windows.Forms.GroupBox gbTheme;
     }
 }
