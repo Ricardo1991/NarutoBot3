@@ -643,17 +643,17 @@ namespace NarutoBot3
                         {
                             cmd = cmd.Substring(1);
 
-                        if (string.Compare(msg, "!Anime best Anime ever", true) == 0)
+                        if (string.Compare(msg, "!anime best anime ever", true) == 0)
                             {
-                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/Anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
-                        else if (String.Compare(cmd, "Help", true) == 0)
+                        else if (String.Compare(cmd, "help", true) == 0)
                             {
                                 WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                                 help(user);
                             }
 
-                        else if (String.Compare(cmd, "Rules", true) == 0)
+                        else if (String.Compare(cmd, "rules", true) == 0)
                             {
                                 WriteMessage("* Received a Rules request from " + user, currentColorScheme.BotReport);
                                 rules(whoSent, user);
@@ -669,7 +669,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
                                 opList(user);
                             }
-                        else if (String.Compare(cmd, "Roll", true) == 0)
+                        else if (String.Compare(cmd, "roll", true) == 0)
                             {
                                 WriteMessage("* Received a Roll request from " + user, currentColorScheme.BotReport);
                                 roll(whoSent, user);
@@ -708,7 +708,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
                                 silence(user);
                             }
-                        else if (String.Compare(cmd, "Rename", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, "rename", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
                                 if (ul.userIsOperator(user)) changeNick(arg);
@@ -734,50 +734,50 @@ namespace NarutoBot3
                                 WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
                                 toCelcius(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, "Time", true) == 0)
+                        else if (String.Compare(cmd, "time", true) == 0)
                             {
                                 WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
                                 time(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, "Wiki", true) == 0)
+                        else if (String.Compare(cmd, "wiki", true) == 0)
                             {
                                 WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
                                 wiki(Client.HOME_CHANNEL, user, arg);
                             }
 
-                        else if (String.Compare(cmd, "Anime", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
                                 animeSearch(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, "Youtube", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                                 youtubeSearch(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if ((String.Compare(cmd, "Giphy", true) == 0 || String.Compare(cmd, "g", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((String.Compare(cmd, "giphy", true) == 0 || String.Compare(cmd, "g", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
                                 giphySearch(Client.HOME_CHANNEL, user, arg);
                             }
 
-                        else if (String.Compare(cmd, "Poke", true) == 0)
+                        else if (String.Compare(cmd, "poke", true) == 0)
                             {
                                 WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
                                 poke(Client.HOME_CHANNEL, user);
                             }
 
-                        else if (String.Compare(cmd, "Trivia", true) == 0)
+                        else if (String.Compare(cmd, "trivia", true) == 0)
                             {
                                 WriteMessage("* Received a Trivia request from " + user, currentColorScheme.BotReport);
                                 trivia(Client.HOME_CHANNEL, user);
                             }
-                        else if (String.Compare(cmd, "Nick", true) == 0)
+                        else if (String.Compare(cmd, "nick", true) == 0)
                             {
                                 WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
                                 nickGen(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, "Kill", true) == 0)
+                        else if (String.Compare(cmd, "kill", true) == 0)
                             {
                                 WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
                                 killUser(Client.HOME_CHANNEL, user, arg);
@@ -787,7 +787,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
                                 lastKill(Client.HOME_CHANNEL, user);
                             }
-                        else if (String.Compare(cmd, "Quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
+                        else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
                             {
                                 WriteMessage("* Received a Quote request from " + user, currentColorScheme.BotReport);
 
@@ -801,17 +801,17 @@ namespace NarutoBot3
                                 }
 
                             }
-                        else if ((String.Compare(cmd, "Choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Choose request from " + user, currentColorScheme.BotReport);
                                 choose(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if ((String.Compare(cmd, "Shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Shuffle request from " + user, currentColorScheme.BotReport);
                                 shuffle(Client.HOME_CHANNEL, user, arg);
                             }
-                        else if (String.Compare(cmd, "Funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
+                        else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
                             {
                                 WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
 
@@ -1018,11 +1018,11 @@ namespace NarutoBot3
         public void ReadRules()
         {
             rls.Clear();
-            if (File.Exists("TextFiles/Rules.txt"))
+            if (File.Exists("TextFiles/rules.txt"))
             {
                 try
                 {
-                    StreamReader sr = new StreamReader("TextFiles/Rules.txt");
+                    StreamReader sr = new StreamReader("TextFiles/rules.txt");
                     while (sr.Peek() >= 0)
                     {
                         rls.Add(sr.ReadLine());
@@ -1043,11 +1043,11 @@ namespace NarutoBot3
         public void ReadHelp()
         {
             hlp.Clear();
-            if (File.Exists("TextFiles/Help.txt"))
+            if (File.Exists("TextFiles/help.txt"))
             {
                 try
                 {
-                    StreamReader sr = new StreamReader("TextFiles/Help.txt");
+                    StreamReader sr = new StreamReader("TextFiles/help.txt");
                     while (sr.Peek() >= 0)
                     {
                         hlp.Add(sr.ReadLine());
@@ -1069,11 +1069,11 @@ namespace NarutoBot3
         {
             tri.Clear();
 
-            if (File.Exists("TextFiles/Trivia.txt"))
+            if (File.Exists("TextFiles/trivia.txt"))
             {
                 try
                 {
-                    StreamReader sr = new StreamReader("TextFiles/Trivia.txt");
+                    StreamReader sr = new StreamReader("TextFiles/trivia.txt");
                     while (sr.Peek() >= 0)
                     {
                         tri.Add(sr.ReadLine());
@@ -1189,11 +1189,11 @@ namespace NarutoBot3
             funk = new List<string>();
             funk.Clear();
 
-            if (File.Exists("TextFiles/Funk.txt"))
+            if (File.Exists("TextFiles/funk.txt"))
             {
                 try
                 {
-                    StreamReader sr = new StreamReader("TextFiles/Funk.txt");
+                    StreamReader sr = new StreamReader("TextFiles/funk.txt");
                     while (sr.Peek() >= 0)
                     {
                         funk.Add(sr.ReadLine());
@@ -1903,7 +1903,7 @@ namespace NarutoBot3
 
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
 
-            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/Anime.php?q=" + query);
+            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
             else
             {
                 int i_max = 0; int i = 0; bool found = false;
@@ -1916,7 +1916,7 @@ namespace NarutoBot3
                 {
                     if (!user)
                     {
-                        if (g.items[i].link.Contains("http://myanimelist.net/Anime/"))
+                        if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
                         {
                             found = true;
                             string[] split = g.items[i].link.Split('/');
@@ -1941,8 +1941,8 @@ namespace NarutoBot3
                 else
                     if (!user)
                     {
-                        string[] animeName = name.Replace("http://myanimelist.net/Anime/", string.Empty).Replace(" ", "+").Replace("_", "+").Split('/');
-                        getString = "http://myanimelist.net/api/Anime/search.xml?q=" + animeName[1];
+                        string[] animeName = name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+").Split('/');
+                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName[1];
 
                         jsonAnime = webClient.DownloadString(getString);
 
@@ -2062,7 +2062,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == true || Settings.Default.giphyEnabled == false) return;
 
             string message = Privmsg(CHANNEL, "No results found"); ;
-            string request = "http://api.Giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=";
+            string request = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=";
             string jsonResult;
             GiphyResult g = new GiphyResult();
 
@@ -2169,7 +2169,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
                 string message;
-                if (args.ToLower() == "la Kill".Trim())
+                if (args.ToLower().Trim() == "la kill")
                 {
                     message = Privmsg(CHANNEL, nick + " lost his way");
                 }
@@ -2358,21 +2358,21 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "can", true) == 0)
                 {
-                    if (arg == "can you give me a Nick" || arg == "can you make me a Nick" ||
-                        arg == "can you generate a Nick" || arg == "can you create a Nick" || arg == "can you make me a new Nick"){
+                    if (arg == "can you give me a nick" || arg == "can you make me a nick" ||
+                        arg == "can you generate a nick" || arg == "can you create a nick" || arg == "can you make me a new nick"){
                             message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
                             stats.nick();
                     }
                         
-                    else if (arg.Contains("can you Kill "))
-                        killUser(CHANNEL, user, Useful.getBetween(arg, "can you Kill ", ""));
+                    else if (arg.Contains("can you kill "))
+                        killUser(CHANNEL, user, Useful.getBetween(arg, "can you kill ", ""));
                     else
                         message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
                 }
 
                 else if (String.Compare(split[0], "would", true) == 0)
                 {
-                    if (arg == "would you make me a Nick" || arg == "would you generate a Nick" || arg == "would you create a Nick" || arg == "would you make me a new Nick")
+                    if (arg == "would you make me a nick" || arg == "would you generate a nick" || arg == "would you create a nick" || arg == "would you make me a new nick")
                         message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     else
