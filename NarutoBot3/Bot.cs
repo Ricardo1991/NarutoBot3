@@ -1504,7 +1504,7 @@ namespace NarutoBot3
             {
                 do
                 {
-                    userNumber = rnd.Next((userList.Count - 1));
+                    userNumber = rnd.Next((userList.Count));
                 }
                 while (removeUserMode(userList[userNumber]) == nick);
 
@@ -1574,7 +1574,7 @@ namespace NarutoBot3
 
             Random rnd = new Random();
 
-            string message = Privmsg(CHANNEL, tri[rnd.Next(tri.Count - 1)]);
+            string message = Privmsg(CHANNEL, tri[rnd.Next(tri.Count)]);
             Client.sendMessage(message);
             stats.trivia();
             return;
@@ -2154,7 +2154,7 @@ namespace NarutoBot3
                 else
                 {
                     if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
-                        target = removeUserMode(userList[r.Next((userList.Count - 1))]);
+                        target = removeUserMode(userList[r.Next((userList.Count))]);
                     else
                         target = args.Trim();
 
@@ -2282,7 +2282,7 @@ namespace NarutoBot3
                 else if (String.Compare(split[0], "why", true) == 0)
                 {
                     if (split.Length >= 2)
-                        message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count - 1)]) + " " + because[r.Next(because.Length - 1)]);
+                        message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length - 1)]);
                 }
 
                 else if (String.Compare(split[0], "is", true) == 0)
@@ -2363,7 +2363,7 @@ namespace NarutoBot3
                     if (arg == "who are you")
                         message = Privmsg(CHANNEL, "I'm a bot!");
                     else
-                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length - 1)] + " " + removeUserMode(userList[r.Next(userList.Count - 1)]));
+                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length - 1)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                 }
 
                 else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
@@ -2731,7 +2731,7 @@ namespace NarutoBot3
                 }
 
                 if(temp.Count>0)
-                    message = Privmsg(CHANNEL, temp[r.Next(temp.Count-1)]);
+                    message = Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
                 else message = Privmsg(CHANNEL, "No quotes found");
             }
 
