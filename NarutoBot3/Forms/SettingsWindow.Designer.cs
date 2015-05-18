@@ -44,6 +44,7 @@
             this.cb_Wiki = new System.Windows.Forms.CheckBox();
             this.cb_Anime = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesParser = new System.Windows.Forms.GroupBox();
+            this.cbPageTitle = new System.Windows.Forms.CheckBox();
             this.cb_Reddit = new System.Windows.Forms.CheckBox();
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
@@ -103,7 +104,8 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbPageTitle = new System.Windows.Forms.CheckBox();
+            this.gbQuitMessage = new System.Windows.Forms.GroupBox();
+            this.tbQuitMessage = new System.Windows.Forms.TextBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -124,6 +126,7 @@
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
+            this.gbQuitMessage.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -305,6 +308,16 @@
             this.gb_FeaturesParser.TabIndex = 15;
             this.gb_FeaturesParser.TabStop = false;
             this.gb_FeaturesParser.Text = "Link Parsers";
+            // 
+            // cbPageTitle
+            // 
+            this.cbPageTitle.AutoSize = true;
+            this.cbPageTitle.Location = new System.Drawing.Point(6, 110);
+            this.cbPageTitle.Name = "cbPageTitle";
+            this.cbPageTitle.Size = new System.Drawing.Size(94, 17);
+            this.cbPageTitle.TabIndex = 12;
+            this.cbPageTitle.Text = "Get Page Title";
+            this.cbPageTitle.UseVisualStyleBackColor = true;
             // 
             // cb_Reddit
             // 
@@ -519,6 +532,7 @@
             // 
             // tabInterface
             // 
+            this.tabInterface.Controls.Add(this.gbQuitMessage);
             this.tabInterface.Controls.Add(this.gb_autocommand);
             this.tabInterface.Controls.Add(this.gb_AppearanceChatWindow);
             this.tabInterface.Controls.Add(this.bApplyTheme);
@@ -921,15 +935,22 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // cbPageTitle
+            // gbQuitMessage
             // 
-            this.cbPageTitle.AutoSize = true;
-            this.cbPageTitle.Location = new System.Drawing.Point(6, 110);
-            this.cbPageTitle.Name = "cbPageTitle";
-            this.cbPageTitle.Size = new System.Drawing.Size(94, 17);
-            this.cbPageTitle.TabIndex = 12;
-            this.cbPageTitle.Text = "Get Page Title";
-            this.cbPageTitle.UseVisualStyleBackColor = true;
+            this.gbQuitMessage.Controls.Add(this.tbQuitMessage);
+            this.gbQuitMessage.Location = new System.Drawing.Point(146, 152);
+            this.gbQuitMessage.Name = "gbQuitMessage";
+            this.gbQuitMessage.Size = new System.Drawing.Size(354, 53);
+            this.gbQuitMessage.TabIndex = 7;
+            this.gbQuitMessage.TabStop = false;
+            this.gbQuitMessage.Text = "Quit Message";
+            // 
+            // tbQuitMessage
+            // 
+            this.tbQuitMessage.Location = new System.Drawing.Point(8, 19);
+            this.tbQuitMessage.Name = "tbQuitMessage";
+            this.tbQuitMessage.Size = new System.Drawing.Size(340, 20);
+            this.tbQuitMessage.TabIndex = 0;
             // 
             // SettingsWindow
             // 
@@ -977,6 +998,8 @@
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
+            this.gbQuitMessage.ResumeLayout(false);
+            this.gbQuitMessage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1058,5 +1081,7 @@
         private System.Windows.Forms.CheckBox cbShuffle;
         private System.Windows.Forms.CheckBox cbGiphy;
         private System.Windows.Forms.CheckBox cbPageTitle;
+        private System.Windows.Forms.GroupBox gbQuitMessage;
+        private System.Windows.Forms.TextBox tbQuitMessage;
     }
 }

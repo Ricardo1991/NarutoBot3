@@ -778,5 +778,17 @@ namespace NarutoBot3.Properties {
                 this["urlTitleEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Goodbye!")]
+        public string quitMessage {
+            get {
+                return ((string)(this["quitMessage"]));
+            }
+            set {
+                this["quitMessage"] = value;
+            }
+        }
     }
 }

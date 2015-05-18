@@ -338,7 +338,7 @@ namespace NarutoBot3
 
             InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
-            client.Disconnect("Goodbye!");
+            client.Disconnect(Settings.Default.quitMessage);
 
             Thread.Sleep(250);
 

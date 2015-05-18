@@ -95,6 +95,8 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
 
+            Settings.Default.quitMessage = tbQuitMessage.Text;
+
             Settings.Default.Save();
             this.Close();
         }
@@ -198,6 +200,9 @@ namespace NarutoBot3
 
             cbTimeStamp.Checked = Settings.Default.showTimeStamps;
             cbScroll.Checked = Settings.Default.autoScrollToBottom;
+
+            tbQuitMessage.Text = Settings.Default.quitMessage;
+
             //Read schemes
 
             updateSchemes();

@@ -2693,7 +2693,7 @@ namespace NarutoBot3
                 
                 timeoutTimer.Stop();
                 waitingForPong = false;
-                Client.Disconnect("Goodbye!");
+                Client.Disconnect(Settings.Default.quitMessage);
 
                 return true;
             }
@@ -3046,7 +3046,7 @@ namespace NarutoBot3
                 if(timeoutTimer!=null) timeoutTimer.Close();
             }
             userList.Clear();
-            Client.Disconnect("Goodbye!");
+            Client.Disconnect(Settings.Default.quitMessage);
             OutputBox.Clear();
         }
 
