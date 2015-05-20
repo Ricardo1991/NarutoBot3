@@ -63,6 +63,9 @@
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
             this.tabInterface = new System.Windows.Forms.TabPage();
+            this.gbTheme = new System.Windows.Forms.GroupBox();
+            this.themeList = new System.Windows.Forms.ListBox();
+            this.bApplyTheme = new System.Windows.Forms.Button();
             this.gbQuitMessage = new System.Windows.Forms.GroupBox();
             this.tbQuitMessage = new System.Windows.Forms.TextBox();
             this.gb_autocommand = new System.Windows.Forms.GroupBox();
@@ -70,8 +73,6 @@
             this.gb_AppearanceChatWindow = new System.Windows.Forms.GroupBox();
             this.cbScroll = new System.Windows.Forms.CheckBox();
             this.cbTimeStamp = new System.Windows.Forms.CheckBox();
-            this.bApplyTheme = new System.Windows.Forms.Button();
-            this.themeList = new System.Windows.Forms.ListBox();
             this.redditCredentialsTab = new System.Windows.Forms.TabPage();
             this.gb_CredentialsRedditLogin = new System.Windows.Forms.GroupBox();
             this.bt_Logout = new System.Windows.Forms.Button();
@@ -106,7 +107,7 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.gbTheme = new System.Windows.Forms.GroupBox();
+            this.labelConnectCommand = new System.Windows.Forms.Label();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -114,6 +115,7 @@
             this.settingsTabControl.SuspendLayout();
             this.enableDisableTab.SuspendLayout();
             this.tabInterface.SuspendLayout();
+            this.gbTheme.SuspendLayout();
             this.gbQuitMessage.SuspendLayout();
             this.gb_autocommand.SuspendLayout();
             this.gb_AppearanceChatWindow.SuspendLayout();
@@ -128,7 +130,6 @@
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
-            this.gbTheme.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -545,12 +546,44 @@
             this.tabInterface.Text = "Client and Interface";
             this.tabInterface.UseVisualStyleBackColor = true;
             // 
+            // gbTheme
+            // 
+            this.gbTheme.Controls.Add(this.themeList);
+            this.gbTheme.Controls.Add(this.bApplyTheme);
+            this.gbTheme.Location = new System.Drawing.Point(4, 4);
+            this.gbTheme.Name = "gbTheme";
+            this.gbTheme.Size = new System.Drawing.Size(136, 295);
+            this.gbTheme.TabIndex = 8;
+            this.gbTheme.TabStop = false;
+            this.gbTheme.Text = "Themes";
+            // 
+            // themeList
+            // 
+            this.themeList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.themeList.FormattingEnabled = true;
+            this.themeList.Location = new System.Drawing.Point(6, 19);
+            this.themeList.Name = "themeList";
+            this.themeList.Size = new System.Drawing.Size(124, 238);
+            this.themeList.TabIndex = 1;
+            // 
+            // bApplyTheme
+            // 
+            this.bApplyTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bApplyTheme.Location = new System.Drawing.Point(6, 266);
+            this.bApplyTheme.Name = "bApplyTheme";
+            this.bApplyTheme.Size = new System.Drawing.Size(124, 23);
+            this.bApplyTheme.TabIndex = 2;
+            this.bApplyTheme.Text = "Apply Selected Theme";
+            this.bApplyTheme.UseVisualStyleBackColor = true;
+            this.bApplyTheme.Click += new System.EventHandler(this.bApplyTheme_Click);
+            // 
             // gbQuitMessage
             // 
             this.gbQuitMessage.Controls.Add(this.tbQuitMessage);
-            this.gbQuitMessage.Location = new System.Drawing.Point(146, 152);
+            this.gbQuitMessage.Location = new System.Drawing.Point(146, 162);
             this.gbQuitMessage.Name = "gbQuitMessage";
-            this.gbQuitMessage.Size = new System.Drawing.Size(354, 53);
+            this.gbQuitMessage.Size = new System.Drawing.Size(354, 49);
             this.gbQuitMessage.TabIndex = 7;
             this.gbQuitMessage.TabStop = false;
             this.gbQuitMessage.Text = "Quit Message";
@@ -564,10 +597,11 @@
             // 
             // gb_autocommand
             // 
+            this.gb_autocommand.Controls.Add(this.labelConnectCommand);
             this.gb_autocommand.Controls.Add(this.cb_ConnectCommand);
             this.gb_autocommand.Location = new System.Drawing.Point(146, 92);
             this.gb_autocommand.Name = "gb_autocommand";
-            this.gb_autocommand.Size = new System.Drawing.Size(354, 53);
+            this.gb_autocommand.Size = new System.Drawing.Size(354, 64);
             this.gb_autocommand.TabIndex = 6;
             this.gb_autocommand.TabStop = false;
             this.gb_autocommand.Text = "Connect Command";
@@ -609,27 +643,6 @@
             this.cbTimeStamp.TabIndex = 3;
             this.cbTimeStamp.Text = "Show time stamps on chat";
             this.cbTimeStamp.UseVisualStyleBackColor = true;
-            // 
-            // bApplyTheme
-            // 
-            this.bApplyTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApplyTheme.Location = new System.Drawing.Point(6, 266);
-            this.bApplyTheme.Name = "bApplyTheme";
-            this.bApplyTheme.Size = new System.Drawing.Size(124, 23);
-            this.bApplyTheme.TabIndex = 2;
-            this.bApplyTheme.Text = "Apply Selected Theme";
-            this.bApplyTheme.UseVisualStyleBackColor = true;
-            this.bApplyTheme.Click += new System.EventHandler(this.bApplyTheme_Click);
-            // 
-            // themeList
-            // 
-            this.themeList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.themeList.FormattingEnabled = true;
-            this.themeList.Location = new System.Drawing.Point(6, 19);
-            this.themeList.Name = "themeList";
-            this.themeList.Size = new System.Drawing.Size(124, 238);
-            this.themeList.TabIndex = 1;
             // 
             // redditCredentialsTab
             // 
@@ -953,16 +966,14 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // gbTheme
+            // labelConnectCommand
             // 
-            this.gbTheme.Controls.Add(this.themeList);
-            this.gbTheme.Controls.Add(this.bApplyTheme);
-            this.gbTheme.Location = new System.Drawing.Point(4, 4);
-            this.gbTheme.Name = "gbTheme";
-            this.gbTheme.Size = new System.Drawing.Size(136, 295);
-            this.gbTheme.TabIndex = 8;
-            this.gbTheme.TabStop = false;
-            this.gbTheme.Text = "Themes";
+            this.labelConnectCommand.AutoSize = true;
+            this.labelConnectCommand.Location = new System.Drawing.Point(6, 43);
+            this.labelConnectCommand.Name = "labelConnectCommand";
+            this.labelConnectCommand.Size = new System.Drawing.Size(238, 13);
+            this.labelConnectCommand.TabIndex = 1;
+            this.labelConnectCommand.Text = "For commands, don\'t forget to include the \"/\" bar";
             // 
             // SettingsWindow
             // 
@@ -988,6 +999,7 @@
             this.settingsTabControl.ResumeLayout(false);
             this.enableDisableTab.ResumeLayout(false);
             this.tabInterface.ResumeLayout(false);
+            this.gbTheme.ResumeLayout(false);
             this.gbQuitMessage.ResumeLayout(false);
             this.gbQuitMessage.PerformLayout();
             this.gb_autocommand.ResumeLayout(false);
@@ -1012,7 +1024,6 @@
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
-            this.gbTheme.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1097,5 +1108,6 @@
         private System.Windows.Forms.GroupBox gbQuitMessage;
         private System.Windows.Forms.TextBox tbQuitMessage;
         private System.Windows.Forms.GroupBox gbTheme;
+        private System.Windows.Forms.Label labelConnectCommand;
     }
 }
