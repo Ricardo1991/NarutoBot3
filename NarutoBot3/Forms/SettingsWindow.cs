@@ -215,14 +215,15 @@ namespace NarutoBot3
             {
                 Settings.Default.redditUser = tb_User.Text;
                 Settings.Default.redditPass = tb_Pass.Text;
-                Settings.Default.redditEnabled = true;
+                Settings.Default.redditUserEnabled = true;
 
             }
             else
             {
-                Settings.Default.redditEnabled = false;
                 MessageBox.Show("Provide valid login information", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Settings.Default.redditUserEnabled = false;
             }
+
             Settings.Default.Save();
         }
 
@@ -230,7 +231,7 @@ namespace NarutoBot3
         {
             Settings.Default.redditUser = tb_User.Text = "";
             Settings.Default.redditPass = tb_Pass.Text = "";
-            Settings.Default.redditEnabled = false;
+            Settings.Default.redditUserEnabled = false;
 
             Settings.Default.Save();
         }

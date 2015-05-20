@@ -1842,8 +1842,6 @@ namespace NarutoBot3
                             
                             try
                             {
-                                //request.Headers.Add("user-agent", Settings.Default.UserAgent);
-
                                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                                 Stream dataStream = response.GetResponseStream();

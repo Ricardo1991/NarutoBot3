@@ -802,12 +802,10 @@ namespace NarutoBot3
 
             try
             {
-                if (Settings.Default.redditEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                if (Settings.Default.redditUserEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
                 
             }
             catch {
-                Settings.Default.redditEnabled = false;
-                Settings.Default.Save();
             }
 
                 
