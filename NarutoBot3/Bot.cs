@@ -2256,7 +2256,7 @@ namespace NarutoBot3
             string[] when = { "maybe next week", "a few days ago", "last year", "yesterday", "tomorrow", "in a few hours",
                                 "nobody knows", "next year", "it was yesterday", "I'm not sure", "next week" };
 
-            string[] why = { "I dont know, maybe.", "Yeah", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so", 
+            string[] why = { "I dont know, maybe", "I don't know", "Yeah", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so", 
                                "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know", "Because that was destined to be so" };
 
             string[] where = { "somewhere in a far away land" , "on the Youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place",
@@ -2270,7 +2270,7 @@ namespace NarutoBot3
 
             string[] whyY = { "Im not sure if", "Yeah,", "Yes,", "Correct!", "I think", "I believe that" , ""};
 
-            string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!", "Neps,", ""};
+            string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!", ""};
 
             if (split.Length >= 1)
             {
@@ -2512,7 +2512,48 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "did", true) == 0)
                 {
-                    message = Privmsg(CHANNEL, why[r.Next(why.Length - 1)]);
+                    bool yes = false;
+                    if (r.Next(0, 2) == 1)
+                        yes = true;
+
+                    if (split.Length >= 2)
+                    {
+                        string subject = split[1];
+                        string rest = "";
+
+                        for (int i = 2; i < split.Length; i++)
+                        {
+                            rest += split[i] + " ";
+                        }
+                        rest = rest.TrimEnd(' ');
+
+                        string replaced = questionsRegex(rest);
+
+                        if (split[1] == "you")
+                        {
+
+                            if (yes)
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I did" + replaced);
+                            else
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "I didn't " + replaced);
+                        }
+                        else if (split[1] == "i")
+                        {
+                            if (yes)
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "you did " + replaced);
+                            else
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "you didn't " + replaced);
+                        }
+                        else
+                        {
+                            if (yes)
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + split[1] + " did " + replaced);
+                            else
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + split[1] + " didn't " + replaced);
+                        }
+                    }
+
+
                 }
 
                 else if (String.Compare(split[0], "does", true) == 0)
