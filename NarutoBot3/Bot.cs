@@ -1476,9 +1476,9 @@ namespace NarutoBot3
                 {
                     message = Notice(nick, h.Replace("\n", "").Replace("\r", ""));
                     Client.sendMessage(message);
-                    stats.help();
 
                 }
+                stats.help();
             }
         }
 
