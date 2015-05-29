@@ -1108,7 +1108,7 @@ namespace NarutoBot3
 
         void GreetToogle(string nick)
         {
-            string message = Notice(nick, "You didn't set a Greeting yet");
+            string message;
             string state = "disabled";
 
             foreach (User u in ul.Users)
@@ -1123,11 +1123,12 @@ namespace NarutoBot3
 
                     ul.saveData();
 
-                    break;
+                    Client.sendMessage(message);
+                    return;
                 }
             }
 
-            Client.sendMessage(message);
+            Client.sendMessage(Notice(nick, "You didn't set a Greeting yet"));
         }
 
         public void ReadNickGen()//These are for the Nick gen
