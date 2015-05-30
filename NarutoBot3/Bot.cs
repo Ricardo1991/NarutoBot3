@@ -1006,7 +1006,7 @@ namespace NarutoBot3
                         string killS = sr.ReadLine();
 
                         if(killS.Length > 1 && (killS[0] != '/' && killS[1] != '/'))
-                            kill.Add(sr.ReadLine());
+                            kill.Add(killS);
                     }
                         
 
