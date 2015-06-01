@@ -2906,7 +2906,13 @@ namespace NarutoBot3
                 args = result + " : " + args;
             }
 
-            funk.Add(args);
+            string [] splits;
+            splits = args.Split(new char[] { ' ' }, 2);
+
+            if (string.Compare(splits[0].ToLower(), "add") == 0)
+                funk.Add(args.Replace("add ", string.Empty));
+            else
+                funk.Add(args);
 
             saveFunk();
             stats.funk();
