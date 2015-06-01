@@ -2782,6 +2782,7 @@ namespace NarutoBot3
             int i;
             string message = "";
             List<string> temp = new List<string>();
+            List<string> temp2 = new List<string>();
 
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
@@ -2801,14 +2802,45 @@ namespace NarutoBot3
                     message = Privmsg(CHANNEL, "Quote "+ number +" not found");
             }
             else{
-                foreach(string s in quotes){
-                    if(s.ToLower().Contains(args.ToLower()))
-                        temp.Add(s);
-                }
+                string[] queries = args.Trim().ToLower().Split(new char[] { ' ' });
 
-                if(temp.Count>0)
-                    message = Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
-                else message = Privmsg(CHANNEL, "No quotes found");
+                if (queries.Length > 1)
+                {
+                    foreach (string s in quotes)
+                    {
+                        if (s.ToLower().Contains(queries[0]))
+                            temp.Add(s);
+                    }
+
+                    foreach (string t in temp)
+                    {
+                        for (int d = 1; d < queries.Length; d++)
+                        {
+                            if (t.ToLower().Contains(queries[d].ToLower()))
+                            {
+                                temp2.Add(t);
+                            }
+                        }
+
+                    }
+                    if (temp2.Count > 0)
+                        message = Privmsg(CHANNEL, temp2[r.Next(temp2.Count)]);
+                    else message = Privmsg(CHANNEL, "No quotes found");
+                }
+                else
+                {
+                    foreach (string s in quotes)
+                    {
+                        if (s.ToLower().Contains(args.ToLower()))
+                        {
+                            temp.Add(s);
+                        }
+                    }
+                    if (temp.Count > 0)
+                        message = Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
+                    else message = Privmsg(CHANNEL, "No quotes found");
+                }
+                
             }
 
             Client.sendMessage(message);
@@ -2896,6 +2928,12 @@ namespace NarutoBot3
             if (funk == null)
                 funk = new List<string>();
 
+            string [] splits;
+            splits = args.Split(new char[] { ' ' }, 2);
+
+            if (string.Compare(splits[0].ToLower(), "add") == 0)
+                args = args.Replace("add ", string.Empty);
+
             if ((args.Contains("youtu.be") && (args.Contains("?v=") == false && args.Contains("&v=") == false))
                             || (args.Contains("youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
             {
@@ -2906,12 +2944,9 @@ namespace NarutoBot3
                 args = result + " : " + args;
             }
 
-            string [] splits;
-            splits = args.Split(new char[] { ' ' }, 2);
 
-            if (string.Compare(splits[0].ToLower(), "add") == 0)
-                funk.Add(args.Replace("add ", string.Empty));
-            else
+
+
                 funk.Add(args);
 
             saveFunk();
