@@ -222,6 +222,7 @@ namespace NarutoBot3
             ReadNickGen();              //For the Nick generator
             ReadQuotes();
             ReadFunk();
+            ReadRules();
 
             ul.loadData();
 
@@ -581,7 +582,12 @@ namespace NarutoBot3
                     string cmd = msg.Split(' ')[0];
                     string arg = "";
 
+
                     user = removeUserMode(user);
+
+                    if (string.Compare(whoSent, Client.NICK, true) == 0)
+                        whoSent = user;
+
 
                     if (msg.Length - 1 > cmd.Length)
                         arg = msg.Substring(cmd.Length+1); //the rest of msg
@@ -646,7 +652,7 @@ namespace NarutoBot3
                     else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length - 1] == '?')
                         {
                             WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
-                            parseQuestion(Client.HOME_CHANNEL, user, arg);
+                            parseQuestion(whoSent, user, arg);
                         }
                     else if (cmd[0] == Client.SYMBOL)   //Bot Command
                         {
@@ -736,65 +742,65 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
-                                toFahrenheit(Client.HOME_CHANNEL, user, arg);
+                                toFahrenheit(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
-                                toCelcius(Client.HOME_CHANNEL, user, arg);
+                                toCelcius(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "time", true) == 0)
                             {
                                 WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
-                                time(Client.HOME_CHANNEL, user, arg);
+                                time(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "wiki", true) == 0)
                             {
                                 WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
-                                wiki(Client.HOME_CHANNEL, user, arg);
+                                wiki(whoSent, user, arg);
                             }
 
                         else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
-                                animeSearch(Client.HOME_CHANNEL, user, arg);
+                                animeSearch(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
-                                youtubeSearch(Client.HOME_CHANNEL, user, arg);
+                                youtubeSearch(whoSent, user, arg);
                             }
                         else if ((String.Compare(cmd, "giphy", true) == 0 || String.Compare(cmd, "g", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
-                                giphySearch(Client.HOME_CHANNEL, user, arg);
+                                giphySearch(whoSent, user, arg);
                             }
 
                         else if (String.Compare(cmd, "poke", true) == 0)
                             {
                                 WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
-                                poke(Client.HOME_CHANNEL, user);
+                                poke(whoSent, user);
                             }
 
                         else if (String.Compare(cmd, "trivia", true) == 0)
                             {
                                 WriteMessage("* Received a Trivia request from " + user, currentColorScheme.BotReport);
-                                trivia(Client.HOME_CHANNEL, user);
+                                trivia(whoSent, user);
                             }
                         else if (String.Compare(cmd, "nick", true) == 0)
                             {
                                 WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
-                                nickGen(Client.HOME_CHANNEL, user, arg);
+                                nickGen(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "kill", true) == 0)
                             {
                                 WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
-                                killUser(Client.HOME_CHANNEL, user, arg);
+                                killUser(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "lastkill", true) == 0)
                             {
                                 WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
-                                lastKill(Client.HOME_CHANNEL, user);
+                                lastKill(whoSent, user);
                             }
                         else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
                             {
@@ -806,26 +812,26 @@ namespace NarutoBot3
                                 }
                                 else //lookup or random
                                 {
-                                    printQuote(Client.HOME_CHANNEL, arg, user);
+                                    printQuote(whoSent, arg, user);
                                 }
 
                             }
                         else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Choose request from " + user, currentColorScheme.BotReport);
-                                choose(Client.HOME_CHANNEL, user, arg);
+                                choose(whoSent, user, arg);
                             }
                         else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Shuffle request from " + user, currentColorScheme.BotReport);
-                                shuffle(Client.HOME_CHANNEL, user, arg);
+                                shuffle(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
                             {
                                 WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
 
                                 if (String.IsNullOrEmpty(arg)) //lookup or random
-                                    printFunk(Client.HOME_CHANNEL, arg, user);
+                                    printFunk(whoSent, arg, user);
 
                                 else
                                     addFunk(arg, user);
@@ -2863,8 +2869,13 @@ namespace NarutoBot3
             if (ul.userIsMuted(user) || !Settings.Default.chooseEnabled) return;
 
             Random r = new Random();
-            string[] choices = arg.Split(new char[] { ' ' });
+            string[] choices;
             string message;
+
+            if (arg.Contains(','))
+                choices = arg.Split(new char[] { ',' });
+            else
+                choices = arg.Split(new char[] { ' ' });
 
             int random = r.Next(choices.Length);
 
