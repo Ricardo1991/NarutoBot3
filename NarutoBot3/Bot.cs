@@ -679,6 +679,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
                                 toogleMirror(user);
                             }
+                        else if (String.Compare(cmd, "enforcemirror", true) == 0)
+                            {
+                                WriteMessage("* Received an enforce mirror off toogle request from " + user, currentColorScheme.BotReport);
+                                toogleEnforceOff(user);
+                            }
 
                         else if (String.Compare(cmd, "rules", true) == 0)
                             {
@@ -1548,6 +1553,21 @@ namespace NarutoBot3
             message = Notice(nick, "MirrorMode is now " + (mirror ? "enabled" :"disabled"));
             Client.sendMessage(message);  
         }
+
+        void toogleEnforceOff(string nick)
+        {
+            string message;
+
+            if (!ul.userIsOperator(nick)) return;
+
+            Settings.Default.enforceMirrorOff = !Settings.Default.enforceMirrorOff;
+
+            Settings.Default.Save();
+
+            message = Notice(nick, "Enforce Mirror Mode Off is now " + (Settings.Default.enforceMirrorOff ? "enabled" : "disabled"));
+            Client.sendMessage(message);  
+        }
+        
 
         void roll(string CHANNEL, string nick)
         {
