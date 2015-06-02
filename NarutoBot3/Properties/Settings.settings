@@ -194,5 +194,8 @@
     <Setting Name="quitMessage" Type="System.String" Scope="User">
       <Value Profile="(Default)">Goodbye!</Value>
     </Setting>
+    <Setting Name="enforceMirrorOff" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

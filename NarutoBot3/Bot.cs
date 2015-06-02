@@ -589,7 +589,7 @@ namespace NarutoBot3
                     {
                         //If its a user sending, check if it has mirror mode
                         
-                        if (ul.userIsMirrored(user))
+                        if (ul.userIsMirrored(user) && (ul.userIsOperator(user) || Settings.Default.enforceMirrorOff == false)) //If enforce off is true and user is operator, let it bypass the enforce
                             whoSent = Client.HOME_CHANNEL;
                         else
                             whoSent = user;

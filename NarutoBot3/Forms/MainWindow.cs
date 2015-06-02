@@ -190,6 +190,15 @@ namespace NarutoBot3
                 toolStripStatusLabelSilence.Visible = false;
             }
 
+            if (Settings.Default.enforceMirrorOff)
+            {
+                forceMirrorModeOffToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                forceMirrorModeOffToolStripMenuItem.Checked = false;
+            }
+
             HOME_CHANNEL = Settings.Default.Channel;
             HOST = Settings.Default.Server;
             NICK = Settings.Default.Nick;
@@ -1218,6 +1227,21 @@ namespace NarutoBot3
             bot.ReadNickGen();
             bot.ReadHelp();
             bot.ReadRules();
+        }
+
+        private void forceMirrorModeOffToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Settings.Default.enforceMirrorOff == true)
+            {
+                forceMirrorModeOffToolStripMenuItem.Checked = false;
+                Settings.Default.enforceMirrorOff = false;
+            }
+            else
+            {
+                forceMirrorModeOffToolStripMenuItem.Checked = true;
+                Settings.Default.enforceMirrorOff = true;
+            }
+            Settings.Default.Save();
         }
 
     }

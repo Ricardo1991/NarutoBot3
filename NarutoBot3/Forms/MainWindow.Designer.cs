@@ -82,6 +82,7 @@
             this.contextMenuUserList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.forceMirrorModeOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripBottom.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -202,6 +203,7 @@
             this.toolStripButtonSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.silencedToolStripMenuItem,
+            this.forceMirrorModeOffToolStripMenuItem,
             this.toolStripSeparator2,
             this.commandsToolStripMenuItem,
             this.releaseCheckerToolStripMenuItem,
@@ -222,26 +224,26 @@
             this.silencedToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.silencedToolStripMenuItem.Name = "silencedToolStripMenuItem";
             this.silencedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.silencedToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.silencedToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.silencedToolStripMenuItem.Text = "&Silenced";
             this.silencedToolStripMenuItem.Click += new System.EventHandler(this.silencedToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(201, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(232, 6);
             // 
             // commandsToolStripMenuItem
             // 
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
-            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.commandsToolStripMenuItem.Text = "Settings";
             this.commandsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // releaseCheckerToolStripMenuItem
             // 
             this.releaseCheckerToolStripMenuItem.Name = "releaseCheckerToolStripMenuItem";
-            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.releaseCheckerToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.releaseCheckerToolStripMenuItem.Text = "Chapter Release Checker";
             this.releaseCheckerToolStripMenuItem.Click += new System.EventHandler(this.releaseCheckerToolStripMenuItem_Click);
             // 
@@ -252,7 +254,7 @@
             this.t45,
             this.t60});
             this.randomTextIntervalToolStripMenuItem.Name = "randomTextIntervalToolStripMenuItem";
-            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.randomTextIntervalToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.randomTextIntervalToolStripMenuItem.Text = "Random Text Interval";
             // 
             // t30
@@ -279,19 +281,19 @@
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(201, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(232, 6);
             // 
             // operatorsToolStripMenuItem
             // 
             this.operatorsToolStripMenuItem.Name = "operatorsToolStripMenuItem";
-            this.operatorsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.operatorsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.operatorsToolStripMenuItem.Text = "Bot Operators";
             this.operatorsToolStripMenuItem.Click += new System.EventHandler(this.operatorsToolStripMenuItem_Click);
             // 
             // mutedUsersToolStripMenuItem
             // 
             this.mutedUsersToolStripMenuItem.Name = "mutedUsersToolStripMenuItem";
-            this.mutedUsersToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.mutedUsersToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.mutedUsersToolStripMenuItem.Text = "Ignored Users";
             this.mutedUsersToolStripMenuItem.Click += new System.EventHandler(this.mutedUsersToolStripMenuItem_Click);
             // 
@@ -448,8 +450,8 @@
             this.InputBox.Name = "InputBox";
             this.InputBox.Size = new System.Drawing.Size(1024, 20);
             this.InputBox.TabIndex = 3;
-            this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
             this.InputBox.Values = null;
+            this.InputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.input_KeyDown);
             // 
             // splitContainer1
             // 
@@ -531,6 +533,14 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // forceMirrorModeOffToolStripMenuItem
+            // 
+            this.forceMirrorModeOffToolStripMenuItem.Name = "forceMirrorModeOffToolStripMenuItem";
+            this.forceMirrorModeOffToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.forceMirrorModeOffToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.forceMirrorModeOffToolStripMenuItem.Text = "Force MirrorMode Off";
+            this.forceMirrorModeOffToolStripMenuItem.Click += new System.EventHandler(this.forceMirrorModeOffToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -609,6 +619,7 @@
         private System.Windows.Forms.ToolStripMenuItem quotesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem funkToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem forceMirrorModeOffToolStripMenuItem;
     }
 }
 

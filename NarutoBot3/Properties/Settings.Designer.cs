@@ -790,5 +790,17 @@ namespace NarutoBot3.Properties {
                 this["quitMessage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool enforceMirrorOff {
+            get {
+                return ((bool)(this["enforceMirrorOff"]));
+            }
+            set {
+                this["enforceMirrorOff"] = value;
+            }
+        }
     }
 }
