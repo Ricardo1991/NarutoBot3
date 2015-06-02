@@ -224,6 +224,38 @@ namespace NarutoBot3
             return false;
         }
 
+        public bool userIsMirrored(String nick)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0 && u.MirrorMode) return true;
+            }
+            return false;
+        }
+
+        public bool toogleMirror(String nick)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0 )
+                {
+                    u.MirrorMode = !u.MirrorMode;
+                    return u.MirrorMode;
+                }
+            }
+            return false;
+        }
+
     }
 
     public class User
@@ -233,6 +265,13 @@ namespace NarutoBot3
         bool isOperator;
         bool isMuted;
         bool greetingEnabled;
+        bool mirrorMode;
+
+        public bool MirrorMode
+        {
+            get { return mirrorMode; }
+            set { mirrorMode = value; }
+        }
 
         [JsonIgnore]
         bool isOnline=false;
@@ -251,6 +290,7 @@ namespace NarutoBot3
             isOperator = false;
             isMuted = false;
             greetingEnabled = false;
+            mirrorMode = false;
         }
 
         public User(String n, bool online)
@@ -261,9 +301,10 @@ namespace NarutoBot3
             isOperator = false;
             isMuted = false;
             greetingEnabled = false;
+            mirrorMode = false;
         }
 
-        public User(String n, String g, bool online, bool op, bool mute, bool greet)
+        public User(String n, String g, bool online, bool op, bool mute, bool greet, bool mirror)
         {
             nick = n;
             greeting = g;
@@ -271,6 +312,7 @@ namespace NarutoBot3
             isOperator = op;
             isMuted = mute;
             greetingEnabled = greet;
+            mirrorMode = mirror;
         }
 
         public String Nick

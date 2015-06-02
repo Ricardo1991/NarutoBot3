@@ -586,8 +586,14 @@ namespace NarutoBot3
                     user = removeUserMode(user);
 
                     if (string.Compare(whoSent, Client.NICK, true) == 0)
-                        whoSent = user;
-
+                    {
+                        //If its a user sending, check if it has mirror mode
+                        
+                        if (ul.userIsMirrored(user))
+                            whoSent = Client.HOME_CHANNEL;
+                        else
+                            whoSent = user;
+                    }
 
                     if (msg.Length - 1 > cmd.Length)
                         arg = msg.Substring(cmd.Length+1); //the rest of msg
@@ -666,6 +672,12 @@ namespace NarutoBot3
                             {
                                 WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                                 help(user);
+                            }
+
+                        else if (String.Compare(cmd, "mirror", true) == 0)
+                            {
+                                WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
+                                toogleMirror(user);
                             }
 
                         else if (String.Compare(cmd, "rules", true) == 0)
@@ -1499,8 +1511,12 @@ namespace NarutoBot3
                 {
                     foreach (string h in rls)
                     {
-                        message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                        Client.sendMessage(message);    
+                        if (!string.IsNullOrWhiteSpace(h))
+                        {
+                            message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
+                            Client.sendMessage(message);  
+                        }
+  
                     }
                     stats.rules();
                     return;
@@ -1511,12 +1527,26 @@ namespace NarutoBot3
             {
                 foreach (string h in rls)
                 {
-                    message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                    Client.sendMessage(message);
+                    if (!string.IsNullOrWhiteSpace(h))
+                    {
+                        message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
+                        Client.sendMessage(message);
+                    }
                 }
                 stats.rules();
                 return;
             }
+        }
+
+        void toogleMirror(string nick)
+        {
+            string message;
+            bool mirror = false;
+
+            mirror = ul.toogleMirror(nick);
+            
+            message = Notice(nick, "MirrorMode is now " + (mirror ? "enabled" :"disabled"));
+            Client.sendMessage(message);  
         }
 
         void roll(string CHANNEL, string nick)
