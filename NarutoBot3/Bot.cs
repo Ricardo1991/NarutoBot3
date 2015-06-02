@@ -2909,7 +2909,7 @@ namespace NarutoBot3
 
             int random = r.Next(choices.Length);
 
-            message = Privmsg(CHANNEL, user+": "+ choices[random]);
+            message = Privmsg(CHANNEL, user+": "+ choices[random].Trim());
 
             Client.sendMessage(message);
             stats.choose();
