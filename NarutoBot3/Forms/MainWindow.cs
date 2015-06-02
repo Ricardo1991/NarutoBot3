@@ -333,6 +333,8 @@ namespace NarutoBot3
 
             bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
+            bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
+
             operatorsWindow = new BotOperatorWindow(ref bot.ul);
             mutedWindow = new MutedUsersWindow(ref bot.ul);
             settingsWindow = new SettingsWindow(ref currentColorScheme);
@@ -1244,5 +1246,9 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
+        private void enforceChanged(object sender, EventArgs e)
+        {
+            forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
+        }
     }
 }

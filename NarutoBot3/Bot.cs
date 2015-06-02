@@ -78,6 +78,7 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> BotUnsilenced;
         public event EventHandler<EventArgs> Quit;
         public event EventHandler<EventArgs> TopicChange;
+        public event EventHandler<EventArgs> EnforceMirrorChanged;
 
         private System.Timers.Timer timeoutTimer;
 
@@ -208,6 +209,12 @@ namespace NarutoBot3
         {
             if (Kicked != null)
                 Kicked(this, e);
+        }
+
+        protected virtual void OnEnforceMirrorChanged(EventArgs e)
+        {
+            if (EnforceMirrorChanged != null)
+                EnforceMirrorChanged(this, e);
         }
         
         public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
@@ -1565,7 +1572,9 @@ namespace NarutoBot3
             Settings.Default.Save();
 
             message = Notice(nick, "Enforce Mirror Mode Off is now " + (Settings.Default.enforceMirrorOff ? "enabled" : "disabled"));
-            Client.sendMessage(message);  
+            Client.sendMessage(message);
+
+            OnEnforceMirrorChanged(EventArgs.Empty);
         }
         
 
