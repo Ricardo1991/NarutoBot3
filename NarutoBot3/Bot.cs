@@ -1848,8 +1848,8 @@ namespace NarutoBot3
 
                 TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID });
 
-                author = tweetResult.Author.ScreenName;
-                tweet = tweetResult.Text.Replace("\n", " ");
+                author = HttpUtility.HtmlDecode(tweetResult.Author.ScreenName);
+                tweet = HttpUtility.HtmlDecode(tweetResult.Text.Replace("\n", " "));
 
 
                 message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
@@ -2762,13 +2762,13 @@ namespace NarutoBot3
                     post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + postName);
                     comment = reddit.GetComment(sub.Name, "t1_" + commentName, "t3_" + postName);
 
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                     Client.sendMessage(message);
 
                     if (comment.Body.ToString().Length > 300)
-                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
                     else
-                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02"));
 
                     Client.sendMessage(message);
 
@@ -2779,12 +2779,12 @@ namespace NarutoBot3
 
                     if (post.IsSelfPost)
                     {
-                        message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                        message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                         Client.sendMessage(message);
                     }
                     else
                     {
-                        message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + post.Title + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
+                        message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
                         Client.sendMessage(message);
                     }
                 }
