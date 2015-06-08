@@ -860,6 +860,18 @@ namespace NarutoBot3
                                 else
                                     addFunk(arg, user);
                             }
+                        else if (String.Compare(cmd, "reload", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                reloadTexts(user, arg);
+                            }
+                        else if (String.Compare(cmd, "stats", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                statsPrint(whoSent, user, arg);
+                            }
+                        else if (String.Compare(cmd, "set", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                setSetting(user, arg);
+                            }
                         }
 
 
@@ -1400,6 +1412,293 @@ namespace NarutoBot3
         /// </summary>
         /// <param Name="Nick">the User that called the command</param>
         /// <param Name="targetUser">the User to be made bot operator</param>
+        /// 
+
+        void reloadTexts(string user, string arg)
+        {
+            if (!ul.userIsOperator(user)) return;
+
+            string[] options = arg.ToLower().Trim().Split(new char[] { ' ' });
+
+            foreach (string option in options)
+            {
+                switch (option)
+                {
+                    case "all":
+                        ReadFunk();
+                        ReadQuotes();
+                        ReadKills();
+                        ReadTrivia();
+                        ReadNickGen();
+                        ReadHelp();
+                        ReadRules();
+                        Client.sendMessage(Notice(user, "Reloaded everything!"));
+                        break;
+                    case "rules":
+                    case "rule":
+                        ReadRules();
+                        Client.sendMessage(Notice(user, "Reloaded rules!"));
+                        break;
+                    case "help":
+                        ReadHelp();
+                        Client.sendMessage(Notice(user, "Reloaded help!"));
+                        break;
+                    case "nick":
+                    case "nicks":
+                        ReadNickGen();
+                        Client.sendMessage(Notice(user, "Reloaded nicks!"));
+                        break;
+                    case "trivia":
+                    case "trivias":
+                        ReadTrivia();
+                        Client.sendMessage(Notice(user, "Reloaded trivia!"));
+                        break;
+                    case "kills":
+                    case "kill":
+                        ReadKills();
+                        Client.sendMessage(Notice(user, "Reloaded kills!"));
+                        break;
+                    case "quotes":
+                    case "quote":
+                        ReadQuotes();
+                        Client.sendMessage(Notice(user, "Reloaded quotes!"));
+                        break;
+                    case "funk":
+                        ReadFunk();
+                        Client.sendMessage(Notice(user, "Reloaded funk!"));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        void statsPrint(string whoSent, string user, string arg)
+        {
+            if (!ul.userIsOperator(user)) return;
+
+            string[] options = arg.ToLower().Trim().Split(new char[] { ' ' });
+
+            foreach (string option in options)
+            {
+                switch (option)
+                {
+                    case "roll":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getRoll()[0] + " Lifetime: " + stats.getRoll()[1]));
+                        break;
+                    case "anime":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getAnime()[0] + " Lifetime: " + stats.getAnime()[1]));
+                        break;
+                    case "help":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getHelp()[0] + " Lifetime: " + stats.getHelp()[1]));
+                        break;
+                    case "rules":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getRules()[0] + " Lifetime: " + stats.getRules()[1]));
+                        break;
+                    case "greet":
+                    case "greetings":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getGreet()[0] + " Lifetime: " + stats.getGreet()[1]));
+                        break;
+                    case "time":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTime()[0] + " Lifetime: " + stats.getTime()[1]));
+                        break;
+                    case "temperature":
+                    case "temperatures":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTemperature()[0] + " Lifetime: " + stats.getTemperature()[1]));
+                        break;
+                    case "wiki":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getWiki()[0] + " Lifetime: " + stats.getWiki()[1]));
+                        break;
+                    case "poke":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getPoke()[0] + " Lifetime: " + stats.getPoke()[1]));
+                        break;
+                    case "trivia":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTrivia()[0] + " Lifetime: " + stats.getTrivia()[1]));
+                        break;
+                    case "quote":
+                    case "quotes":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getQuote()[0] + " Lifetime: " + stats.getQuote()[1]));
+                        break;
+                    case "choose":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getChoose()[0] + " Lifetime: " + stats.getChoose()[1]));
+                        break;
+                    case "shuffle":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getShuffle()[0] + " Lifetime: " + stats.getShuffle()[1]));
+                        break;
+                    case "funk":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getFunk()[0] + " Lifetime: " + stats.getFunk()[1]));
+                        break;
+                    case "giphy":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getGiphy()[0] + " Lifetime: " + stats.getGiphy()[1]));
+                        break;
+                    case "nick":
+                    case "nicks":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getNick()[0] + " Lifetime: " + stats.getNick()[1]));
+                        break;
+                    case "question":
+                    case "questions":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getQuestion()[0] + " Lifetime: " + stats.getQuestion()[1]));
+                        break;
+                    case "youtube":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getYoutube()[0] + " Lifetime: " + stats.getYoutube()[1]));
+                        break;
+                    case "kill":
+                    case "kills":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getKill()[0] + " Lifetime: " + stats.getKill()[1]));
+                        break;
+
+
+                    default: break;
+                }
+            }
+
+        }
+        void setSetting(string user, string arg)
+        {
+            if (!ul.userIsOperator(user)) return;
+
+            string[] options = arg.ToLower().Trim().Split(new char[] { ' ' });
+            bool status = false;
+
+            if (options.Length < 2)
+            {
+                Client.sendMessage(Notice(user, "Not enought arguments"));
+                return;
+            }
+
+            if (options[1] != "off")
+                if (options[1] == "on")
+                    status = true;
+                else { Client.sendMessage(Notice(user, "Invalid Status")); return; }
+
+            switch (options[0])
+            {
+                case "rules":
+                    Settings.Default.rules_Enabled = status;
+                    Client.sendMessage(Notice(user, "Rules is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "help":
+                    Settings.Default.help_Enabled = status;
+                    Client.sendMessage(Notice(user, "Help is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "time":
+                    Settings.Default.timeEnabled = status;
+                    Client.sendMessage(Notice(user, "Time is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "conversion":
+                case "conversions":
+                    Settings.Default.conversionEnabled = status;
+                    Client.sendMessage(Notice(user, "Conversions is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "wiki":
+                    Settings.Default.wikiEnabled = status;
+                    Client.sendMessage(Notice(user, "Wiki is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "anime":
+                    Settings.Default.aniSearchEnabled = status;
+                    Client.sendMessage(Notice(user, "Anime Search is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "youtube":
+                    Settings.Default.youtubeSearchEnabled = status;
+                    Client.sendMessage(Notice(user, "Youtube Search is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "choose":
+                    Settings.Default.chooseEnabled = status;
+                    Client.sendMessage(Notice(user, "Choose is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "shuffle":
+                    Settings.Default.shuffleEnabled = status;
+                    Client.sendMessage(Notice(user, "Shuffle is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "roll":
+                    Settings.Default.roll_Enabled = status;
+                    Client.sendMessage(Notice(user, "Roll is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "hello":
+                    Settings.Default.hello_Enabled = status;
+                    Client.sendMessage(Notice(user, "Hello is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "nick":
+                case "nicks":
+                    Settings.Default.nickEnabled = status;
+                    Client.sendMessage(Notice(user, "Nickname Generator is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "text":
+                    Settings.Default.randomTextEnabled = status;
+                    Client.sendMessage(Notice(user, "Random Text is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "poke":
+                    Settings.Default.pokeEnabled = status;
+                    Client.sendMessage(Notice(user, "Poke is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "trivia":
+                    Settings.Default.triviaEnabled = status;
+                    Client.sendMessage(Notice(user, "Trivia is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "kill":
+                case "kills":
+                    Settings.Default.killEnabled = status;
+                    Client.sendMessage(Notice(user, "Kill is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "questions":
+                case "question":
+                    Settings.Default.questionEnabled = status;
+                    Client.sendMessage(Notice(user, "Questions are now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "greetings":
+                case "greet":
+                case "greets":
+                    Settings.Default.greetingsEnabled = status;
+                    Client.sendMessage(Notice(user, "Greetings are now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "quotes":
+                case "quote":
+                    Settings.Default.quotesEnabled = status;
+                    Client.sendMessage(Notice(user, "Quotes are now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "funk":
+                    Settings.Default.funkEnabled = status;
+                    Client.sendMessage(Notice(user, "Funk is now " + (status ? "enabled" : "disabled")));
+                    break;
+                case "giphy":
+                    Settings.Default.giphyEnabled = status;
+                    Client.sendMessage(Notice(user, "Giphy is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "reddit":
+                case "reddittitle":
+                    Settings.Default.redditEnabled = status;
+                    Client.sendMessage(Notice(user, "Reddit Titles are now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "vimeo":
+                case "vimeotitle":
+                    Settings.Default.vimeoEnabled = status;
+                    Client.sendMessage(Notice(user, "Vimeo Titles are now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case"twitter":
+                    Settings.Default.twitterEnabled = status;
+                    Client.sendMessage(Notice(user, "Tweets are now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "youtubetitle":
+                    Settings.Default.youtube_Enabled = status;
+                    Client.sendMessage(Notice(user, "Youtube Info is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "url":
+                case "urltitle":
+                    Settings.Default.urlTitleEnabled = status;
+                    Client.sendMessage(Notice(user, "URL Info is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                default: break;
+            }
+            Settings.Default.Save();
+        }
+
+
         bool addBotOP(string nick, string targetUser)
         {
             string message;
@@ -2712,9 +3011,9 @@ namespace NarutoBot3
                 string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 if(targeted)
-                    message = Privmsg(CHANNEL, nick + " generated a Nick for "+ target +": " + nick_);
+                    message = Privmsg(CHANNEL, nick + " generated a nick for "+ target +": " + nick_);
                 else 
-                    message = Privmsg(CHANNEL, nick + " generated the Nick " + nick_);
+                    message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
 
                 Client.sendMessage(message);
                 stats.nick();
