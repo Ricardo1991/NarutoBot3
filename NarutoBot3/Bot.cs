@@ -2530,13 +2530,15 @@ namespace NarutoBot3
         public void killUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
-            string target;
+            string target = "";
             string killString, temp;
             int killID;
             string randomTarget;
 
             if (ul.userIsMuted(nick)) return;
             if (String.IsNullOrEmpty(nick)) return;
+
+            var regex = new Regex(Regex.Escape("<random>"));
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
@@ -2575,26 +2577,32 @@ namespace NarutoBot3
                     if (killsUsed.Count < 1) killsUsed.Add(killID);
                     else killsUsed[0] = killID;
 
-                    do
-                    {
-                        randomTarget = userList[r.Next(userList.Count)];
-                    } while (string.Compare(target, randomTarget, true) == 0 || userList.Count<2);
-
 
                     temp = kill[killID];
                     if (temp.ToLower().Contains("<normal>"))
                     {
                         temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim()).Replace("<random>", randomTarget.Trim());
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
 
                         message = Privmsg(CHANNEL, killString);
                     }
                     else {
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim()).Replace("<random>", randomTarget.Trim());
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
 
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
                     }
                 }
+
+
+                while (message.Contains("<random>"))
+                {
+                    do{
+                        randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
+                    } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
+
+                    message = regex.Replace(message, randomTarget, 1);
+                }
+
                 Client.sendMessage(message);
                 stats.kill();
             }
