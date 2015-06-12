@@ -2906,7 +2906,7 @@ namespace NarutoBot3
                         {
 
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I did" + replaced);
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length - 1)] + " " + "I did " + replaced);
                             else
                                 message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length - 1)] + " " + "I didn't " + replaced);
                         }
