@@ -310,12 +310,22 @@ namespace NarutoBot3
                 foreach (User u in Users)
                 {
                     if (string.Compare(u.Nick, destinatary, true) == 0)
+                    {
+                        if (u.DeliveredMessages == null) 
+                            u.DeliveredMessages = new List<string>();
+
                         u.DeliveredMessages.Add("From <" + sender + "> : " + message);
+                    }
+                        
                 }
             }
             else
             {
                 User u = new User(destinatary);
+
+                if (u.DeliveredMessages == null)
+                    u.DeliveredMessages = new List<string>();
+
                 u.DeliveredMessages.Add("From <" + sender + "> : " + message);
                 users.Add(u);
             }

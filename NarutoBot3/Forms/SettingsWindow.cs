@@ -143,7 +143,6 @@ namespace NarutoBot3
                     schemeColection.Add(a);
                 }
                     
-
                 a = null;
                 
             }
