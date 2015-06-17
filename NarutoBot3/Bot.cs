@@ -3267,6 +3267,7 @@ namespace NarutoBot3
             {
                 ul.addUserMessage(split[0], nick, split[1]);
                 stats.tell();
+                ul.saveData();
             }
         }
 
