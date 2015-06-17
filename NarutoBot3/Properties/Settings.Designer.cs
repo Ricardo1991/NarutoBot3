@@ -802,5 +802,17 @@ namespace NarutoBot3.Properties {
                 this["enforceMirrorOff"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool tellEnabled {
+            get {
+                return ((bool)(this["tellEnabled"]));
+            }
+            set {
+                this["tellEnabled"] = value;
+            }
+        }
     }
 }

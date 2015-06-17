@@ -313,7 +313,7 @@ namespace NarutoBot3
                 case ("332"): //TOPIC
 
                     topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 3)[2];
-                    OnTopicChange(EventArgs.Empty); //tell the ui the topic changed
+                    OnTopicChange(EventArgs.Empty); //Tell the ui the topic changed
                     break;
 
                 case ("353"): //USERLIST
@@ -414,6 +414,8 @@ namespace NarutoBot3
 
                     greetUser(removeUserMode(Who));
 
+                    messageDelivery(removeUserMode(Who));
+
                     break;
 
 
@@ -498,6 +500,9 @@ namespace NarutoBot3
 
                     ul.makeOffline(oldnick);
                     ul.makeOnline(newnick);
+
+
+                    messageDelivery(removeUserMode(newnick));
 
                     userTemp.Clear();
                     break;
@@ -862,16 +867,32 @@ namespace NarutoBot3
                             }
                         else if (String.Compare(cmd, "reload", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
+                                WriteMessage("* Received a reload request from " + user, currentColorScheme.BotReport);
                                 reloadTexts(user, arg);
                             }
                         else if (String.Compare(cmd, "stats", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
+                                WriteMessage("* Received a stats request from " + user, currentColorScheme.BotReport);
                                 statsPrint(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "set", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
+                                WriteMessage("* Received a set options request from " + user, currentColorScheme.BotReport);
                                 setSetting(user, arg);
                             }
+
+                        else if (String.Compare(cmd, "acknowledge", true) == 0)
+                            {
+                                WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
+                                ul.clearUserMessages(user);
+                            }
+                        else if (String.Compare(cmd, "Tell", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
+                                tell(user, arg);
+                            }
+
+                        
                         }
 
 
@@ -1691,6 +1712,11 @@ namespace NarutoBot3
                 case "urltitle":
                     Settings.Default.urlTitleEnabled = status;
                     Client.sendMessage(Notice(user, "URL Info is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "tell":
+                    Settings.Default.tellEnabled = status;
+                    Client.sendMessage(Notice(user, "Tell is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 default: break;
@@ -3230,6 +3256,20 @@ namespace NarutoBot3
             saveQuotes();
         }
 
+        void tell(string nick, string args)
+        {
+            if (ul.userIsMuted(nick) || !Settings.Default.tellEnabled) return;
+
+            string[] split = args.Split(new char[] { ' ' }, 2);
+
+            if (split.Length < 2) return;
+            else
+            {
+                ul.addUserMessage(split[0], nick, split[1]);
+                stats.tell();
+            }
+        }
+
         private void choose(string CHANNEL, string user, string arg)
         {
             if (ul.userIsMuted(user) || !Settings.Default.chooseEnabled) return;
@@ -3526,6 +3566,24 @@ namespace NarutoBot3
             }
         }
 
+
+        void messageDelivery(string nick)
+        {
+            int count = ul.userMessageCount(nick);
+            if (count == 0) return;
+
+            string message;
+
+            Client.sendMessage(Privmsg(nick, "Hello " + nick + ". You have " + count + " message(s)"));
+
+            for(int i = 0 ; i < count ; i++)
+            {
+                message = Privmsg(nick, ul.getUserMessage(nick, i));
+                Client.sendMessage(message);
+            }
+
+            Client.sendMessage(Privmsg(nick, "Mark all messages as read using "+ Client.SYMBOL+"acknowledge"));
+        }
 
         public void Dispose()
         {

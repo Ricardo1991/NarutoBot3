@@ -69,6 +69,7 @@
             this.gbQuitMessage = new System.Windows.Forms.GroupBox();
             this.tbQuitMessage = new System.Windows.Forms.TextBox();
             this.gb_autocommand = new System.Windows.Forms.GroupBox();
+            this.labelConnectCommand = new System.Windows.Forms.Label();
             this.cb_ConnectCommand = new System.Windows.Forms.TextBox();
             this.gb_AppearanceChatWindow = new System.Windows.Forms.GroupBox();
             this.cbScroll = new System.Windows.Forms.CheckBox();
@@ -107,7 +108,7 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.labelConnectCommand = new System.Windows.Forms.Label();
+            this.cbTell = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -205,6 +206,7 @@
             // 
             // gb_FeaturesHelpful
             // 
+            this.gb_FeaturesHelpful.Controls.Add(this.cbTell);
             this.gb_FeaturesHelpful.Controls.Add(this.cbShuffle);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_choose);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_YTSearch);
@@ -213,9 +215,9 @@
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Wiki);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_roll);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Anime);
-            this.gb_FeaturesHelpful.Location = new System.Drawing.Point(6, 84);
+            this.gb_FeaturesHelpful.Location = new System.Drawing.Point(6, 10);
             this.gb_FeaturesHelpful.Name = "gb_FeaturesHelpful";
-            this.gb_FeaturesHelpful.Size = new System.Drawing.Size(162, 202);
+            this.gb_FeaturesHelpful.Size = new System.Drawing.Size(162, 276);
             this.gb_FeaturesHelpful.TabIndex = 16;
             this.gb_FeaturesHelpful.TabStop = false;
             this.gb_FeaturesHelpful.Text = "Helpful";
@@ -494,7 +496,7 @@
             // 
             this.gb_FeaturesBasic.Controls.Add(this.cb_rules);
             this.gb_FeaturesBasic.Controls.Add(this.cb_help);
-            this.gb_FeaturesBasic.Location = new System.Drawing.Point(6, 10);
+            this.gb_FeaturesBasic.Location = new System.Drawing.Point(342, 149);
             this.gb_FeaturesBasic.Name = "gb_FeaturesBasic";
             this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 68);
             this.gb_FeaturesBasic.TabIndex = 12;
@@ -605,6 +607,15 @@
             this.gb_autocommand.TabIndex = 6;
             this.gb_autocommand.TabStop = false;
             this.gb_autocommand.Text = "Connect Command";
+            // 
+            // labelConnectCommand
+            // 
+            this.labelConnectCommand.AutoSize = true;
+            this.labelConnectCommand.Location = new System.Drawing.Point(6, 43);
+            this.labelConnectCommand.Name = "labelConnectCommand";
+            this.labelConnectCommand.Size = new System.Drawing.Size(238, 13);
+            this.labelConnectCommand.TabIndex = 1;
+            this.labelConnectCommand.Text = "For commands, don\'t forget to include the \"/\" bar";
             // 
             // cb_ConnectCommand
             // 
@@ -966,14 +977,15 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // labelConnectCommand
+            // cbTell
             // 
-            this.labelConnectCommand.AutoSize = true;
-            this.labelConnectCommand.Location = new System.Drawing.Point(6, 43);
-            this.labelConnectCommand.Name = "labelConnectCommand";
-            this.labelConnectCommand.Size = new System.Drawing.Size(238, 13);
-            this.labelConnectCommand.TabIndex = 1;
-            this.labelConnectCommand.Text = "For commands, don\'t forget to include the \"/\" bar";
+            this.cbTell.AutoSize = true;
+            this.cbTell.Location = new System.Drawing.Point(5, 203);
+            this.cbTell.Name = "cbTell";
+            this.cbTell.Size = new System.Drawing.Size(43, 17);
+            this.cbTell.TabIndex = 16;
+            this.cbTell.Text = "Tell";
+            this.cbTell.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -1109,5 +1121,6 @@
         private System.Windows.Forms.TextBox tbQuitMessage;
         private System.Windows.Forms.GroupBox gbTheme;
         private System.Windows.Forms.Label labelConnectCommand;
+        private System.Windows.Forms.CheckBox cbTell;
     }
 }

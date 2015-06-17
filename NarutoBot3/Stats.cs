@@ -152,6 +152,13 @@ namespace NarutoBot3
             saveData();
         }
 
+        public void tell()
+        {
+            session.incrementTell();
+            lifetime.incrementTell();
+            saveData();
+        }
+
 
         public int[] getKill()
         {
@@ -228,6 +235,11 @@ namespace NarutoBot3
         public int[] getRoll()
         {
             return new int[2] { session.Roll, lifetime.Roll };
+        }
+
+        public int[] getTell()
+        {
+            return new int[2] { session.Tell, lifetime.Tell };
         }
     }
 
@@ -367,6 +379,13 @@ namespace NarutoBot3
             set { roll = value; }
         }
 
+        int tell;
+
+        public int Tell
+        {
+            get { return tell; }
+            set { tell = value; }
+        }
 
         public Stats()
         {
@@ -389,7 +408,10 @@ namespace NarutoBot3
             help = 0;
             anime = 0;
             roll = 0;
+            tell = 0;
         }
+
+        
 
 
 
@@ -413,6 +435,8 @@ namespace NarutoBot3
         public void incrementHelp() { Help++; }
         public void incrementAnime() { Anime++; }
         public void incrementRoll() { Roll++; }
+
+        public void incrementTell() { Tell++; }
 
     }
 }

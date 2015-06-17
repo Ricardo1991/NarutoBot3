@@ -37,20 +37,21 @@ namespace NarutoBot3
                 users = new List<User>();
             }
 
-            
+
         }
 
-        public bool hasUserByName(String name){
+        public bool hasUserByName(String name)
+        {
             if (string.IsNullOrWhiteSpace(name)) return false;
 
             name = name.Replace("@", string.Empty).Replace("+", string.Empty);
             name = name.Trim();
             foreach (User u in Users)
             {
-                if (u.Nick == name)
+                if (string.Compare(u.Nick, name, true) == 0)
                     return true;
             }
-            
+
             return false;
         }
 
@@ -63,7 +64,7 @@ namespace NarutoBot3
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsOnline = true;
                 }
             }
@@ -80,7 +81,7 @@ namespace NarutoBot3
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsOnline = false;
                 }
             }
@@ -96,7 +97,7 @@ namespace NarutoBot3
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsOperator = true;
                 }
             }
@@ -118,7 +119,7 @@ namespace NarutoBot3
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsOperator = false;
                 }
             }
@@ -135,11 +136,12 @@ namespace NarutoBot3
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
+
             if (hasUserByName(n))
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsMuted = true;
                 }
             }
@@ -160,7 +162,7 @@ namespace NarutoBot3
             {
                 foreach (User u in Users)
                 {
-                    if (u.Nick == n)
+                    if (string.Compare(u.Nick, n, true) == 0)
                         u.IsMuted = false;
                 }
             }
@@ -186,7 +188,7 @@ namespace NarutoBot3
                         u.Greeting = greeting;
                         u.GreetingEnabled = enabled;
                     }
-                        
+
                 }
             }
             else
@@ -247,7 +249,7 @@ namespace NarutoBot3
 
             foreach (User u in Users)
             {
-                if (String.Compare(u.Nick, nick, true) == 0 )
+                if (String.Compare(u.Nick, nick, true) == 0)
                 {
                     u.MirrorMode = !u.MirrorMode;
                     return u.MirrorMode;
@@ -256,10 +258,97 @@ namespace NarutoBot3
             return false;
         }
 
+        public int userMessageCount(String nick)
+        {
+
+            if (string.IsNullOrWhiteSpace(nick)) return 0;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                {
+                    return u.DeliveredMessages.Count;
+                }
+
+            }
+            return 0;
+        }
+
+        public String getUserMessage(String nick, int index)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return string.Empty;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                {
+                    if (u.DeliveredMessages.Count > 0)
+                    {
+                        return u.DeliveredMessages[index];
+
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public void addUserMessage(String destinatary, String sender, String message)
+        {
+            if (string.IsNullOrWhiteSpace(destinatary)) return;
+            destinatary = destinatary.Replace("@", string.Empty).Replace("+", string.Empty);
+            destinatary = destinatary.Trim();
+
+            if (hasUserByName(destinatary))
+            {
+                foreach (User u in Users)
+                {
+                    if (string.Compare(u.Nick, destinatary, true) == 0)
+                        u.DeliveredMessages.Add("From <" + sender + "> : " + message);
+                }
+            }
+            else
+            {
+                User u = new User(destinatary);
+                u.DeliveredMessages.Add("From <" + sender + "> : " + message);
+                users.Add(u);
+            }
+        }
+
+        public void clearUserMessages(String nick)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                {
+                    u.DeliveredMessages.Clear();
+                }
+
+            }
+
+        }
     }
 
     public class User
     {
+        List<String> deliveredMessages;
+
+        public List<String> DeliveredMessages
+        {
+            get { return deliveredMessages; }
+            set { deliveredMessages = value; }
+        }
         String nick;
         String greeting;
         bool isOperator;
@@ -291,6 +380,8 @@ namespace NarutoBot3
             isMuted = false;
             greetingEnabled = false;
             mirrorMode = false;
+
+            deliveredMessages = new List<string>();
         }
 
         public User(String n, bool online)
@@ -302,6 +393,8 @@ namespace NarutoBot3
             isMuted = false;
             greetingEnabled = false;
             mirrorMode = false;
+
+            deliveredMessages = new List<string>();
         }
 
         public User(String n, String g, bool online, bool op, bool mute, bool greet, bool mirror)
@@ -313,6 +406,8 @@ namespace NarutoBot3
             isMuted = mute;
             greetingEnabled = greet;
             mirrorMode = mirror;
+
+            deliveredMessages = new List<string>();
         }
 
         public String Nick

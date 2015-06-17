@@ -63,6 +63,7 @@ namespace NarutoBot3
             Settings.Default.shuffleEnabled = cbShuffle.Checked;
             Settings.Default.giphyEnabled = cbGiphy.Checked;
             Settings.Default.urlTitleEnabled = cbPageTitle.Checked;
+            Settings.Default.tellEnabled = cbTell.Checked;
 
 
             Settings.Default.twitterAccessToken = tb_AccessToken.Text;
@@ -182,6 +183,7 @@ namespace NarutoBot3
             cbShuffle.Checked = Settings.Default.shuffleEnabled;
             cbGiphy.Checked = Settings.Default.giphyEnabled;
             cbPageTitle.Checked = Settings.Default.urlTitleEnabled;
+            cbTell.Checked = Settings.Default.tellEnabled;
 
             cb_TwitterEnabled.Checked = Settings.Default.twitterEnabled;
             tb_AccessToken.Text = Settings.Default.twitterAccessToken;
