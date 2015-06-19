@@ -277,9 +277,9 @@ namespace NarutoBot3
             return 0;
         }
 
-        public String getUserMessage(String nick, int index)
+        public UserMessage getUserMessage(String nick, int index)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return string.Empty;
+            if (string.IsNullOrWhiteSpace(nick)) return null;
 
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
@@ -296,7 +296,7 @@ namespace NarutoBot3
                 }
             }
 
-            return string.Empty;
+            return null;
         }
 
         public void addUserMessage(String destinatary, String sender, String message)
@@ -311,10 +311,10 @@ namespace NarutoBot3
                 {
                     if (string.Compare(u.Nick, destinatary, true) == 0)
                     {
-                        if (u.DeliveredMessages == null) 
-                            u.DeliveredMessages = new List<string>();
+                        if (u.DeliveredMessages == null)
+                            u.DeliveredMessages = new List<UserMessage>();
 
-                        u.DeliveredMessages.Add("From <" + sender + "> : " + message);
+                        u.DeliveredMessages.Add(new UserMessage(message, sender));
                     }
                         
                 }
@@ -324,9 +324,9 @@ namespace NarutoBot3
                 User u = new User(destinatary);
 
                 if (u.DeliveredMessages == null)
-                    u.DeliveredMessages = new List<string>();
+                    u.DeliveredMessages = new List<UserMessage>();
 
-                u.DeliveredMessages.Add("From <" + sender + "> : " + message);
+                u.DeliveredMessages.Add(new UserMessage(message, sender));
                 users.Add(u);
             }
         }
@@ -352,13 +352,14 @@ namespace NarutoBot3
 
     public class User
     {
-        List<String> deliveredMessages;
+        List<UserMessage> deliveredMessages;
 
-        public List<String> DeliveredMessages
+        public List<UserMessage> DeliveredMessages
         {
             get { return deliveredMessages; }
             set { deliveredMessages = value; }
         }
+
         String nick;
         String greeting;
         bool isOperator;
@@ -391,7 +392,7 @@ namespace NarutoBot3
             greetingEnabled = false;
             mirrorMode = false;
 
-            deliveredMessages = new List<string>();
+            deliveredMessages = new List<UserMessage>();
         }
 
         public User(String n, bool online)
@@ -404,7 +405,7 @@ namespace NarutoBot3
             greetingEnabled = false;
             mirrorMode = false;
 
-            deliveredMessages = new List<string>();
+            deliveredMessages = new List<UserMessage>();
         }
 
         public User(String n, String g, bool online, bool op, bool mute, bool greet, bool mirror)
@@ -417,7 +418,7 @@ namespace NarutoBot3
             greetingEnabled = greet;
             mirrorMode = mirror;
 
-            deliveredMessages = new List<string>();
+            deliveredMessages = new List<UserMessage>();
         }
 
         public String Nick
@@ -455,5 +456,39 @@ namespace NarutoBot3
             get { return greetingEnabled; }
             set { greetingEnabled = value; }
         }
+    }
+
+    public class UserMessage
+    {
+        String message;
+
+        public String Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+        String sender;
+
+        public String Sender
+        {
+            get { return sender; }
+            set { sender = value; }
+        }
+        DateTime timestamp;
+
+        public DateTime Timestamp
+        {
+            get { return timestamp; }
+            set { timestamp = value; }
+        }
+
+        public UserMessage(string message, string sender)
+        {
+            this.message = message;
+            this.sender = sender;
+
+            timestamp = DateTime.Now.ToUniversalTime();
+        }
+
     }
 }

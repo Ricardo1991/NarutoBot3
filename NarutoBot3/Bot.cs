@@ -3579,7 +3579,31 @@ namespace NarutoBot3
 
             for(int i = 0 ; i < count ; i++)
             {
-                message = Privmsg(nick, ul.getUserMessage(nick, i));
+
+                UserMessage m = ul.getUserMessage(nick, i);
+                TimeSpan diff = m.Timestamp.Subtract(DateTime.Now.ToUniversalTime());
+
+                string timeDiff = "";
+
+                if (diff.Days >= 1)
+                    if (diff.Days == 1)
+                        timeDiff += diff.Days + " day, ";
+                    else
+                        timeDiff += diff.Days + " days, ";
+
+                if (diff.Hours >= 1)
+                    if (diff.Hours == 1)
+                        timeDiff += diff.Hours + " hour ago";
+                    else
+                        timeDiff += diff.Hours + " hours ago";
+                else
+                    if (diff.Minutes == 1)
+                        timeDiff += diff.Minutes + " minute ago";
+                    else
+                        timeDiff += diff.Minutes + " minutes ago";
+
+
+                message = Privmsg(nick, "From "+ m.Sender +" " + timeDiff +": " + m.Message );
                 Client.sendMessage(message);
             }
 
