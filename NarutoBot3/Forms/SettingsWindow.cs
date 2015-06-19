@@ -241,7 +241,7 @@ namespace NarutoBot3
         //{
         //    TextWriter WriteFileStream = new StreamWriter("Theme\\" + currentColorScheme.Name + ".json", false);
 
-        //    WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme));
+        //    WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme, Formatting.Indented));
 
         //    WriteFileStream.Close();
         //}

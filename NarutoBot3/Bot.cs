@@ -544,12 +544,17 @@ namespace NarutoBot3
                         case ("+a"):
                             userList.Add("&" + affectedUser);
                             break;
-
+                        case ("+b"):
+                        case ("-b"):
+                        case ("+m"):
+                        case ("-m"):
+                            break;
                         case ("-o"):
                         case ("-a"):
                         case ("-q"):
                         case ("-h"):
                         case ("-v"):
+                        
                         default:
                             userList.Add(affectedUser);
                             break;

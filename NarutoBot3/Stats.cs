@@ -18,7 +18,7 @@ namespace NarutoBot3
         {
             TextWriter WriteFileStream = new StreamWriter("stats.json", false);
 
-            WriteFileStream.Write(JsonConvert.SerializeObject(lifetime));
+            WriteFileStream.Write(JsonConvert.SerializeObject(lifetime, Formatting.Indented));
 
             WriteFileStream.Close();
         }
