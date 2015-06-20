@@ -3586,7 +3586,7 @@ namespace NarutoBot3
             {
 
                 UserMessage m = ul.getUserMessage(nick, i);
-                TimeSpan diff = m.Timestamp.Subtract(DateTime.Now.ToUniversalTime());
+                TimeSpan diff = DateTime.Now.ToUniversalTime().Subtract(m.Timestamp);
 
                 string timeDiff = "";
 
