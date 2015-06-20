@@ -1245,11 +1245,6 @@ namespace NarutoBot3
                 {
                 }
             }
-            else
-            {
-                Settings.Default.quotesEnabled = false;
-                Settings.Default.Save();
-            }
         }
 
         public void saveQuotes(){
@@ -1281,11 +1276,6 @@ namespace NarutoBot3
                 catch
                 {
                 }
-            }
-            else
-            {
-                Settings.Default.funkEnabled = false;
-                Settings.Default.Save();
             }
         }
 
@@ -3255,9 +3245,20 @@ namespace NarutoBot3
         {
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
-            if (quotes != null)
-                quotes.Add(Useful.getBetween(args, "add ", null));
+            string add;
 
+            if (quotes == null)
+                quotes = new List<string>();
+
+
+            if (string.Compare(args.Split(new char[] { ' ' }, 2)[0] , "add", true) == 0)
+                add = Useful.getBetween(args, "add ", null);
+            else
+                add = args;
+
+            if(!string.IsNullOrWhiteSpace(add))
+                quotes.Add(add);
+            
             saveQuotes();
         }
 
