@@ -891,7 +891,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
                                 ul.clearUserMessages(user);
                             }
-                        else if (String.Compare(cmd, "Tell", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (String.Compare(cmd, "tell", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
                                 tell(user, arg);
@@ -3609,7 +3609,7 @@ namespace NarutoBot3
                         timeDiff += diff.Minutes + " minutes ago";
 
 
-                message = Privmsg(nick, "From "+ m.Sender +" " + timeDiff +": " + m.Message );
+                message = Privmsg(nick, "From "+ m.Sender +", sent " + timeDiff +": " + m.Message );
                 Client.sendMessage(message);
             }
 
