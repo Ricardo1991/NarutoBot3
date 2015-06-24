@@ -327,8 +327,7 @@ namespace NarutoBot3
                         if (!found) 
                             userList.Add(s);
 
-                        if (!ul.hasUserByName(s))
-                            ul.makeOnline(s);
+                        ul.makeOnline(removeUserMode(s));
                     }
                             
                     userList.Sort();
@@ -499,7 +498,7 @@ namespace NarutoBot3
                     OnNickChange(EventArgs.Empty);
 
                     ul.makeOffline(oldnick);
-                    ul.makeOnline(newnick);
+                    ul.makeOnline(removeUserMode(newnick));
 
 
                     messageDelivery(removeUserMode(newnick));
