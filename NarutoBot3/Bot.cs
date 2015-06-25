@@ -2269,13 +2269,12 @@ namespace NarutoBot3
             string jsonAnime;
             bool user = false;
 
-            if (ul.userIsMuted(nick)) return;
-            if (Settings.Default.silence == true || Settings.Default.aniSearchEnabled == false) return;
-            if (String.IsNullOrWhiteSpace(query)) return;
+            if (ul.userIsMuted(nick) || Settings.Default.silence == true || Settings.Default.aniSearchEnabled == false || String.IsNullOrWhiteSpace(query))  
+                return;
 
             if (query.Contains("-u") || query.Contains("-User") || query.Contains("-user")) user = true;
 
-            query = query.Replace(" ", "%20").Replace(" -User", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
+            query = query.ToLower().Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
 
             string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
 
@@ -2285,6 +2284,7 @@ namespace NarutoBot3
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
             string name = "";
+            string id = "";
 
             try
             {
@@ -2295,14 +2295,14 @@ namespace NarutoBot3
 
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
 
-            if (g.items == null) message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
+            if (g.items == null) 
+                message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
             else
             {
-                int i_max = 0; int i = 0; bool found = false;
+                int i_max = 4; int i = 0; bool found = false;
 
                 if (g.items.Length < 4)
                     i_max = g.items.Length - 1;
-                else i_max = 4;
 
                 while (i <= i_max && found == false)
                 {
@@ -2312,10 +2312,14 @@ namespace NarutoBot3
                         {
                             found = true;
                             string[] split = g.items[i].link.Split('/');
+
                             if (split.Length <= 5)
-                                name = g.items[i].link + "/" + query;
+                                name = split[5];
                             else
-                                name = g.items[i].link;
+                                name = query;
+
+                            if (split.Length >= 5)
+                                id = split[4];
                         }
                         else i++;
                     }
@@ -2329,12 +2333,14 @@ namespace NarutoBot3
                     }
                 }
 
-                if (!found) message = Privmsg(CHANNEL, g.items[0].link);
+                if (!found) 
+                    message = Privmsg(CHANNEL, g.items[0].link);
+
                 else
                     if (!user)
                     {
-                        string[] animeName = name.Replace("http://myanimelist.net/anime/", string.Empty).Replace(" ", "+").Replace("_", "+").Split('/');
-                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName[1];
+                        string animeName = name.Replace(" ", "+").Replace("_", "+");
+                        getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
                         jsonAnime = webClient.DownloadString(getString);
 
@@ -2362,9 +2368,22 @@ namespace NarutoBot3
                         }
                         else
                         {
-                            string score = a.entry[0].score.ToString();
-                            string episodes = a.entry[0].episodes.ToString();
-                            string title = a.entry[0].title;
+                            int index = 0;
+
+                            for (int o = 0; o < a.entry.Length; o++)
+                            {
+                                if (a.entry[o].id.ToString() == id)
+                                {
+                                    index = o;
+                                    break;
+                                }
+                                    
+
+                            }
+
+                            string score = a.entry[index].score.ToString();
+                            string episodes = a.entry[index].episodes.ToString();
+                            string title = a.entry[index].title;
 
                             if (episodes == "0")
                                 episodes = "?";
