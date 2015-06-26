@@ -2814,6 +2814,32 @@ namespace NarutoBot3
                             message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced);
                     }
                 }
+                else if (String.Compare(split[0], "was", true) == 0)
+                {
+                    bool yes = false;
+
+                    if (r.Next(0, 2) == 1)
+                        yes = true;
+
+                    if (split.Length >= 2)
+                    {
+                        string subject = split[1];
+                        string rest = "";
+
+                        for (int i = 2; i < split.Length; i++)
+                        {
+                            rest += split[i] + " ";
+                        }
+                        rest = rest.TrimEnd(' ');
+
+                        string replaced = questionsRegex(rest);
+
+                        if (yes)
+                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " was " + replaced);
+                        else
+                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " wasn't " + replaced);
+                    }
+                }
                 else if (String.Compare(split[0], "when", true) == 0)
                 {
                     message = Privmsg(CHANNEL, when[r.Next(when.Length)]);
