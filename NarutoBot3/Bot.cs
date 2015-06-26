@@ -772,6 +772,16 @@ namespace NarutoBot3
                                 WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
                                 removeBotOP(user, arg);
                             }
+                        else if (String.Compare(cmd, "mute", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a mute request from " + user, currentColorScheme.BotReport);
+                                muteUser(user, arg);
+                            }
+                        else if (String.Compare(cmd, "unmute", true) == 0 && !String.IsNullOrEmpty(arg))
+                            {
+                                WriteMessage("* Received a unmute request from " + user, currentColorScheme.BotReport);
+                                unmuteUser(user, arg);
+                            }
                         else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
@@ -1731,6 +1741,38 @@ namespace NarutoBot3
 
             ul.opUser(targetUser);
             message = Notice(nick, targetUser + " was set as a bot operator!");
+            Client.sendMessage(message);
+            return true;
+
+        }
+
+        bool muteUser(string nick, string targetUser)
+        {
+            string message;
+
+            targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+
+            if (!ul.userIsOperator(nick))
+                return false;
+
+            ul.muteUser(targetUser);
+            message = Notice(nick, targetUser + " was muted!");
+            Client.sendMessage(message);
+            return true;
+
+        }
+
+        bool unmuteUser(string nick, string targetUser)
+        {
+            string message;
+
+            targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+
+            if (!ul.userIsOperator(nick))
+                return false;
+
+            ul.unmuteUser(targetUser);
+            message = Notice(nick, targetUser + " was unmuted!");
             Client.sendMessage(message);
             return true;
 
