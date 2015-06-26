@@ -1041,7 +1041,7 @@ namespace NarutoBot3
 
             foreach (string u in userList)
             {
-                if (String.Compare(u, user, true) == 0 )
+                if (String.Compare(u.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty), user, true) == 0)
                 {
                     switch (u[0])
                     {
