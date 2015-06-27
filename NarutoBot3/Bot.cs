@@ -522,6 +522,10 @@ namespace NarutoBot3
 
                     string affectedUser = messageObject.SplitMessage[2];
 
+                    affectedUser = affectedUser.Split(new char[] { '!' }, 2)[0];
+
+                    if (string.Compare(affectedUser, "*") == 0) return;
+
                     foreach (string userD in userList)
                         if (string.Compare(removeUserMode(userD), removeUserMode(affectedUser), true) != 0)
                             userTemp.Add(userD);
@@ -553,6 +557,9 @@ namespace NarutoBot3
                                 userList.Add("@" + affectedUser);
                             else
                                 userList.Add("%" + affectedUser);
+                            break;              
+                        case ("+a"):
+                            userList.Add("&" + affectedUser);
                             break;
                         case ("+q"):
                             if (ul.userHasChannelOP(affectedUser))
@@ -560,14 +567,12 @@ namespace NarutoBot3
                             else
                                 userList.Add("~" + affectedUser);
                             break;
-                        case ("+a"):
-                            userList.Add("&" + affectedUser);
+
+                        
+                        case ("-q"):
+                            userList.Add(affectedUser);
                             break;
-                        case ("+b"):
-                        case ("-b"):
-                        case ("+m"):
-                        case ("-m"):
-                            break;
+
                         case ("-o"):
                             ul.setUserChannelOP(affectedUser, false);
                             if (ul.userHasChannelVoice(affectedUser))
@@ -577,7 +582,7 @@ namespace NarutoBot3
 
                             break;
                         case ("-a"):
-                        case ("-q"):
+                        
                         case ("-h"):
                             if (ul.userHasChannelOP(affectedUser))
                                 userList.Add("@" + affectedUser);
@@ -594,6 +599,12 @@ namespace NarutoBot3
                             ul.setUserChannelVoice(affectedUser, false);
                             break;
 
+
+                        case ("+b"):
+                        case ("-b"):
+                        case ("+m"):
+                        case ("-m"):
+                            break;
                         default:
                             userList.Add(affectedUser);
                             break;
