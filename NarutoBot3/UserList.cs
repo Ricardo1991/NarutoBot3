@@ -231,6 +231,60 @@ namespace NarutoBot3
             return false;
         }
 
+        public bool userHasChannelOP(String nick)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0 && u.HasOP) return true;
+            }
+            return false;
+        }
+
+        public bool userHasChannelVoice(String nick)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0 && u.HasVoice) return true;
+            }
+            return false;
+        }
+
+        public void setUserChannelVoice(String nick, bool status)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                    u.HasVoice = status;
+            }
+            return;
+        }
+
+        public void setUserChannelOP(String nick, bool status)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return;
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                    u.HasOP = status;
+            }
+            return;
+        }
+
         public bool userIsMirrored(String nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
@@ -381,6 +435,25 @@ namespace NarutoBot3
         [JsonIgnore]
         bool isOnline=false;
 
+        [JsonIgnore]
+        bool hasOP = false;
+
+        [JsonIgnore]
+        public bool HasOP
+        {
+            get { return hasOP; }
+            set { hasOP = value; }
+        }
+        [JsonIgnore]
+        bool hasVoice = false;
+
+        [JsonIgnore]
+        public bool HasVoice
+        {
+            get { return hasVoice; }
+            set { hasVoice = value; }
+        }
+
         [JsonConstructor]
         private User()
         {
@@ -450,6 +523,7 @@ namespace NarutoBot3
             set { isOperator = value; }
         }
 
+        [JsonIgnore]
         public bool IsOnline
         {
             get { return isOnline; }
