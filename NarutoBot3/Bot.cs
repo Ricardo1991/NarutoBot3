@@ -2806,7 +2806,7 @@ namespace NarutoBot3
                             else if (arg == "how many fucks do you give")
                                 message = Privmsg(CHANNEL, "I always give 0 fucks.");
                             else
-                                message = Privmsg(CHANNEL, howMany[r.Next(howMany.Length)] + " " + r.Next(21));
+                                message = Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
                         }
 
                         else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
@@ -2862,9 +2862,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced);
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced).Trim());
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced);
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
                     }
                 }
                 else if (String.Compare(split[0], "was", true) == 0)
@@ -2888,9 +2888,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " was " + replaced);
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " was " + replaced).Trim());
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " wasn't " + replaced);
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " wasn't " + replaced).Trim());
                     }
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
