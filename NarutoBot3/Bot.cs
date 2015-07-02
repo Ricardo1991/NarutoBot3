@@ -2848,7 +2848,7 @@ namespace NarutoBot3
                                 else if (string.Compare(split[2], "are", true) == 0)
                                 {
                                     if (string.Compare(target, "you", true) == 0)
-                                        message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp());
+                                        message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
                                     else
                                     {
                                         message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
