@@ -2825,6 +2825,36 @@ namespace NarutoBot3
 
                         else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length], "die", true) == 0)
                             killUser(CHANNEL, user,  Useful.getBetween(arg, "did", "die"));
+
+                        else if (String.Compare(split[1], "old", true) == 0)
+                        {
+                            if (split.Length >= 4)
+                            {
+                                string target = "";
+
+                                for (int i = 3; i < split.Length; i++)
+                                {
+                                    target += split[i] + " ";
+                                }
+                                target = target.TrimEnd(' ');
+
+                                if (string.Compare(split[2], "is", true) == 0)
+                                {
+                                    message = Privmsg(CHANNEL, target + " is "  + r.Next(41));
+                                    
+                                }
+                                else if (string.Compare(split[2], "are", true) == 0)
+                                {
+                                    if (string.Compare(target, "you", true) == 0)
+                                        message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp());
+                                    else
+                                    {
+                                        message = Privmsg(CHANNEL, target + " are " + r.Next(41));
+                                    }
+                                }
+                            }
+
+                        }
                     }
                     else
                         message = Privmsg(CHANNEL, user + ", no idea...");
@@ -3324,7 +3354,7 @@ namespace NarutoBot3
 
         void greetUser(string nick)
         {
-            if (ul.userIsMuted(nick) || !Settings.Default.greetingsEnabled) return;
+            if (ul.userIsMuted(nick) || !Settings.Default.greetingsEnabled || Settings.Default.silence) return;
 
             foreach (User u in ul.Users)
             {
