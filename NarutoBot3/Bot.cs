@@ -2842,7 +2842,7 @@ namespace NarutoBot3
 
                                 if (string.Compare(split[2], "is", true) == 0)
                                 {
-                                    message = Privmsg(CHANNEL, replaced + " is " + r.Next(41));
+                                    message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
                                     
                                 }
                                 else if (string.Compare(split[2], "are", true) == 0)
@@ -2851,8 +2851,15 @@ namespace NarutoBot3
                                         message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp());
                                     else
                                     {
-                                        message = Privmsg(CHANNEL, replaced + " are " + r.Next(41));
+                                        message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
                                     }
+                                }
+
+                                else if (string.Compare(split[2], "am", true) == 0 || string.Compare(split[3], "i", true) == 0)
+                                {
+
+                                    message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
+                                    
                                 }
                             }
 
