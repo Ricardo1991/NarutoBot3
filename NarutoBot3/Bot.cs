@@ -3260,19 +3260,21 @@ namespace NarutoBot3
                 Client.sendMessage(message);
 
                 try{
-                    comment = reddit.GetComment(sub.Name, "t1_" + commentName, "t3_" + postName);
+                    comment = reddit.GetComment(/*sub.Name, "t1_" + commentName, "t3_" + postName*/ new Uri("https://"+url));
+
+                    if (comment.Body.ToString().Length > 300)
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
+                    else
+                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02"));
+                    Client.sendMessage(message);
+                    
+                        
                 }
                 catch{
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "Failed to get comment info" + "\x02");
                     Client.sendMessage(message);
                     return;
                 }
-
-                if (comment.Body.ToString().Length > 300)
-                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
-                else
-                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.ToString().Replace("\r", " ").Replace("\n", " ") + "\x02"));
-                Client.sendMessage(message);
 
             }
             else  //No comment link
