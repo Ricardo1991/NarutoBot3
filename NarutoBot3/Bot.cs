@@ -2495,14 +2495,14 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    string readHtml = webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
+                    string readHtml = HttpUtility.HtmlDecode(webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty)));
 
-                    string profile = Useful.getBetween(readHtml, "<title>", "'s Profile - MyAnimeList.net</title>");
+                    string profile = Useful.getBetween(readHtml.Replace("\n", string.Empty), "<title>", "'s Profile - MyAnimeList.net").Trim();
 
-                    string completed = Useful.getBetween(readHtml, ">Completed</span></td>", "<td><div style=");
-                    completed = Useful.getBetween(completed, "<td align=\"center\">", "</td>");
+                    string completed = Useful.getBetween(readHtml.Replace("\n", string.Empty), ">Completed</span></td>", "<td><div style=");
+                    completed = Useful.getBetween(completed, "<td align=\"center\">", "</td>").Trim();
 
-                    message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " animes" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
+                    message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " anime" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                 }
             
 
