@@ -42,7 +42,7 @@ namespace NarutoBot3
         public Message(string message)
         {
             string trailing = null;
-            sender = type = String.Empty;
+            sender = type = string.Empty;
             splitMessage = new string[] { };
 
             int prefixEnd = -1, trailingStart = message.Length;

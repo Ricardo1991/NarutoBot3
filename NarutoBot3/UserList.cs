@@ -40,7 +40,7 @@ namespace NarutoBot3
 
         }
 
-        public bool hasUserByName(String name)
+        public bool hasUserByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return false;
 
@@ -56,7 +56,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public void makeOnline(String n)
+        public void makeOnline(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
 
@@ -75,7 +75,7 @@ namespace NarutoBot3
             else users.Add(new User(n, true));
         }
 
-        public void makeOffline(String n)
+        public void makeOffline(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
 
@@ -92,7 +92,7 @@ namespace NarutoBot3
             else users.Add(new User(n, false));
         }
 
-        public void opUser(String n)
+        public void opUser(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -114,7 +114,7 @@ namespace NarutoBot3
             }
         }
 
-        public void deopUser(String n)
+        public void deopUser(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
 
@@ -136,7 +136,7 @@ namespace NarutoBot3
             }
         }
 
-        public void muteUser(String n)
+        public void muteUser(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -158,7 +158,7 @@ namespace NarutoBot3
             }
         }
 
-        public void unmuteUser(String n)
+        public void unmuteUser(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -179,7 +179,7 @@ namespace NarutoBot3
             }
         }
 
-        public void setGreeting(String n, String greeting, bool enabled)
+        public void setGreeting(string n, string greeting, bool enabled)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -205,7 +205,7 @@ namespace NarutoBot3
             }
         }
 
-        public bool userIsOperator(String nick)
+        public bool userIsOperator(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -218,7 +218,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool userIsMuted(String nick)
+        public bool userIsMuted(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -231,7 +231,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool userHasChannelOP(String nick)
+        public bool userHasChannelOP(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -244,7 +244,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool userHasChannelVoice(String nick)
+        public bool userHasChannelVoice(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -257,7 +257,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public void setUserChannelVoice(String nick, bool status)
+        public void setUserChannelVoice(string nick, bool status)
         {
             if (string.IsNullOrWhiteSpace(nick)) return;
 
@@ -271,7 +271,7 @@ namespace NarutoBot3
             return;
         }
 
-        public void setUserChannelOP(String nick, bool status)
+        public void setUserChannelOP(string nick, bool status)
         {
             if (string.IsNullOrWhiteSpace(nick)) return;
 
@@ -285,7 +285,7 @@ namespace NarutoBot3
             return;
         }
 
-        public bool userIsMirrored(String nick)
+        public bool userIsMirrored(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -299,7 +299,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool toogleMirror(String nick)
+        public bool toogleMirror(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -317,7 +317,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public int userMessageCount(String nick)
+        public int userMessageCount(string nick)
         {
 
             if (string.IsNullOrWhiteSpace(nick)) return 0;
@@ -336,7 +336,7 @@ namespace NarutoBot3
             return 0;
         }
 
-        public UserMessage getUserMessage(String nick, int index)
+        public UserMessage getUserMessage(string nick, int index)
         {
             if (string.IsNullOrWhiteSpace(nick)) return null;
 
@@ -358,7 +358,7 @@ namespace NarutoBot3
             return null;
         }
 
-        public void addUserMessage(String destinatary, String sender, String message)
+        public void addUserMessage(string destinatary, string sender, string message)
         {
             if (string.IsNullOrWhiteSpace(destinatary)) return;
             destinatary = destinatary.Replace("@", string.Empty).Replace("+", string.Empty);
@@ -390,7 +390,7 @@ namespace NarutoBot3
             }
         }
 
-        public void clearUserMessages(String nick)
+        public void clearUserMessages(string nick)
         {
             if (string.IsNullOrWhiteSpace(nick)) return;
 
@@ -419,8 +419,8 @@ namespace NarutoBot3
             set { deliveredMessages = value; }
         }
 
-        String nick;
-        String greeting;
+        string nick;
+        string greeting;
         bool isOperator;
         bool isMuted;
         bool greetingEnabled;
@@ -460,7 +460,7 @@ namespace NarutoBot3
 
         }
 
-        public User(String n)
+        public User(string n)
         {
             nick = n;
             greeting = string.Empty;
@@ -473,7 +473,7 @@ namespace NarutoBot3
             deliveredMessages = new List<UserMessage>();
         }
 
-        public User(String n, bool online)
+        public User(string n, bool online)
         {
             nick = n;
             greeting = string.Empty;
@@ -486,7 +486,7 @@ namespace NarutoBot3
             deliveredMessages = new List<UserMessage>();
         }
 
-        public User(String n, String g, bool online, bool op, bool mute, bool greet, bool mirror)
+        public User(string n, string g, bool online, bool op, bool mute, bool greet, bool mirror)
         {
             nick = n;
             greeting = g;
@@ -499,13 +499,13 @@ namespace NarutoBot3
             deliveredMessages = new List<UserMessage>();
         }
 
-        public String Nick
+        public string Nick
         {
             get { return nick; }
             set { nick = value; }
         }
 
-        public String Greeting
+        public string Greeting
         {
             get { return greeting; }
             set { greeting = value; }
@@ -539,16 +539,16 @@ namespace NarutoBot3
 
     public class UserMessage
     {
-        String message;
+        string message;
 
-        public String Message
+        public string Message
         {
             get { return message; }
             set { message = value; }
         }
-        String sender;
+        string sender;
 
-        public String Sender
+        public string Sender
         {
             get { return sender; }
             set { sender = value; }

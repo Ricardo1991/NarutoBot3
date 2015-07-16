@@ -209,7 +209,6 @@ namespace NarutoBot3
         }
 
 
-
         private void applyTheme(string p)
         {
             foreach(ColorScheme c in schemeColection)

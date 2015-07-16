@@ -21,6 +21,9 @@ namespace NarutoBot3
 {
     public class Bot : IDisposable
     {
+
+        //Questions qq;
+
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
         private List<string> tri = new List<string>();
@@ -219,6 +222,9 @@ namespace NarutoBot3
         
         public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
         {
+
+            //qq = new Questions();
+
             Client = client;
             OutputBox = output;
             currentColorScheme = color;
@@ -647,14 +653,14 @@ namespace NarutoBot3
 
                     string user = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!")); //Nick of the Sender
                     string whoSent = messageObject.Source;                         //Who sent is the Source of the Message. (The Channel, or User if private Message)
-                    string msg = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                    string msg = messageObject.SplitMessage[1].Replace("\r", String.Empty).Replace("\n", String.Empty).Trim();
                     string cmd = msg.Split(' ')[0];
                     string arg = "";
 
 
                     user = removeUserMode(user);
 
-                    if (string.Compare(whoSent, Client.NICK, true) == 0)
+                    if (String.Compare(whoSent, Client.NICK, true) == 0)
                     {
                         //If its a user sending, check if it has mirror mode
                         
@@ -670,9 +676,9 @@ namespace NarutoBot3
                     //Write Message on Console
                     if (msg.Contains("\x01"+"ACTION "))
                     {
-                        msg = msg.Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
+                        msg = msg.Replace("\x01" + "ACTION ", String.Empty).Replace("\x01", String.Empty);
 
-                        if (string.Compare(whoSent, Client.NICK, true) == 0)
+                        if (String.Compare(whoSent, Client.NICK, true) == 0)
                             WriteMessage("             * : " + user + " " + msg, currentColorScheme.Notice);
                         
                         else if (msg.ToLower().Contains(Client.NICK.ToLower()))
@@ -683,7 +689,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        if (string.Compare(whoSent, Client.NICK, true) == 0)
+                        if (String.Compare(whoSent, Client.NICK, true) == 0)
                         {
                             string alignedNick = user.Truncate(13);
                             int tab = 15 - alignedNick.Length;
@@ -715,9 +721,9 @@ namespace NarutoBot3
 
 
                     //StartParsing
-                    if ((String.Compare(cmd.Replace(",",string.Empty), "hello", true) == 0
-                            || String.Compare(cmd.Replace(",", string.Empty), "hi", true) == 0
-                            || String.Compare(cmd.Replace(",",string.Empty), "hey", true) == 0)
+                    if ((String.Compare(cmd.Replace(",", String.Empty), "hello", true) == 0
+                            || String.Compare(cmd.Replace(",", String.Empty), "hi", true) == 0
+                            || String.Compare(cmd.Replace(",", String.Empty), "hey", true) == 0)
                             && arg.ToLower().Contains(Client.NICK.ToLower()))
                         {
                             WriteMessage("* Received a hello from " + user, currentColorScheme.BotReport);
@@ -733,7 +739,7 @@ namespace NarutoBot3
                         {
                             cmd = cmd.Substring(1);
 
-                        if (string.Compare(msg, "!anime best anime ever", true) == 0)
+                            if (String.Compare(msg, "!anime best anime ever", true) == 0)
                             {
                                 Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
@@ -2442,7 +2448,7 @@ namespace NarutoBot3
             else
                 if (!user)
                 {
-                    string animeName = name.Replace(" ", "+").Replace("_", "+");
+                    string animeName = name.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
                     getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
                     jsonAnime = webClient.DownloadString(getString);
@@ -2463,8 +2469,12 @@ namespace NarutoBot3
                         string episodes = Useful.getBetween(jsonAnime, "<episodes>", "</episodes>");
                         string title = Useful.getBetween(jsonAnime, "<title>", "</title>");
 
-                        if (episodes == "0")
+                        if (episodes == "0" || episodes == string.Empty)
                             episodes = "?";
+                        if (score == string.Empty)
+                            score = "?";
+                        if (title == string.Empty)
+                            title = "?";
 
                         message = Privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
@@ -2759,13 +2769,17 @@ namespace NarutoBot3
 
         private void parseQuestion(string CHANNEL, string user, string arg)
         {
-            string message = "";
-            Random r = new Random();
-
             if (ul.userIsMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
-            arg = arg.ToLower().Replace("?", string.Empty).TrimStart(new char[]{' '});
+
+            //qq.questionParser(arg, user);
+
+
+            string message = "";
+            Random r = new Random();
+
+            arg = arg.Replace("?", string.Empty).TrimStart(new char[]{' '});
             string[] split = arg.Split(new char[] { ' ' });
 
             string[] howMany = { "I dont know, maybe", "Probably", "More than", "Less than", "I think it was", "I don't know, so i'll give you a random number:","", "It's" };
@@ -2785,7 +2799,8 @@ namespace NarutoBot3
                                "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer", 
                                "beneath your bed!", "where you didnt expect", "near your house"};
 
-            string[] whoDid = { "probably", "maybe it was", "i'm sure it was", "I don't think it was", "i suspect", "someone told me it was","I think it was" };
+            string[] whoDid = { "Probably", "Maybe it was", "I'm sure it was", "I don't think it was", "I suspect", "Someone told me it was","I think it was" };
+            string[] whoDo = { "Probably", "Maybe it is", "I'm sure it is", "I don't think it was", "I suspect", "Someone told me it is", "I think it is" };
 
             string[] what = { "Sorry, I have no idea","Can you ask somebody else? I really don't know","No idea, try Google", "I'm not good with questions",
                             "I'm under pressure, i can't answer you that","Stop bullying me!" };
@@ -2801,7 +2816,7 @@ namespace NarutoBot3
                     if(split.Length >= 2){
                         if (String.Compare(split[1], "many", true) == 0)
                         {
-                            if (arg == "how many killstrings do you have" || arg == "how many kills do you have")
+                            if (String.Compare(arg, "how many killstrings do you have", true) == 0 || String.Compare(arg, "how many kills do you have", true) == 0)
                                 message = Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
                             else if (arg == "how many fucks do you give")
                                 message = Privmsg(CHANNEL, "I always give 0 fucks.");
@@ -2811,7 +2826,7 @@ namespace NarutoBot3
 
                         else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
                         {
-                            if (arg == "how are you" || arg == "how are you doing")
+                            if (String.Compare(arg , "how are you", true) == 0 || String.Compare(arg , "how are you doing", true)==0)
                                 message = Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
                             else
                                 message = Privmsg(CHANNEL, "I dont know yet, ask later");
@@ -2840,14 +2855,14 @@ namespace NarutoBot3
 
                                 string replaced = questionsRegex(target);
 
-                                if (string.Compare(split[2], "is", true) == 0)
+                                if (String.Compare(split[2], "is", true) == 0)
                                 {
                                     message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
                                     
                                 }
-                                else if (string.Compare(split[2], "are", true) == 0)
+                                else if (String.Compare(split[2], "are", true) == 0)
                                 {
-                                    if (string.Compare(target, "you", true) == 0)
+                                    if (String.Compare(target, "you", true) == 0)
                                         message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
                                     else
                                     {
@@ -2855,7 +2870,7 @@ namespace NarutoBot3
                                     }
                                 }
 
-                                else if (string.Compare(split[2], "am", true) == 0 || string.Compare(split[3], "i", true) == 0)
+                                else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
                                 {
 
                                     message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
@@ -2927,9 +2942,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " was " + replaced).Trim());
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " was " + replaced).Trim());
                         else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " wasn't " + replaced).Trim());
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
                     }
                 }
                 else if (String.Compare(split[0], "when", true) == 0)
@@ -2939,10 +2954,10 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "are", true) == 0)
                 {
-                    if (arg == "are you real")
+                    if (String.Compare(arg , "are you real", true)==0)
                         message = Privmsg(CHANNEL, "Yes, i am real");
 
-                    else if (arg == "are you a real person" || arg == "are you a real human" || arg == "are you human")
+                    else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
                         message = Privmsg(CHANNEL, "No, i'm a bot");
 
                     else
@@ -2952,21 +2967,23 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "can", true) == 0)
                 {
-                    if (arg == "can you give me a nick" || arg == "can you make me a nick" ||
-                        arg == "can you generate a nick" || arg == "can you create a nick" || arg == "can you make me a new nick"){
+                    if (String.Compare(arg ,  "can you give me a nick", true) == 0  || String.Compare(arg ,  "can you make me a nick", true) == 0  ||
+                        String.Compare(arg ,  "can you generate a nick", true) == 0  || String.Compare(arg ,  "can you create a nick" , true) == 0 ||
+                        String.Compare(arg, "can you make me a new nick", true) == 0) {
                             message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
                             stats.nick();
                     }
                         
-                    else if (arg.Contains("can you kill "))
-                        killUser(CHANNEL, user, Useful.getBetween(arg, "can you kill ", ""));
+                    else if (arg.ToLower().Contains("can you kill "))
+                        killUser(CHANNEL, user, Useful.getBetween(arg.ToLower(), "can you kill ", ""));
                     else
                         message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
                 }
 
                 else if (String.Compare(split[0], "would", true) == 0)
                 {
-                    if (arg == "would you make me a nick" || arg == "would you generate a nick" || arg == "would you create a nick" || arg == "would you make me a new nick")
+                    if (String.Compare(arg, "would you make me a nick", true) == 0  || String.Compare(arg, "would you generate a nick", true) == 0  ||
+                        String.Compare(arg, "would you create a nick", true) == 0 || String.Compare(arg, "would you make me a new nick", true) == 0)
                         message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                     else
@@ -2981,15 +2998,17 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "who", true) == 0 || String.Compare(split[0], "who's", true) == 0)
                 {
-                    if (arg == "who are you")
+                    if (String.Compare(arg, "who are you", true) == 0)
                         message = Privmsg(CHANNEL, "I'm a bot!");
+                    else if(split[1] == "do")
+                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                     else
                         message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                 }
 
                 else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
                 {
-                    if (arg == "what are you")
+                    if (String.Compare(arg, "what are you", true) == 0)
                         message = Privmsg(CHANNEL, "I'm a bot!");
                     else
                     {
@@ -3293,9 +3312,9 @@ namespace NarutoBot3
                     Client.sendMessage(message);
                     return;
                 }
-                
 
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                 Client.sendMessage(message);
 
                 try{
@@ -3329,11 +3348,11 @@ namespace NarutoBot3
                 }
 
                 if (post.IsSelfPost){
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                     Client.sendMessage(message);
                 }
                 else{
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + post.Subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
+                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "]" + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02" + " :" + " \x033" + post.Url + "\x03");
                     Client.sendMessage(message);
                 }
             }
@@ -3689,7 +3708,7 @@ namespace NarutoBot3
         /// Writes a Message on the output window
         /// </summary>
         /// <param Name="Message">A sting with the Message to write</param>
-        public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
+        public void WriteMessage(string message) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -3720,7 +3739,7 @@ namespace NarutoBot3
             //also, should make a log
 
         }
-        public void WriteMessage(String message, Color color) //Writes Message on the TextBox (bot console)
+        public void WriteMessage(string message, Color color) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -3754,7 +3773,7 @@ namespace NarutoBot3
 
         }
 
-        private static String GetTimestamp(DateTime value)
+        private static string GetTimestamp(DateTime value)
         {
             return value.ToString("mmssffff");
         }
@@ -3859,7 +3878,7 @@ namespace NarutoBot3
             var someVariable1 = "you";
             var someVariable2 = "me";
             var someVariable3 = "you are";
-            var someVariable4 = "mine";
+            var someVariable4 = "my";
             var someVariable5 = "your";
             var someVariable6 = "myself";
             var someVariable7 = "yourself";
