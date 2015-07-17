@@ -954,7 +954,7 @@ namespace NarutoBot3
                                 setSetting(user, arg);
                             }
 
-                        else if (String.Compare(cmd, "acknowledge", true) == 0)
+                            else if (String.Compare(cmd, "acknowledge", true) == 0 || String.Compare(cmd, "a", true) == 0)
                             {
                                 WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
                                 ul.clearUserMessages(user);
@@ -3844,7 +3844,7 @@ namespace NarutoBot3
                 Client.sendMessage(message);
             }
 
-            Client.sendMessage(Privmsg(nick, "Mark all messages as read using "+ Client.SYMBOL+"acknowledge"));
+            Client.sendMessage(Privmsg(nick, "Mark all messages as read using " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
         }
 
         public void Dispose()
