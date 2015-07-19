@@ -902,7 +902,7 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, "lastkill", true) == 0)
                             {
                                 WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
-                                lastKill(whoSent, user);
+                                lastKill(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
                             {
@@ -2668,16 +2668,38 @@ namespace NarutoBot3
 
             }
         }
-        public void lastKill(string CHANNEL, string nick)
+        public void lastKill(string CHANNEL, string nick, string arg)
         {
             if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
 
             string message;
+            int index = 0;
 
-            if(killsUsed == null || killsUsed.Count == 0)
+            if (!String.IsNullOrWhiteSpace(arg))
+            {
+                try
+                {
+                    index = Convert.ToInt32(arg) - 1;
+                }
+                catch
+                {
+                    message = Privmsg(CHANNEL, "Invalid Argument");
+                    Client.sendMessage(message);
+                    return;
+                }
+            }
+
+
+
+            if (killsUsed == null || killsUsed.Count == 0)
                 message = Privmsg(CHANNEL, "No kills since last reset");
+            else if (killsUsed.Count < index+1 || index < 0)
+                message = Privmsg(CHANNEL, "Out of Range");
+            else if(index==0)
+                message = Privmsg(CHANNEL, "[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
             else
-                message = Privmsg(CHANNEL,"[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
+                message = Privmsg(CHANNEL, "(" + (index+1) + " kills ago) " + "[#" + killsUsed[index] + "] " + kill[killsUsed[index]]);
+
             Client.sendMessage(message);
             
         }
