@@ -3219,7 +3219,7 @@ namespace NarutoBot3
 
             if (!String.IsNullOrWhiteSpace(message))
             {
-                Client.sendMessage(message);
+                Client.sendMessage(message.Replace("  ", " "));
                 stats.question();
             }
         }
