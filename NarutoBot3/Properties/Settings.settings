@@ -14,13 +14,7 @@
     <Setting Name="Port" Type="System.String" Scope="User">
       <Value Profile="(Default)">6667</Value>
     </Setting>
-    <Setting Name="MaxLines" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
-    </Setting>
     <Setting Name="hello_Enabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="eta_Enabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="silence" Type="System.Boolean" Scope="User">
@@ -35,23 +29,8 @@
     <Setting Name="rules_Enabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="assign_Enabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="claims_Enabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="currentAssignmentURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://www.reddit.com/r/NMCP/comments/2isfh1/695_assignments/</Value>
-    </Setting>
-    <Setting Name="currentClaimsURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://www.reddit.com/r/NMCP/comments/2iqqra/695_page_claiming/</Value>
-    </Setting>
     <Setting Name="youtube_Enabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="eta" Type="System.String" Scope="User">
-      <Value Profile="(Default)">12AM-4AM CST</Value>
     </Setting>
     <Setting Name="conversionEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
