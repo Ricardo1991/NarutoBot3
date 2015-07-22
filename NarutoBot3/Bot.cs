@@ -3042,6 +3042,29 @@ namespace NarutoBot3
                 {
 
                 }
+                else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
+                {
+                    string rest = "";
+
+                    bool yes = false;
+
+                    if (r.Next(0, 2) == 1)
+                        yes = true;
+
+                    for (int i = 2; i < split.Length; i++)
+                    {
+                        rest += split[i] + " ";
+                    }
+
+                    rest = rest.TrimEnd(' ');
+
+                    string replaced = questionsRegex(rest);
+
+                    if (yes)
+                        message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " you are " + replaced).Trim());
+                    else
+                        message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
+                }
 
                 else if (String.Compare(split[0], "do", true) == 0)
                 {
