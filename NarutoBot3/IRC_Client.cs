@@ -94,15 +94,15 @@ namespace NarutoBot3
                     while (message.Length > (450 - header.Length - footer.Length))
                     {
                         if (message.Contains("\x01")){
-                            temp = header + message.Substring(0, 450 - header.Length - footer.Length) + "\x01" + footer;
+                            temp = header + message.Substring(0, 440 - header.Length - footer.Length) + "\x01" + footer;
                             isAction = true;
                         }
 
                         else{
-                            temp = header + message.Substring(0, 450 - header.Length - footer.Length) + footer;
+                            temp = header + message.Substring(0, 440 - header.Length - footer.Length) + footer;
                         }
 
-                        message = message.Substring(450 - header.Length - footer.Length);
+                        message = message.Substring(440 - header.Length - footer.Length);
 
                         writer.WriteLine(temp);
                         writer.Flush();
