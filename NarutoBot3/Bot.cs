@@ -959,7 +959,7 @@ namespace NarutoBot3
                                 WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
                                 ul.clearUserMessages(user);
                             }
-                        else if (String.Compare(cmd, "tell", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if ((String.Compare(cmd, "tell", true) == 0 || String.Compare(cmd, "message", true) == 0) && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
                                 tell(user, arg);
@@ -2442,10 +2442,11 @@ namespace NarutoBot3
                 }
             }
 
-            if (!found) 
+            if (!found)
                 message = Privmsg(CHANNEL, g.items[0].link);
 
             else
+            {
                 if (!user)
                 {
                     string animeName = name.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
@@ -2514,8 +2515,8 @@ namespace NarutoBot3
 
                     message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " anime" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
                 }
-            
 
+            }
             Client.sendMessage(message);
             stats.anime();
         }
@@ -3285,7 +3286,7 @@ namespace NarutoBot3
                     else if (s.ToLower() == "for")
                     {
                         targeted = true;
-                        target = Useful.getBetween(args, "for ", " ");
+                        target = Useful.getBetween(args, "for ", null);
                     }
 
                     if(s.ToLower() == "sl") switchLetterNumb = true;
