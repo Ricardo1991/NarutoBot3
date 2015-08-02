@@ -263,6 +263,7 @@
     <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="JSON and XML classes\MAL_User.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

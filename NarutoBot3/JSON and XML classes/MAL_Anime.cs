@@ -9,7 +9,7 @@
         private animeEntry[] entryField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("entry")]
+        [System.Xml.Serialization.XmlElement("entry")]
         public animeEntry[] entry
         {
             get

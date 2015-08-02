@@ -1039,7 +1039,7 @@ namespace NarutoBot3
                         if (messageObject.Sender.Contains('!'))
                             userN = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));   //Nick of the Sender
                         else userN = messageObject.Sender;
-                            
+
                         if (msgN.Length - 1 > cmdN.Length)
                             argg = msgN.Substring(cmdN.Length);                 //the rest of msg
                         else argg = "";
@@ -1059,26 +1059,29 @@ namespace NarutoBot3
                         else if (cmdN.Contains("PING"))
                         {
                             WriteMessage("* Received a CTCP ping request from " + userN, currentColorScheme.BotReport);
-                                
+
                             ctcpPing(userN, argg);
                         }
                     }
-                    else{
+                    else {
                         string alignedNick = messageObject.Sender;
 
-                        try{
-                            alignedNick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));  //Nick of the Sender
-                        }
-                        catch{}
-                        finally{
-                            alignedNick = alignedNick.Truncate(13);
-                        }
-                            
-                        int tab = 15 - alignedNick.Length;
+                        if (!string.IsNullOrWhiteSpace(alignedNick))
+                        { 
+                            try {
+                                alignedNick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));  //Nick of the Sender
+                            }
+                            catch { }
+                            finally {
+                                alignedNick = alignedNick.Truncate(13);
+                            }
 
-                        for (int i = 0; i < tab; i++)
-                            alignedNick = alignedNick + " ";
-                        WriteMessage(alignedNick + ": " + messageObject.SplitMessage[1], currentColorScheme.Notice);
+                            int tab = 15 - alignedNick.Length;
+
+                            for (int i = 0; i < tab; i++)
+                                alignedNick = alignedNick + " ";
+                            WriteMessage(alignedNick + ": " + messageObject.SplitMessage[1], currentColorScheme.Notice);
+                        }
 
                     }
                         
@@ -2477,7 +2480,7 @@ namespace NarutoBot3
                         if (title == string.Empty)
                             title = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "[" + episodes + " episode"+(episodes=="1"?"":"s")+"] [" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
                     }
                     else
@@ -2500,20 +2503,30 @@ namespace NarutoBot3
                         if (episodes == "0")
                             episodes = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episodes] " + "[" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] [" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
                     }
 
                 }
                 else
                 {
-                    string readHtml = HttpUtility.HtmlDecode(webClient.DownloadString(g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty)));
+                    string xmlUser = webClient.DownloadString("http://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u",string.Empty)).Trim();
 
-                    string profile = Useful.getBetween(readHtml.Replace("\n", string.Empty), "<title>", "'s Profile - MyAnimeList.net").Trim();
+                    myanimelist u = new myanimelist();
 
-                    string completed = Useful.getBetween(readHtml.Replace("\n", string.Empty), ">Completed</span></td>", "<td><div style=");
-                    completed = Useful.getBetween(completed, "<td align=\"center\">", "</td>").Trim();
+                    try
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(myanimelist));
+                        using (StringReader reader = new StringReader(xmlUser))
+                        {
+                            u = (myanimelist)(serializer.Deserialize(reader));
+                        }
+                    }
+                    catch { }
 
-                    message = Privmsg(CHANNEL, "[" + profile + "] " + "Completed " + completed + " anime" + " -> " + g.items[i].link.Replace("recommendations", string.Empty).Replace("reviews", string.Empty).Replace("clubs", string.Empty).Replace("friends", string.Empty));
+                    if(u == null || u.myinfo==null|| xmlUser.Contains("<error>Invalid username</error>"))
+                        message = Privmsg(CHANNEL, "Error fetching user stats");
+                    else
+                        message = Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Curretly Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
                 }
 
             }

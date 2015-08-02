@@ -329,7 +329,9 @@ namespace NarutoBot3
             {
                 if (String.Compare(u.Nick, nick, true) == 0)
                 {
-                    return u.DeliveredMessages.Count;
+                    if (u.DeliveredMessages != null)
+                        return u.DeliveredMessages.Count;
+                    else return 0;
                 }
 
             }

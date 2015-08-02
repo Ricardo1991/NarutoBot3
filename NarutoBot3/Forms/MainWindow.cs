@@ -71,13 +71,13 @@ namespace NarutoBot3
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
-            ///
+            //
 
             //Themes
             loadThemes();
             applyTheme(Settings.Default.themeName);
             settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
-            ///
+            //
 
             //Show ConnectWindow Form and try to connect
 
@@ -88,7 +88,7 @@ namespace NarutoBot3
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            ///
+            //
         }
 
         public bool connect()   
@@ -293,7 +293,7 @@ namespace NarutoBot3
                     byte[] bytes = Encoding.Default.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
-                    bot.processMessage(line);
+                    if(line.Length>0) bot.processMessage(line);
                 }
                 catch
                 { }
