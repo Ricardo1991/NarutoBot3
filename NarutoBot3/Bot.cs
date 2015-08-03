@@ -741,7 +741,7 @@ namespace NarutoBot3
 
                             if (String.Compare(msg, "!anime best anime ever", true) == 0)
                             {
-                                Client.sendMessage(Privmsg(whoSent, "[25 episodes] [8,87 / 10] : Code Geass: Hangyaku no Lelouch -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                                Client.sendMessage(Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
                         else if (String.Compare(cmd, "help", true) == 0)
                             {
@@ -2483,7 +2483,7 @@ namespace NarutoBot3
                         if (status == string.Empty)
                             status = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episode"+(episodes=="1"?"":"s")+"] [" + score + " / 10] [" + status + "] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
 
                     }
                     else
@@ -2507,7 +2507,7 @@ namespace NarutoBot3
                         if (episodes == "0")
                             episodes = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] [" + score + " / 10] ["+status+"] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
                     }
 
                 }
