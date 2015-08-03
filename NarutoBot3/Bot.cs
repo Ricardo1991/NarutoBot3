@@ -239,7 +239,7 @@ namespace NarutoBot3
 
             ul.loadData();
 
-            reddit = new Reddit();
+            reddit = new Reddit(false);
 
             if (Settings.Default.redditUserEnabled)
             {
@@ -3334,7 +3334,6 @@ namespace NarutoBot3
             string message;
 
             RedditSharp.Things.Post post;
-            //RedditSharp.Things.Subreddit sub;
             RedditSharp.Things.Comment comment;
 
             if (ul.userIsMuted(nick)) return;
@@ -3350,15 +3349,6 @@ namespace NarutoBot3
             }
 
             subreddit = Useful.getBetween(url, "/r/", "/");
-
-            //try {
-            //    sub = reddit.GetSubreddit(subreddit);
-            //}
-            //catch{
-            //    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Replace(" ", string.Empty) + "] " + "Failed to get subreddit info. Maybe the subreddit is private?" + "\x02");
-            //    Client.sendMessage(message);
-            //    return;
-            //}
             
             string[] linkParse = url.Replace("\r", string.Empty).Split('/');
 
@@ -3368,17 +3358,16 @@ namespace NarutoBot3
                 string commentName = linkParse[6].Split(new char[] { '?' }, 2)[0];  //Split is for removing url args
 
                 try{
-                    post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + postName);
+                    //post = (RedditSharp.Things.Post) reddit.GetThingByFullname("t3_" + postName);
+                    post = reddit.GetPost(new Uri("http://" + url));
+
+                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                    Client.sendMessage(message);
                 }
                 catch{
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
                     Client.sendMessage(message);
-                    return;
                 }
-
-
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                Client.sendMessage(message);
 
                 try{
                     comment = reddit.GetComment(new Uri("https://"+url));
@@ -3388,38 +3377,31 @@ namespace NarutoBot3
                     else
                         message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
                     Client.sendMessage(message);
-                    
-                        
                 }
                 catch{
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get comment info" + "\x02");
                     Client.sendMessage(message);
-                    return;
                 }
 
             }
             else  //No comment link
             {      
                 try {
-                    post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
+                    //post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
+                    post = reddit.GetPost(new Uri("http://" + url));
+
+                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                    Client.sendMessage(message);
+
+                    if (!post.IsSelfPost)
+                        Client.sendMessage(Privmsg(CHANNEL, "\x033" + post.Url + "\x03"));
                 }
 
                 catch {
                     message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
                     Client.sendMessage(message);
-                    return;
                 }
-
-
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                Client.sendMessage(message);
-
-                if (!post.IsSelfPost){
-                    message = Privmsg(CHANNEL,"\x033" + post.Url + "\x03");
-                    Client.sendMessage(message);
-                }
-            }
-            
+            }    
         }
 
         void wiki(string CHANNEL, string nick, string args)
