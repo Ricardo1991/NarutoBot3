@@ -2472,6 +2472,7 @@ namespace NarutoBot3
                         string score = Useful.getBetween(jsonAnime, "<score>", "</score>");
                         string episodes = Useful.getBetween(jsonAnime, "<episodes>", "</episodes>");
                         string title = Useful.getBetween(jsonAnime, "<title>", "</title>");
+                        string status = Useful.getBetween(jsonAnime, "Status:</span> ", "</div>");
 
                         if (episodes == "0" || episodes == string.Empty)
                             episodes = "?";
@@ -2479,8 +2480,10 @@ namespace NarutoBot3
                             score = "?";
                         if (title == string.Empty)
                             title = "?";
+                        if (status == string.Empty)
+                            status = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episode"+(episodes=="1"?"":"s")+"] [" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "[" + episodes + " episode"+(episodes=="1"?"":"s")+"] [" + score + " / 10] [" + status + "] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
 
                     }
                     else
@@ -2499,11 +2502,12 @@ namespace NarutoBot3
                         string score = a.entry[index].score.ToString();
                         string episodes = a.entry[index].episodes.ToString();
                         string title = a.entry[index].title;
+                        string status = a.entry[index].status;
 
                         if (episodes == "0")
                             episodes = "?";
 
-                        message = Privmsg(CHANNEL, "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] [" + score + " / 10] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
+                        message = Privmsg(CHANNEL, "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] [" + score + " / 10] ["+status+"] : " + "\x02" + title + "\x02" + " -> " + g.items[i].link);
                     }
 
                 }
