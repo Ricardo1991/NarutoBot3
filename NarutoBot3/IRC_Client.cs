@@ -80,7 +80,7 @@ namespace NarutoBot3
             string footer = "\r\n";
             bool isAction = false;
 
-            if (String.IsNullOrWhiteSpace(message)) return false;
+            if (String.IsNullOrWhiteSpace(message) || writer  == null) return false;
 
             header = message.Split(new char[]{':'} , 2)[0]+":";
 
@@ -125,7 +125,9 @@ namespace NarutoBot3
 
         public string readMessage()
         {
-            return reader.ReadLine();
+            if (reader != null)
+                return reader.ReadLine();
+            else return null;
         }
 
         public void Disconnect(string quitMessage)
