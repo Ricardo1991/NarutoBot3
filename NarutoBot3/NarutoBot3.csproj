@@ -27,7 +27,7 @@
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>4.7.0.%2a</ApplicationVersion>
+    <ApplicationVersion>4.7.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -336,33 +336,33 @@
     <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="models\lexparser\englishFactored.ser.gz">
+    <Content Include="models\lexparser\englishFactored.ser.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\lexparser\englishPCFG.caseless.ser.gz">
+    </Content>
+    <Content Include="models\lexparser\englishPCFG.caseless.ser.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\lexparser\englishPCFG.ser.gz">
+    </Content>
+    <Content Include="models\lexparser\englishPCFG.ser.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\lexparser\englishRNN.ser.gz">
+    </Content>
+    <Content Include="models\lexparser\englishRNN.ser.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\parser\nndep\CTB_CoNLL_params.txt.gz">
+    </Content>
+    <Content Include="models\parser\nndep\CTB_CoNLL_params.txt.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\parser\nndep\english_SD.gz">
+    </Content>
+    <Content Include="models\parser\nndep\english_SD.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\parser\nndep\english_UD.gz">
+    </Content>
+    <Content Include="models\parser\nndep\english_UD.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\parser\nndep\PTB_CoNLL_params.txt.gz">
+    </Content>
+    <Content Include="models\parser\nndep\PTB_CoNLL_params.txt.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="models\parser\nndep\wsj_SD.gz">
+    </Content>
+    <Content Include="models\parser\nndep\wsj_SD.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="NarutoBot3_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
