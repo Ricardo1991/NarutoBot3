@@ -336,15 +336,33 @@
     <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="models\lexparser\englishFactored.ser.gz" />
-    <None Include="models\lexparser\englishPCFG.caseless.ser.gz" />
-    <None Include="models\lexparser\englishPCFG.ser.gz" />
-    <None Include="models\lexparser\englishRNN.ser.gz" />
-    <None Include="models\parser\nndep\CTB_CoNLL_params.txt.gz" />
-    <None Include="models\parser\nndep\english_SD.gz" />
-    <None Include="models\parser\nndep\english_UD.gz" />
-    <None Include="models\parser\nndep\PTB_CoNLL_params.txt.gz" />
-    <None Include="models\parser\nndep\wsj_SD.gz" />
+    <None Include="models\lexparser\englishFactored.ser.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\lexparser\englishPCFG.caseless.ser.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\lexparser\englishPCFG.ser.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\lexparser\englishRNN.ser.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\parser\nndep\CTB_CoNLL_params.txt.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\parser\nndep\english_SD.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\parser\nndep\english_UD.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\parser\nndep\PTB_CoNLL_params.txt.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="models\parser\nndep\wsj_SD.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="NarutoBot3_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
