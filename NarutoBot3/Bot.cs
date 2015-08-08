@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Web;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Serialization;
 using TweetSharp;
 
@@ -22,7 +23,7 @@ namespace NarutoBot3
     public class Bot : IDisposable
     {
 
-        //Questions qq;
+        Questions qq;
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -223,7 +224,7 @@ namespace NarutoBot3
         public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
         {
 
-            //qq = new Questions();
+            qq = new Questions();
 
             Client = client;
             OutputBox = output;
@@ -2813,7 +2814,51 @@ namespace NarutoBot3
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
 
-            //qq.questionParser(arg, user);
+            string xmlS = qq.questionParser(arg, user);
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(xmlS);
+
+            XmlNodeList xnList = xml.SelectNodes("//*");
+
+
+            XmlNode npTree = null;
+
+            string subjectNPL = string.Empty;
+
+            foreach (XmlNode xn in xnList)
+            {
+                XmlAttributeCollection ac = xn.Attributes;
+                
+                for(int i = 0; i < ac.Count; i++)
+                {
+                    if (ac["value"].InnerText == "NP")
+                    {
+                        if (npTree == null)
+                            npTree = xn;
+                        break;
+                    }
+                }
+                if (npTree != null) break;
+
+            }
+
+            if(npTree != null)
+            {
+                XmlNodeList words = npTree.SelectNodes(".//*");
+
+                foreach (XmlNode xn in words)
+                {
+                    if (xn.Name == "leaf") {
+                        XmlAttributeCollection ac = xn.Attributes;
+
+                        for (int i = 0; i < ac.Count; i++)
+                        {
+                            subjectNPL += ac["value"].InnerText + " ";
+                        }
+                    }
+                }
+            }
 
 
             string message = "";
@@ -2885,39 +2930,23 @@ namespace NarutoBot3
                         {
                             if (split.Length >= 4)
                             {
-                                string target = "";
-
-                                for (int i = 3; i < split.Length; i++)
-                                {
-                                    target += split[i] + " ";
-                                }
-                                target = target.TrimEnd(' ');
-
-                                string replaced = questionsRegex(target);
+                                string replaced = questionsRegex(subjectNPL);
 
                                 if (String.Compare(split[2], "is", true) == 0)
                                 {
                                     message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
-                                    
                                 }
                                 else if (String.Compare(split[2], "are", true) == 0)
                                 {
-                                    if (String.Compare(target, "you", true) == 0)
+                                    if (String.Compare(subjectNPL, "you", true) == 0)
                                         message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
                                     else
-                                    {
                                         message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
-                                    }
                                 }
 
                                 else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
-                                {
-
                                     message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
-                                    
-                                }
                             }
-
                         }
                     }
                     else
@@ -2926,7 +2955,8 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "how's", true) == 0)
                 {
-                    message = Privmsg(CHANNEL, split[1] + " is " + howIs[r.Next(howIs.Length)]);
+                    string replaced = questionsRegex(subjectNPL);
+                    message = Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
                 }
 
                 else if (String.Compare(split[0], "why", true) == 0)
@@ -2944,14 +2974,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 
@@ -2970,14 +3000,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 
@@ -3062,19 +3092,18 @@ namespace NarutoBot3
                 }
                 else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
                 {
-                    string rest = "";
-
                     bool yes = false;
 
                     if (r.Next(0, 2) == 1)
                         yes = true;
 
-                    for (int i = 2; i < split.Length; i++)
+                    string rest = "";
+
+                    for (int i = 1; i < split.Length; i++)
                     {
                         rest += split[i] + " ";
                     }
-
-                    rest = rest.TrimEnd(' ');
+                    rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                     string replaced = questionsRegex(rest);
 
@@ -3092,14 +3121,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 
@@ -3121,9 +3150,9 @@ namespace NarutoBot3
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + split[1] + " do " + replaced);
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + split[1] + " doesn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced);
                         }
                     }
                 }
@@ -3136,14 +3165,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 
@@ -3165,9 +3194,9 @@ namespace NarutoBot3
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + split[1] + " should " + replaced);
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + split[1] + " shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced);
                         }
                     }
                     else
@@ -3187,14 +3216,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 
@@ -3216,9 +3245,9 @@ namespace NarutoBot3
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + split[1] + " did " + replaced);
+                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced);
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + split[1] + " didn't " + replaced);
+                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced);
                         }
                     }
 
@@ -3233,14 +3262,14 @@ namespace NarutoBot3
 
                     if (split.Length >= 2)
                     {
-                        string subject = split[1];
+                        string subject = subjectNPL;
                         string rest = "";
 
-                        for (int i = 2; i < split.Length; i++)
+                        for (int i = 1; i < split.Length; i++)
                         {
                             rest += split[i] + " ";
                         }
-                        rest = rest.TrimEnd(' ');
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                         string replaced = questionsRegex(rest);
 

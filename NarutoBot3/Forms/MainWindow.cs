@@ -21,6 +21,7 @@ namespace NarutoBot3
         delegate void SetEventCallback(object sender, EventArgs e, string text);
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
+        delegate void ChangeTimeStamp(TimeSpan diff);
 
         public ColorScheme currentColorScheme = new ColorScheme();
         List<ColorScheme> schemeColection = new List<ColorScheme>();
@@ -612,12 +613,19 @@ namespace NarutoBot3
 
         private void updateLag(TimeSpan diff)
         {
-            try
+            if (statusStripBottom.InvokeRequired)
             {
-                int seconds = diff.Seconds * 60 + diff.Seconds;
-                toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") + "s";
+                ChangeTimeStamp d = new ChangeTimeStamp(updateLag);
+                this.Invoke(d, new object[] { diff });
             }
-            catch { }
+            else { 
+                try
+                {
+                    int seconds = diff.Seconds * 60 + diff.Seconds;
+                    toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") + "s";
+                }
+                catch { }
+            }
         }
 
         ////// Events

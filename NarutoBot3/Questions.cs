@@ -1,13 +1,9 @@
-﻿using java.io;
+﻿using edu.stanford.nlp.parser.lexparser;
 using edu.stanford.nlp.process;
-using edu.stanford.nlp.ling;
 using edu.stanford.nlp.trees;
-using edu.stanford.nlp.parser.lexparser;
+using java.io;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
@@ -48,10 +44,33 @@ namespace NarutoBot3
             var tdl = gs.typedDependenciesCCprocessed();
             System.Console.WriteLine("\n{0}\n", tdl);
 
-            var tp = new TreePrint("penn,typedDependenciesCollapsed");
+            var tp = new TreePrint("xmlTree");
 
-            tp.printTree(tree);
-            return null;
+            PrintWriter p = new PrintWriter("parse.xml", "UTF-8");
+            tp.printTree(tree, p);
+
+            BufferedReader br = new BufferedReader(new FileReader("parse.xml"));
+            String everything;
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null)
+                {
+                    sb.Append(line);
+                    sb.Append('\r');
+                    line = br.readLine();
+                }
+                everything = sb.ToString();
+            }
+            finally
+            {
+                br.close();
+            }
+
+
+            return everything;
         }
     }
 }
