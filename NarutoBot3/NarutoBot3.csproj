@@ -336,23 +336,10 @@
     <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="models\lexparser\arabicFactored.ser.gz" />
-    <None Include="models\lexparser\chineseFactored.ser.gz" />
-    <None Include="models\lexparser\chinesePCFG.ser.gz" />
     <None Include="models\lexparser\englishFactored.ser.gz" />
     <None Include="models\lexparser\englishPCFG.caseless.ser.gz" />
     <None Include="models\lexparser\englishPCFG.ser.gz" />
     <None Include="models\lexparser\englishRNN.ser.gz" />
-    <None Include="models\lexparser\frenchFactored.ser.gz" />
-    <None Include="models\lexparser\germanFactored.ser.gz" />
-    <None Include="models\lexparser\germanPCFG.ser.gz" />
-    <None Include="models\lexparser\spanishPCFG.ser.gz" />
-    <None Include="models\lexparser\wsjFactored.ser.gz" />
-    <None Include="models\lexparser\wsjPCFG.ser.gz" />
-    <None Include="models\lexparser\wsjRNN.ser.gz" />
-    <None Include="models\lexparser\xinhuaFactored.ser.gz" />
-    <None Include="models\lexparser\xinhuaFactoredSegmenting.ser.gz" />
-    <None Include="models\lexparser\xinhuaPCFG.ser.gz" />
     <None Include="models\parser\nndep\CTB_CoNLL_params.txt.gz" />
     <None Include="models\parser\nndep\english_SD.gz" />
     <None Include="models\parser\nndep\english_UD.gz" />
