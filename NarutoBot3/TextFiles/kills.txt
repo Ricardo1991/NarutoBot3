@@ -1733,7 +1733,7 @@ asks if <target> is <user>’s lover
 asks when <user> is planning on marrying <target>
 asks if <random> would approve all this killing going on
 asks what <user>’s mother would think of them killing people
-tells <user> to hire a hitman instead of asking a non existing bot to kill peoplec
+tells <user> to hire a hitman instead of asking a non existing bot to kill people
 congratulates <user> on beating a child for cutting them in line
 asks <target> how many children they have beaten today
 throws a cat at <target>’s face
