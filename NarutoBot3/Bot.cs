@@ -2552,7 +2552,8 @@ namespace NarutoBot3
 
             query = query.Replace(" ", "%20");
 
-            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" + query + "&maxresults=10&type=video&safeSearch=none";
+            string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" +
+                HttpUtility.UrlEncode(query) + "&maxresults=10&type=video&safeSearch=none";
 
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;

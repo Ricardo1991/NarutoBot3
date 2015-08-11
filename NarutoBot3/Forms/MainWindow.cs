@@ -84,6 +84,13 @@ namespace NarutoBot3
 
             if (Connect.ShowDialog() == DialogResult.OK)
             {
+                if (backgroundWorker.IsBusy)
+                {
+                    disconnectClient();
+                    Thread.Sleep(250);
+                    backgroundWorker.CancelAsync();
+                }
+                    
                 if (connect())          //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();
                 else
@@ -275,9 +282,6 @@ namespace NarutoBot3
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
         {
-            String buffer;
-            String line;
-
             bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
             initializeBot();
@@ -285,13 +289,14 @@ namespace NarutoBot3
             uList = bot.ul;
 
             while (!exitTheLoop)
-            { 
-                buffer = "";
-                
+            {
+                string buffer = "";
+                string line;
+
                 try
                 {
                     buffer = client.readMessage();
-                    byte[] bytes = Encoding.Default.GetBytes(buffer);
+                    byte[] bytes = Encoding.UTF8.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
                     if(line.Length>0) bot.processMessage(line);
