@@ -406,8 +406,16 @@ namespace NarutoBot3
 
                 case ("JOIN"):
 
-                    Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
-                    JoinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!")+1);
+                    if (messageObject.Sender.Contains("!"))
+                    {
+                        Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                        JoinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!") + 1);
+                    }
+                    else {
+                        Who = messageObject.Sender;
+                        JoinMessage = "";
+                    }
+
                     found = false;
 
                     foreach(string s in userList)
@@ -432,7 +440,9 @@ namespace NarutoBot3
 
                 case ("PART"):
 
-                    WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    if (messageObject.Sender.Contains("!"))
+                        WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    else WhoLeft = messageObject.Sender;
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
@@ -456,8 +466,10 @@ namespace NarutoBot3
 
 
                 case ("QUIT"):
+                    if (messageObject.Sender.Contains("!"))
+                        WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    else WhoLeft = messageObject.Sender;
 
-                    WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
@@ -483,7 +495,9 @@ namespace NarutoBot3
 
                 case ("NICK"):
 
-                    string oldnick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    string oldnick = messageObject.Sender;
+                    if (messageObject.Sender.Contains("!"))
+                        oldnick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     string newnick = messageObject.CompleteMessage;
                     char userMode = getUserMode(oldnick, userList);
 
@@ -652,12 +666,16 @@ namespace NarutoBot3
 
                 case ("PRIVMSG"):
 
-                    string user = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!")); //Nick of the Sender
+                    string user;
                     string whoSent = messageObject.Source;                         //Who sent is the Source of the Message. (The Channel, or User if private Message)
                     string msg = messageObject.SplitMessage[1].Replace("\r", String.Empty).Replace("\n", String.Empty).Trim();
                     string cmd = msg.Split(' ')[0];
                     string arg = "";
 
+                    if (messageObject.Sender.Contains("!"))
+                        user = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!")); //Nick of the Sender
+                    else
+                        user = messageObject.Sender;
 
                     user = removeUserMode(user);
 
@@ -1038,7 +1056,7 @@ namespace NarutoBot3
                         string cmdN = msgN.Split(' ')[0];
 
                         if (messageObject.Sender.Contains('!'))
-                            userN = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));   //Nick of the Sender
+                                userN = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));   //Nick of the Sender
                         else userN = messageObject.Sender;
 
                         if (msgN.Length - 1 > cmdN.Length)
@@ -1070,7 +1088,8 @@ namespace NarutoBot3
                         if (!string.IsNullOrWhiteSpace(alignedNick))
                         { 
                             try {
-                                alignedNick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));  //Nick of the Sender
+                                if(messageObject.Sender.Contains("!"))
+                                    alignedNick = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));  //Nick of the Sender
                             }
                             catch { }
                             finally {
@@ -1092,7 +1111,6 @@ namespace NarutoBot3
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
             }
-            
         }
 
 
