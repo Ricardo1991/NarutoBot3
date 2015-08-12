@@ -2568,7 +2568,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
             if (String.IsNullOrWhiteSpace(query)) return;
 
-            query = query.Replace(" ", "%20");
+            //query = query.Replace(" ", "%20");
 
             string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" +
                 HttpUtility.UrlEncode(query) + "&maxresults=10&type=video&safeSearch=none";
@@ -2597,18 +2597,19 @@ namespace NarutoBot3
                         {
                             jsonYoutube = webClient.DownloadString(getString);
                             JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
+
+                            title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+                            duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+
+                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                            Client.sendMessage(message);
+                            return;//Only shows 1 link
                         }
                         catch { }
 
-                        title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-                        duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
-
-                        message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                        Client.sendMessage(message);
-
                         break;
                 }
-                return;//Only shows 1 link
+                
             }
             message = Privmsg(CHANNEL, "No results found");
             Client.sendMessage(message);
