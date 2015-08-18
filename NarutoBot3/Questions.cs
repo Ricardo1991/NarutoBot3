@@ -42,7 +42,7 @@ namespace NarutoBot3
             var gs = gsf.newGrammaticalStructure(tree);
             
             var tdl = gs.typedDependenciesCCprocessed();
-            System.Console.WriteLine("\n{0}\n", tdl);
+            //System.Console.WriteLine("\n{0}\n", tdl);
 
             var tp = new TreePrint("xmlTree");
 

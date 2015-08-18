@@ -3055,7 +3055,39 @@ namespace NarutoBot3
                         message = Privmsg(CHANNEL, "No, i'm a bot");
 
                     else
-                        message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                    {
+                        if(r.Next(100)<15)
+                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                        else
+                        {
+                            bool yes = false;
+                            if (r.Next(0, 2) == 1)
+                                yes = true;
+
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+                            
+
+                            if (subject == "you")
+                                subject = "I";
+                            else
+                                subject = questionsRegex(subject);
+
+                            if (yes)
+                                message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
+                            else
+                                message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
+                        }
+                    }
+                        
 
                 }
 
@@ -3160,23 +3192,23 @@ namespace NarutoBot3
                         {
                             
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "I " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced)).Trim();
                         }
                         else if (split[1] == "i")
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "you do " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced)).Trim();
                         }
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced)).Trim();
                         }
                     }
                 }
@@ -3204,31 +3236,31 @@ namespace NarutoBot3
                         {
 
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "I should " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I should " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced)).Trim();
                         }
                         else if (split[1] == "i")
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "you should " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced)).Trim();
                         }
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced)).Trim();
                         }
                     }
                     else
                     {
                         if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)]);
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)])).Trim();
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)]);
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)])).Trim();
                     }
                 }
 
@@ -3255,23 +3287,23 @@ namespace NarutoBot3
                         {
 
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "I did " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I did " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced)).Trim();
                         }
                         else if (split[1] == "i")
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + "you did " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced)).Trim();
                         }
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced);
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced)).Trim();
                             else
-                                message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced);
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced)).Trim();
                         }
                     }
 
@@ -3300,9 +3332,9 @@ namespace NarutoBot3
                         subject = questionsRegex(subject);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced);
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced)).Trim();
                         else
-                            message = Privmsg(CHANNEL, whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced);
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced)).Trim();
 
                     }
                 }
