@@ -181,6 +181,9 @@ namespace NarutoBot3
             randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
             randomTextTimer.Elapsed += (sender, e) => randomTextSender(sender, e);
 
+            if (Settings.Default.randomTextEnabled)
+                randomTextTimer.Start();
+
             timeoutTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
             timeoutTimer.Enabled = true;
             timeoutTimer.Elapsed += new ElapsedEventHandler(pingServer);
@@ -350,7 +353,12 @@ namespace NarutoBot3
 
         private void disconnectClient()
         {
-            if(bot!=null) bot.userList.Clear();
+            if (bot != null)
+            {
+                bot.userList.Clear();
+                bot.ul.saveData();
+                bot.tmc.save("textSample.xml");
+            }
 
             InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
@@ -786,7 +794,11 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
-            if(bot!=null) bot.ul.saveData();
+            if (bot != null)
+            {
+                bot.ul.saveData();
+                bot.tmc.save("textSample.xml");
+            }
 
             if (client != null && client.isConnected) 
                 disconnectClient();
@@ -830,6 +842,9 @@ namespace NarutoBot3
             }
             catch {
             }
+
+            if (Settings.Default.randomTextEnabled)
+                randomTextTimer.Start();
 
                 
         }

@@ -26,7 +26,7 @@ namespace NarutoBot3
 
         Questions qq;
 
-        TextMarkovChain tmc = new TextMarkovChain();
+        public TextMarkovChain tmc = new TextMarkovChain();
         int tmcCount = 0;
 
         private List<string> rls = new List<string>();
@@ -243,6 +243,15 @@ namespace NarutoBot3
             ReadRules();
 
             ul.loadData();
+
+
+            if (File.Exists("textSample.xml"))
+            {
+                XmlDocument d = new XmlDocument();
+                d.Load("textSample.xml");
+                tmc.feed(d);
+            }
+                
 
             reddit = new Reddit(false);
 
@@ -1042,10 +1051,10 @@ namespace NarutoBot3
 
                     else //No parsing, just a normal Message
                         {
-                            if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
+                            if (whoSent == Client.HOME_CHANNEL && msg != null) //Add to past messages
                             {
                                 tmc.feed(msg);
-                            tmcCount++;
+                                tmcCount++;
                             }
                         }
 
@@ -1106,7 +1115,6 @@ namespace NarutoBot3
                                 alignedNick = alignedNick + " ";
                             WriteMessage(alignedNick + ": " + messageObject.SplitMessage[1], currentColorScheme.Notice);
                         }
-
                     }
                         
                     break;
@@ -1463,7 +1471,7 @@ namespace NarutoBot3
         {
             string message;
 
-            if (Settings.Default.randomTextEnabled || tmcCount<8 || !tmc.readyToGenerate()) return;
+            if (!Settings.Default.randomTextEnabled || tmcCount<8 || !tmc.readyToGenerate()) return;
 
             message = Privmsg(Client.HOME_CHANNEL, "\x02" +  tmc.generateSentence() + "\x02");
             Client.sendMessage(message);
