@@ -3054,6 +3054,7 @@ namespace NarutoBot3
                     else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
                         message = Privmsg(CHANNEL, "No, i'm a bot");
 
+
                     else
                     {
                         if(r.Next(100)<15)
@@ -3076,15 +3077,25 @@ namespace NarutoBot3
                             string replaced = questionsRegex(rest);
                             
 
-                            if (subject == "you")
-                                subject = "I";
+                            if (subject.Trim() == "you")
+                            {
+
+                                if (yes)
+                                    message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + "I'm " + replaced).Trim());
+                                else
+                                    message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + "I'm not " + replaced).Trim());
+
+                            }
+                                
                             else
+                            {
                                 subject = questionsRegex(subject);
 
-                            if (yes)
-                                message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
-                            else
-                                message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
+                                if (yes)
+                                    message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
+                                else
+                                    message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
+                            }
                         }
                     }
                         
