@@ -16,6 +16,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using TextMarkovChains;
 using TweetSharp;
 
 namespace NarutoBot3
@@ -25,6 +26,9 @@ namespace NarutoBot3
 
         Questions qq;
 
+        TextMarkovChain tmc = new TextMarkovChain();
+        int tmcCount = 0;
+
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
         private List<string> tri = new List<string>();
@@ -32,7 +36,7 @@ namespace NarutoBot3
         private List<string> quotes = new List<string>();
         private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
-        private List<pastMessage> pastMessages = new List<pastMessage>();
+
 
         public List<string> userList = new List<string>();
 
@@ -1040,8 +1044,8 @@ namespace NarutoBot3
                         {
                             if (whoSent == Client.HOME_CHANNEL && msg != null)//Add to past messages
                             {
-                                pastMessage p = new pastMessage(user, msg);
-                                pastMessages.Add(p);
+                                tmc.feed(msg);
+                            tmcCount++;
                             }
                         }
 
@@ -1457,55 +1461,11 @@ namespace NarutoBot3
 
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            Random rd = new Random();
-            StringBuilder g = new StringBuilder();
-            List<pastMessage> pastTemp = new List<pastMessage>();
-            int count;
-            int n, d;
             string message;
-            string randomWords;
-            int numberSamples = rd.Next(2, 4);      //Number of messages to sample from
 
+            if (Settings.Default.randomTextEnabled || tmcCount<8 || !tmc.readyToGenerate()) return;
 
-            pastMessages.Sort((p, q) => p.WordsCount.CompareTo(q.WordsCount));
-
-
-            foreach (pastMessage p in pastMessages)//remove messages with less than 8 Words
-            {
-                if (p.WordsCount >= 8)
-                    pastTemp.Add(p);
-            }
-
-            pastMessages.Clear();
-
-            foreach (pastMessage p in pastTemp)
-            {
-                pastMessages.Add(p);
-            }
-
-            if (pastMessages.Count < 10 || !Settings.Default.randomTextEnabled) return;
-
-
-            for (count = 0; count <= numberSamples; count++)
-            {
-
-                n = rd.Next(pastMessages.Count);
-
-                int start = rd.Next(4);
-                int end;
-                do { end = rd.Next(pastMessages[n].WordsCount); } while (end <= start);
-
-                string[] words = pastMessages[n].GetWords();
-                for (d = start; d < end; d++)
-                {
-                    g.Append(words[d] + " ");
-
-                }
-                pastMessages.Remove(pastMessages[n]);
-            }
-            randomWords = g.ToString();
-
-            message = Privmsg(Client.HOME_CHANNEL, "\x02" + randomWords + "\x02");
+            message = Privmsg(Client.HOME_CHANNEL, "\x02" +  tmc.generateSentence() + "\x02");
             Client.sendMessage(message);
 
         }

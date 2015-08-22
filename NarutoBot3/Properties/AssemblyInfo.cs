@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NarutoBot3")]
-[assembly: AssemblyDescription("IRC Channel Bot. Using RedditSharp, TweetSharp, Newtonsoft.Json, HtmlAgilityPack and the Standford NLP Parser")]
+[assembly: AssemblyDescription("IRC Channel Bot. Using RedditSharp, TweetSharp, Newtonsoft.Json, HtmlAgilityPack , Standford NLP Parser and treydwilson/MarkovChainSentenceGenerator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ricardo1991")]
 [assembly: AssemblyProduct("NarutoBot3")]
