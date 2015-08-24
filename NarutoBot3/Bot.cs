@@ -26,8 +26,9 @@ namespace NarutoBot3
 
         Questions qq;
 
-        public TextMarkovChain tmc = new TextMarkovChain();
+        public MultiDeepMarkovChain tmc = new MultiDeepMarkovChain(3);
         int tmcCount = 0;
+        
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -251,7 +252,8 @@ namespace NarutoBot3
                 d.Load("textSample.xml");
                 tmc.feed(d);
             }
-                
+            
+            
 
             reddit = new Reddit(false);
 
