@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NarutoBot3")]
-[assembly: AssemblyDescription("IRC Channel Bot. Using RedditSharp, TweetSharp, Newtonsoft.Json, HtmlAgilityPack , Standford NLP Parser and treydwilson/MarkovChainSentenceGenerator")]
+[assembly: AssemblyDescription("IRC Channel Bot. Using RedditSharp, TweetSharp, Newtonsoft.Json, HtmlAgilityPack , Standford NLP Parser, Chatterbot API and treydwilson/MarkovChainSentenceGenerator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ricardo1991")]
 [assembly: AssemblyProduct("NarutoBot3")]
@@ -33,6 +33,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.7.1.0")]
-[assembly: AssemblyFileVersion("4.7.1.0")]
+[assembly: AssemblyVersion("4.8.0.0")]
+[assembly: AssemblyFileVersion("4.8.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

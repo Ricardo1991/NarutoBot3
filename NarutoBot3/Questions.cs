@@ -4,6 +4,7 @@ using edu.stanford.nlp.trees;
 using java.io;
 using System;
 using System.Text;
+using System.Xml;
 
 namespace NarutoBot3
 {
@@ -23,6 +24,7 @@ namespace NarutoBot3
             {
                 
             }
+            string subjectNPL = string.Empty;
 
             var tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
             var sent2Reader = new StringReader(question);
@@ -50,7 +52,7 @@ namespace NarutoBot3
             tp.printTree(tree, p);
 
             BufferedReader br = new BufferedReader(new FileReader("parse.xml"));
-            String everything;
+            String xmlS;
             try
             {
                 StringBuilder sb = new StringBuilder();
@@ -62,7 +64,7 @@ namespace NarutoBot3
                     sb.Append('\r');
                     line = br.readLine();
                 }
-                everything = sb.ToString();
+                xmlS = sb.ToString();
             }
             finally
             {
@@ -70,7 +72,54 @@ namespace NarutoBot3
             }
 
 
-            return everything;
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(xmlS);
+
+            XmlNodeList xnList = xml.SelectNodes("//*");
+
+
+            XmlNode npTree = null;
+
+            foreach (XmlNode xn in xnList)
+            {
+                XmlAttributeCollection ac = xn.Attributes;
+
+                for (int i = 0; i < ac.Count; i++)
+                {
+                    if (ac["value"].InnerText == "NP")
+                    {
+                        if (npTree == null)
+                            npTree = xn;
+                        break;
+                    }
+                }
+                if (npTree != null) break;
+
+            }
+
+            if (npTree != null)
+            {
+                XmlNodeList words = npTree.SelectNodes(".//*");
+
+                foreach (XmlNode xn in words)
+                {
+                    if (xn.Name == "leaf")
+                    {
+                        XmlAttributeCollection ac = xn.Attributes;
+
+                        for (int i = 0; i < ac.Count; i++)
+                        {
+                            if (xn.ParentNode.Attributes["value"].InnerText == "NNS" || xn.ParentNode.Attributes["value"].InnerText == ",")
+                                subjectNPL = subjectNPL.Trim();
+
+
+                            subjectNPL += ac["value"].InnerText + " ";
+                        }
+                    }
+                }
+            }
+            return subjectNPL;
         }
     }
 }

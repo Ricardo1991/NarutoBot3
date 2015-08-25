@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using TextMarkovChains;
+using ChatterBotAPI;
 using TweetSharp;
 
 namespace NarutoBot3
@@ -28,7 +29,12 @@ namespace NarutoBot3
 
         public MultiDeepMarkovChain tmc = new MultiDeepMarkovChain(3);
         int tmcCount = 0;
-        
+
+
+        ChatterBotFactory factory = new ChatterBotFactory();
+        ChatterBot bot1;
+        ChatterBotSession bot1session;
+
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -244,6 +250,9 @@ namespace NarutoBot3
             ReadRules();
 
             ul.loadData();
+
+            bot1 = factory.Create(ChatterBotType.CLEVERBOT);
+            bot1session = bot1.CreateSession();
 
 
             if (File.Exists("textSample.xml"))
@@ -2803,56 +2812,8 @@ namespace NarutoBot3
             if (ul.userIsMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
-
-            string xmlS = qq.questionParser(arg, user);
-
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(xmlS);
-
-            XmlNodeList xnList = xml.SelectNodes("//*");
-
-
-            XmlNode npTree = null;
-
             string subjectNPL = string.Empty;
-
-            foreach (XmlNode xn in xnList)
-            {
-                XmlAttributeCollection ac = xn.Attributes;
-                
-                for(int i = 0; i < ac.Count; i++)
-                {
-                    if (ac["value"].InnerText == "NP")
-                    {
-                        if (npTree == null)
-                            npTree = xn;
-                        break;
-                    }
-                }
-                if (npTree != null) break;
-
-            }
-
-            if(npTree != null)
-            {
-                XmlNodeList words = npTree.SelectNodes(".//*");
-
-                foreach (XmlNode xn in words)
-                {
-                    if (xn.Name == "leaf") {
-                        XmlAttributeCollection ac = xn.Attributes;
-
-                        for (int i = 0; i < ac.Count; i++)
-                        {
-                            if (xn.ParentNode.Attributes["value"].InnerText == "NNS" || xn.ParentNode.Attributes["value"].InnerText == ",")
-                                subjectNPL=subjectNPL.Trim();
-                            
-
-                            subjectNPL += ac["value"].InnerText + " ";
-                        }
-                    }
-                }
-            }
+            subjectNPL = qq.questionParser(arg, user);
 
 
             string message = "";
@@ -3125,6 +3086,8 @@ namespace NarutoBot3
 
                 else if (String.Compare(split[0], "if", true) == 0)
                 {
+                    string answer = bot1session.Think(arg+"?");
+                    message = Privmsg(CHANNEL, answer);
 
                 }
                 else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
@@ -3322,7 +3285,10 @@ namespace NarutoBot3
             }
 
             else
-                message = Privmsg(CHANNEL, user + ", what?");
+            {
+                string answer = bot1session.Think(arg + "?");
+                message = Privmsg(CHANNEL, answer);
+            }
 
             if (!String.IsNullOrWhiteSpace(message))
             {

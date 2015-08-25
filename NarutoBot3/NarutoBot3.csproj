@@ -27,7 +27,7 @@
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>4.7.1.%2a</ApplicationVersion>
+    <ApplicationVersion>4.8.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -95,6 +95,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChatterBotAPI">
+      <HintPath>..\chatter-bot-api\ChatterBotAPI.dll</HintPath>
+    </Reference>
     <Reference Include="ejml-0.23">
       <HintPath>..\packages\Stanford.NLP.Parser.3.5.2\lib\ejml-0.23.dll</HintPath>
     </Reference>
