@@ -773,7 +773,7 @@ namespace NarutoBot3
                             hello(whoSent, user);
                         }
 
-                    else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg) && arg[arg.Length - 1] == '?')
+                    else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
                             parseQuestion(whoSent, user, arg);
@@ -2819,9 +2819,7 @@ namespace NarutoBot3
             string message = "";
             Random r = new Random();
 
-            arg = arg.Replace("?", string.Empty).TrimStart(new char[]{' '});
-            string[] split = arg.Split(new char[] { ' ' });
-
+          
             string[] howMany = { "I dont know, maybe", "Probably", "More than", "Less than", "I think it was", "I don't know, so i'll give you a random number:","", "It's" };
 
             string[] howIs = { "fine", "not fine", "lost", "being retarded again", "not feeling well", "being annoying as always", "probably hungry", "good", "all right", "upset", "bored" };
@@ -2849,153 +2847,93 @@ namespace NarutoBot3
 
             string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!", ""};
 
-            if (split.Length >= 1)
+            if(arg[arg.Length - 1] == '?')
             {
-                if (String.Compare(split[0], "how", true) == 0)
+
+                arg = arg.Replace("?", string.Empty).TrimStart(new char[] { ' ' });
+                string[] split = arg.Split(new char[] { ' ' });
+
+                if (split.Length >= 1)
                 {
-                    if(split.Length >= 2){
-                        if (String.Compare(split[1], "many", true) == 0)
+                    if (String.Compare(split[0], "how", true) == 0)
+                    {
+                        if (split.Length >= 2)
                         {
-                            if (String.Compare(arg, "how many killstrings do you have", true) == 0 || String.Compare(arg, "how many kills do you have", true) == 0)
-                                message = Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
-                            else if (arg == "how many fucks do you give")
-                                message = Privmsg(CHANNEL, "I always give 0 fucks.");
-                            else
-                                message = Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
-                        }
-
-                        else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
-                        {
-                            if (String.Compare(arg , "how are you", true) == 0 || String.Compare(arg , "how are you doing", true)==0)
-                                message = Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
-                            else
-                                message = Privmsg(CHANNEL, "I dont know yet, ask later");
-                        }
-
-                        else if (String.Compare(split[1], "is", true) == 0)
-                        {
-                            if (split.Length == 3)
-                                message = Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length)]);
-                        }
-
-                        else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length], "die", true) == 0)
-                            killUser(CHANNEL, user,  Useful.getBetween(arg, "did", "die"));
-
-                        else if (String.Compare(split[1], "old", true) == 0)
-                        {
-                            if (split.Length >= 4)
+                            if (String.Compare(split[1], "many", true) == 0)
                             {
-                                string replaced = questionsRegex(subjectNPL);
+                                if (String.Compare(arg, "how many killstrings do you have", true) == 0 || String.Compare(arg, "how many kills do you have", true) == 0)
+                                    message = Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
+                                else if (arg == "how many fucks do you give")
+                                    message = Privmsg(CHANNEL, "I always give 0 fucks.");
+                                else
+                                    message = Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
+                            }
 
-                                if (String.Compare(split[2], "is", true) == 0)
-                                {
-                                    message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
-                                }
-                                else if (String.Compare(split[2], "are", true) == 0)
-                                {
-                                    if (String.Compare(subjectNPL, "you", true) == 0)
-                                        message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
-                                    else
-                                        message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
-                                }
+                            else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
+                            {
+                                if (String.Compare(arg, "how are you", true) == 0 || String.Compare(arg, "how are you doing", true) == 0)
+                                    message = Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
+                                else
+                                    message = Privmsg(CHANNEL, "I dont know yet, ask later");
+                            }
 
-                                else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
-                                    message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
+                            else if (String.Compare(split[1], "is", true) == 0)
+                            {
+                                if (split.Length == 3)
+                                    message = Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length)]);
+                            }
+
+                            else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length], "die", true) == 0)
+                                killUser(CHANNEL, user, Useful.getBetween(arg, "did", "die"));
+
+                            else if (String.Compare(split[1], "old", true) == 0)
+                            {
+                                if (split.Length >= 4)
+                                {
+                                    string replaced = questionsRegex(subjectNPL);
+
+                                    if (String.Compare(split[2], "is", true) == 0)
+                                    {
+                                        message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
+                                    }
+                                    else if (String.Compare(split[2], "are", true) == 0)
+                                    {
+                                        if (String.Compare(subjectNPL, "you", true) == 0)
+                                            message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
+                                        else
+                                            message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
+                                    }
+
+                                    else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
+                                        message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
+                                }
                             }
                         }
-                    }
-                    else
-                        message = Privmsg(CHANNEL, user + ", no idea...");
-                }
-
-                else if (String.Compare(split[0], "how's", true) == 0)
-                {
-                    string replaced = questionsRegex(subjectNPL);
-                    message = Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
-                }
-
-                else if (String.Compare(split[0], "why", true) == 0)
-                {
-                    if (split.Length >= 2)
-                        message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length)]);
-                }
-
-                else if (String.Compare(split[0], "is", true) == 0)
-                {
-                    bool yes = false;
-
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
-                    {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced).Trim());
                         else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
+                            message = Privmsg(CHANNEL, user + ", no idea...");
                     }
-                }
-                else if (String.Compare(split[0], "was", true) == 0)
-                {
-                    bool yes = false;
 
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
+                    else if (String.Compare(split[0], "how's", true) == 0)
                     {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " was " + replaced).Trim());
-                        else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
+                        string replaced = questionsRegex(subjectNPL);
+                        message = Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
                     }
-                }
-                else if (String.Compare(split[0], "when", true) == 0)
-                {
-                    message = Privmsg(CHANNEL, when[r.Next(when.Length)]);
-                }
 
-                else if (String.Compare(split[0], "are", true) == 0)
-                {
-                    if (String.Compare(arg , "are you real", true)==0)
-                        message = Privmsg(CHANNEL, "Yes, i am real");
-
-                    else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
-                        message = Privmsg(CHANNEL, "No, i'm a bot");
-
-
-                    else
+                    else if (String.Compare(split[0], "why", true) == 0)
                     {
-                        if(r.Next(100)<15)
-                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
-                        else
-                        {
-                            bool yes = false;
-                            if (r.Next(0, 2) == 1)
-                                yes = true;
+                        if (split.Length >= 2)
+                            message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length)]);
+                    }
 
+                    else if (String.Compare(split[0], "is", true) == 0)
+                    {
+                        bool yes = false;
+
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
                             string subject = subjectNPL;
                             string rest = "";
 
@@ -3006,287 +2944,361 @@ namespace NarutoBot3
                             rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
                             string replaced = questionsRegex(rest);
-                            
 
-                            if (subject.Trim() == "you")
-                            {
-
-                                if (yes)
-                                    message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + "I'm " + replaced).Trim());
-                                else
-                                    message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + "I'm not " + replaced).Trim());
-
-                            }
-                                
+                            if (yes)
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced).Trim());
                             else
-                            {
-                                subject = questionsRegex(subject);
-
-                                if (yes)
-                                    message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
-                                else
-                                    message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
-                            }
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
                         }
                     }
-                        
+                    else if (String.Compare(split[0], "was", true) == 0)
+                    {
+                        bool yes = false;
 
-                }
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
 
-                else if (String.Compare(split[0], "can", true) == 0)
-                {
-                    if (String.Compare(arg ,  "can you give me a nick", true) == 0  || String.Compare(arg ,  "can you make me a nick", true) == 0  ||
-                        String.Compare(arg ,  "can you generate a nick", true) == 0  || String.Compare(arg ,  "can you create a nick" , true) == 0 ||
-                        String.Compare(arg, "can you make me a new nick", true) == 0) {
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            if (yes)
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " was " + replaced).Trim());
+                            else
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
+                        }
+                    }
+                    else if (String.Compare(split[0], "when", true) == 0)
+                    {
+                        message = Privmsg(CHANNEL, when[r.Next(when.Length)]);
+                    }
+
+                    else if (String.Compare(split[0], "are", true) == 0)
+                    {
+                        if (String.Compare(arg, "are you real", true) == 0)
+                            message = Privmsg(CHANNEL, "Yes, i am real");
+
+                        else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
+                            message = Privmsg(CHANNEL, "No, i'm a bot");
+
+
+                        else
+                        {
+                            if (r.Next(100) < 15)
+                                message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                            else
+                            {
+                                bool yes = false;
+                                if (r.Next(0, 2) == 1)
+                                    yes = true;
+
+                                string subject = subjectNPL;
+                                string rest = "";
+
+                                for (int i = 1; i < split.Length; i++)
+                                {
+                                    rest += split[i] + " ";
+                                }
+                                rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                                string replaced = questionsRegex(rest);
+
+
+                                if (subject.Trim() == "you")
+                                {
+
+                                    if (yes)
+                                        message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + "I'm " + replaced).Trim());
+                                    else
+                                        message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + "I'm not " + replaced).Trim());
+
+                                }
+
+                                else
+                                {
+                                    subject = questionsRegex(subject);
+
+                                    if (yes)
+                                        message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
+                                    else
+                                        message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
+                                }
+                            }
+                        }
+
+
+                    }
+
+                    else if (String.Compare(split[0], "can", true) == 0)
+                    {
+                        if (String.Compare(arg, "can you give me a nick", true) == 0 || String.Compare(arg, "can you make me a nick", true) == 0 ||
+                            String.Compare(arg, "can you generate a nick", true) == 0 || String.Compare(arg, "can you create a nick", true) == 0 ||
+                            String.Compare(arg, "can you make me a new nick", true) == 0)
+                        {
                             message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
                             stats.nick();
+                        }
+
+                        else if (arg.ToLower().Contains("can you kill "))
+                            killUser(CHANNEL, user, Useful.getBetween(arg.ToLower(), "can you kill ", ""));
+                        else
+                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
-                        
-                    else if (arg.ToLower().Contains("can you kill "))
-                        killUser(CHANNEL, user, Useful.getBetween(arg.ToLower(), "can you kill ", ""));
-                    else
-                        message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
-                }
 
-                else if (String.Compare(split[0], "would", true) == 0)
-                {
-                    if (String.Compare(arg, "would you make me a nick", true) == 0  || String.Compare(arg, "would you generate a nick", true) == 0  ||
-                        String.Compare(arg, "would you create a nick", true) == 0 || String.Compare(arg, "would you make me a new nick", true) == 0)
-                        message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
-
-                    else
-                        message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
-                }
-
-                else if (String.Compare(split[0], "where", true) == 0)
-                {
-                    message = Privmsg(CHANNEL, where[r.Next(where.Length)]);
-
-                }
-
-                else if (String.Compare(split[0], "who", true) == 0 || String.Compare(split[0], "who's", true) == 0)
-                {
-                    if (String.Compare(arg, "who are you", true) == 0)
-                        message = Privmsg(CHANNEL, "I'm a bot!");
-                    else if(split[1] == "do")
-                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
-                    else
-                        message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
-                }
-
-                else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
-                {
-                    if (String.Compare(arg, "what are you", true) == 0)
-                        message = Privmsg(CHANNEL, "I'm a bot!");
-                    else
+                    else if (String.Compare(split[0], "would", true) == 0)
                     {
-                        message = Privmsg(CHANNEL, what[r.Next(what.Length)]);
+                        if (String.Compare(arg, "would you make me a nick", true) == 0 || String.Compare(arg, "would you generate a nick", true) == 0 ||
+                            String.Compare(arg, "would you create a nick", true) == 0 || String.Compare(arg, "would you make me a new nick", true) == 0)
+                            message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
+
+                        else
+                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                    }
+
+                    else if (String.Compare(split[0], "where", true) == 0)
+                    {
+                        message = Privmsg(CHANNEL, where[r.Next(where.Length)]);
+
+                    }
+
+                    else if (String.Compare(split[0], "who", true) == 0 || String.Compare(split[0], "who's", true) == 0)
+                    {
+                        if (String.Compare(arg, "who are you", true) == 0)
+                            message = Privmsg(CHANNEL, "I'm a bot!");
+                        else if (split[1] == "do")
+                            message = Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
+                        else
+                            message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
+                    }
+
+                    else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
+                    {
+                        if (String.Compare(arg, "what are you", true) == 0)
+                            message = Privmsg(CHANNEL, "I'm a bot!");
+                        else
+                        {
+                            message = Privmsg(CHANNEL, what[r.Next(what.Length)]);
+                        }
+                    }
+
+                    else if (String.Compare(split[0], "if", true) == 0)
+                    {
+                        string answer = bot1session.Think(arg + "?");
+                        message = Privmsg(CHANNEL, answer);
+
+                    }
+                    else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
+                    {
+                        bool yes = false;
+
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        string rest = "";
+
+                        for (int i = 1; i < split.Length; i++)
+                        {
+                            rest += split[i] + " ";
+                        }
+                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                        string replaced = questionsRegex(rest);
+
+                        if (yes)
+                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " you are " + replaced).Trim());
+                        else
+                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
+                    }
+
+                    else if (String.Compare(split[0], "do", true) == 0)
+                    {
+                        bool yes = false;
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            if (split[1] == "you")
+                            {
+
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced)).Trim();
+                            }
+                            else if (split[1] == "i")
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced)).Trim();
+                            }
+                            else
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced)).Trim();
+                            }
+                        }
+                    }
+
+                    else if (String.Compare(split[0], "should", true) == 0)
+                    {
+                        bool yes = false;
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            if (split[1] == "you")
+                            {
+
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I should " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced)).Trim();
+                            }
+                            else if (split[1] == "i")
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced)).Trim();
+                            }
+                            else
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced)).Trim();
+                            }
+                        }
+                        else
+                        {
+                            if (yes)
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)])).Trim();
+                            else
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)])).Trim();
+                        }
+                    }
+
+                    else if (String.Compare(split[0], "did", true) == 0)
+                    {
+                        bool yes = false;
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            if (split[1] == "you")
+                            {
+
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I did " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced)).Trim();
+                            }
+                            else if (split[1] == "i")
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced)).Trim();
+                            }
+                            else
+                            {
+                                if (yes)
+                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced)).Trim();
+                                else
+                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced)).Trim();
+                            }
+                        }
+
+
+                    }
+
+                    else if (String.Compare(split[0], "does", true) == 0)
+                    {
+                        bool yes = false;
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            subject = questionsRegex(subject);
+
+                            if (yes)
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced)).Trim();
+                            else
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced)).Trim();
+
+                        }
                     }
                 }
-
-                else if (String.Compare(split[0], "if", true) == 0)
+                else
                 {
-                    string answer = bot1session.Think(arg+"?");
+                    string answer = bot1session.Think(arg + "?");
                     message = Privmsg(CHANNEL, answer);
-
-                }
-                else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
-                {
-                    bool yes = false;
-
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    string rest = "";
-
-                    for (int i = 1; i < split.Length; i++)
-                    {
-                        rest += split[i] + " ";
-                    }
-                    rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                    string replaced = questionsRegex(rest);
-
-                    if (yes)
-                        message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " you are " + replaced).Trim());
-                    else
-                        message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
-                }
-
-                else if (String.Compare(split[0], "do", true) == 0)
-                {
-                    bool yes = false;
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
-                    {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        if (split[1] == "you")
-                        {
-                            
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced)).Trim();
-                        }
-                        else if (split[1] == "i")
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced)).Trim();
-                        }
-                        else
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced)).Trim();
-                        }
-                    }
-                }
-
-                else if (String.Compare(split[0], "should", true) == 0)
-                {
-                    bool yes = false;
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
-                    {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        if (split[1] == "you")
-                        {
-
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I should " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced)).Trim();
-                        }
-                        else if (split[1] == "i")
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced)).Trim();
-                        }
-                        else
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced)).Trim();
-                        }
-                    }
-                    else
-                    {
-                        if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)])).Trim();
-                        else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)])).Trim();
-                    }
-                }
-
-                else if (String.Compare(split[0], "did", true) == 0)
-                {
-                    bool yes = false;
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
-                    {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        if (split[1] == "you")
-                        {
-
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I did " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced)).Trim();
-                        }
-                        else if (split[1] == "i")
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced)).Trim();
-                        }
-                        else
-                        {
-                            if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced)).Trim();
-                            else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced)).Trim();
-                        }
-                    }
-
-
-                }
-
-                else if (String.Compare(split[0], "does", true) == 0)
-                {
-                    bool yes = false;
-                    if (r.Next(0, 2) == 1)
-                        yes = true;
-
-                    if (split.Length >= 2)
-                    {
-                        string subject = subjectNPL;
-                        string rest = "";
-
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            rest += split[i] + " ";
-                        }
-                        rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
-
-                        string replaced = questionsRegex(rest);
-
-                        subject = questionsRegex(subject);
-
-                        if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced)).Trim();
-                        else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced)).Trim();
-
-                    }
                 }
             }
 
             else
             {
-                string answer = bot1session.Think(arg + "?");
+                string answer = bot1session.Think(arg);
                 message = Privmsg(CHANNEL, answer);
             }
 
