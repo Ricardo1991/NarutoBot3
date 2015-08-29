@@ -27,7 +27,7 @@ namespace NarutoBot3
 
         Questions qq;
 
-        public MultiDeepMarkovChain tmc = new MultiDeepMarkovChain(3);
+        public TextMarkovChain tmc = new TextMarkovChain();
         int tmcCount = 0;
 
 
