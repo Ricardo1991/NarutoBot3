@@ -110,7 +110,7 @@ namespace NarutoBot3
 
                         for (int i = 0; i < ac.Count; i++)
                         {
-                            if (xn.ParentNode.Attributes["value"].InnerText == "NNS" || xn.ParentNode.Attributes["value"].InnerText == ",")
+                            if (xn.ParentNode.Attributes["value"].InnerText == "NNS" || xn.ParentNode.Attributes["value"].InnerText == "," || ac["value"].InnerText == "_" || ac["value"].InnerText == "'")
                                 subjectNPL = subjectNPL.Trim();
 
 
