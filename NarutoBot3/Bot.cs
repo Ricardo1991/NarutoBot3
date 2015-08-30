@@ -28,6 +28,7 @@ namespace NarutoBot3
         Questions qq;
 
         public TextMarkovChain tmc = new TextMarkovChain();
+        public TextMarkovChain killgen = new TextMarkovChain();
         int tmcCount = 0;
 
 
@@ -947,6 +948,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
                                 lastKill(whoSent, user, arg);
                             }
+                        else if (String.Compare(cmd, "rkill", true) == 0)
+                            {
+                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                                randomKill(whoSent, user, arg);
+                            }
                         else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
                             {
                                 WriteMessage("* Received a Quote request from " + user, currentColorScheme.BotReport);
@@ -1177,6 +1183,8 @@ namespace NarutoBot3
         {
             kill.Clear();
             killsUsed.Clear();
+            killgen = new TextMarkovChain();
+
 
             if (File.Exists("TextFiles/kills.txt"))
             {
@@ -1188,7 +1196,11 @@ namespace NarutoBot3
                         string killS = sr.ReadLine();
 
                         if(killS.Length > 1 && (killS[0] != '/' && killS[1] != '/'))
+                        {
                             kill.Add(killS);
+                            killgen.feed(killS);
+                        }
+                            
                     }
                         
 
@@ -2801,6 +2813,69 @@ namespace NarutoBot3
 
                     message = regex.Replace(message, randomTarget, 1);
                 }
+
+                Client.sendMessage(message);
+                stats.kill();
+            }
+        }
+
+        public void randomKill(string CHANNEL, string nick, string args)
+        {
+            Random r = new Random();
+            string target = "";
+            string killString, temp;
+            string randomTarget;
+
+
+            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick)) return;
+
+            var regex = new Regex(Regex.Escape("<random>"));
+
+            if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
+            {
+                string message;
+               
+                if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
+                    target = removeUserMode(userList[r.Next((userList.Count))]);
+                else
+                    target = args.Trim();
+
+                if (!killgen.readyToGenerate())
+                {
+                    message = Privmsg(CHANNEL, "Sorry, i can't think of a new kill right now.");
+                }
+                else
+                {
+                    temp = killgen.generateSentence();
+
+                    if (temp.ToLower().Contains("<normal>"))
+                    {
+                        temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+
+                        message = Privmsg(CHANNEL, killString);
+                    }
+                    else
+                    {
+                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+
+                        message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                    }
+
+
+
+                    while (message.Contains("<random>"))
+                    {
+                        do
+                        {
+                            randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
+                        } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
+
+                        message = regex.Replace(message, randomTarget, 1);
+                    }
+                }
+
+                
 
                 Client.sendMessage(message);
                 stats.kill();
