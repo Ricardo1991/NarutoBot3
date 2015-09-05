@@ -1426,11 +1426,11 @@ namespace NarutoBot3
         {
             string result;
 
-            result = "PRIVMSG " + destinatary + " :" + message + "\r\n";
+            result = "PRIVMSG " + destinatary + " :" + message.Trim() + "\r\n";
 
             if (message.Contains("\x01"+"ACTION "))
             {
-                message = Client.NICK + " " + message.Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
+                message = Client.NICK + " " + message.Trim().Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
 
                 WriteMessage("             * : " + message, currentColorScheme.OwnMessage);
             }
@@ -1457,7 +1457,7 @@ namespace NarutoBot3
         {
             string result;
 
-            result = "NOTICE " + destinatary + " :" + message + "\r\n";
+            result = "NOTICE " + destinatary + " :" + message.Trim() + "\r\n";
 
             if (Client.NICK.Length > 15){
                 WriteMessage(Client.NICK.Truncate(16) + ":" + message);
@@ -2873,6 +2873,8 @@ namespace NarutoBot3
 
                         message = regex.Replace(message, randomTarget, 1);
                     }
+
+                    message = message.Replace("  ", " ");
                 }
 
                 
