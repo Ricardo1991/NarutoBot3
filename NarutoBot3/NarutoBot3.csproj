@@ -27,7 +27,7 @@
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>4.8.0.%2a</ApplicationVersion>
+    <ApplicationVersion>4.9.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -385,6 +385,9 @@
     <None Include="Resources\ico_info.png" />
     <None Include="Resources\black-connected-16.png" />
     <None Include="Resources\black-disconnected-16 %281%29.png" />
+    <Content Include="TextFiles\facts.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextFiles\funk.txt" />
     <Content Include="TextFiles\quotes.txt" />
     <Content Include="Theme\Cool.json">

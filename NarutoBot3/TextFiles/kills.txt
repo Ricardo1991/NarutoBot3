@@ -322,7 +322,7 @@ bows to <target>
 bows to <user>
 suggests to <target> that they tell their mother to shave their upper lip
 reminds <target> that their mother is largely obese
-embarasses <target> by telling talking about their sex, or lack thereof, in front of their mother
+embarasses <target> by talking about their sex, or lack thereof, in front of their mother
 removes <target>’s brain for giggling at their dress
 gives <target> a backrub
 asks <target> to join them in the shower
@@ -1264,7 +1264,7 @@ remarks how <user> always tries to tell me what to do
 kills <random> instead of <target>
 buys <target> pants that are much too small
 hints that <target> should probably lose a few pounds
-asks if <target> would like to come to <user> and <target>’s sleepover party
+asks if <random> would like to come to <user> and <target>’s sleepover party
 asks why <target> always wears a vampire costume everywhere they go
 replaces <target>’s heart with a banana
 asks if <target> can be the stripper at <user> and <random>’s wedding party

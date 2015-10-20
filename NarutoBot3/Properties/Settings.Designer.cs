@@ -730,5 +730,17 @@ namespace NarutoBot3.Properties {
                 this["tellEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool factsEnabled {
+            get {
+                return ((bool)(this["factsEnabled"]));
+            }
+            set {
+                this["factsEnabled"] = value;
+            }
+        }
     }
 }

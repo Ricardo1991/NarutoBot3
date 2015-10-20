@@ -43,6 +43,13 @@ namespace NarutoBot3
             lifetime.incrementKill();
             saveData();
         }
+
+        public void fact()
+        {
+            session.incrementFact();
+            lifetime.incrementFact();
+            saveData();
+        }
         public void youtube()
         {
             session.incrementYoutube();
@@ -241,6 +248,11 @@ namespace NarutoBot3
         {
             return new int[2] { session.Tell, lifetime.Tell };
         }
+
+        public int[] getFact()
+        {
+            return new int[2] { session.Fact, lifetime.Fact };
+        }
     }
 
     class Stats
@@ -251,6 +263,14 @@ namespace NarutoBot3
         {
             get { return kill; }
             set { kill = value; }
+        }
+
+        int fact;
+
+        public int Fact
+        {
+            get { return fact; }
+            set { fact = value; }
         }
         int youtube;
 
@@ -390,6 +410,7 @@ namespace NarutoBot3
         public Stats()
         {
             kill = 0;
+            fact = 0;
             youtube = 0;
             question = 0;
             nick = 0;
@@ -417,6 +438,7 @@ namespace NarutoBot3
 
 
         public void incrementKill() {Kill++;}
+        public void incrementFact() { Fact++; }
         public void incrementYoutube() { Youtube++; }
         public void incrementQuestion() { Question++; }
         public void incrementNick() { Nick++; }

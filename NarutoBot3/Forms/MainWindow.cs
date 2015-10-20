@@ -1256,6 +1256,7 @@ namespace NarutoBot3
             bot.ReadNickGen();
             bot.ReadHelp();
             bot.ReadRules();
+            bot.ReadFacts();
         }
 
         private void forceMirrorModeOffToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1276,6 +1277,11 @@ namespace NarutoBot3
         private void enforceChanged(object sender, EventArgs e)
         {
             forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
+        }
+
+        private void factsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bot.ReadFacts();
         }
     }
 }

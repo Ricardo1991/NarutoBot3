@@ -41,6 +41,7 @@ namespace NarutoBot3
         private List<string> hlp = new List<string>();
         private List<string> tri = new List<string>();
         private List<string> kill = new List<string>();
+        private List<string> facts = new List<string>();
         private List<string> quotes = new List<string>();
         private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
@@ -112,6 +113,7 @@ namespace NarutoBot3
         string topic;
 
         private List<int> killsUsed = new List<int>();
+        private List<int> factsUsed = new List<int>();
 
         private TwitterService service;
 
@@ -245,6 +247,7 @@ namespace NarutoBot3
             ReadHelp();                 //Help text
             ReadTrivia();               //Trivia strings
             ReadKills();                //Read the killstrings
+            ReadFacts();                //Read the factStrings
             ReadNickGen();              //For the Nick generator
             ReadQuotes();
             ReadFunk();
@@ -943,6 +946,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
                                 killUser(whoSent, user, arg);
                             }
+                        else if (String.Compare(cmd, "fact", true) == 0 || String.Compare(cmd, "facts", true) == 0)
+                            {
+                                WriteMessage("* Received a Fact request from " + user, currentColorScheme.BotReport);
+                                factUser(whoSent, user, arg);
+                            }
                         else if (String.Compare(cmd, "lastkill", true) == 0)
                             {
                                 WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
@@ -1195,7 +1203,7 @@ namespace NarutoBot3
                     {
                         string killS = sr.ReadLine();
 
-                        if(killS.Length > 1 && (killS[0] != '/' && killS[1] != '/'))
+                        if(killS.Length > 1 && !(killS[0] == '/' && killS[1] == '/'))
                         {
                             kill.Add(killS);
                             killgen.feed(killS);
@@ -1214,6 +1222,42 @@ namespace NarutoBot3
             else
             {
                 Settings.Default.killEnabled = false;
+                Settings.Default.Save();
+            }
+        }
+
+        public void ReadFacts()
+        {
+            facts.Clear();
+            factsUsed.Clear();
+
+            if (File.Exists("TextFiles/facts.txt"))
+            {
+                try
+                {
+                    StreamReader sr = new StreamReader("TextFiles/facts.txt");
+                    while (sr.Peek() >= 0)
+                    {
+                        string factS = sr.ReadLine();
+
+                        if (factS.Length > 1 && !(factS[0] == '/' && factS[1] == '/'))
+                        {
+                            facts.Add(factS);
+                        }
+
+                    }
+
+
+                    sr.Close();
+                }
+                catch
+                {
+                }
+
+            }
+            else
+            {
+                Settings.Default.factsEnabled = false;
                 Settings.Default.Save();
             }
         }
@@ -1526,6 +1570,7 @@ namespace NarutoBot3
                         ReadFunk();
                         ReadQuotes();
                         ReadKills();
+                        ReadFacts();
                         ReadTrivia();
                         ReadNickGen();
                         ReadHelp();
@@ -1555,6 +1600,12 @@ namespace NarutoBot3
                     case "kill":
                         ReadKills();
                         Client.sendMessage(Notice(user, "Reloaded kills!"));
+                        break;
+
+                    case "facts":
+                    case "fact":
+                        ReadFacts();
+                        Client.sendMessage(Notice(user, "Reloaded facts!"));
                         break;
                     case "quotes":
                     case "quote":
@@ -1643,6 +1694,10 @@ namespace NarutoBot3
                     case "kill":
                     case "kills":
                         Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getKill()[0] + " Lifetime: " + stats.getKill()[1]));
+                        break;
+                    case "fact":
+                    case "facts":
+                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getFact()[0] + " Lifetime: " + stats.getFact()[1]));
                         break;
 
 
@@ -1737,6 +1792,12 @@ namespace NarutoBot3
                 case "kills":
                     Settings.Default.killEnabled = status;
                     Client.sendMessage(Notice(user, "Kill is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "fact":
+                case "facts":
+                    Settings.Default.factsEnabled = status;
+                    Client.sendMessage(Notice(user, "Fact is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "questions":
                 case "question":
@@ -2744,7 +2805,7 @@ namespace NarutoBot3
 
             int MAX_KILLS = 500;
 
-            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick)) return;
+            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || kill.Count < 1) return;
 
             var regex = new Regex(Regex.Escape("<random>"));
 
@@ -2816,6 +2877,72 @@ namespace NarutoBot3
 
                 Client.sendMessage(message);
                 stats.kill();
+            }
+        }
+
+        public void factUser(string CHANNEL, string nick, string args)
+        {
+            Random r = new Random();
+            string target = "";
+            string factString, temp;
+            int factID;
+            string randomTarget;
+
+            int MAX_FACTS = 300;
+
+            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || facts.Count <1) return;
+
+            var regex = new Regex(Regex.Escape("<random>"));
+
+            if (Settings.Default.silence == false && Settings.Default.factsEnabled == true)
+            {
+                string message;
+                
+                if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
+                    target = removeUserMode(userList[r.Next((userList.Count))]);
+                else
+                    target = args.Trim();
+
+                if (facts.Count <= MAX_FACTS)
+                {
+                    factsUsed.Clear();
+                    factID = r.Next(facts.Count);
+                    factsUsed.Insert(0, factID);
+                }
+
+                else
+                {
+                    do factID = r.Next(facts.Count);
+                    while (factsUsed.Contains(factID));
+                }
+
+
+                if (factsUsed.Count >= MAX_FACTS)
+                {
+                    factsUsed.Remove(factsUsed[factsUsed.Count - 1]);
+                }
+
+                factsUsed.Insert(0, factID);
+
+                temp = facts[factID];
+
+
+                factString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+
+                message = Privmsg(CHANNEL, factString);
+
+
+                while (message.Contains("<random>"))
+                {
+                    do{
+                        randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
+                    } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
+
+                    message = regex.Replace(message, randomTarget, 1);
+                }
+
+                Client.sendMessage(message);
+                stats.fact();
             }
         }
 

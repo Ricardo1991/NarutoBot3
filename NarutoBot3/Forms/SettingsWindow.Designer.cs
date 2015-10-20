@@ -36,6 +36,7 @@
             this.cb_youtube = new System.Windows.Forms.CheckBox();
             this.bSave = new System.Windows.Forms.Button();
             this.gb_FeaturesHelpful = new System.Windows.Forms.GroupBox();
+            this.cbTell = new System.Windows.Forms.CheckBox();
             this.cbShuffle = new System.Windows.Forms.CheckBox();
             this.cb_choose = new System.Windows.Forms.CheckBox();
             this.cb_YTSearch = new System.Windows.Forms.CheckBox();
@@ -108,7 +109,7 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbTell = new System.Windows.Forms.CheckBox();
+            this.cbFacts = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -138,7 +139,7 @@
             this.cb_hello.AutoSize = true;
             this.cb_hello.Checked = true;
             this.cb_hello.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_hello.Location = new System.Drawing.Point(6, 19);
+            this.cb_hello.Location = new System.Drawing.Point(6, 87);
             this.cb_hello.Name = "cb_hello";
             this.cb_hello.Size = new System.Drawing.Size(50, 17);
             this.cb_hello.TabIndex = 0;
@@ -221,6 +222,16 @@
             this.gb_FeaturesHelpful.TabIndex = 16;
             this.gb_FeaturesHelpful.TabStop = false;
             this.gb_FeaturesHelpful.Text = "Helpful";
+            // 
+            // cbTell
+            // 
+            this.cbTell.AutoSize = true;
+            this.cbTell.Location = new System.Drawing.Point(5, 203);
+            this.cbTell.Name = "cbTell";
+            this.cbTell.Size = new System.Drawing.Size(43, 17);
+            this.cbTell.TabIndex = 16;
+            this.cbTell.Text = "Tell";
+            this.cbTell.UseVisualStyleBackColor = true;
             // 
             // cbShuffle
             // 
@@ -362,13 +373,12 @@
             // 
             // gb_FeaturesFun
             // 
+            this.gb_FeaturesFun.Controls.Add(this.cbFacts);
             this.gb_FeaturesFun.Controls.Add(this.cbGiphy);
             this.gb_FeaturesFun.Controls.Add(this.cbFunk);
             this.gb_FeaturesFun.Controls.Add(this.cbQuotes);
-            this.gb_FeaturesFun.Controls.Add(this.cb_greetings);
             this.gb_FeaturesFun.Controls.Add(this.cb_Questions);
             this.gb_FeaturesFun.Controls.Add(this.cb_Kill);
-            this.gb_FeaturesFun.Controls.Add(this.cb_hello);
             this.gb_FeaturesFun.Controls.Add(this.cb_nicks);
             this.gb_FeaturesFun.Controls.Add(this.cb_Trivia);
             this.gb_FeaturesFun.Controls.Add(this.cb_Poke);
@@ -383,7 +393,7 @@
             // cbGiphy
             // 
             this.cbGiphy.AutoSize = true;
-            this.cbGiphy.Location = new System.Drawing.Point(6, 253);
+            this.cbGiphy.Location = new System.Drawing.Point(6, 205);
             this.cbGiphy.Name = "cbGiphy";
             this.cbGiphy.Size = new System.Drawing.Size(53, 17);
             this.cbGiphy.TabIndex = 15;
@@ -393,7 +403,7 @@
             // cbFunk
             // 
             this.cbFunk.AutoSize = true;
-            this.cbFunk.Location = new System.Drawing.Point(6, 229);
+            this.cbFunk.Location = new System.Drawing.Point(6, 181);
             this.cbFunk.Name = "cbFunk";
             this.cbFunk.Size = new System.Drawing.Size(50, 17);
             this.cbFunk.TabIndex = 14;
@@ -403,7 +413,7 @@
             // cbQuotes
             // 
             this.cbQuotes.AutoSize = true;
-            this.cbQuotes.Location = new System.Drawing.Point(6, 206);
+            this.cbQuotes.Location = new System.Drawing.Point(6, 158);
             this.cbQuotes.Name = "cbQuotes";
             this.cbQuotes.Size = new System.Drawing.Size(60, 17);
             this.cbQuotes.TabIndex = 13;
@@ -413,7 +423,7 @@
             // cb_greetings
             // 
             this.cb_greetings.AutoSize = true;
-            this.cb_greetings.Location = new System.Drawing.Point(6, 182);
+            this.cb_greetings.Location = new System.Drawing.Point(6, 64);
             this.cb_greetings.Name = "cb_greetings";
             this.cb_greetings.Size = new System.Drawing.Size(71, 17);
             this.cb_greetings.TabIndex = 12;
@@ -425,7 +435,7 @@
             this.cb_Questions.AutoSize = true;
             this.cb_Questions.Checked = true;
             this.cb_Questions.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Questions.Location = new System.Drawing.Point(6, 158);
+            this.cb_Questions.Location = new System.Drawing.Point(6, 135);
             this.cb_Questions.Name = "cb_Questions";
             this.cb_Questions.Size = new System.Drawing.Size(73, 17);
             this.cb_Questions.TabIndex = 11;
@@ -437,7 +447,7 @@
             this.cb_Kill.AutoSize = true;
             this.cb_Kill.Checked = true;
             this.cb_Kill.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Kill.Location = new System.Drawing.Point(6, 134);
+            this.cb_Kill.Location = new System.Drawing.Point(6, 111);
             this.cb_Kill.Name = "cb_Kill";
             this.cb_Kill.Size = new System.Drawing.Size(39, 17);
             this.cb_Kill.TabIndex = 10;
@@ -449,7 +459,7 @@
             this.cb_nicks.AutoSize = true;
             this.cb_nicks.Checked = true;
             this.cb_nicks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_nicks.Location = new System.Drawing.Point(6, 42);
+            this.cb_nicks.Location = new System.Drawing.Point(6, 19);
             this.cb_nicks.Name = "cb_nicks";
             this.cb_nicks.Size = new System.Drawing.Size(124, 17);
             this.cb_nicks.TabIndex = 2;
@@ -461,7 +471,7 @@
             this.cb_Trivia.AutoSize = true;
             this.cb_Trivia.Checked = true;
             this.cb_Trivia.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Trivia.Location = new System.Drawing.Point(6, 111);
+            this.cb_Trivia.Location = new System.Drawing.Point(6, 88);
             this.cb_Trivia.Name = "cb_Trivia";
             this.cb_Trivia.Size = new System.Drawing.Size(52, 17);
             this.cb_Trivia.TabIndex = 5;
@@ -473,7 +483,7 @@
             this.cb_Poke.AutoSize = true;
             this.cb_Poke.Checked = true;
             this.cb_Poke.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Poke.Location = new System.Drawing.Point(6, 88);
+            this.cb_Poke.Location = new System.Drawing.Point(6, 65);
             this.cb_Poke.Name = "cb_Poke";
             this.cb_Poke.Size = new System.Drawing.Size(51, 17);
             this.cb_Poke.TabIndex = 7;
@@ -485,7 +495,7 @@
             this.cb_randomText.AutoSize = true;
             this.cb_randomText.Checked = true;
             this.cb_randomText.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_randomText.Location = new System.Drawing.Point(6, 65);
+            this.cb_randomText.Location = new System.Drawing.Point(6, 42);
             this.cb_randomText.Name = "cb_randomText";
             this.cb_randomText.Size = new System.Drawing.Size(90, 17);
             this.cb_randomText.TabIndex = 9;
@@ -496,9 +506,11 @@
             // 
             this.gb_FeaturesBasic.Controls.Add(this.cb_rules);
             this.gb_FeaturesBasic.Controls.Add(this.cb_help);
+            this.gb_FeaturesBasic.Controls.Add(this.cb_greetings);
+            this.gb_FeaturesBasic.Controls.Add(this.cb_hello);
             this.gb_FeaturesBasic.Location = new System.Drawing.Point(342, 149);
             this.gb_FeaturesBasic.Name = "gb_FeaturesBasic";
-            this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 68);
+            this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 137);
             this.gb_FeaturesBasic.TabIndex = 12;
             this.gb_FeaturesBasic.TabStop = false;
             this.gb_FeaturesBasic.Text = "Basic";
@@ -977,15 +989,15 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // cbTell
+            // cbFacts
             // 
-            this.cbTell.AutoSize = true;
-            this.cbTell.Location = new System.Drawing.Point(5, 203);
-            this.cbTell.Name = "cbTell";
-            this.cbTell.Size = new System.Drawing.Size(43, 17);
-            this.cbTell.TabIndex = 16;
-            this.cbTell.Text = "Tell";
-            this.cbTell.UseVisualStyleBackColor = true;
+            this.cbFacts.AutoSize = true;
+            this.cbFacts.Location = new System.Drawing.Point(7, 229);
+            this.cbFacts.Name = "cbFacts";
+            this.cbFacts.Size = new System.Drawing.Size(52, 17);
+            this.cbFacts.TabIndex = 16;
+            this.cbFacts.Text = "Facts";
+            this.cbFacts.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -1122,5 +1134,6 @@
         private System.Windows.Forms.GroupBox gbTheme;
         private System.Windows.Forms.Label labelConnectCommand;
         private System.Windows.Forms.CheckBox cbTell;
+        private System.Windows.Forms.CheckBox cbFacts;
     }
 }
