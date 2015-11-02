@@ -2380,6 +2380,8 @@ namespace NarutoBot3
                     WebRequest webRequest = HttpWebRequest.Create(url);
 
                     webRequest.Method = "HEAD";
+
+                    webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
                     try
                     {
                         using (WebResponse webResponse = webRequest.GetResponse())
@@ -2429,6 +2431,31 @@ namespace NarutoBot3
 
                             }
                             catch { }
+                        }
+                        else
+                        {
+                            try {
+                                string[] sizes = { "B", "KB", "MB", "GB" };
+                                double len = Convert.ToDouble(headers["Content-Length"]);
+                                int order = 0;
+                                while (len >= 1024 && order + 1 < sizes.Length)
+                                {
+                                    order++;
+                                    len = len / 1024;
+                                }
+
+                                // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+                                // show a single decimal place, and no space.
+                                string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+
+
+                                message = Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
+                                Client.sendMessage(message);
+                            }
+                            catch{ }
+
+                            
+
                         }
                     }
                 }
