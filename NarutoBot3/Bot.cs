@@ -2468,7 +2468,7 @@ namespace NarutoBot3
             GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
             anime a = new anime();
             string jsonGoogle;
-            string jsonAnime;
+            string xmlAnime;
             bool user = false;
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2553,12 +2553,12 @@ namespace NarutoBot3
                     string animeName = name.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
                     getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
-                    jsonAnime = webClient.DownloadString(getString);
+                    xmlAnime = webClient.DownloadString(getString);
 
                     try
                     {
                         XmlSerializer serializer = new XmlSerializer(typeof(anime));
-                        using (StringReader reader = new StringReader(jsonAnime))
+                        using (StringReader reader = new StringReader(xmlAnime))
                         {
                             a = (anime)(serializer.Deserialize(reader));
                         }
@@ -2567,10 +2567,10 @@ namespace NarutoBot3
 
                     if (a.entry == null)
                     {
-                        string score = Useful.getBetween(jsonAnime, "<score>", "</score>");
-                        string episodes = Useful.getBetween(jsonAnime, "<episodes>", "</episodes>");
-                        string title = Useful.getBetween(jsonAnime, "<title>", "</title>");
-                        string status = Useful.getBetween(jsonAnime, "Status:</span> ", "</div>");
+                        string score = Useful.getBetween(xmlAnime, "<score>", "</score>");
+                        string episodes = Useful.getBetween(xmlAnime, "<episodes>", "</episodes>");
+                        string title = Useful.getBetween(xmlAnime, "<title>", "</title>");
+                        string status = Useful.getBetween(xmlAnime, "<status>", "</status>");
 
                         if (episodes == "0" || episodes == string.Empty)
                             episodes = "?";
@@ -2625,7 +2625,7 @@ namespace NarutoBot3
                     }
                     catch { }
 
-                    if(u == null || u.myinfo==null|| xmlUser.Contains("<error>Invalid username</error>"))
+                    if(u == null || u.myinfo == null|| xmlUser.Contains("<error>Invalid username</error>"))
                         message = Privmsg(CHANNEL, "Error fetching user stats");
                     else
                         message = Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Curretly Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
