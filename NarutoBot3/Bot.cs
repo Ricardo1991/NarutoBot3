@@ -3521,14 +3521,14 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    string answer = bot1session.Think(arg + "?");
+                    string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
                     message = Privmsg(CHANNEL, answer);
                 }
             }
 
             else
             {
-                string answer = bot1session.Think(arg);
+                string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
                 message = Privmsg(CHANNEL, answer);
             }
 
