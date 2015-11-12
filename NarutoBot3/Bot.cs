@@ -3821,9 +3821,14 @@ namespace NarutoBot3
             if (split.Length < 2) return;
             else
             {
-                ul.addUserMessage(split[0], nick, split[1]);
-                stats.tell();
-                ul.saveData();
+                if (ul.userMessageCount(split[0]) > 20)
+                    Client.sendMessage(Privmsg(nick, split[0] + " has his inbox full! Can't accept more messages."));
+                else {
+                    ul.addUserMessage(split[0], nick, split[1]);
+                    stats.tell();
+                    ul.saveData();
+                }
+
             }
         }
 
@@ -4131,7 +4136,7 @@ namespace NarutoBot3
 
             string message;
 
-            Client.sendMessage(Privmsg(nick, "Hello " + nick + ". You have " + count + " message(s)"));
+            Client.sendMessage(Privmsg(nick,  nick + ", you have " + count + " message(s)"));
 
             for(int i = 0 ; i < count ; i++)
             {
@@ -4141,29 +4146,36 @@ namespace NarutoBot3
 
                 string timeDiff = "";
 
-                if (diff.Days >= 1)
-                    if (diff.Days == 1)
-                        timeDiff += diff.Days + " day, ";
-                    else
-                        timeDiff += diff.Days + " days, ";
-
-                if (diff.Hours >= 1)
-                    if (diff.Hours == 1)
-                        timeDiff += diff.Hours + " hour ago";
-                    else
-                        timeDiff += diff.Hours + " hours ago";
+                if (diff.Days > 3)
+                {
+                    timeDiff += diff.Days + " days ago";
+                }
                 else
-                    if (diff.Minutes == 1)
+                {
+                    if (diff.Days >= 1)
+                        if (diff.Days == 1)
+                            timeDiff += diff.Days + " day, ";
+                        else
+                            timeDiff += diff.Days + " days, ";
+
+                    if (diff.Hours >= 1)
+                        if (diff.Hours == 1)
+                            timeDiff += diff.Hours + " hour ago";
+                        else
+                            timeDiff += diff.Hours + " hours ago";
+                    else
+                        if (diff.Minutes == 1)
                         timeDiff += diff.Minutes + " minute ago";
                     else
                         timeDiff += diff.Minutes + " minutes ago";
+                }
 
 
-                message = Privmsg(nick, "From "+ m.Sender +", sent " + timeDiff +": " + m.Message );
+                message = Privmsg(nick, "Sent " + timeDiff +"\t<"+ m.Sender +"> " + m.Message );
                 Client.sendMessage(message);
             }
 
-            Client.sendMessage(Privmsg(nick, "Mark all messages as read using " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
+            Client.sendMessage(Privmsg(nick, "Remove messages with " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
         }
 
         public void Dispose()
