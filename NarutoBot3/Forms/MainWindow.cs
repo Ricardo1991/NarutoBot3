@@ -1,6 +1,5 @@
 ﻿using NarutoBot3.Properties;
 using Newtonsoft.Json;
-using AutoComplete;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,18 +24,7 @@ namespace NarutoBot3
 
         public ColorScheme currentColorScheme = new ColorScheme();
         List<ColorScheme> schemeColection = new List<ColorScheme>();
-
-        ConnectWindow Connect = new ConnectWindow();
-        ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
-        EditRulesWindow rulesWindow = new EditRulesWindow();
-        HelpTextWindow helpWindow = new HelpTextWindow();
-        MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
-        AboutBox aboutbox = new AboutBox();
-
-        SettingsWindow settingsWindow;
-        MutedUsersWindow mutedWindow;
-        BotOperatorWindow operatorsWindow;
-
+       
         private Bot bot;
         private IRC_Client client;
 
@@ -54,19 +42,12 @@ namespace NarutoBot3
         int lastCommandIndex = 0;
 
         bool exitTheLoop = false;
-        UserList uList;
 
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
         {
             InitializeComponent();
-
-            uList = new UserList();
-
-            operatorsWindow = new BotOperatorWindow(ref uList);
-            mutedWindow = new MutedUsersWindow(ref uList);
-            settingsWindow = new SettingsWindow(ref currentColorScheme);
 
             //Events for BGWorker
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
@@ -77,12 +58,13 @@ namespace NarutoBot3
             //Themes
             loadThemes();
             applyTheme(Settings.Default.themeName);
-            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
             //
 
             //Show ConnectWindow Form and try to connect
 
-            if (Connect.ShowDialog() == DialogResult.OK)
+            ConnectWindow connect = new ConnectWindow();
+
+            if (connect.ShowDialog() == DialogResult.OK)
             {
                 if (backgroundWorker.IsBusy)
                 {
@@ -91,7 +73,7 @@ namespace NarutoBot3
                     backgroundWorker.CancelAsync();
                 }
                     
-                if (connect())          //If connected with success, then start the bot
+                if (this.connect())          //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();
                 else
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -220,11 +202,11 @@ namespace NarutoBot3
         }
 
 
-        private void applyTheme(string p)
+        private void applyTheme(string themeName)
         {
             foreach(ColorScheme c in schemeColection)
             {
-                if (String.Compare(c.Name, p, true) == 0)
+                if (String.Compare(c.Name, themeName, true) == 0)
                 {
                     currentColorScheme = c;
 
@@ -246,7 +228,7 @@ namespace NarutoBot3
             }
         }
 
-        private bool schemeAlreadyExists(string name)
+        private bool schemeExists(string name)
         {
             foreach (ColorScheme c in schemeColection)
             {
@@ -276,7 +258,7 @@ namespace NarutoBot3
                 JsonConvert.PopulateObject(json, tmpScheme);
 
                 stream.Close();
-                if (!schemeAlreadyExists(tmpScheme.Name))
+                if (!schemeExists(tmpScheme.Name))
                     schemeColection.Add(tmpScheme);
                 tmpScheme = null;
 
@@ -288,8 +270,6 @@ namespace NarutoBot3
             bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
             initializeBot();
-
-            uList = bot.ul;
 
             while (!exitTheLoop)
             {
@@ -343,11 +323,8 @@ namespace NarutoBot3
 
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
 
-            operatorsWindow = new BotOperatorWindow(ref bot.ul);
-            mutedWindow = new MutedUsersWindow(ref bot.ul);
-            settingsWindow = new SettingsWindow(ref currentColorScheme);
+            
 
-            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
         }
 
@@ -721,6 +698,8 @@ namespace NarutoBot3
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
+            ConnectWindow Connect = new ConnectWindow();
+
             var result = Connect.ShowDialog();
             DialogResult resultWarning;
 
@@ -831,6 +810,10 @@ namespace NarutoBot3
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            SettingsWindow settingsWindow = new SettingsWindow(ref currentColorScheme);
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
+
             settingsWindow.ShowDialog();
 
             if (Settings.Default.twitterEnabled) bot.TwitterLogin();
@@ -851,12 +834,24 @@ namespace NarutoBot3
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
             nickWindow.ShowDialog();
             bot.changeNick(Settings.Default.Nick);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            BotOperatorWindow operatorsWindow;
+
+            if (bot == null)
+            {
+                UserList ul = new UserList();
+                operatorsWindow = new BotOperatorWindow(ref ul);
+            }
+            else
+                operatorsWindow = new BotOperatorWindow(ref bot.ul);
+
+
             operatorsWindow.ShowDialog();
         }
 
@@ -971,17 +966,30 @@ namespace NarutoBot3
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            EditRulesWindow rulesWindow = new EditRulesWindow();
             rulesWindow.ShowDialog();
         }
 
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HelpTextWindow helpWindow = new HelpTextWindow();
             helpWindow.ShowDialog();
             bot.ReadHelp();
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            MutedUsersWindow mutedWindow;
+
+            if (bot == null)
+            {
+                UserList ul = new UserList();
+                mutedWindow = new MutedUsersWindow(ref ul);
+            }
+                
+            else
+                mutedWindow = new MutedUsersWindow(ref bot.ul);
+
             mutedWindow.ShowDialog();
         }
 
@@ -1049,12 +1057,12 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            if (!uList.userIsOperator(nick))
+            if (bot!=null && !bot.ul.userIsOperator(nick))
                 contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.giveOps(nick); }));
             else
                 contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.takeOps(nick); }));
 
-            if (!uList.userIsMuted(nick))
+            if (bot != null && !bot.ul.userIsMuted(nick))
                 contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate(Object o, EventArgs a) { bot.muteUser(nick); }));
             else
                 contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate(Object o, EventArgs a) { bot.unmuteUser(nick); }));
@@ -1092,6 +1100,7 @@ namespace NarutoBot3
 
         public void releaseCheckerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
             var result = releaseChecker.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -1201,12 +1210,15 @@ namespace NarutoBot3
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AboutBox aboutbox = new AboutBox();
             aboutbox.ShowDialog();
         }
 
         public void refreshTheme(object sender, EventArgs e){
 
-            currentColorScheme = settingsWindow.currentColorScheme;
+            SettingsWindow s = (SettingsWindow)sender;
+
+            currentColorScheme = s.currentColorScheme;
             this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
             this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
 

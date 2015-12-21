@@ -4140,7 +4140,7 @@ namespace NarutoBot3
 
             for(int i = 0 ; i < count ; i++)
             {
-
+                System.Threading.Thread.Sleep(250);
                 UserMessage m = ul.getUserMessage(nick, i);
                 TimeSpan diff = DateTime.Now.ToUniversalTime().Subtract(m.Timestamp);
 
