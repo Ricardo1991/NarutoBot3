@@ -1000,6 +1000,11 @@ namespace NarutoBot3
                                 WriteMessage("* Received a reload request from " + user, currentColorScheme.BotReport);
                                 reloadTexts(user, arg);
                             }
+                        else if (String.Compare(cmd, "names", true) == 0)
+                            {
+                                WriteMessage("* Received a names request from " + user, currentColorScheme.BotReport);
+                                printNames(user);
+                            }
                         else if (String.Compare(cmd, "stats", true) == 0 && !String.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a stats request from " + user, currentColorScheme.BotReport);
@@ -2176,6 +2181,24 @@ namespace NarutoBot3
             stats.trivia();
             return;
         }
+
+        public void printNames(string nick)
+        {
+            string list = "[";
+
+            foreach(string u in userList)
+            {
+                list += u + " ";
+            }
+
+            list += "]";
+
+            string message = Privmsg(nick, list);
+            Client.sendMessage(message);
+
+            
+        }
+            
 
         void time(string CHANNEL, string nick, string args)
         {
