@@ -2195,7 +2195,6 @@ namespace NarutoBot3
 
             string message = Privmsg(nick, list);
             Client.sendMessage(message);
-
             
         }
             
@@ -2378,7 +2377,7 @@ namespace NarutoBot3
 
         public void urlTitle(string CHANNEL, string nick, string line)
         {
-            string title, message, url=null, html;
+            string url;
             string[] split;
             Dictionary<string, string> headers = new Dictionary<string, string>();
 
@@ -2391,96 +2390,97 @@ namespace NarutoBot3
                 split = line.Split(new char[] { ' ' });
 
                 foreach (string s in split){
-                    if (s.Contains("http"))
+                    if (s.Contains("http://") || s.Contains("https://"))
                     {
                         url = s;
-                        break;
+                        if (!string.IsNullOrWhiteSpace(url))
+                            getURLInfo(CHANNEL, url);
                     }
                 }
+            }
+        }
 
-                if (!string.IsNullOrWhiteSpace(url))
+        void getURLInfo(string CHANNEL, string url)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            string html, title, message;
+
+            WebRequest webRequest = HttpWebRequest.Create(url);
+            webRequest.Method = "HEAD";
+            webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
+
+            try
+            {
+                using (WebResponse webResponse = webRequest.GetResponse())
                 {
-                    WebRequest webRequest = HttpWebRequest.Create(url);
+                    foreach (string header in webResponse.Headers)
+                        headers.Add(header, webResponse.Headers[header]);
+                }
+            }
+            catch
+            {
 
-                    webRequest.Method = "HEAD";
+            }
 
-                    webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
+            if (headers.ContainsKey("Content-Type"))
+            {
+                if (headers["Content-Type"].Contains("text/html"))
+                {
+                    WebRequest request = WebRequest.Create(url);
+                    request.Proxy = null;
+                    request.Timeout = 30000;
+
                     try
                     {
-                        using (WebResponse webResponse = webRequest.GetResponse())
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                        Stream dataStream = response.GetResponseStream();
+                        StreamReader reader = new StreamReader(dataStream);
+
+                        html = reader.ReadToEnd();
+
+                        if (!html.Contains("<title")) return;
+
+                        string temp = Useful.getBetween(html, "<title", "</title>");
+                        title = Useful.getBetween(temp, ">", "</title>");
+
+                        if (!string.IsNullOrWhiteSpace(title))
                         {
-                            foreach (string header in webResponse.Headers)
-                                headers.Add(header, webResponse.Headers[header]);
+
+                            title = title.Replace('\n', ' ').Replace('\r', ' ').Replace('\t', ' ').Trim();
+                            title = HttpUtility.HtmlDecode(title);
+                            if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
+
+                            message = Privmsg(CHANNEL, "[title] " + title);
+                            Client.sendMessage(message);
                         }
+
+
                     }
-                    catch
+                    catch { }
+                }
+                else
+                {
+                    try
                     {
-
-                    }
-
-                    if (headers.ContainsKey("Content-Type"))
-                    {
-                        if (headers["Content-Type"].Contains("text/html"))
+                        string[] sizes = { "B", "KB", "MB", "GB" };
+                        double len = Convert.ToDouble(headers["Content-Length"]);
+                        int order = 0;
+                        while (len >= 1024 && order + 1 < sizes.Length)
                         {
-                            WebRequest request = WebRequest.Create(url);
-                            request.Proxy = null;
-                            request.Timeout = 30000;
-                            
-                            try
-                            {
-                                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                                Stream dataStream = response.GetResponseStream();
-                                StreamReader reader = new StreamReader(dataStream);
-
-                                html = reader.ReadToEnd();
-
-                                if (!html.Contains("<title")) return;
-
-                                string temp = Useful.getBetween(html, "<title", "</title>");
-                                title = Useful.getBetween(temp, ">", "</title>");
-                                
-                                if (!string.IsNullOrWhiteSpace(title))
-                                {
-
-                                    title = title.Replace('\n', ' ').Replace('\r', ' ').Replace('\t', ' ').Trim();
-                                    title = HttpUtility.HtmlDecode(title);
-                                    if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
-
-                                    message = Privmsg(CHANNEL, "[title] " + title);
-                                    Client.sendMessage(message);
-                                }
-                                
-
-                            }
-                            catch { }
+                            order++;
+                            len = len / 1024;
                         }
-                        else
-                        {
-                            try {
-                                string[] sizes = { "B", "KB", "MB", "GB" };
-                                double len = Convert.ToDouble(headers["Content-Length"]);
-                                int order = 0;
-                                while (len >= 1024 && order + 1 < sizes.Length)
-                                {
-                                    order++;
-                                    len = len / 1024;
-                                }
 
-                                // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
-                                // show a single decimal place, and no space.
-                                string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+                        // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+                        // show a single decimal place, and no space.
+                        string result = String.Format("{0:0.##} {1}", len, sizes[order]);
 
 
-                                message = Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
-                                Client.sendMessage(message);
-                            }
-                            catch{ }
-
-                            
-
-                        }
+                        message = Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
+                        Client.sendMessage(message);
                     }
+                    catch { }
                 }
             }
         }
@@ -2651,7 +2651,7 @@ namespace NarutoBot3
                     if(u == null || u.myinfo == null|| xmlUser.Contains("<error>Invalid username</error>"))
                         message = Privmsg(CHANNEL, "Error fetching user stats");
                     else
-                        message = Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Curretly Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
+                        message = Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
                 }
 
             }
@@ -3626,12 +3626,8 @@ namespace NarutoBot3
             if (String.IsNullOrEmpty(line) || String.IsNullOrEmpty(nick)) return;
 
             string[] temp = line.Split(' ');
-            string subreddit = "";
-            string url = "";
-            string message;
-
-            RedditSharp.Things.Post post;
-            RedditSharp.Things.Comment comment;
+            string subreddit;
+            string url;
 
             if (ul.userIsMuted(nick)) return;
 
@@ -3641,64 +3637,91 @@ namespace NarutoBot3
                 {
                     url = st;
                     url = url.Replace("http://", string.Empty).Replace("https://", string.Empty);
+
+                    subreddit = Useful.getBetween(url, "/r/", "/");
+
+                    string[] linkParse = url.Replace("\r", string.Empty).Split('/');
+
+                    if (linkParse.Length >= 7 && !String.IsNullOrEmpty(linkParse[6]))    //With Comment
+                    {
+                        redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6].Split(new char[] { '?' }, 2)[0]);
+
+                    }
+                    else  //No comment link
+                    {
+                        redditInfo(CHANNEL, url, linkParse[4]);
+                    }
                 }
-                else return;
             }
+        }
 
-            subreddit = Useful.getBetween(url, "/r/", "/");
-            
-            string[] linkParse = url.Replace("\r", string.Empty).Split('/');
+        void redditInfoWithComment(string CHANNEL, string url, string postName, string commentName)
+        {
+            RedditSharp.Things.Post post;
+            RedditSharp.Things.Comment comment;
 
-            if (linkParse.Length >= 7 && !String.IsNullOrEmpty(linkParse[6]))    //With Comment
+            string message;
+
+            string postID = postName;
+            string commentID = commentName;
+
+            string subreddit = Useful.getBetween(url, "/r/", "/");
+
+            try
             {
-                string postName = linkParse[4];
-                string commentName = linkParse[6].Split(new char[] { '?' }, 2)[0];  //Split is for removing url args
+                post = reddit.GetPost(new Uri("https://" + url));
 
-                try{
-                    //post = (RedditSharp.Things.Post) reddit.GetThingByFullname("t3_" + postName);
-                    post = reddit.GetPost(new Uri("http://" + url));
-
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                    Client.sendMessage(message);
-                }
-                catch{
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
-                    Client.sendMessage(message);
-                }
-
-                try{
-                    comment = reddit.GetComment(new Uri("https://"+url));
-
-                    if (comment.Body.ToString().Length > 300)
-                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
-                    else
-                        message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
-                    Client.sendMessage(message);
-                }
-                catch{
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get comment info" + "\x02");
-                    Client.sendMessage(message);
-                }
-
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                Client.sendMessage(message);
             }
-            else  //No comment link
-            {      
-                try {
-                    //post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
-                    post = reddit.GetPost(new Uri("http://" + url));
+            catch
+            {
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
+                Client.sendMessage(message);
+            }
 
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                    Client.sendMessage(message);
+            try
+            {
+                comment = reddit.GetComment(new Uri("https://" + url));
 
-                    if (!post.IsSelfPost)
-                        Client.sendMessage(Privmsg(CHANNEL, "\x033" + post.Url + "\x03"));
-                }
+                if (comment.Body.ToString().Length > 300)
+                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
+                else
+                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
+                Client.sendMessage(message);
+            }
+            catch
+            {
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get comment info" + "\x02");
+                Client.sendMessage(message);
+            }
+        }
 
-                catch {
-                    message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
-                    Client.sendMessage(message);
-                }
-            }    
+
+        void redditInfo(string CHANNEL, string url, string postName)
+        {
+            RedditSharp.Things.Post post;
+
+            string message;
+            string subreddit = Useful.getBetween(url, "/r/", "/");
+
+            try
+            {
+                //post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
+                post = reddit.GetPost(new Uri("http://" + url));
+
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                Client.sendMessage(message);
+
+                if (!post.IsSelfPost)
+                    Client.sendMessage(Privmsg(CHANNEL, "\x033" + post.Url + "\x03"));
+            }
+
+            catch
+            {
+                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
+                Client.sendMessage(message);
+            }
         }
 
         void wiki(string CHANNEL, string nick, string args)
@@ -3851,7 +3874,6 @@ namespace NarutoBot3
                     stats.tell();
                     ul.saveData();
                 }
-
             }
         }
 
