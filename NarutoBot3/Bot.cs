@@ -1060,6 +1060,11 @@ namespace NarutoBot3
                             WriteMessage("* Detected an url from " + user, currentColorScheme.BotReport);
                             urlTitle(whoSent, user, msg);
                         }
+                    else if(msg.TrimEnd('?').EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
+                        {
+                            WriteMessage("* Detected a think message from " + user, currentColorScheme.BotReport);
+                            botThink(whoSent, msg, user);
+                        }
 
                     else if (message.Contains("\x01"))
                         {
@@ -2398,6 +2403,28 @@ namespace NarutoBot3
                     }
                 }
             }
+        }
+
+        public void botThink(string CHANNEL, string line, string nick)
+        {
+            string message;
+
+            if (ul.userIsMuted(nick)) return;
+
+            string[] split = line.Split(' ');
+
+            string newLine = "";
+
+            for (int i = 0; i < split.Length - 1; i++)
+                newLine += split[i] + " ";
+
+            newLine = newLine.Trim();
+            newLine = newLine.TrimEnd(',');
+
+            string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
+            message = Privmsg(CHANNEL, answer);
+
+            Client.sendMessage(message);
         }
 
         void getURLInfo(string CHANNEL, string url)
