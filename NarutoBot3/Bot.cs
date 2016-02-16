@@ -362,7 +362,7 @@ namespace NarutoBot3
                         if (!found) 
                             userList.Add(s);
 
-                        ul.makeOnline(removeUserMode(s));
+                        ul.setUserOnline(removeUserMode(s));
 
                         if (s[0] == '@')
                             ul.setUserChannelOP(s, true);
@@ -457,7 +457,7 @@ namespace NarutoBot3
 
                     OnJoin(EventArgs.Empty);
 
-                    ul.makeOnline(removeUserMode(Who));
+                    ul.setUserOnline(removeUserMode(Who));
 
                     greetUser(removeUserMode(Who));
 
@@ -487,7 +487,7 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.makeOffline(WhoLeft);
+                    ul.setUserOffline(WhoLeft);
 
                     OnLeave(EventArgs.Empty);
                     break;
@@ -514,7 +514,7 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.makeOffline(WhoLeft);
+                    ul.setUserOffline(WhoLeft);
 
 
                     OnLeave(EventArgs.Empty);
@@ -551,8 +551,8 @@ namespace NarutoBot3
 
                     OnNickChange(EventArgs.Empty);
 
-                    ul.makeOffline(oldnick);
-                    ul.makeOnline(removeUserMode(newnick));
+                    ul.setUserOffline(oldnick);
+                    ul.setUserOnline(removeUserMode(newnick));
 
 
                     messageDelivery(removeUserMode(newnick));
@@ -687,7 +687,7 @@ namespace NarutoBot3
                     userTemp.Clear();
                     Who = kickedUser;
 
-                    ul.makeOffline(kickedUser);
+                    ul.setUserOffline(kickedUser);
 
                     OnKick(EventArgs.Empty);
                     break;
@@ -3565,6 +3565,36 @@ namespace NarutoBot3
                                 message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced)).Trim();
                             else
                                 message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced)).Trim();
+
+                        }
+                    }
+
+                    else if (String.Compare(split[0], "will", true) == 0)
+                    {
+                        bool yes = false;
+
+                        if (r.Next(0, 2) == 1)
+                            yes = true;
+
+                        if (split.Length >= 2)
+                        {
+                            string subject = subjectNPL;
+                            string rest = "";
+
+                            for (int i = 1; i < split.Length; i++)
+                            {
+                                rest += split[i] + " ";
+                            }
+                            rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
+
+                            string replaced = questionsRegex(rest);
+
+                            subject = questionsRegex(subject);
+
+                            if (yes)
+                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " will " + replaced)).Trim();
+                            else
+                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " won't " + replaced)).Trim();
 
                         }
                     }

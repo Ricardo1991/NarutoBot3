@@ -40,7 +40,7 @@ namespace NarutoBot3
 
         }
 
-        public bool hasUserByName(string name)
+        public bool userExists(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return false;
 
@@ -56,14 +56,14 @@ namespace NarutoBot3
             return false;
         }
 
-        public void makeOnline(string n)
+        public void setUserOnline(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
 
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
 
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -75,13 +75,13 @@ namespace NarutoBot3
             else users.Add(new User(n, true));
         }
 
-        public void makeOffline(string n)
+        public void setUserOffline(string n)
         {
             if (string.IsNullOrWhiteSpace(n)) return;
 
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -98,7 +98,7 @@ namespace NarutoBot3
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
 
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -120,7 +120,7 @@ namespace NarutoBot3
 
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -142,7 +142,7 @@ namespace NarutoBot3
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
 
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -163,7 +163,7 @@ namespace NarutoBot3
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -184,7 +184,7 @@ namespace NarutoBot3
             if (string.IsNullOrWhiteSpace(n)) return;
             n = n.Replace("@", string.Empty).Replace("+", string.Empty);
             n = n.Trim();
-            if (hasUserByName(n))
+            if (userExists(n))
             {
                 foreach (User u in Users)
                 {
@@ -366,7 +366,7 @@ namespace NarutoBot3
             destinatary = destinatary.Replace("@", string.Empty).Replace("+", string.Empty);
             destinatary = destinatary.Trim();
 
-            if (hasUserByName(destinatary))
+            if (userExists(destinatary))
             {
                 foreach (User u in Users)
                 {
