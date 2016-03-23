@@ -261,12 +261,20 @@ namespace NarutoBot3
 
             if (File.Exists("textSample.xml"))
             {
-                XmlDocument d = new XmlDocument();
-                d.Load("textSample.xml");
-                tmc.feed(d);
+                
+
+                try {
+                    XmlDocument d = new XmlDocument();
+                    d.Load("textSample.xml");
+                    tmc.feed(d);
+                }
+                catch
+                {
+                    Settings.Default.randomTextEnabled = false;
+                    Settings.Default.Save();
+                }
+                
             }
-            
-            
 
             reddit = new Reddit(false);
 
@@ -958,7 +966,7 @@ namespace NarutoBot3
                             }
                         else if (String.Compare(cmd, "rkill", true) == 0)
                             {
-                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                                WriteMessage("* Received a randomkill request from " + user, currentColorScheme.BotReport);
                                 randomKill(whoSent, user, arg);
                             }
                         else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
@@ -3045,27 +3053,22 @@ namespace NarutoBot3
 
                 if (!killgen.readyToGenerate())
                 {
-                    message = Privmsg(CHANNEL, "Sorry, i can't think of a new kill right now.");
+                    message = Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
                 }
                 else
                 {
                     temp = killgen.generateSentence();
 
-                    if (temp.ToLower().Contains("<normal>"))
-                    {
-                        temp = temp.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
+                    killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
 
+                    if (killString.ToLower().Contains("<normal>"))
+                    {
+                        killString = killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
                         message = Privmsg(CHANNEL, killString);
                     }
                     else
-                    {
-                        killString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
-
                         message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
-                    }
-
-
+                    
 
                     while (message.Contains("<random>"))
                     {

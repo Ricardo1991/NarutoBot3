@@ -62,6 +62,8 @@ namespace NarutoBot3
 
             //Show ConnectWindow Form and try to connect
 
+            loadSettings();
+
             ConnectWindow connect = new ConnectWindow();
 
             if (connect.ShowDialog() == DialogResult.OK)
@@ -84,8 +86,6 @@ namespace NarutoBot3
         public bool connect()   
         {
             ChangeConnectingLabel("Connecting...");
-
-            loadSettings();
 
             client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
@@ -322,8 +322,6 @@ namespace NarutoBot3
             bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
-
-            
 
 
         }

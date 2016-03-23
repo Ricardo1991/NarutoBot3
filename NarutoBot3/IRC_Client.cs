@@ -51,6 +51,7 @@ namespace NarutoBot3
 
             try{
                 sendMessage(user_message);
+                
                 sendMessage(nick_message);
                 
                 return true;    //Weee, we connected!

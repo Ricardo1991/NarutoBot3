@@ -94,6 +94,9 @@
     <Prefer32Bit>true</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChatterBotAPI">
       <HintPath>..\chatter-bot-api\ChatterBotAPI.dll</HintPath>
@@ -344,7 +347,6 @@
     <Content Include="models\lexparser\englishPCFG.ser.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="NarutoBot3_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
