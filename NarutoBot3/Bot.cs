@@ -324,7 +324,7 @@ namespace NarutoBot3
                     sendMessage(new Pong(null, messageObject.SplitMessage[0]));
 
                     #if DEBUG
-                        WriteMessage(message);
+                        WriteMessage(messageObject.SplitMessage[0]);
                     #endif
                     break;
 
@@ -1486,25 +1486,25 @@ namespace NarutoBot3
             {
                 if (Client.NICK.Length > 15)
                 {
-                    WriteMessage(Client.NICK.Truncate(16) + ":" + message);
+                    WriteMessage(Client.NICK.Truncate(16) + ":" + message.body);
                 }
 
                 else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console
                 {
-                    WriteMessage(Client.NICK + "\t: " + message);
+                    WriteMessage(Client.NICK + "\t: " + message.body);
                 }
 
                 else
                 {
-                    WriteMessage(Client.NICK + "\t\t: " + message);
+                    WriteMessage(Client.NICK + "\t\t: " + message.body);
                 }
             }
             else if(message is Messages.Action)
             {
-                WriteMessage("             * : " + message, currentColorScheme.OwnMessage);
+                WriteMessage("             * : " + message.body, currentColorScheme.OwnMessage);
             }
 
-            else
+            else if (message is Messages.Privmsg)
             {
                 string alignedNick = Client.NICK.Truncate(13);
                 int tab = 15 - alignedNick.Length;
@@ -1512,7 +1512,7 @@ namespace NarutoBot3
                 for (int i = 0; i < tab; i++)
                     alignedNick = alignedNick + " ";
 
-                WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
+                WriteMessage(alignedNick + ": " + message.body, currentColorScheme.OwnMessage);
             }
                 
         }

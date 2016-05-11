@@ -492,7 +492,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (client.isConnected)
             {
-                client.sendMessage(new Nick(null,client.NICK));
+                bot.sendMessage(new Nick(null,client.NICK));
                 return true;
             }
 
@@ -916,7 +916,7 @@ namespace NarutoBot3
                 else //Normal send
                     message = new Privmsg(HOME_CHANNEL, InputBox.Text);
 
-            if (message != null && !String.IsNullOrWhiteSpace(message.body)) client.sendMessage(message);
+            if (message != null && !String.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
         }
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
