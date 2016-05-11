@@ -280,7 +280,6 @@ namespace NarutoBot3
                 try
                 {
                     buffer = client.readMessage();
-                    if (buffer == null);
 
                     byte[] bytes = Encoding.UTF8.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);

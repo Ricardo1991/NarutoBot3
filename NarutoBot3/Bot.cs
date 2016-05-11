@@ -4195,7 +4195,7 @@ namespace NarutoBot3
         {
             if (!WaitingForPong)
             {
-                Message message = new Ping(null,"PING " + GetTimestamp(DateTime.Now));
+                Message message = new Ping(null,GetTimestamp(DateTime.Now));
 
                 #if DEBUG
                     WriteMessage(message.body);
