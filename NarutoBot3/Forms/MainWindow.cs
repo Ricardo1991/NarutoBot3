@@ -88,6 +88,12 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connecting...");
 
+            HOME_CHANNEL = Settings.Default.Channel;
+            HOST = Settings.Default.Server;
+            NICK = Settings.Default.Nick;
+            PORT = Convert.ToInt32(Settings.Default.Port);
+            REALNAME = Settings.Default.RealName;
+
             client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
 
             if (client.Connect())

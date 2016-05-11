@@ -18,7 +18,7 @@ namespace NarutoBot3.Messages
 
         public override string toString()
         {
-            return header + " " + destinatary + " :"+"\x01" + "ACTION" + body.Trim() + "\x01" + footer;
+            return header + " " + destinatary + " :"+"\x01" + "ACTION " + body.Trim() + "\x01" + footer;
         }
         public override bool isValid()
         {
