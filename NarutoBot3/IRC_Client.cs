@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NarutoBot3.Messages;
+using System;
 using System.IO;
 using System.Net.Sockets;
 
@@ -17,9 +18,9 @@ namespace NarutoBot3
 
         public string HOST_SERVER;
 
-        private string user_message;
-        private string nick_message;
-        private string join_message;
+        private Message user_message;
+        private Message nick_message;
+        private Message join_message;
 
         private NetworkStream stream;
         private TcpClient irc;
@@ -34,9 +35,9 @@ namespace NarutoBot3
             NICK = nick;
             REALNAME = realName;
 
-            user_message = "USER " + NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME + "\n";
-            nick_message = "NICK " + NICK + "\r\n";
-            join_message = "JOIN " + HOME_CHANNEL + "\r\n";
+            user_message = new Messages.User(null, NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
+            nick_message = new Nick(null, NICK);
+            join_message = new Join(null, HOME_CHANNEL);
         }
 
         public bool Connect()
@@ -70,50 +71,32 @@ namespace NarutoBot3
 
         public void Join(string channel)
         {
-            sendMessage("JOIN " + channel + "\r\n");
+            sendMessage(new Join(null, channel));
             isConnected = true;
         }
 
-        public bool sendMessage(string message)
+        public bool sendMessage(Message message)
         {
-            string temp;
-            string header;
-            string footer = "\r\n";
-            bool isAction = false;
-
-            if (String.IsNullOrWhiteSpace(message) || writer  == null) return false;
-
-            header = message.Split(new char[]{':'} , 2)[0]+":";
+            if (!message.isValid() || writer == null) return false;
 
             try
             {
-                if (message.Length > 450)
+                if (message.toString().Length > 450)
                 {
-                    message = Useful.getBetween(message, header, "");
-                    message = message.Replace(footer, String.Empty);
-
-                    while (message.Length > (450 - header.Length - footer.Length))
+                    while (message.toString().Length > 450)
                     {
-                        if (message.Contains("\x01")){
-                            temp = header + message.Substring(0, 440 - header.Length - footer.Length) + "\x01" + footer;
-                            isAction = true;
-                        }
+                        var nextMessage = message;
+                        message.body = message.body.Substring(0, 400);
+                        nextMessage.body = nextMessage.body.Substring(400);
 
-                        else{
-                            temp = header + message.Substring(0, 440 - header.Length - footer.Length) + footer;
-                        }
+                        writer.WriteLine(message.toString());
 
-                        message = message.Substring(440 - header.Length - footer.Length);
-
-                        writer.WriteLine(temp);
-                        writer.Flush();
+                        message = nextMessage;
                     }
-                    if (isAction) message = message.Replace("\x01", String.Empty);
-                    writer.WriteLine(header + message + footer);
 
                 }
-                else
-                    writer.WriteLine(message);
+               
+                writer.WriteLine(message.toString());
 
                 writer.Flush();
                 return true;
@@ -128,14 +111,14 @@ namespace NarutoBot3
         {
             if (reader != null)
                 return reader.ReadLine();
-            else return null;
+            else return string.Empty;
         }
 
         public void Disconnect(string quitMessage)
         {
             try
             {
-                if (writer != null) sendMessage("QUIT "+quitMessage+"\r\n");
+                if (writer != null) sendMessage(new Quit(null, quitMessage));
 
                 isConnected = false;
 

@@ -876,6 +876,7 @@ rubs baby lotion on <target>’s eyes
 takes away <target>’s baby bottle in the middle of them eating
 takes <target> on a date to Red Lobster
 eats all of <target>’s Trix
+does not refill <target>’s water bowl
 forgets to feed <target>
 frees <target> from their cage
 breaks <target>’s legs so that they will appreciate them more

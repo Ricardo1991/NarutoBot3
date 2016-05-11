@@ -19,6 +19,7 @@ using System.Xml.Serialization;
 using TextMarkovChains;
 using ChatterBotAPI;
 using TweetSharp;
+using NarutoBot3.Messages;
 
 namespace NarutoBot3
 {
@@ -306,7 +307,7 @@ namespace NarutoBot3
         {
             List<string> userTemp = new List<string>();
             bool found;
-            Message messageObject;
+            ParsedMessage messageObject;
 
             Who = "";
             WhoLeft = "";
@@ -314,13 +315,13 @@ namespace NarutoBot3
 
             if (String.IsNullOrEmpty(message)) return;
 
-            messageObject = new Message(message);
+            messageObject = new ParsedMessage(message);
 
             switch (messageObject.Type)
             {
                 case ("PING"):
 
-                    Client.sendMessage("PONG :" + messageObject.SplitMessage[0] + "\r\n");
+                    sendMessage(new Pong(null, messageObject.SplitMessage[0]));
 
                     #if DEBUG
                         WriteMessage(message);
@@ -796,7 +797,7 @@ namespace NarutoBot3
 
                             if (String.Compare(msg, "!anime best anime ever", true) == 0)
                             {
-                                Client.sendMessage(Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                                sendMessage(new Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                             }
                         else if (String.Compare(cmd, "help", true) == 0)
                             {
@@ -1364,7 +1365,7 @@ namespace NarutoBot3
 
         void GreetToogle(string nick)
         {
-            string message;
+            Message message;
             string state = "disabled";
 
             foreach (User u in ul.Users)
@@ -1374,17 +1375,16 @@ namespace NarutoBot3
                     u.GreetingEnabled = !u.GreetingEnabled;
 
                     if(u.GreetingEnabled) state = "enabled";
-                    message = string.Empty;
-                    message = Notice(nick, "Your Greeting is now " + state);
+                    message = new Notice(nick, "Your Greeting is now " + state);
 
                     ul.saveData();
 
-                    Client.sendMessage(message);
+                    sendMessage(message);
                     return;
                 }
             }
 
-            Client.sendMessage(Notice(nick, "You didn't set a Greeting yet"));
+            sendMessage(new Notice(nick, "You didn't set a Greeting yet"));
         }
 
         public void ReadNickGen()//These are for the Nick gen
@@ -1478,24 +1478,32 @@ namespace NarutoBot3
             }
         }
 
-
-        /// <summary>
-        /// Sends a Message to the destinatary
-        /// </summary>
-        /// <param Name="destinatary">string with either a User or a channel, it's where the Message will be sent</param>
-        /// <param Name="Message">String of text with the Message that will be delivered</param>
-        public string Privmsg(string destinatary, string message)
+        public void sendMessage(Message message)
         {
-            string result;
+            Client.sendMessage(message);
 
-            result = "PRIVMSG " + destinatary + " :" + message.Trim() + "\r\n";
-
-            if (message.Contains("\x01"+"ACTION "))
+            if (message is Notice)
             {
-                message = Client.NICK + " " + message.Trim().Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
+                if (Client.NICK.Length > 15)
+                {
+                    WriteMessage(Client.NICK.Truncate(16) + ":" + message);
+                }
 
+                else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console
+                {
+                    WriteMessage(Client.NICK + "\t: " + message);
+                }
+
+                else
+                {
+                    WriteMessage(Client.NICK + "\t\t: " + message);
+                }
+            }
+            else if(message is Messages.Action)
+            {
                 WriteMessage("             * : " + message, currentColorScheme.OwnMessage);
             }
+
             else
             {
                 string alignedNick = Client.NICK.Truncate(13);
@@ -1505,61 +1513,31 @@ namespace NarutoBot3
                     alignedNick = alignedNick + " ";
 
                 WriteMessage(alignedNick + ": " + message, currentColorScheme.OwnMessage);
-
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Sends a Notice to the destinatary
-        /// </summary>
-        /// <param Name="destinatary">string with either a User or a channel, it's where the Message will be sent</param>
-        /// <param Name="Message">String of text with the Message that will be delivered</param>
-        public string Notice(string destinatary, string message)
-        {
-            string result;
-
-            result = "NOTICE " + destinatary + " :" + message.Trim() + "\r\n";
-
-            if (Client.NICK.Length > 15){
-                WriteMessage(Client.NICK.Truncate(16) + ":" + message);
             }
                 
-            else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console
-            {
-                WriteMessage(Client.NICK + "\t: " + message);
-            }
-                
-            else
-            {
-                WriteMessage(Client.NICK + "\t\t: " + message);
-            }
-                
-
-            return result;
         }
 
         public void pokeUser(string nick)
         {
-            string message = Privmsg(Client.HOME_CHANNEL, "\x01" + "ACTION stabs " + nick + " with a sharp knife" + "\x01");
-            Client.sendMessage(message);
+            Message message = new Messages.Action(Client.HOME_CHANNEL, "stabs " + nick + " with a sharp knife");
+            sendMessage(message);
 
         }
         public void whoisUser(string nick)
         {
-            string message = "WHOIS " + nick + "\n";
-            Client.sendMessage(message);
+            Message message = new Whois(null, nick);
+            sendMessage(message);
 
         }
 
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            string message;
+            Message message;
 
             if (!Settings.Default.randomTextEnabled || tmcCount<8 || !tmc.readyToGenerate()) return;
 
-            message = Privmsg(Client.HOME_CHANNEL, "\x02" +  tmc.generateSentence() + "\x02");
-            Client.sendMessage(message);
+            message = new Privmsg(Client.HOME_CHANNEL, "\x02" + tmc.generateSentence() + "\x02");
+            sendMessage(message);
 
         }
 
@@ -1593,46 +1571,46 @@ namespace NarutoBot3
                         ReadNickGen();
                         ReadHelp();
                         ReadRules();
-                        Client.sendMessage(Notice(user, "Reloaded everything!"));
+                        sendMessage(new Notice(user, "Reloaded everything!"));
                         break;
                     case "rules":
                     case "rule":
                         ReadRules();
-                        Client.sendMessage(Notice(user, "Reloaded rules!"));
+                        sendMessage(new Notice(user, "Reloaded rules!"));
                         break;
                     case "help":
                         ReadHelp();
-                        Client.sendMessage(Notice(user, "Reloaded help!"));
+                        sendMessage(new Notice(user, "Reloaded help!"));
                         break;
                     case "nick":
                     case "nicks":
                         ReadNickGen();
-                        Client.sendMessage(Notice(user, "Reloaded nicks!"));
+                        sendMessage(new Notice(user, "Reloaded nicks!"));
                         break;
                     case "trivia":
                     case "trivias":
                         ReadTrivia();
-                        Client.sendMessage(Notice(user, "Reloaded trivia!"));
+                        sendMessage(new Notice(user, "Reloaded trivia!"));
                         break;
                     case "kills":
                     case "kill":
                         ReadKills();
-                        Client.sendMessage(Notice(user, "Reloaded kills!"));
+                        sendMessage(new Notice(user, "Reloaded kills!"));
                         break;
 
                     case "facts":
                     case "fact":
                         ReadFacts();
-                        Client.sendMessage(Notice(user, "Reloaded facts!"));
+                        sendMessage(new Notice(user, "Reloaded facts!"));
                         break;
                     case "quotes":
                     case "quote":
                         ReadQuotes();
-                        Client.sendMessage(Notice(user, "Reloaded quotes!"));
+                        sendMessage(new Notice(user, "Reloaded quotes!"));
                         break;
                     case "funk":
                         ReadFunk();
-                        Client.sendMessage(Notice(user, "Reloaded funk!"));
+                        sendMessage(new Notice(user, "Reloaded funk!"));
                         break;
                     default:
                         break;
@@ -1651,71 +1629,71 @@ namespace NarutoBot3
                 switch (option)
                 {
                     case "roll":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getRoll()[0] + " Lifetime: " + stats.getRoll()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getRoll()[0] + " Lifetime: " + stats.getRoll()[1]));
                         break;
                     case "anime":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getAnime()[0] + " Lifetime: " + stats.getAnime()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getAnime()[0] + " Lifetime: " + stats.getAnime()[1]));
                         break;
                     case "help":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getHelp()[0] + " Lifetime: " + stats.getHelp()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getHelp()[0] + " Lifetime: " + stats.getHelp()[1]));
                         break;
                     case "rules":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getRules()[0] + " Lifetime: " + stats.getRules()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getRules()[0] + " Lifetime: " + stats.getRules()[1]));
                         break;
                     case "greet":
                     case "greetings":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getGreet()[0] + " Lifetime: " + stats.getGreet()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getGreet()[0] + " Lifetime: " + stats.getGreet()[1]));
                         break;
                     case "time":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTime()[0] + " Lifetime: " + stats.getTime()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getTime()[0] + " Lifetime: " + stats.getTime()[1]));
                         break;
                     case "temperature":
                     case "temperatures":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTemperature()[0] + " Lifetime: " + stats.getTemperature()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getTemperature()[0] + " Lifetime: " + stats.getTemperature()[1]));
                         break;
                     case "wiki":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getWiki()[0] + " Lifetime: " + stats.getWiki()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getWiki()[0] + " Lifetime: " + stats.getWiki()[1]));
                         break;
                     case "poke":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getPoke()[0] + " Lifetime: " + stats.getPoke()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getPoke()[0] + " Lifetime: " + stats.getPoke()[1]));
                         break;
                     case "trivia":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getTrivia()[0] + " Lifetime: " + stats.getTrivia()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getTrivia()[0] + " Lifetime: " + stats.getTrivia()[1]));
                         break;
                     case "quote":
                     case "quotes":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getQuote()[0] + " Lifetime: " + stats.getQuote()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getQuote()[0] + " Lifetime: " + stats.getQuote()[1]));
                         break;
                     case "choose":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getChoose()[0] + " Lifetime: " + stats.getChoose()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getChoose()[0] + " Lifetime: " + stats.getChoose()[1]));
                         break;
                     case "shuffle":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getShuffle()[0] + " Lifetime: " + stats.getShuffle()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getShuffle()[0] + " Lifetime: " + stats.getShuffle()[1]));
                         break;
                     case "funk":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getFunk()[0] + " Lifetime: " + stats.getFunk()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getFunk()[0] + " Lifetime: " + stats.getFunk()[1]));
                         break;
                     case "giphy":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getGiphy()[0] + " Lifetime: " + stats.getGiphy()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getGiphy()[0] + " Lifetime: " + stats.getGiphy()[1]));
                         break;
                     case "nick":
                     case "nicks":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getNick()[0] + " Lifetime: " + stats.getNick()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getNick()[0] + " Lifetime: " + stats.getNick()[1]));
                         break;
                     case "question":
                     case "questions":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getQuestion()[0] + " Lifetime: " + stats.getQuestion()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getQuestion()[0] + " Lifetime: " + stats.getQuestion()[1]));
                         break;
                     case "youtube":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getYoutube()[0] + " Lifetime: " + stats.getYoutube()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getYoutube()[0] + " Lifetime: " + stats.getYoutube()[1]));
                         break;
                     case "kill":
                     case "kills":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getKill()[0] + " Lifetime: " + stats.getKill()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getKill()[0] + " Lifetime: " + stats.getKill()[1]));
                         break;
                     case "fact":
                     case "facts":
-                        Client.sendMessage(Privmsg(whoSent, "Session: " + stats.getFact()[0] + " Lifetime: " + stats.getFact()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getFact()[0] + " Lifetime: " + stats.getFact()[1]));
                         break;
 
 
@@ -1733,146 +1711,146 @@ namespace NarutoBot3
 
             if (options.Length < 2)
             {
-                Client.sendMessage(Notice(user, "Not enought arguments"));
+                sendMessage(new Notice(user, "Not enought arguments"));
                 return;
             }
 
             if (options[1] != "off")
                 if (options[1] == "on")
                     status = true;
-                else { Client.sendMessage(Notice(user, "Invalid Status")); return; }
+                else { sendMessage(new Notice(user, "Invalid Status")); return; }
 
             switch (options[0])
             {
                 case "rules":
                     Settings.Default.rules_Enabled = status;
-                    Client.sendMessage(Notice(user, "Rules is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Rules is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "help":
                     Settings.Default.help_Enabled = status;
-                    Client.sendMessage(Notice(user, "Help is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Help is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "time":
                     Settings.Default.timeEnabled = status;
-                    Client.sendMessage(Notice(user, "Time is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Time is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "conversion":
                 case "conversions":
                     Settings.Default.conversionEnabled = status;
-                    Client.sendMessage(Notice(user, "Conversions is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Conversions is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "wiki":
                     Settings.Default.wikiEnabled = status;
-                    Client.sendMessage(Notice(user, "Wiki is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Wiki is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "anime":
                     Settings.Default.aniSearchEnabled = status;
-                    Client.sendMessage(Notice(user, "Anime Search is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Anime Search is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "youtube":
                     Settings.Default.youtubeSearchEnabled = status;
-                    Client.sendMessage(Notice(user, "Youtube Search is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Youtube Search is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "choose":
                     Settings.Default.chooseEnabled = status;
-                    Client.sendMessage(Notice(user, "Choose is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Choose is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "shuffle":
                     Settings.Default.shuffleEnabled = status;
-                    Client.sendMessage(Notice(user, "Shuffle is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Shuffle is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "roll":
                     Settings.Default.roll_Enabled = status;
-                    Client.sendMessage(Notice(user, "Roll is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Roll is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "hello":
                     Settings.Default.hello_Enabled = status;
-                    Client.sendMessage(Notice(user, "Hello is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Hello is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "nick":
                 case "nicks":
                     Settings.Default.nickEnabled = status;
-                    Client.sendMessage(Notice(user, "Nickname Generator is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Nickname Generator is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "text":
                     Settings.Default.randomTextEnabled = status;
-                    Client.sendMessage(Notice(user, "Random Text is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Random Text is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "poke":
                     Settings.Default.pokeEnabled = status;
-                    Client.sendMessage(Notice(user, "Poke is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Poke is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "trivia":
                     Settings.Default.triviaEnabled = status;
-                    Client.sendMessage(Notice(user, "Trivia is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Trivia is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "kill":
                 case "kills":
                     Settings.Default.killEnabled = status;
-                    Client.sendMessage(Notice(user, "Kill is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Kill is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "fact":
                 case "facts":
                     Settings.Default.factsEnabled = status;
-                    Client.sendMessage(Notice(user, "Fact is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Fact is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "questions":
                 case "question":
                     Settings.Default.questionEnabled = status;
-                    Client.sendMessage(Notice(user, "Questions are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Questions are now " + (status ? "enabled" : "disabled")));
                     break;
                 case "greetings":
                 case "greet":
                 case "greets":
                     Settings.Default.greetingsEnabled = status;
-                    Client.sendMessage(Notice(user, "Greetings are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Greetings are now " + (status ? "enabled" : "disabled")));
                     break;
                 case "quotes":
                 case "quote":
                     Settings.Default.quotesEnabled = status;
-                    Client.sendMessage(Notice(user, "Quotes are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Quotes are now " + (status ? "enabled" : "disabled")));
                     break;
                 case "funk":
                     Settings.Default.funkEnabled = status;
-                    Client.sendMessage(Notice(user, "Funk is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Funk is now " + (status ? "enabled" : "disabled")));
                     break;
                 case "giphy":
                     Settings.Default.giphyEnabled = status;
-                    Client.sendMessage(Notice(user, "Giphy is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Giphy is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "reddit":
                 case "reddittitle":
                     Settings.Default.redditEnabled = status;
-                    Client.sendMessage(Notice(user, "Reddit Titles are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Reddit Titles are now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "vimeo":
                 case "vimeotitle":
                     Settings.Default.vimeoEnabled = status;
-                    Client.sendMessage(Notice(user, "Vimeo Titles are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Vimeo Titles are now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case"twitter":
                     Settings.Default.twitterEnabled = status;
-                    Client.sendMessage(Notice(user, "Tweets are now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Tweets are now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "youtubetitle":
                     Settings.Default.youtube_Enabled = status;
-                    Client.sendMessage(Notice(user, "Youtube Info is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Youtube Info is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "url":
                 case "urltitle":
                     Settings.Default.urlTitleEnabled = status;
-                    Client.sendMessage(Notice(user, "URL Info is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "URL Info is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 case "tell":
                     Settings.Default.tellEnabled = status;
-                    Client.sendMessage(Notice(user, "Tell is now " + (status ? "enabled" : "disabled")));
+                    sendMessage(new Notice(user, "Tell is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 default: break;
@@ -1883,7 +1861,7 @@ namespace NarutoBot3
 
         bool addBotOP(string nick, string targetUser)
         {
-            string message;
+            Message message;
 
             targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty);
 
@@ -1891,15 +1869,15 @@ namespace NarutoBot3
                 return false;
 
             ul.opUser(targetUser);
-            message = Notice(nick, targetUser + " was set as a bot operator!");
-            Client.sendMessage(message);
+            message = new Notice(nick, targetUser + " was set as a bot operator!");
+            sendMessage(message);
             return true;
 
         }
 
         bool muteUser(string nick, string targetUser)
         {
-            string message;
+            Message message;
 
             targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
 
@@ -1907,15 +1885,15 @@ namespace NarutoBot3
                 return false;
 
             ul.muteUser(targetUser);
-            message = Notice(nick, targetUser + " was muted!");
-            Client.sendMessage(message);
+            message = new Notice(nick, targetUser + " was muted!");
+            sendMessage(message);
             return true;
 
         }
 
         bool unmuteUser(string nick, string targetUser)
         {
-            string message;
+            Message message;
 
             targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
 
@@ -1923,8 +1901,8 @@ namespace NarutoBot3
                 return false;
 
             ul.unmuteUser(targetUser);
-            message = Notice(nick, targetUser + " was unmuted!");
-            Client.sendMessage(message);
+            message = new Notice(nick, targetUser + " was unmuted!");
+            sendMessage(message);
             return true;
 
         }
@@ -1935,7 +1913,7 @@ namespace NarutoBot3
         /// <param Name="targetUser">the User to be removed from the bot operator list</param>
         bool removeBotOP(string nick, string targetUser)
         {
-            string message;
+            Message message;
 
             targetUser = targetUser.Replace("\r", string.Empty).Replace("\n", string.Empty);
 
@@ -1944,23 +1922,23 @@ namespace NarutoBot3
 
             takeOps(targetUser);
 
-            message = Notice(nick, targetUser + " was removed as a bot operator!");
-            Client.sendMessage(message);
+            message = new Notice(nick, targetUser + " was removed as a bot operator!");
+            sendMessage(message);
             return true;
         }
 
         void opList(string nick)
         {
-            string message;
+            Message message;
 
             if (ul.userIsOperator(nick))
             {
-                message = Notice(nick, "Bot operators:");
-                Client.sendMessage(message);
+                message = new Notice(nick, "Bot operators:");
+                sendMessage(message);
                 foreach (User u in ul.Users)
                 {
                     if (u.IsOperator)
-                        Client.sendMessage(Notice(nick, "     -> " + u.Nick));
+                        sendMessage(new Notice(nick, "     -> " + u.Nick));
                 }
             }
         }
@@ -1969,33 +1947,33 @@ namespace NarutoBot3
         {
             if (ul.userIsOperator(nick))
             {
-                Client.sendMessage(Privmsg(CHANNEL, args));
+                sendMessage(new Privmsg(CHANNEL, args));
             }
         }
 
         void me(string CHANNEL, string args, string nick)
         {
             if (ul.userIsOperator(nick))
-                Client.sendMessage(Privmsg(CHANNEL, "\x01" + "ACTION " + args + "\x01"));
+                sendMessage(new  Messages.Action(CHANNEL, args));
         }
 
         public void silence(string nick)
         {
-            string message;
+            Message message;
             if (ul.userIsOperator(nick))
             {
                 if (Settings.Default.silence == true)
                 {
                     OnUnsilence(EventArgs.Empty);
-                    message = Notice(nick, "The bot was unmuted");
+                    message = new Notice(nick, "The bot was unmuted");
                 }
                 else
                 {
                     OnSilence(EventArgs.Empty);
-                    message = Notice(nick, "The bot was muted");
+                    message = new Notice(nick, "The bot was muted");
                 }
 
-                Client.sendMessage(message);
+                sendMessage(message);
                 return;
             }
         }
@@ -2004,21 +1982,21 @@ namespace NarutoBot3
         {
             if (!ul.userIsMuted(nick) && Settings.Default.hello_Enabled == true && Settings.Default.silence == false)
             {
-                string message = Privmsg(CHANNEL, "Hello " + nick + "!");
-                Client.sendMessage(message);
+                Message message = new Privmsg(CHANNEL, "Hello " + nick + "!");
+                sendMessage(message);
             }
         }
 
         void help(string nick)
         {
-            string message;
+            Message message;
 
             if (!ul.userIsMuted(nick) && Settings.Default.help_Enabled == true)
             {
                 foreach (string h in hlp)
                 {
-                    message = Notice(nick, h.Replace("\n", "").Replace("\r", ""));
-                    Client.sendMessage(message);
+                    message = new Notice(nick, h.Replace("\n", "").Replace("\r", ""));
+                    sendMessage(message);
 
                 }
                 stats.help();
@@ -2027,7 +2005,7 @@ namespace NarutoBot3
 
         void rules(string CHANNEL, string nick)
         {
-            string message;
+            Message message;
             if (ul.userIsMuted(nick)) return;
 
             if (Settings.Default.silence == true && Settings.Default.rules_Enabled == true)
@@ -2038,8 +2016,8 @@ namespace NarutoBot3
                     {
                         if (!string.IsNullOrWhiteSpace(h))
                         {
-                            message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                            Client.sendMessage(message);  
+                            message = new Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
+                            sendMessage(message);  
                         }
   
                     }
@@ -2054,8 +2032,8 @@ namespace NarutoBot3
                 {
                     if (!string.IsNullOrWhiteSpace(h))
                     {
-                        message = Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
-                        Client.sendMessage(message);
+                        message = new Privmsg(CHANNEL, h.Replace("\n", "").Replace("\r", ""));
+                        sendMessage(message);
                     }
                 }
                 stats.rules();
@@ -2065,18 +2043,18 @@ namespace NarutoBot3
 
         void toogleMirror(string nick)
         {
-            string message;
+            Message message;
             bool mirror = false;
 
             mirror = ul.toogleMirror(nick);
             
-            message = Notice(nick, "MirrorMode is now " + (mirror ? "enabled" :"disabled"));
-            Client.sendMessage(message);  
+            message = new Notice(nick, "MirrorMode is now " + (mirror ? "enabled" :"disabled"));
+            sendMessage(message);  
         }
 
         void toogleEnforceOff(string nick)
         {
-            string message;
+            Message message;
 
             if (!ul.userIsOperator(nick)) return;
 
@@ -2084,8 +2062,8 @@ namespace NarutoBot3
 
             Settings.Default.Save();
 
-            message = Notice(nick, "Enforce Mirror Mode Off is now " + (Settings.Default.enforceMirrorOff ? "enabled" : "disabled"));
-            Client.sendMessage(message);
+            message = new Notice(nick, "Enforce Mirror Mode Off is now " + (Settings.Default.enforceMirrorOff ? "enabled" : "disabled"));
+            sendMessage(message);
 
             OnEnforceMirrorChanged(EventArgs.Empty);
         }
@@ -2101,15 +2079,15 @@ namespace NarutoBot3
                 int number = random.Next(0, 100);
 
                 nick = nick.Replace("\r", "");
-                string message = Privmsg(CHANNEL, nick + " rolled a " + number);
-                Client.sendMessage(message);
+                Message message = new Privmsg(CHANNEL, nick + " rolled a " + number);
+                sendMessage(message);
                 stats.roll();
             }
         }
 
         private void poke(string CHANNEL, string nick)
         {
-            string message;
+            Message message;
             int userNumber = 0;
             Random rnd = new Random();
 
@@ -2123,15 +2101,15 @@ namespace NarutoBot3
                 }
                 while (removeUserMode(userList[userNumber]) == nick);
 
-                message = Privmsg(CHANNEL, "\x01" + "ACTION " + "pokes " + userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty) + "\x01");
-                Client.sendMessage(message);
+                message = new Messages.Action(CHANNEL, "pokes " + userList[userNumber].Replace("@", string.Empty).Replace("+", string.Empty));
+                sendMessage(message);
                 stats.poke();
             }
         }
 
         void toFahrenheit(string CHANNEL, string nick, string args)
         {
-            string message;
+            Message message;
             double f = 0;
             double c = 0;
 
@@ -2144,13 +2122,13 @@ namespace NarutoBot3
             }
             catch
             {
-                message = Privmsg(CHANNEL, "Could not parse arguments");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "Could not parse arguments");
+                sendMessage(message);
                 return;
             }
 
-            message = Privmsg(CHANNEL, c + " C is " + Math.Round(f, 2) + " F");
-            Client.sendMessage(message);
+            message = new Privmsg(CHANNEL, c + " C is " + Math.Round(f, 2) + " F");
+            sendMessage(message);
             stats.temperature();
             return;
 
@@ -2158,7 +2136,7 @@ namespace NarutoBot3
 
         void toCelcius(string CHANNEL, string nick, string args)
         {
-            string message;
+            Message message;
             double c = 0;
             double f = 0;
 
@@ -2171,13 +2149,13 @@ namespace NarutoBot3
             }
             catch
             {
-                message = Privmsg(CHANNEL, "Could not parse arguments");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "Could not parse arguments");
+                sendMessage(message);
                 return;
             }
 
-            message = Privmsg(CHANNEL, f + " F is " + Math.Round(c, 2) + " C");
-            Client.sendMessage(message);
+            message = new Privmsg(CHANNEL, f + " F is " + Math.Round(c, 2) + " C");
+            sendMessage(message);
             stats.temperature();
             return;
 
@@ -2189,8 +2167,8 @@ namespace NarutoBot3
 
             Random rnd = new Random();
 
-            string message = Privmsg(CHANNEL, tri[rnd.Next(tri.Count)]);
-            Client.sendMessage(message);
+            Message message = new Privmsg(CHANNEL, tri[rnd.Next(tri.Count)]);
+            sendMessage(message);
             stats.trivia();
             return;
         }
@@ -2206,15 +2184,15 @@ namespace NarutoBot3
 
             list += "]";
 
-            string message = Privmsg(nick, list);
-            Client.sendMessage(message);
+            Message message = new Privmsg(nick, list);
+            sendMessage(message);
             
         }
             
 
         void time(string CHANNEL, string nick, string args)
         {
-            string message;
+            Message message;
             string timezoneS;
             string location = "";
             bool wantUTC = false;
@@ -2334,14 +2312,14 @@ namespace NarutoBot3
 
                 if (invalid)
                     if (args.Replace("\r", string.Empty).ToLower() == "2blaze" || args.Replace("\r", string.Empty).ToLower() == "2blaze1" || args.Replace("\r", string.Empty).ToLower() == "toblaze")
-                        message = Privmsg(CHANNEL, "4:20");
+                        message = new Privmsg(CHANNEL, "4:20");
                     else if (args.Replace("\r", string.Empty).ToLower() == "alan_jackson" || args.Replace("\r", string.Empty).ToLower() == "alan" || args.Replace("\r", string.Empty).ToLower() == "alanjackson")
-                        message = Privmsg(CHANNEL, "5:00");
+                        message = new Privmsg(CHANNEL, "5:00");
                     else
-                        message = Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS + ". \"" + args + "\" is an invalid argument");
+                        message = new Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS + ". \"" + args + "\" is an invalid argument");
                 else
-                    message = Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS);
-                Client.sendMessage(message);
+                    message = new Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS);
+                sendMessage(message);
                 stats.time();
 
             }
@@ -2358,14 +2336,14 @@ namespace NarutoBot3
 
                 string result = YoutubeUseful.getYoutubeInfoFromID(id);
 
-                string message = Privmsg(CHANNEL, result);
-                Client.sendMessage(message);
+                Message message = new Privmsg(CHANNEL, result);
+                sendMessage(message);
             }
         }
 
         public void twitter(string CHANNEL, string nick, string line)
         {
-            string author, tweet, message;
+            string author, tweet;
 
             if (ul.userIsMuted(nick)) return;
 
@@ -2382,9 +2360,9 @@ namespace NarutoBot3
                 tweet = HttpUtility.HtmlDecode(tweetResult.Text.Replace("\n", " "));
 
 
-                message = Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
+                Message message = new Privmsg(CHANNEL, "Tweet by @" + author + " : " + tweet);
                 
-                Client.sendMessage(message);
+                sendMessage(message);
             }
         }
 
@@ -2415,7 +2393,7 @@ namespace NarutoBot3
 
         public void botThink(string CHANNEL, string line, string nick)
         {
-            string message;
+            Message message;
 
             if (ul.userIsMuted(nick)) return;
 
@@ -2430,15 +2408,16 @@ namespace NarutoBot3
             newLine = newLine.TrimEnd(',');
 
             string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
-            message = Privmsg(CHANNEL, answer);
+            message = new Privmsg(CHANNEL, answer);
 
-            Client.sendMessage(message);
+            sendMessage(message);
         }
 
         void getURLInfo(string CHANNEL, string url)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
-            string html, title, message;
+            string html, title;
+            Message message;
 
             WebRequest webRequest = HttpWebRequest.Create(url);
             webRequest.Method = "HEAD";
@@ -2486,8 +2465,8 @@ namespace NarutoBot3
                             title = HttpUtility.HtmlDecode(title);
                             if (title.ToLower().Contains("gyazo")) return;    //avoid those pages
 
-                            message = Privmsg(CHANNEL, "[title] " + title);
-                            Client.sendMessage(message);
+                            message = new Privmsg(CHANNEL, "[title] " + title);
+                            sendMessage(message);
                         }
 
 
@@ -2512,8 +2491,8 @@ namespace NarutoBot3
                         string result = String.Format("{0:0.##} {1}", len, sizes[order]);
 
 
-                        message = Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
-                        Client.sendMessage(message);
+                        message = new Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
+                        sendMessage(message);
                     }
                     catch { }
                 }
@@ -2522,7 +2501,7 @@ namespace NarutoBot3
 
         public void animeSearch(string CHANNEL, string nick, string query)
         {
-            string message = "";
+            Message message;
             GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
             anime a = new anime();
             string jsonGoogle;
@@ -2556,16 +2535,16 @@ namespace NarutoBot3
                 JsonConvert.PopulateObject(jsonGoogle, g);
             }
             catch {
-                message = Privmsg(CHANNEL, "Error while searching for results");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "Error while searching for results");
+                sendMessage(message);
                 return;
             }
 
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
 
             if (g.items == null) {
-                message = Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
+                sendMessage(message);
                 return;
             }
                 
@@ -2602,7 +2581,7 @@ namespace NarutoBot3
             }
 
             if (!found)
-                message = Privmsg(CHANNEL, g.items[0].link);
+                message = new Privmsg(CHANNEL, g.items[0].link);
 
             else
             {
@@ -2639,7 +2618,7 @@ namespace NarutoBot3
                         if (status == string.Empty)
                             status = "?";
 
-                        message = Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
+                        message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
 
                     }
                     else
@@ -2663,7 +2642,7 @@ namespace NarutoBot3
                         if (episodes == "0")
                             episodes = "?";
 
-                        message = Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
+                        message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
                     }
 
                 }
@@ -2684,19 +2663,19 @@ namespace NarutoBot3
                     catch { }
 
                     if(u == null || u.myinfo == null|| xmlUser.Contains("<error>Invalid username</error>"))
-                        message = Privmsg(CHANNEL, "Error fetching user stats");
+                        message = new Privmsg(CHANNEL, "Error fetching user stats");
                     else
-                        message = Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
+                        message = new Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/"+ u.myinfo.user_name);
                 }
 
             }
-            Client.sendMessage(message);
+            sendMessage(message);
             stats.anime();
         }
 
         public void youtubeSearch(string CHANNEL, string nick, string query)
         {
-            string message = "";
+            Message message;
             string jsonYoutube, title, duration;
             YoutubeSearch.YoutubeSearch y = new YoutubeSearch.YoutubeSearch();
             YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
@@ -2738,8 +2717,8 @@ namespace NarutoBot3
                             title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
                             duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
-                            message = Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                            Client.sendMessage(message);
+                            message = new Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                            sendMessage(message);
                             return;//Only shows 1 link
                         }
                         catch { }
@@ -2748,8 +2727,8 @@ namespace NarutoBot3
                 }
                 
             }
-            message = Privmsg(CHANNEL, "No results found");
-            Client.sendMessage(message);
+            message = new Privmsg(CHANNEL, "No results found");
+            sendMessage(message);
             stats.youtube();
             return;
         }
@@ -2759,7 +2738,7 @@ namespace NarutoBot3
             if (ul.userIsMuted(nick)) return;
             if (Settings.Default.silence == true || Settings.Default.giphyEnabled == false) return;
 
-            string message = Privmsg(CHANNEL, "No results found"); ;
+            Message message = new Privmsg(CHANNEL, "No results found");
             string request = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=";
             string jsonResult;
             GiphyResult g = new GiphyResult();
@@ -2777,13 +2756,13 @@ namespace NarutoBot3
                 JsonConvert.PopulateObject(jsonResult, g);
 
                 if (g.data != null)
-                    message = Privmsg(CHANNEL, query + ": " + g.data.url);
+                    message = new Privmsg(CHANNEL, query + ": " + g.data.url);
             }
             catch
             {
             }
 
-            Client.sendMessage(message);
+            sendMessage(message);
             stats.giphy();
 
             return;
@@ -2801,7 +2780,7 @@ namespace NarutoBot3
                 int seconds = 0;
                 int temp = 0;
 
-                string message;
+                Message message;
                 string ID = Useful.getBetween(line, "vimeo.com/", "/");
                 string URLString = "http://vimeo.com/api/v2/video/" + ID.Replace("\r", "").Replace("\n", "") + ".xml";
 
@@ -2832,14 +2811,14 @@ namespace NarutoBot3
 
                     }
                     minutes = temp;
-                    message = Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
-                    Client.sendMessage(message);
+                    message = new Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + hours + ":" + minutes.ToString("00") + ":" + seconds.ToString("00") + "]\x02");
+                    sendMessage(message);
 
                 }
                 else
                 {
-                    message = Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
-                    Client.sendMessage(message);
+                    message = new Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
+                    sendMessage(message);
                 }
 
             }
@@ -2848,7 +2827,7 @@ namespace NarutoBot3
         {
             if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
 
-            string message;
+            Message message;
             int index = 0;
 
             if (!String.IsNullOrWhiteSpace(arg))
@@ -2859,8 +2838,8 @@ namespace NarutoBot3
                 }
                 catch
                 {
-                    message = Privmsg(CHANNEL, "Invalid Argument");
-                    Client.sendMessage(message);
+                    message = new Privmsg(CHANNEL, "Invalid Argument");
+                    sendMessage(message);
                     return;
                 }
             }
@@ -2868,15 +2847,15 @@ namespace NarutoBot3
 
 
             if (killsUsed == null || killsUsed.Count == 0)
-                message = Privmsg(CHANNEL, "No kills since last reset");
+                message = new Privmsg(CHANNEL, "No kills since last reset");
             else if (killsUsed.Count < index+1 || index < 0)
-                message = Privmsg(CHANNEL, "Out of Range");
+                message = new Privmsg(CHANNEL, "Out of Range");
             else if(index==0)
-                message = Privmsg(CHANNEL, "[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
+                message = new Privmsg(CHANNEL, "[#" + killsUsed[0] + "] " + kill[killsUsed[0]]);
             else
-                message = Privmsg(CHANNEL, "(" + (index+1) + " kills ago) " + "[#" + killsUsed[index] + "] " + kill[killsUsed[index]]);
+                message = new Privmsg(CHANNEL, "(" + (index+1) + " kills ago) " + "[#" + killsUsed[index] + "] " + kill[killsUsed[index]]);
 
-            Client.sendMessage(message);
+            sendMessage(message);
             
         }
 
@@ -2896,15 +2875,15 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
-                string message;
+                Message message;
                 if (args.ToLower().Trim() == "la kill")
                 {
-                    message = Privmsg(CHANNEL, nick + " lost his way");
+                    message = new Privmsg(CHANNEL, nick + " lost his way");
                 }
                 
                 else if (args.ToLower() == "me baby".Trim())
                 {
-                    message = Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=dwkClIFBMEE");
+                    message = new Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=dwkClIFBMEE");
                 }
                 else
                 {
@@ -2941,25 +2920,25 @@ namespace NarutoBot3
                     if (killString.ToLower().Contains("<normal>"))
                     {
                         killString = killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
-                        message = Privmsg(CHANNEL, killString);
+                        message = new Privmsg(CHANNEL, killString);
                     }
                     else {
 
-                        message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                        message = new Messages.Action(CHANNEL, killString);
                     }
                 }
 
 
-                while (message.Contains("<random>"))
+                while (message.body.Contains("<random>"))
                 {
                     do{
                         randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
                     } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
 
-                    message = regex.Replace(message, randomTarget, 1);
+                    message.body = regex.Replace(message.body, randomTarget, 1);
                 }
 
-                Client.sendMessage(message);
+                sendMessage(message);
                 stats.kill();
             }
         }
@@ -2980,7 +2959,7 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.factsEnabled == true)
             {
-                string message;
+                Message message;
                 
                 if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                     target = removeUserMode(userList[r.Next((userList.Count))]);
@@ -3013,19 +2992,19 @@ namespace NarutoBot3
 
                 factString = temp.Replace("<target>", target).Replace("<user>", nick.Trim());
 
-                message = Privmsg(CHANNEL, factString);
+                message = new Privmsg(CHANNEL, factString);
 
 
-                while (message.Contains("<random>"))
+                while (message.body.Contains("<random>"))
                 {
                     do{
                         randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
                     } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
 
-                    message = regex.Replace(message, randomTarget, 1);
+                    message.body = regex.Replace(message.body, randomTarget, 1);
                 }
 
-                Client.sendMessage(message);
+                sendMessage(message);
                 stats.fact();
             }
         }
@@ -3037,6 +3016,8 @@ namespace NarutoBot3
             string killString, temp;
             string randomTarget;
 
+            Message message;
+
 
             if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick)) return;
 
@@ -3044,7 +3025,6 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
-                string message;
                
                 if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                     target = removeUserMode(userList[r.Next((userList.Count))]);
@@ -3053,7 +3033,7 @@ namespace NarutoBot3
 
                 if (!killgen.readyToGenerate())
                 {
-                    message = Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
+                    message = new Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
                 }
                 else
                 {
@@ -3064,28 +3044,28 @@ namespace NarutoBot3
                     if (killString.ToLower().Contains("<normal>"))
                     {
                         killString = killString.Replace("<normal>", string.Empty).Replace("<NORMAL>", string.Empty);
-                        message = Privmsg(CHANNEL, killString);
+                        message = new Privmsg(CHANNEL, killString);
                     }
                     else
-                        message = Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                        message = new Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
                     
 
-                    while (message.Contains("<random>"))
+                    while (message.body.Contains("<random>"))
                     {
                         do
                         {
                             randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
                         } while (string.Compare(target, randomTarget, true) == 0 || userList.Count < 2);
 
-                        message = regex.Replace(message, randomTarget, 1);
+                        message.body = regex.Replace(message.body, randomTarget, 1);
                     }
 
-                    message = message.Replace("  ", " ");
+                    message.body = message.body.Replace("  ", " ");
                 }
 
                 
 
-                Client.sendMessage(message);
+                sendMessage(message);
                 stats.kill();
             }
         }
@@ -3098,8 +3078,7 @@ namespace NarutoBot3
             string subjectNPL = string.Empty;
             subjectNPL = qq.questionParser(arg, user);
 
-
-            string message = "";
+            Message message = null;
             Random r = new Random();
 
           
@@ -3145,29 +3124,32 @@ namespace NarutoBot3
                             if (String.Compare(split[1], "many", true) == 0)
                             {
                                 if (String.Compare(arg, "how many killstrings do you have", true) == 0 || String.Compare(arg, "how many kills do you have", true) == 0)
-                                    message = Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
+                                    message = new Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
                                 else if (arg == "how many fucks do you give")
-                                    message = Privmsg(CHANNEL, "I always give 0 fucks.");
+                                    message = new Privmsg(CHANNEL, "I always give 0 fucks.");
                                 else
-                                    message = Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
+                                    message = new Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
                             }
 
                             else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
                             {
                                 if (String.Compare(arg, "how are you", true) == 0 || String.Compare(arg, "how are you doing", true) == 0)
-                                    message = Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
+                                    message = new Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
                                 else
-                                    message = Privmsg(CHANNEL, "I dont know yet, ask later");
+                                    message = new Privmsg(CHANNEL, "I dont know yet, ask later");
                             }
 
                             else if (String.Compare(split[1], "is", true) == 0)
                             {
                                 if (split.Length == 3)
-                                    message = Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length)]);
+                                    message = new Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length)]);
                             }
 
                             else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length], "die", true) == 0)
+                            {
                                 killUser(CHANNEL, user, Useful.getBetween(arg, "did", "die"));
+                                return;
+                            }
 
                             else if (String.Compare(split[1], "old", true) == 0)
                             {
@@ -3177,35 +3159,35 @@ namespace NarutoBot3
 
                                     if (String.Compare(split[2], "is", true) == 0)
                                     {
-                                        message = Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
+                                        message = new Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
                                     }
                                     else if (String.Compare(split[2], "are", true) == 0)
                                     {
                                         if (String.Compare(subjectNPL, "you", true) == 0)
-                                            message = Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
+                                            message = new Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
                                         else
-                                            message = Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
+                                            message = new Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
                                     }
 
                                     else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
-                                        message = Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
+                                        message = new Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
                                 }
                             }
                         }
                         else
-                            message = Privmsg(CHANNEL, user + ", no idea...");
+                            message = new Privmsg(CHANNEL, user + ", no idea...");
                     }
 
                     else if (String.Compare(split[0], "how's", true) == 0)
                     {
                         string replaced = questionsRegex(subjectNPL);
-                        message = Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
+                        message = new Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
                     }
 
                     else if (String.Compare(split[0], "why", true) == 0)
                     {
                         if (split.Length >= 2)
-                            message = Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length)]);
+                            message = new Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length)]);
                     }
 
                     else if (String.Compare(split[0], "is", true) == 0)
@@ -3229,9 +3211,9 @@ namespace NarutoBot3
                             string replaced = questionsRegex(rest);
 
                             if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced).Trim());
+                                message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my") + " is " + replaced).Trim());
                             else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
+                                message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
                         }
                     }
                     else if (String.Compare(split[0], "was", true) == 0)
@@ -3255,29 +3237,29 @@ namespace NarutoBot3
                             string replaced = questionsRegex(rest);
 
                             if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " was " + replaced).Trim());
+                                message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " was " + replaced).Trim());
                             else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
+                                message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
                         }
                     }
                     else if (String.Compare(split[0], "when", true) == 0)
                     {
-                        message = Privmsg(CHANNEL, when[r.Next(when.Length)]);
+                        message = new Privmsg(CHANNEL, when[r.Next(when.Length)]);
                     }
 
                     else if (String.Compare(split[0], "are", true) == 0)
                     {
                         if (String.Compare(arg, "are you real", true) == 0)
-                            message = Privmsg(CHANNEL, "Yes, i am real");
+                            message = new Privmsg(CHANNEL, "Yes, i am real");
 
                         else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
-                            message = Privmsg(CHANNEL, "No, i'm a bot");
+                            message = new Privmsg(CHANNEL, "No, i'm a bot");
 
 
                         else
                         {
                             if (r.Next(100) < 15)
-                                message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                                message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                             else
                             {
                                 bool yes = false;
@@ -3300,9 +3282,9 @@ namespace NarutoBot3
                                 {
 
                                     if (yes)
-                                        message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + "I'm " + replaced).Trim());
+                                        message = new Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + "I'm " + replaced).Trim());
                                     else
-                                        message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + "I'm not " + replaced).Trim());
+                                        message = new Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + "I'm not " + replaced).Trim());
 
                                 }
 
@@ -3311,9 +3293,9 @@ namespace NarutoBot3
                                     subject = questionsRegex(subject);
 
                                     if (yes)
-                                        message = Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
+                                        message = new Privmsg(CHANNEL, ((whyY[r.Next(whyY.Length)]) + " " + subject + " are " + replaced).Trim());
                                     else
-                                        message = Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
+                                        message = new Privmsg(CHANNEL, ((whyN[r.Next(whyN.Length)]) + " " + subject + " aren't " + replaced).Trim());
                                 }
                             }
                         }
@@ -3327,56 +3309,60 @@ namespace NarutoBot3
                             String.Compare(arg, "can you generate a nick", true) == 0 || String.Compare(arg, "can you create a nick", true) == 0 ||
                             String.Compare(arg, "can you make me a new nick", true) == 0)
                         {
-                            message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
+                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
                             stats.nick();
                         }
 
                         else if (arg.ToLower().Contains("can you kill "))
+                        {
                             killUser(CHANNEL, user, Useful.getBetween(arg.ToLower(), "can you kill ", ""));
+                            return;
+                        }
+
                         else
-                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                            message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
 
                     else if (String.Compare(split[0], "would", true) == 0)
                     {
                         if (String.Compare(arg, "would you make me a nick", true) == 0 || String.Compare(arg, "would you generate a nick", true) == 0 ||
                             String.Compare(arg, "would you create a nick", true) == 0 || String.Compare(arg, "would you make me a new nick", true) == 0)
-                            message = Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
+                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                         else
-                            message = Privmsg(CHANNEL, why[r.Next(why.Length)]);
+                            message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
 
                     else if (String.Compare(split[0], "where", true) == 0)
                     {
-                        message = Privmsg(CHANNEL, where[r.Next(where.Length)]);
+                        message = new Privmsg(CHANNEL, where[r.Next(where.Length)]);
 
                     }
 
                     else if (String.Compare(split[0], "who", true) == 0 || String.Compare(split[0], "who's", true) == 0)
                     {
                         if (String.Compare(arg, "who are you", true) == 0)
-                            message = Privmsg(CHANNEL, "I'm a bot!");
+                            message = new Privmsg(CHANNEL, "I'm a bot!");
                         else if (split[1] == "do")
-                            message = Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
+                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                         else
-                            message = Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
+                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                     }
 
                     else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
                     {
                         if (String.Compare(arg, "what are you", true) == 0)
-                            message = Privmsg(CHANNEL, "I'm a bot!");
+                            message = new Privmsg(CHANNEL, "I'm a bot!");
                         else
                         {
-                            message = Privmsg(CHANNEL, what[r.Next(what.Length)]);
+                            message = new Privmsg(CHANNEL, what[r.Next(what.Length)]);
                         }
                     }
 
                     else if (String.Compare(split[0], "if", true) == 0)
                     {
                         string answer = bot1session.Think(arg + "?");
-                        message = Privmsg(CHANNEL, answer);
+                        message = new Privmsg(CHANNEL, answer);
 
                     }
                     else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
@@ -3397,9 +3383,9 @@ namespace NarutoBot3
                         string replaced = questionsRegex(rest);
 
                         if (yes)
-                            message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " you are " + replaced).Trim());
+                            message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " you are " + replaced).Trim());
                         else
-                            message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
+                            message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
                     }
 
                     else if (String.Compare(split[0], "do", true) == 0)
@@ -3425,23 +3411,23 @@ namespace NarutoBot3
                             {
 
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced).Trim());
                             }
                             else if (split[1] == "i")
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you don't " + replaced).Trim());
                             }
                             else
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " do " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " doesn't " + replaced).Trim());
                             }
                         }
                     }
@@ -3469,31 +3455,31 @@ namespace NarutoBot3
                             {
 
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I should " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I should " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced).Trim());
                             }
                             else if (split[1] == "i")
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you shouldn't " + replaced).Trim());
                             }
                             else
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " should " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " shouldn't " + replaced).Trim());
                             }
                         }
                         else
                         {
                             if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)])).Trim();
+                                message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)]).Trim());
                             else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)])).Trim();
+                                message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)]).Trim());
                         }
                     }
 
@@ -3520,23 +3506,23 @@ namespace NarutoBot3
                             {
 
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I did " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "I did " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced).Trim());
                             }
                             else if (split[1] == "i")
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "you didn't " + replaced).Trim());
                             }
                             else
                             {
                                 if (yes)
-                                    message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " did " + replaced).Trim());
                                 else
-                                    message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced)).Trim();
+                                    message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " didn't " + replaced).Trim());
                             }
                         }
 
@@ -3565,9 +3551,9 @@ namespace NarutoBot3
                             subject = questionsRegex(subject);
 
                             if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced)).Trim();
+                                message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " does " + replaced).Trim());
                             else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced)).Trim();
+                                message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " does not " + replaced).Trim());
 
                         }
                     }
@@ -3595,9 +3581,9 @@ namespace NarutoBot3
                             subject = questionsRegex(subject);
 
                             if (yes)
-                                message = Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " will " + replaced)).Trim();
+                                message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + subject + " will " + replaced).Trim());
                             else
-                                message = Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " won't " + replaced)).Trim();
+                                message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject + " won't " + replaced).Trim());
 
                         }
                     }
@@ -3605,19 +3591,19 @@ namespace NarutoBot3
                 else
                 {
                     string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
-                    message = Privmsg(CHANNEL, answer);
+                    message = new Privmsg(CHANNEL, answer);
                 }
             }
 
             else
             {
                 string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
-                message = Privmsg(CHANNEL, answer);
+                message = new Privmsg(CHANNEL, answer);
             }
 
-            if (!String.IsNullOrWhiteSpace(message))
+            if (message!= null && !String.IsNullOrWhiteSpace(message.body))
             {
-                Client.sendMessage(message.Replace("  ", " "));
+                sendMessage(message);
                 stats.question();
             }
         }
@@ -3634,14 +3620,14 @@ namespace NarutoBot3
             bool targeted = false;
 
             string target = null;
-            string message;
+            Message message;
 
             if (ul.userIsMuted(nick)) return;
 
             if (nickGenStrings.Count < 2)
             {
-                message = Privmsg(CHANNEL, "Nickname generator was not initialized properly");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "Nickname generator was not initialized properly");
+                sendMessage(message);
                 return;
             }
 
@@ -3672,11 +3658,11 @@ namespace NarutoBot3
                 string nick_ = NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 if(targeted)
-                    message = Privmsg(CHANNEL, nick + " generated a nick for "+ target +": " + nick_);
+                    message = new Privmsg(CHANNEL, nick + " generated a nick for "+ target +": " + nick_);
                 else 
-                    message = Privmsg(CHANNEL, nick + " generated the nick " + nick_);
+                    message = new Privmsg(CHANNEL, nick + " generated the nick " + nick_);
 
-                Client.sendMessage(message);
+                sendMessage(message);
                 stats.nick();
             }
         }
@@ -3720,7 +3706,7 @@ namespace NarutoBot3
             RedditSharp.Things.Post post;
             RedditSharp.Things.Comment comment;
 
-            string message;
+            Message message;
 
             string postID = postName;
             string commentID = commentName;
@@ -3731,13 +3717,13 @@ namespace NarutoBot3
             {
                 post = reddit.GetPost(new Uri("https://" + url));
 
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                sendMessage(message);
             }
             catch
             {
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
+                sendMessage(message);
             }
 
             try
@@ -3745,15 +3731,15 @@ namespace NarutoBot3
                 comment = reddit.GetComment(new Uri("https://" + url));
 
                 if (comment.Body.ToString().Length > 300)
-                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
+                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
                 else
-                    message = Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
-                Client.sendMessage(message);
+                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
+                sendMessage(message);
             }
             catch
             {
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get comment info" + "\x02");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get comment info" + "\x02");
+                sendMessage(message);
             }
         }
 
@@ -3762,7 +3748,7 @@ namespace NarutoBot3
         {
             RedditSharp.Things.Post post;
 
-            string message;
+            Message message;
             string subreddit = Useful.getBetween(url, "/r/", "/");
 
             try
@@ -3770,17 +3756,17 @@ namespace NarutoBot3
                 //post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
                 post = reddit.GetPost(new Uri("http://" + url));
 
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                sendMessage(message);
 
                 if (!post.IsSelfPost)
-                    Client.sendMessage(Privmsg(CHANNEL, "\x033" + post.Url + "\x03"));
+                    sendMessage(new Privmsg(CHANNEL, "\x033" + post.Url + "\x03"));
             }
 
             catch
             {
-                message = Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
-                Client.sendMessage(message);
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
+                sendMessage(message);
             }
         }
 
@@ -3790,8 +3776,8 @@ namespace NarutoBot3
 
             if (Settings.Default.silence == false && Settings.Default.wikiEnabled == true)
             {
-                string message = Privmsg(CHANNEL, "Here's a Wiki for \"" + args + "\": " + "http://en.wikipedia.org/w/index.php?title=Special:Search&search=" + args.Replace(" ", "%20"));
-                Client.sendMessage(message);
+                Message message = new Privmsg(CHANNEL, "Here's a Wiki for \"" + args + "\": " + "http://en.wikipedia.org/w/index.php?title=Special:Search&search=" + args.Replace(" ", "%20"));
+                sendMessage(message);
                 stats.wiki();
             }
         }
@@ -3804,8 +3790,8 @@ namespace NarutoBot3
             {
                 if (String.Compare(u.Nick, nick, true) == 0 && u.GreetingEnabled)
                 {
-                    string mensagem = Privmsg(Client.HOME_CHANNEL, u.Greeting);
-                    Client.sendMessage(mensagem);
+                    Message mensagem = new Privmsg(Client.HOME_CHANNEL, u.Greeting);
+                    sendMessage(mensagem);
                     stats.greet();
                     break;
                 }
@@ -3829,7 +3815,7 @@ namespace NarutoBot3
         {
             Random r = new Random();
             int i;
-            string message = "";
+            Message message;
             List<string> temp = new List<string>();
             List<string> temp2 = new List<string>();
 
@@ -3838,7 +3824,7 @@ namespace NarutoBot3
             if (String.IsNullOrWhiteSpace(args) && quotes.Count>0) //pring random
             {
                 i = r.Next(quotes.Count);
-                message = Privmsg(CHANNEL, quotes[i]);
+                message = new Privmsg(CHANNEL, quotes[i]);
             }
             else if (args[0] == '#')
             {
@@ -3846,9 +3832,9 @@ namespace NarutoBot3
                 int number = Convert.ToInt32(split.Replace("#",string.Empty));
 
                 if (number <= quotes.Count)
-                    message = Privmsg(CHANNEL, quotes[number - 1]);
+                    message = new Privmsg(CHANNEL, quotes[number - 1]);
                 else
-                    message = Privmsg(CHANNEL, "Quote "+ number +" not found");
+                    message = new Privmsg(CHANNEL, "Quote "+ number +" not found");
             }
             else{
                 string[] queries = args.Trim().ToLower().Split(new char[] { ' ' });
@@ -3873,8 +3859,8 @@ namespace NarutoBot3
 
                     }
                     if (temp2.Count > 0)
-                        message = Privmsg(CHANNEL, temp2[r.Next(temp2.Count)]);
-                    else message = Privmsg(CHANNEL, "No quotes found");
+                        message = new Privmsg(CHANNEL, temp2[r.Next(temp2.Count)]);
+                    else message = new Privmsg(CHANNEL, "No quotes found");
                 }
                 else
                 {
@@ -3886,13 +3872,13 @@ namespace NarutoBot3
                         }
                     }
                     if (temp.Count > 0)
-                        message = Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
-                    else message = Privmsg(CHANNEL, "No quotes found");
+                        message = new Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
+                    else message = new Privmsg(CHANNEL, "No quotes found");
                 }
                 
             }
 
-            Client.sendMessage(message);
+            sendMessage(message);
             stats.quote();
 
         }
@@ -3928,7 +3914,7 @@ namespace NarutoBot3
             else
             {
                 if (ul.userMessageCount(split[0]) > 20)
-                    Client.sendMessage(Privmsg(nick, split[0] + " has his inbox full! Can't accept more messages."));
+                    sendMessage(new Privmsg(nick, split[0] + " has his inbox full! Can't accept more messages."));
                 else {
                     ul.addUserMessage(split[0], nick, split[1]);
                     stats.tell();
@@ -3943,7 +3929,7 @@ namespace NarutoBot3
 
             Random r = new Random();
             string[] choices;
-            string message;
+            Message message;
 
             if (arg.Contains(','))
                 choices = arg.Split(new char[] { ',' });
@@ -3952,9 +3938,9 @@ namespace NarutoBot3
 
             int random = r.Next(choices.Length);
 
-            message = Privmsg(CHANNEL, user+": "+ choices[random].Trim());
+            message = new Privmsg(CHANNEL, user+": "+ choices[random].Trim());
 
-            Client.sendMessage(message);
+            sendMessage(message);
             stats.choose();
         }
 
@@ -3982,7 +3968,7 @@ namespace NarutoBot3
 
 
 
-            Client.sendMessage(Privmsg(CHANNEL, user + ":" + message));
+            sendMessage(new Privmsg(CHANNEL, user + ":" + message));
             stats.shuffle();
         }
 
@@ -3990,17 +3976,16 @@ namespace NarutoBot3
         {
             Random r = new Random();
             int i;
-            string message = "";
+            Message message;
 
-            if (ul.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
+            if (ul.userIsMuted(nick) || !Settings.Default.funkEnabled || funk.Count == 0) return;
 
-            if (String.IsNullOrWhiteSpace(args) && funk.Count > 0) //pring random
-            {
-                i = r.Next(funk.Count);
-                message = Privmsg(CHANNEL, funk[i]);
-            }
 
-            Client.sendMessage(message);
+            i = r.Next(funk.Count);
+            message = new Privmsg(CHANNEL, funk[i]);
+            
+
+            sendMessage(message);
             stats.funk();
 
         }
@@ -4055,19 +4040,19 @@ namespace NarutoBot3
 
             string complete = week + " " + month + " " + day + " " + hour;
 
-            string message = Notice(u, "\x01" + "TIME " + complete + "\x01");
-            Client.sendMessage(message);
+            Message message = new Notice(u, "\x01" + "TIME " + complete + "\x01");
+            sendMessage(message);
         }
         public void ctcpVersion(string u)
         {
-            string message = Notice(u, "\x01" + "VERSION " + botVersion + "\x01");
-            Client.sendMessage(message);
+            Message message = new Notice(u, "\x01" + "VERSION " + botVersion + "\x01");
+            sendMessage(message);
         }
 
         public void ctcpPing(string u, string stamp)
         {
-            string message = Notice(u, "\x01" + "PING " + stamp + "\x01");
-            Client.sendMessage(message);
+            Message message = new Notice(u, "\x01" + "PING " + stamp + "\x01");
+            sendMessage(message);
         }
         ////
 
@@ -4104,8 +4089,8 @@ namespace NarutoBot3
             //do Nick change to server
             if (Client.isConnected)
             {
-                string message = "NICK " + Client.NICK + "\n";
-                Client.sendMessage(message);
+                Message message = new Nick(null,"NICK " + Client.NICK);
+                sendMessage(message);
                 return true;
             }
             else return false;
@@ -4159,7 +4144,7 @@ namespace NarutoBot3
             //also, should make a log
 
         }
-        public void WriteMessage(string message, Color color) //Writes Message on the TextBox (bot console)
+        public void WriteMessage(string message, Color color)           //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -4185,7 +4170,7 @@ namespace NarutoBot3
                 if (Settings.Default.autoScrollToBottom)
                 {
                     OutputBox.SelectionStart = OutputBox.Text.Length;       //Set the current caret position at the end
-                    OutputBox.ScrollToCaret();                          //Now scroll it automatically
+                    OutputBox.ScrollToCaret();                              //Now scroll it automatically
                 }
             }
 
@@ -4202,13 +4187,13 @@ namespace NarutoBot3
         {
             if (!WaitingForPong)
             {
-                string message = "PING " + GetTimestamp(DateTime.Now);
+                Message message = new Ping(null,"PING " + GetTimestamp(DateTime.Now));
 
                 #if DEBUG
-                    WriteMessage(message);
+                    WriteMessage(message.body);
                 #endif
 
-                Client.sendMessage(message);
+                sendMessage(message);
 
                 WaitingForPong = true;
 
@@ -4220,8 +4205,8 @@ namespace NarutoBot3
 
         public void kickUser(string userToBeKicked)
         {
-            string message = "KICK " + Client.HOME_CHANNEL + " " + userToBeKicked;
-            Client.sendMessage(message);
+            Message message = new Kick(Client.HOME_CHANNEL, userToBeKicked);
+            sendMessage(message);
         }
 
         void checkIfTimeout(object sender, EventArgs e)
@@ -4239,9 +4224,9 @@ namespace NarutoBot3
             int count = ul.userMessageCount(nick);
             if (count == 0) return;
 
-            string message;
+            Message message;
 
-            Client.sendMessage(Privmsg(nick,  nick + ", you have " + count + " message(s)"));
+            sendMessage(new Privmsg(nick,  nick + ", you have " + count + " message(s)"));
 
             for(int i = 0 ; i < count ; i++)
             {
@@ -4276,11 +4261,11 @@ namespace NarutoBot3
                 }
 
 
-                message = Privmsg(nick, "Sent " + timeDiff +"\t<"+ m.Sender +"> " + m.Message );
-                Client.sendMessage(message);
+                message = new Privmsg(nick, "Sent " + timeDiff +"\t<"+ m.Sender +"> " + m.Message );
+                sendMessage(message);
             }
 
-            Client.sendMessage(Privmsg(nick, "Remove messages with " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
+            sendMessage(new Privmsg(nick, "Remove messages with " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
         }
 
         public void Dispose()

@@ -273,7 +273,20 @@
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="JSON and XML classes\MAL_User.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="Messages\Action.cs" />
+    <Compile Include="Messages\Join.cs" />
+    <Compile Include="Messages\Kick.cs" />
+    <Compile Include="Messages\Message.cs" />
+    <Compile Include="Messages\Nick.cs" />
+    <Compile Include="Messages\Notice.cs" />
+    <Compile Include="Messages\Ping.cs" />
+    <Compile Include="Messages\Pong.cs" />
+    <Compile Include="Messages\Privmsg.cs" />
+    <Compile Include="Messages\Quit.cs" />
+    <Compile Include="Messages\User.cs" />
+    <Compile Include="Messages\Whois.cs" />
+    <Compile Include="Messages\Whowas.cs" />
+    <Compile Include="ParsedMessage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -292,12 +305,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\MangaReleaseCheckerWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MangaReleaseCheckerWindow.Designer.cs">
-      <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\EditRulesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -337,9 +344,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MangaReleaseCheckerWindow.resx">
-      <DependentUpon>MangaReleaseCheckerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditRulesWindow.resx">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>

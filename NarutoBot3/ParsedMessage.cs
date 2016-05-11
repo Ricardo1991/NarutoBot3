@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NarutoBot3
 {
-    class Message
+    class ParsedMessage
     {
         string sender;          //Who sends the message. Nick, or server
 
@@ -39,7 +36,7 @@ namespace NarutoBot3
             get { return completeMessage; }
         }
 
-        public Message(string message)
+        public ParsedMessage(string message)
         {
             string trailing = null;
             sender = type = string.Empty;

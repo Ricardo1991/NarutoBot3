@@ -1,4 +1,5 @@
-﻿using NarutoBot3.Properties;
+﻿using NarutoBot3.Messages;
+using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -279,6 +280,8 @@ namespace NarutoBot3
                 try
                 {
                     buffer = client.readMessage();
+                    if (buffer == null);
+
                     byte[] bytes = Encoding.UTF8.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
@@ -489,7 +492,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (client.isConnected)
             {
-                client.sendMessage("NICK " + client.NICK + "\n");
+                client.sendMessage(new Nick(null,client.NICK));
                 return true;
             }
 
@@ -631,52 +634,6 @@ namespace NarutoBot3
             }
         }
 
-        public void isMangaOutEvent(object source, ElapsedEventArgs e)
-        {
-            String rawHTML;
-            string url = Settings.Default.baseURL.TrimEnd('/') + "/" + Settings.Default.chapterNumber;
-            var webClient = new WebClient();
-            webClient.Encoding = Encoding.UTF8;
-            HttpWebRequest request;
-
-            if (!Settings.Default.releaseEnabled) return;
-
-            try
-            {
-                request = (HttpWebRequest)WebRequest.Create(new Uri(url));
-                request.MaximumAutomaticRedirections = 4;
-                request.MaximumResponseHeadersLength = 4;
-                request.Timeout = 7 * 1000;   //7 seconds
-                request.Credentials = CredentialCache.DefaultCredentials;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                Stream receiveStream = response.GetResponseStream();
-                StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-
-                rawHTML = readStream.ReadToEnd();
-            }
-            catch
-            {
-                return;
-            }
-
-            if (!rawHTML.Contains("is not released yet.")) //Not yet
-            {
-                string message;
-
-                message = bot.Privmsg(client.HOME_CHANNEL, "*");
-                client.sendMessage(message);
-                message = bot.Privmsg(client.HOME_CHANNEL, "\x02" + "\x030,4Chapter " + Settings.Default.chapterNumber.ToString() + " appears to be out! \x030,4" + url + " [I'm a bot, so i can be wrong!]" + "\x02");
-                client.sendMessage(message);
-                message = bot.Privmsg(client.HOME_CHANNEL, "*");
-                client.sendMessage(message);
-
-                Settings.Default.releaseEnabled = false;
-                Settings.Default.Save();
-
-                mangaReleaseTimer.Enabled = false;
-            }
-        }
 
         private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
         {
@@ -911,7 +868,7 @@ namespace NarutoBot3
         private void parseInputMessage(string inmessage)
         {
             string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest    
-            string message = "";
+            Message message = null;
 
             if (!client.isConnected) return;
             
@@ -920,46 +877,46 @@ namespace NarutoBot3
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = bot.Privmsg(HOME_CHANNEL, "\x01" + "ACTION " + parsed[1] + "\x01");
+                        message = new Messages.Action(HOME_CHANNEL,parsed[1]);
 
                     else if (parsed[0].ToLower() == "/whois")  //Action send
-                        message = "WHOIS " + parsed[1] + "\n";
+                        message = new Whois(null, parsed[1]);
 
                     else if (parsed[0].ToLower() == "/whowas")  //Action send
-                        message = "WHOWAS " + parsed[1] + "\n";
+                        message = new Whowas(null, parsed[1]);
 
                     else if (parsed[0].ToLower() == "/nick")  //Action send
                         changeNick(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
-                        message = bot.Privmsg("NickServ", parsed[1]);
+                        message = new Privmsg("NickServ", parsed[1]);
 
                     else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
-                        message = bot.Privmsg("ChanServ", parsed[1]);
+                        message = new Privmsg("ChanServ", parsed[1]);
 
                     else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
                     {
                         parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
                         if (parsed.Length >= 3)
-                            message = bot.Privmsg(parsed[1], parsed[2]);
+                            message = new Privmsg(parsed[1], parsed[2]);
                         else
                             WriteMessage("Not enough arguments");
                     }
                     else if (parsed[0].ToLower() == "/identify")
-                        message = bot.Privmsg("NickServ", "identify " + parsed[1]);
+                        message = new Privmsg("NickServ", "identify " + parsed[1]);
                 }
 
                 else //Normal send
-                    message = bot.Privmsg(HOME_CHANNEL, InputBox.Text);
+                    message = new Privmsg(HOME_CHANNEL, InputBox.Text);
             }
             else
                 if (parsed[0][0] == '/')
                     WriteMessage("Not enough arguments");
 
                 else //Normal send
-                    message = bot.Privmsg(HOME_CHANNEL, InputBox.Text);
+                    message = new Privmsg(HOME_CHANNEL, InputBox.Text);
 
-            if (!String.IsNullOrWhiteSpace(message)) client.sendMessage(message);
+            if (message != null && !String.IsNullOrWhiteSpace(message.body)) client.sendMessage(message);
         }
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1094,27 +1051,6 @@ namespace NarutoBot3
         private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             contextMenuUserList.Items.Clear();
-        }
-
-        public void releaseCheckerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MangaReleaseCheckerWindow releaseChecker = new MangaReleaseCheckerWindow();
-            var result = releaseChecker.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                if (Settings.Default.releaseEnabled)
-                {
-                    string message = bot.Privmsg(HOME_CHANNEL, "I'm now checking " + Settings.Default.baseURL + Settings.Default.chapterNumber + " for the chapter every " + Settings.Default.checkInterval + " seconds.");
-                    mangaReleaseTimer.Interval = Settings.Default.checkInterval * 1000;
-                    mangaReleaseTimer.Elapsed += new ElapsedEventHandler(isMangaOutEvent);
-                    mangaReleaseTimer.Enabled = true;
-                    client.sendMessage(message);
-                }
-                else
-                {
-                    mangaReleaseTimer.Enabled = false;
-                }
-            }
         }
 
         private void t30_Click(object sender, EventArgs e)
