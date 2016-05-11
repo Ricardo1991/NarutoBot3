@@ -235,6 +235,14 @@ namespace NarutoBot3
             if (EnforceMirrorChanged != null)
                 EnforceMirrorChanged(this, e);
         }
+
+        public static UserList getSavedUsers()
+        {
+            UserList ul = new UserList();
+            ul.loadData();
+
+            return ul;
+        }
         
         public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
         {

@@ -270,7 +270,7 @@ namespace NarutoBot3
         {
             bot = new Bot(ref client, ref OutputBox, currentColorScheme);
 
-            initializeBot();
+            initializeBotEvents();
 
             while (!exitTheLoop)
             {
@@ -297,7 +297,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Disconnected");
         }
 
-        private void initializeBot()
+        private void initializeBotEvents()
         {
             bot.Connected += new EventHandler<EventArgs>(nowConnected);
             bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
@@ -800,7 +800,7 @@ namespace NarutoBot3
 
             if (bot == null)
             {
-                UserList ul = new UserList();
+                UserList ul = Bot.getSavedUsers();
                 operatorsWindow = new BotOperatorWindow(ref ul);
             }
             else
@@ -938,7 +938,7 @@ namespace NarutoBot3
 
             if (bot == null)
             {
-                UserList ul = new UserList();
+                UserList ul = Bot.getSavedUsers();
                 mutedWindow = new MutedUsersWindow(ref ul);
             }
                 
