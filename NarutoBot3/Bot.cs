@@ -833,7 +833,7 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, "quit", true) == 0)
                             {
                                 WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
-                                if(quitIRC(user)) OnQuit(EventArgs.Empty);
+                                quitIRC(user);
                             }
                         else if (String.Compare(cmd, "oplist", true) == 0)
                             {
@@ -2415,8 +2415,16 @@ namespace NarutoBot3
             newLine = newLine.Trim();
             newLine = newLine.TrimEnd(',');
 
-            string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
-            message = new Privmsg(CHANNEL, answer);
+            try
+            {
+                string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
+                message = new Privmsg(CHANNEL, answer);
+            }
+            catch
+            {
+                message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                bot1session = bot1.CreateSession();
+            }
 
             sendMessage(message);
         }
@@ -3026,7 +3034,6 @@ namespace NarutoBot3
 
             Message message;
 
-
             if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick)) return;
 
             var regex = new Regex(Regex.Escape("<random>"));
@@ -3369,8 +3376,15 @@ namespace NarutoBot3
 
                     else if (String.Compare(split[0], "if", true) == 0)
                     {
-                        string answer = bot1session.Think(arg + "?");
-                        message = new Privmsg(CHANNEL, answer);
+                        try { 
+                            string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
+                            message = new Privmsg(CHANNEL, answer);
+                        }
+                        catch
+                        {
+                            message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                            bot1session = bot1.CreateSession();
+                        }
 
                     }
                     else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
@@ -3598,15 +3612,31 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
-                    message = new Privmsg(CHANNEL, answer);
+                    try
+                    {
+                        string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
+                        message = new Privmsg(CHANNEL, answer);
+                    }
+                    catch
+                    {
+                        message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                        bot1session = bot1.CreateSession();
+                    }
                 }
             }
 
             else
             {
-                string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
-                message = new Privmsg(CHANNEL, answer);
+                try
+                {
+                    string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
+                    message = new Privmsg(CHANNEL, answer);
+                }
+                catch
+                {
+                    message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                    bot1session = bot1.CreateSession();
+                }
             }
 
             if (message!= null && !String.IsNullOrWhiteSpace(message.body))
@@ -3809,11 +3839,10 @@ namespace NarutoBot3
         bool quitIRC(string nick)
         {
             if(ul.userIsOperator(nick)){
-                
+                OnQuit(EventArgs.Empty);
+
                 timeoutTimer.Stop();
                 waitingForPong = false;
-                Client.Disconnect(Settings.Default.quitMessage);
-
                 return true;
             }
             return false;
@@ -4290,7 +4319,6 @@ namespace NarutoBot3
             }
             userList.Clear();
             Client.Disconnect(Settings.Default.quitMessage);
-            OutputBox.Clear();
         }
 
         private static string questionsRegex(string rest)
