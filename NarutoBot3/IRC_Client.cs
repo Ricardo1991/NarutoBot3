@@ -81,20 +81,19 @@ namespace NarutoBot3
 
             try
             {
-                if (message.toString().Length > 450)
+
+                while (message.toString().Length > 420)
                 {
-                    while (message.toString().Length > 450)
-                    {
-                        var nextMessage = message;
-                        message.body = message.body.Substring(0, 400);
-                        nextMessage.body = nextMessage.body.Substring(400);
+                    var nextMessage = (Message) message.Clone();
+                    message.body = message.body.Substring(0, 390);
+                    nextMessage.body = nextMessage.body.Substring(390);
 
-                        writer.WriteLine(message.toString());
+                    writer.WriteLine(message.toString());
 
-                        message = nextMessage;
-                    }
-
+                    message = nextMessage;
                 }
+
+                
                
                 writer.WriteLine(message.toString());
 

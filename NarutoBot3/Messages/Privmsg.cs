@@ -26,5 +26,11 @@ namespace NarutoBot3.Messages
             return header + " " + destinatary + " :" + body.Trim() + footer;
         }
 
+        public override object Clone()
+        {
+
+            return this.MemberwiseClone();
+        }
+
     }
 }

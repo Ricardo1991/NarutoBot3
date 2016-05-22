@@ -30,6 +30,11 @@ namespace NarutoBot3.Messages
             return !string.IsNullOrWhiteSpace(body);
         }
 
+        public override object Clone()
+        {
+
+            return this.MemberwiseClone();
+        }
 
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace NarutoBot3
+﻿using System;
+
+namespace NarutoBot3
 {
-    abstract public class Message
+    abstract public class Message : ICloneable
     {
         public string header;
         public string body;
@@ -10,6 +12,8 @@
         abstract public string toString();
 
         abstract public bool isValid();
+
+        abstract public object Clone();
     }
 
 
