@@ -2204,7 +2204,6 @@ namespace NarutoBot3
             string timezoneS;
             string location = "";
             bool wantUTC = false;
-            bool sensor = false;
             bool invalid = false;
             string requestURL;
 
@@ -2301,7 +2300,7 @@ namespace NarutoBot3
 
                 if (!wantUTC)
                 {
-                    requestURL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + location + "&timestamp=" + timestamp + "&sensor=" + sensor.ToString().ToLower() + "&key=" + Settings.Default.apikey;
+                    requestURL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + location + "&timestamp=" + timestamp + "&key=" + Settings.Default.apikey;
                     var webClient = new WebClient();
                     webClient.Encoding = Encoding.UTF8;
                     try
@@ -3641,6 +3640,7 @@ namespace NarutoBot3
 
             if (message!= null && !String.IsNullOrWhiteSpace(message.body))
             {
+                message.body = message.body.Replace("  ", " ");
                 sendMessage(message);
                 stats.question();
             }
@@ -4126,7 +4126,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (Client.isConnected)
             {
-                Message message = new Nick(null,"NICK " + Client.NICK);
+                Message message = new Nick(null,Client.NICK);
                 sendMessage(message);
                 return true;
             }
