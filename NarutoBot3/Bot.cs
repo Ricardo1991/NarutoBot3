@@ -46,6 +46,7 @@ namespace NarutoBot3
         private List<string> quotes = new List<string>();
         private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
+        public List<CustomCommand> customCommands = new List<CustomCommand>();
 
 
         public List<string> userList = new List<string>();
@@ -261,6 +262,7 @@ namespace NarutoBot3
             ReadQuotes();
             ReadFunk();
             ReadRules();
+            customCommands = CustomCommand.loadCustomCommands();
 
             ul.loadData();
 
@@ -270,8 +272,6 @@ namespace NarutoBot3
 
             if (File.Exists("textSample.xml"))
             {
-                
-
                 try {
                     XmlDocument d = new XmlDocument();
                     d.Load("textSample.xml");
@@ -783,7 +783,6 @@ namespace NarutoBot3
 
                     }
 
-
                     //StartParsing
                     if ((String.Compare(cmd.Replace(",", String.Empty), "hello", true) == 0
                             || String.Compare(cmd.Replace(",", String.Empty), "hi", true) == 0
@@ -803,246 +802,268 @@ namespace NarutoBot3
                         {
                             cmd = cmd.Substring(1);
 
-                            if (String.Compare(msg, "!anime best anime ever", true) == 0)
-                            {
-                                sendMessage(new Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
-                            }
+                        if (String.Compare(msg, "!anime best anime ever", true) == 0)
+                        {
+                            sendMessage(new Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                        }
                         else if (String.Compare(cmd, "help", true) == 0)
-                            {
-                                WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
-                                help(user);
-                            }
+                        {
+                            WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
+                            help(user);
+                        }
 
                         else if (String.Compare(cmd, "mirror", true) == 0)
-                            {
-                                WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
-                                toogleMirror(user);
-                            }
+                        {
+                            WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
+                            toogleMirror(user);
+                        }
                         else if (String.Compare(cmd, "enforcemirror", true) == 0)
-                            {
-                                WriteMessage("* Received an enforce mirror off toogle request from " + user, currentColorScheme.BotReport);
-                                toogleEnforceOff(user);
-                            }
+                        {
+                            WriteMessage("* Received an enforce mirror off toogle request from " + user, currentColorScheme.BotReport);
+                            toogleEnforceOff(user);
+                        }
 
                         else if (String.Compare(cmd, "rules", true) == 0)
-                            {
-                                WriteMessage("* Received a Rules request from " + user, currentColorScheme.BotReport);
-                                rules(whoSent, user);
-                            }
+                        {
+                            WriteMessage("* Received a Rules request from " + user, currentColorScheme.BotReport);
+                            rules(whoSent, user);
+                        }
 
                         else if (String.Compare(cmd, "quit", true) == 0)
-                            {
-                                WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
-                                quitIRC(user);
-                            }
+                        {
+                            WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
+                            quitIRC(user);
+                        }
                         else if (String.Compare(cmd, "oplist", true) == 0)
-                            {
-                                WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
-                                opList(user);
-                            }
+                        {
+                            WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
+                            opList(user);
+                        }
                         else if (String.Compare(cmd, "roll", true) == 0)
-                            {
-                                WriteMessage("* Received a Roll request from " + user, currentColorScheme.BotReport);
-                                roll(whoSent, user);
-                            }
+                        {
+                            WriteMessage("* Received a Roll request from " + user, currentColorScheme.BotReport);
+                            roll(whoSent, user);
+                        }
                         else if (String.Compare(cmd, "say", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
-                                say(Client.HOME_CHANNEL, arg, user);
-                            }
+                        {
+                            WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
+                            say(Client.HOME_CHANNEL, arg, user);
+                        }
                         else if (String.Compare(cmd, "greetme", true) == 0)
+                        {
+                            if (String.IsNullOrEmpty(arg))
                             {
-                                if (String.IsNullOrEmpty(arg))
-                                {
-                                    WriteMessage("* Received a Greet TOOGLE request from " + user, currentColorScheme.BotReport);
-                                    GreetToogle(user);
-                                }
-                                else
-                                {
-                                    WriteMessage("* Received a Greet request from " + user, currentColorScheme.BotReport);
-                                    AddGreetings(arg, user);
-                                }
+                                WriteMessage("* Received a Greet TOOGLE request from " + user, currentColorScheme.BotReport);
+                                GreetToogle(user);
                             }
+                            else
+                            {
+                                WriteMessage("* Received a Greet request from " + user, currentColorScheme.BotReport);
+                                AddGreetings(arg, user);
+                            }
+                        }
                         else if (String.Compare(cmd, "greetmenow", true) == 0)
-                            {
-                                    WriteMessage("* Received a Greet me now request from " + user, currentColorScheme.BotReport);
-                                    greetUser(user);
-                            }
+                        {
+                            WriteMessage("* Received a Greet me now request from " + user, currentColorScheme.BotReport);
+                            greetUser(user);
+                        }
                         else if (String.Compare(cmd, "me", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
-                                me(Client.HOME_CHANNEL, arg, user);
-                            }
+                        {
+                            WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
+                            me(Client.HOME_CHANNEL, arg, user);
+                        }
 
                         else if (String.Compare(cmd, "silence", true) == 0)
-                            {
-                                WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
-                                silence(user);
-                            }
+                        {
+                            WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
+                            silence(user);
+                        }
                         else if (String.Compare(cmd, "rename", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
-                                if (ul.userIsOperator(user)) changeNick(arg);
-                            }
+                        {
+                            WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
+                            if (ul.userIsOperator(user)) changeNick(arg);
+                        }
 
                         else if (String.Compare(cmd, "op", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
-                                addBotOP(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
+                            addBotOP(user, arg);
+                        }
                         else if (String.Compare(cmd, "deop", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
-                                removeBotOP(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
+                            removeBotOP(user, arg);
+                        }
                         else if (String.Compare(cmd, "mute", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a mute request from " + user, currentColorScheme.BotReport);
-                                muteUser(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a mute request from " + user, currentColorScheme.BotReport);
+                            muteUser(user, arg);
+                        }
                         else if (String.Compare(cmd, "unmute", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a unmute request from " + user, currentColorScheme.BotReport);
-                                unmuteUser(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a unmute request from " + user, currentColorScheme.BotReport);
+                            unmuteUser(user, arg);
+                        }
                         else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
-                                toFahrenheit(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
+                            toFahrenheit(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
-                                toCelcius(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
+                            toCelcius(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "time", true) == 0)
-                            {
-                                WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
-                                time(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
+                            time(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "wiki", true) == 0)
-                            {
-                                WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
-                                wiki(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
+                            wiki(whoSent, user, arg);
+                        }
 
                         else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
-                                animeSearch(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
+                            animeSearch(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
-                                youtubeSearch(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
+                            youtubeSearch(whoSent, user, arg);
+                        }
                         else if ((String.Compare(cmd, "giphy", true) == 0 || String.Compare(cmd, "g", true) == 0) && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
-                                giphySearch(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
+                            giphySearch(whoSent, user, arg);
+                        }
 
                         else if (String.Compare(cmd, "poke", true) == 0)
-                            {
-                                WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
-                                poke(whoSent, user);
-                            }
+                        {
+                            WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
+                            poke(whoSent, user);
+                        }
 
                         else if (String.Compare(cmd, "trivia", true) == 0)
-                            {
-                                WriteMessage("* Received a Trivia request from " + user, currentColorScheme.BotReport);
-                                trivia(whoSent, user);
-                            }
+                        {
+                            WriteMessage("* Received a Trivia request from " + user, currentColorScheme.BotReport);
+                            trivia(whoSent, user);
+                        }
                         else if (String.Compare(cmd, "nick", true) == 0)
-                            {
-                                WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
-                                nickGen(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
+                            nickGen(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "kill", true) == 0)
-                            {
-                                WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
-                                killUser(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
+                            killUser(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "fact", true) == 0 || String.Compare(cmd, "facts", true) == 0)
-                            {
-                                WriteMessage("* Received a Fact request from " + user, currentColorScheme.BotReport);
-                                factUser(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Fact request from " + user, currentColorScheme.BotReport);
+                            factUser(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "lastkill", true) == 0)
-                            {
-                                WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
-                                lastKill(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
+                            lastKill(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "rkill", true) == 0)
-                            {
-                                WriteMessage("* Received a randomkill request from " + user, currentColorScheme.BotReport);
-                                randomKill(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a randomkill request from " + user, currentColorScheme.BotReport);
+                            randomKill(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
+                        {
+                            WriteMessage("* Received a Quote request from " + user, currentColorScheme.BotReport);
+
+                            if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
                             {
-                                WriteMessage("* Received a Quote request from " + user, currentColorScheme.BotReport);
-
-                                if (string.Compare(arg.ToLower().Split(new char[] { ' ' }, 2)[0], "add") == 0)  //add
-                                {
-                                    addQuote(arg, user);
-                                }
-                                else //lookup or random
-                                {
-                                    printQuote(whoSent, arg, user);
-                                }
-
+                                addQuote(arg, user);
                             }
+                            else //lookup or random
+                            {
+                                printQuote(whoSent, arg, user);
+                            }
+
+                        }
                         else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Choose request from " + user, currentColorScheme.BotReport);
-                                choose(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Choose request from " + user, currentColorScheme.BotReport);
+                            choose(whoSent, user, arg);
+                        }
                         else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Shuffle request from " + user, currentColorScheme.BotReport);
-                                shuffle(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Shuffle request from " + user, currentColorScheme.BotReport);
+                            shuffle(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
-                            {
-                                WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
+                        {
+                            WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
 
-                                if (String.IsNullOrEmpty(arg)) //lookup or random
-                                    printFunk(whoSent, arg, user);
+                            if (String.IsNullOrEmpty(arg)) //lookup or random
+                                printFunk(whoSent, arg, user);
 
-                                else
-                                    addFunk(arg, user);
-                            }
+                            else
+                                addFunk(arg, user);
+                        }
                         else if (String.Compare(cmd, "reload", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a reload request from " + user, currentColorScheme.BotReport);
-                                reloadTexts(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a reload request from " + user, currentColorScheme.BotReport);
+                            reloadTexts(user, arg);
+                        }
                         else if (String.Compare(cmd, "names", true) == 0)
-                            {
-                                WriteMessage("* Received a names request from " + user, currentColorScheme.BotReport);
-                                printNames(user);
-                            }
+                        {
+                            WriteMessage("* Received a names request from " + user, currentColorScheme.BotReport);
+                            printNames(user);
+                        }
                         else if (String.Compare(cmd, "stats", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a stats request from " + user, currentColorScheme.BotReport);
-                                statsPrint(whoSent, user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a stats request from " + user, currentColorScheme.BotReport);
+                            statsPrint(whoSent, user, arg);
+                        }
                         else if (String.Compare(cmd, "set", true) == 0 && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a set options request from " + user, currentColorScheme.BotReport);
-                                setSetting(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a set options request from " + user, currentColorScheme.BotReport);
+                            setSetting(user, arg);
+                        }
 
-                            else if (String.Compare(cmd, "acknowledge", true) == 0 || String.Compare(cmd, "a", true) == 0)
-                            {
-                                WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
-                                ul.clearUserMessages(user);
-                            }
+                        else if (String.Compare(cmd, "acknowledge", true) == 0 || String.Compare(cmd, "a", true) == 0)
+                        {
+                            WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
+                            ul.clearUserMessages(user);
+                        }
                         else if ((String.Compare(cmd, "tell", true) == 0 || String.Compare(cmd, "message", true) == 0) && !String.IsNullOrEmpty(arg))
-                            {
-                                WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
-                                tell(user, arg);
-                            }
+                        {
+                            WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
+                            tell(user, arg);
+
+                        }
+                        else if ((String.Compare(cmd, "addcmd", true) == 0) && !String.IsNullOrEmpty(arg))
+                        {
+                            WriteMessage("* Received an Add Custom Command request from " + user, currentColorScheme.BotReport);
+                            addCustomCommand(whoSent, arg, user);
+
+                        }
+
+                        else if ((String.Compare(cmd, "removecmd", true) == 0) && !String.IsNullOrEmpty(arg))
+                        {
+                            WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
+                            removeCustomCommand(whoSent, arg, user);
+
+                        }
+
+
+
+                        else
+                        {
+                            //check for custom commands
+                            useCustomCommand(whoSent,cmd ,arg, user);
+                        }
 
                         
                         }
@@ -4058,6 +4079,94 @@ namespace NarutoBot3
             saveFunk();
             stats.funk();
         }
+
+        void addCustomCommand(string CHANNEL, string args, string nick)
+        {
+            string[] splits;
+            Message message;
+            splits = args.Split(new char[] { ' ' }, 2);
+
+            if (CustomCommand.commandExists(splits[0], customCommands) == true)
+            {
+                message = new Privmsg(CHANNEL, "Command " + splits[0] + " already exists.");
+                sendMessage(message);
+
+                return;
+
+            }
+
+            customCommands.Add(new CustomCommand(nick, splits[0], splits[1]));
+            CustomCommand.saveCustomCommands(customCommands);
+
+        }
+
+        void removeCustomCommand(string CHANNEL, string args, string nick)
+        {
+            string[] splits;
+            Message message;
+
+            splits = args.Split(new char[] { ' ' }, 2);
+
+            if (ul.userIsOperator(nick))
+            {
+                CustomCommand.RemoveCommandByName(args, customCommands);
+                CustomCommand.saveCustomCommands(customCommands);
+            }
+        }
+
+        
+
+        void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
+        {
+            string[] splits;
+            Message message;
+            splits = args.Split(new char[] { ' ' }, 2);
+
+            string response;
+            string randomTarget;
+
+            Random r = new Random();
+
+            CustomCommand customcommand;
+
+            var regex = new Regex(Regex.Escape("<random>"));
+
+            if (CustomCommand.commandExists(cmd, customCommands) == false)
+            {
+                message = new Privmsg(CHANNEL, "Command " + cmd + " doesn't exist.");
+                sendMessage(message);
+
+                return;
+
+            }
+
+            customcommand = CustomCommand.getCustomCommandByName(cmd, customCommands);
+
+            if (customcommand == null) return;
+
+            response = customcommand.format;
+
+
+            response = response.Replace("<TARGET>", args.ToUpper()).Replace("<USER>", nick.Trim().ToUpper());
+            response = response.Replace("<target>", args).Replace("<user>", nick.Trim());
+
+            while (response.Contains("<random>"))
+            {
+                do
+                {
+                    randomTarget = removeUserMode(userList[r.Next(userList.Count)].Trim());
+                } while (string.Compare(args, randomTarget, true) == 0 || userList.Count < 2);
+
+                response = regex.Replace(response, randomTarget, 1);
+            }
+
+
+
+            message = new Privmsg(CHANNEL, response);
+            sendMessage(message);
+        }
+
+
 
 
         ///////////////////////////////////

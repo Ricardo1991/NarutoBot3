@@ -343,6 +343,9 @@ namespace NarutoBot3
                 bot.tmc.save("textSample.xml");
             }
 
+
+            CustomCommand.saveCustomCommands(bot.customCommands);
+
             InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
             client.Disconnect(Settings.Default.quitMessage);
