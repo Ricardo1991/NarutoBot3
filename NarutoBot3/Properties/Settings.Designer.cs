@@ -742,5 +742,17 @@ namespace NarutoBot3.Properties {
                 this["factsEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int inboxSize {
+            get {
+                return ((int)(this["inboxSize"]));
+            }
+            set {
+                this["inboxSize"] = value;
+            }
+        }
     }
 }

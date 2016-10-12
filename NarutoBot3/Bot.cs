@@ -478,7 +478,7 @@ namespace NarutoBot3
 
                     greetUser(removeUserMode(Who));
 
-                    messageDelivery(removeUserMode(Who));
+                    messageDelivery(removeUserMode(Who), Who);
 
                     break;
 
@@ -572,7 +572,7 @@ namespace NarutoBot3
                     ul.setUserOnline(removeUserMode(newnick));
 
 
-                    messageDelivery(removeUserMode(newnick));
+                    messageDelivery(removeUserMode(newnick), newnick);
 
                     userTemp.Clear();
                     break;
@@ -1035,7 +1035,11 @@ namespace NarutoBot3
                         else if (String.Compare(cmd, "acknowledge", true) == 0 || String.Compare(cmd, "a", true) == 0)
                         {
                             WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
-                            ul.clearUserMessages(user);
+
+                            if (String.IsNullOrEmpty(arg))
+                                ul.clearUserMessages(user);
+                            else
+                                ul.clearUserMessages(user, arg);
                         }
                         else if ((String.Compare(cmd, "tell", true) == 0 || String.Compare(cmd, "message", true) == 0) && !String.IsNullOrEmpty(arg))
                         {
@@ -1054,6 +1058,19 @@ namespace NarutoBot3
                         {
                             WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
                             removeCustomCommand(whoSent, arg, user);
+
+                        }
+
+                        else if ((String.Compare(cmd, "inspectmessages", true) == 0) && !String.IsNullOrEmpty(arg))
+                        {
+                            WriteMessage("* Received an Inspect Messages request from " + user, currentColorScheme.BotReport);
+                            inspectMessages(whoSent, arg, user);
+
+                        }
+                        else if ((String.Compare(cmd, "cleanmessages", true) == 0) && !String.IsNullOrEmpty(arg))
+                        {
+                            WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
+                            cleanMessages(whoSent, arg, user);
 
                         }
 
@@ -3971,7 +3988,7 @@ namespace NarutoBot3
             if (split.Length < 2) return;
             else
             {
-                if (ul.userMessageCount(split[0]) > 20)
+                if (ul.userMessageCount(split[0]) > Settings.Default.inboxSize)
                     sendMessage(new Privmsg(nick, split[0] + " has his inbox full! Can't accept more messages."));
                 else {
                     ul.addUserMessage(split[0], nick, split[1]);
@@ -3979,6 +3996,37 @@ namespace NarutoBot3
                     ul.saveData();
                 }
             }
+        }
+
+        void inspectMessages(string nick, string args, string user)
+        {
+            if (ul.userIsOperator(user))
+            {
+                messageDelivery(args, user);
+
+            }
+
+        }
+
+        void cleanMessages(string nick, string args, string user)
+        {
+            if (!ul.userIsOperator(user))
+                return;
+
+
+            string[] split = args.Split(new char[] { ' ' });
+
+            if(split.Length == 1)
+            {
+                if (ul.clearUserMessages(args))
+                    sendMessage(new Notice(user, "Success!"));
+            }
+
+            else
+                if (ul.clearUserMessages(split[0], split[1]))
+                    sendMessage(new Notice(split[0], "Success!"));
+
+
         }
 
         private void choose(string CHANNEL, string user, string arg)
@@ -4103,7 +4151,6 @@ namespace NarutoBot3
         void removeCustomCommand(string CHANNEL, string args, string nick)
         {
             string[] splits;
-            Message message;
 
             splits = args.Split(new char[] { ' ' }, 2);
 
@@ -4365,19 +4412,19 @@ namespace NarutoBot3
         }
 
 
-        void messageDelivery(string nick)
+        void messageDelivery(string user, string destinary)
         {
-            int count = ul.userMessageCount(nick);
+            int count = ul.userMessageCount(user);
             if (count == 0) return;
 
             Message message;
 
-            sendMessage(new Privmsg(nick,  nick + ", you have " + count + " message(s)"));
+            sendMessage(new Privmsg(destinary,  user + ", you have " + count + " message(s)"));
 
             for(int i = 0 ; i < count ; i++)
             {
                 System.Threading.Thread.Sleep(250);
-                UserMessage m = ul.getUserMessage(nick, i);
+                UserMessage m = ul.getUserMessage(user, i);
                 TimeSpan diff = DateTime.Now.ToUniversalTime().Subtract(m.Timestamp);
 
                 string timeDiff = "";
@@ -4407,11 +4454,11 @@ namespace NarutoBot3
                 }
 
 
-                message = new Privmsg(nick, "Sent " + timeDiff +"\t<"+ m.Sender +"> " + m.Message );
+                message = new Privmsg(destinary, "#"+ (i+1) + " Sent " + timeDiff +"\t<"+ m.Sender +"> " + m.Message );
                 sendMessage(message);
             }
 
-            sendMessage(new Privmsg(nick, "Remove messages with " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
+            sendMessage(new Privmsg(destinary, "Remove messages with " + Client.SYMBOL + "acknowledge or " + Client.SYMBOL + "a"));
         }
 
         public void Dispose()

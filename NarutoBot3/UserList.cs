@@ -392,9 +392,9 @@ namespace NarutoBot3
             }
         }
 
-        public void clearUserMessages(string nick)
+        public bool clearUserMessages(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return;
+            if (string.IsNullOrWhiteSpace(nick)) return false;
 
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
@@ -404,10 +404,51 @@ namespace NarutoBot3
                 if (String.Compare(u.Nick, nick, true) == 0)
                 {
                     u.DeliveredMessages.Clear();
+                    return true;
                 }
 
             }
 
+            return false;
+        }
+
+        public bool clearUserMessages(string nick, string arg)
+        {
+            if (string.IsNullOrWhiteSpace(nick)) return false;
+
+            int messageNumber = 0;
+            try
+            {
+                messageNumber = Int32.Parse(arg);
+            }
+            catch
+            {
+
+            }
+
+            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
+            nick = nick.Trim();
+
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, nick, true) == 0)
+                {
+                    try
+                    {
+                        u.DeliveredMessages.RemoveAt(messageNumber - 1);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        return false;
+                    }
+                    
+                    return true;
+                }
+
+            }
+
+            return false;
         }
     }
 
