@@ -1,4 +1,5 @@
-﻿using NarutoBot3.Messages;
+﻿using NarutoBot3.Events;
+using NarutoBot3.Messages;
 using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using System;
@@ -7,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Threading;
 using System.Timers;
@@ -21,7 +21,7 @@ namespace NarutoBot3
         delegate void SetEventCallback(object sender, EventArgs e, string text);
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
-        delegate void ChangeTimeStamp(TimeSpan diff);
+        delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
         public ColorScheme currentColorScheme = new ColorScheme();
         List<ColorScheme> schemeColection = new List<ColorScheme>();
@@ -308,9 +308,11 @@ namespace NarutoBot3
             bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
 
             bot.Created += new EventHandler<EventArgs>(userListCreated);
-            bot.Joined += (sender, e) => userJoined(bot.Who, bot.JoinMessage);
-            bot.Left += (sender, e) => userLeft(bot.WhoLeft, bot.QuitMessage);
-            bot.NickChanged += (sender, e) => userNickChange(bot.Who, bot.NewNick);
+
+            bot.Joined += new EventHandler<UserJoinLeftMessageEventArgs>(userJoined);
+            bot.Left += new EventHandler<UserJoinLeftMessageEventArgs>(userLeft);
+
+            bot.NickChanged += new EventHandler<NickChangeEventArgs>(userNickChange);
             bot.Kicked += (sender, e) => userKicked(bot.Who);
             bot.ModeChanged += (sender, e) => userModeChanged(bot.Who, bot.Mode);
 
@@ -325,7 +327,7 @@ namespace NarutoBot3
 
             bot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
 
-            bot.PongReceived += (sender, e) => updateLag(bot.TimeDifference);
+            bot.PongReceived += new EventHandler<PongEventArgs>(updateLag);
 
             bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
 
@@ -425,20 +427,20 @@ namespace NarutoBot3
             //also, should make a log
         }
 
-        private void userJoined(string whoJoined, string joinMessage)
+        private void userJoined(object sender, UserJoinLeftMessageEventArgs e)
         {
-            WriteMessage("** " + whoJoined + " (" + joinMessage + ") joined", currentColorScheme.Join);
+            WriteMessage("** " + e.Who + " (" + e.Message + ") joined", currentColorScheme.Join);
             UpdateDataSource();
         }
 
-        private void userLeft(string whoLeft, string quitMessage)
+        private void userLeft(object sender, UserJoinLeftMessageEventArgs e)
         {
-            WriteMessage("** " + whoLeft + " parted ("+quitMessage.Trim()+")", currentColorScheme.Leave);
+            WriteMessage("** " + e.Who + " parted ("+e.Message.Trim()+")", currentColorScheme.Leave);
             UpdateDataSource();
         }
-        private void userNickChange(string whoJoined, string newNick)
+        private void userNickChange(object sender, NickChangeEventArgs e)
         {
-            WriteMessage("** " + whoJoined + " is now known as " + newNick, currentColorScheme.Rename);
+            WriteMessage("** " + e.OldNick + " is now known as " + e.NewNick, currentColorScheme.Rename);
             UpdateDataSource();
         }
 
@@ -610,18 +612,18 @@ namespace NarutoBot3
             }
         }
 
-        private void updateLag(TimeSpan diff)
+        private void updateLag(object sender, PongEventArgs e)
         {
             if (statusStripBottom.InvokeRequired)
             {
                 ChangeTimeStamp d = new ChangeTimeStamp(updateLag);
-                this.Invoke(d, new object[] { diff });
+                this.Invoke(d, new object[] { sender, e });
             }
             else { 
                 try
                 {
-                    int seconds = diff.Seconds * 60 + diff.Seconds;
-                    toolstripLag.Text = seconds + "." + diff.Milliseconds.ToString("000") + "s";
+                    int seconds = e.TimeDifference.Seconds * 60 + e.TimeDifference.Seconds;
+                    toolstripLag.Text = seconds + "." + e.TimeDifference.Milliseconds.ToString("000") + "s";
                 }
                 catch { }
             }

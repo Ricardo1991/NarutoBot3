@@ -1,4 +1,7 @@
-﻿using GiphySearch;
+﻿using ChatterBotAPI;
+using GiphySearch;
+using NarutoBot3.Events;
+using NarutoBot3.Messages;
 using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using RedditSharp;
@@ -17,9 +20,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using TextMarkovChains;
-using ChatterBotAPI;
 using TweetSharp;
-using NarutoBot3.Messages;
 
 namespace NarutoBot3
 {
@@ -32,11 +33,9 @@ namespace NarutoBot3
         public TextMarkovChain killgen = new TextMarkovChain();
         int tmcCount = 0;
 
-
         ChatterBotFactory factory = new ChatterBotFactory();
         ChatterBot bot1;
         ChatterBotSession bot1session;
-
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -48,7 +47,6 @@ namespace NarutoBot3
         private List<string> nickGenStrings;
         public List<CustomCommand> customCommands = new List<CustomCommand>();
 
-
         public List<string> userList = new List<string>();
 
         public UserList ul = new UserList();
@@ -58,38 +56,25 @@ namespace NarutoBot3
         string mode;
         public string Mode{ get { return mode; } set { mode = value; } }
 
-        string newNick;
-        public string NewNick{get { return newNick; }set { newNick = value; }}
-
         string who;
         public string Who{get { return who; }set { who = value; }}
 
         string whoLeft;
         public string WhoLeft{get { return whoLeft; }set { whoLeft = value; }}
 
-        string quitMessage;
-        public string QuitMessage{get { return quitMessage; } set { quitMessage = value; }}
-
-        string joinMessage;
-
-        public string JoinMessage
-        {
-            get { return joinMessage; }
-            set { joinMessage = value; }
-        }
 
         bool conneceted = false;
         public bool IsConnected{get { return conneceted; }set { conneceted = value; }}
 
         public event EventHandler<EventArgs> DuplicatedNick;
         public event EventHandler<EventArgs> Created;
-        public event EventHandler<EventArgs> Joined;
-        public event EventHandler<EventArgs> Left;
-        public event EventHandler<EventArgs> NickChanged;
+        public event EventHandler<UserJoinLeftMessageEventArgs> Joined;
+        public event EventHandler<UserJoinLeftMessageEventArgs> Left;
+        public event EventHandler<NickChangeEventArgs> NickChanged;
         public event EventHandler<EventArgs> ModeChanged;
         public event EventHandler<EventArgs> Kicked;
         public event EventHandler<EventArgs> Timeout;
-        public event EventHandler<EventArgs> PongReceived;
+        public event EventHandler<PongEventArgs> PongReceived;
         public event EventHandler<EventArgs> Connected;
         public event EventHandler<EventArgs> ConnectedWithServer;
         public event EventHandler<EventArgs> BotNickChanged;
@@ -102,8 +87,6 @@ namespace NarutoBot3
         private System.Timers.Timer timeoutTimer;
 
         private bool waitingForPong = false;
-
-        private TimeSpan timeDifference;
 
         IRC_Client Client;
         RichTextBox OutputBox;
@@ -124,12 +107,7 @@ namespace NarutoBot3
             get { return topic; }
             set { topic = value; }
         }
-        
-        public TimeSpan TimeDifference
-        {
-            get { return timeDifference; }
-            set { timeDifference = value; }
-        }
+       
 
         public bool WaitingForPong
         {
@@ -143,7 +121,7 @@ namespace NarutoBot3
                 TopicChange(this, e);
         
         }
-        protected virtual void OnPongReceived(EventArgs e)
+        protected virtual void OnPongReceived(PongEventArgs e)
         {
             if (PongReceived != null)
                 PongReceived(this, e);
@@ -196,18 +174,18 @@ namespace NarutoBot3
             if (Created != null)
                 Created(this, e);
         }
-        protected virtual void OnJoin(EventArgs e)
+        protected virtual void OnJoin(UserJoinLeftMessageEventArgs e)
         {
             if (Joined != null)
                 Joined(this, e);
         }
-        protected virtual void OnLeave(EventArgs e)
+        protected virtual void OnLeave(UserJoinLeftMessageEventArgs e)
         {
             if (Left != null)
                 Left(this, e);
         }
 
-        protected virtual void OnNickChange(EventArgs e)
+        protected virtual void OnNickChange(NickChangeEventArgs e)
         {
             if (NickChanged != null)
                 NickChanged(this, e);
@@ -319,11 +297,12 @@ namespace NarutoBot3
 
             Who = "";
             WhoLeft = "";
-            NewNick = "";
 
             if (String.IsNullOrEmpty(message)) return;
 
             messageObject = new ParsedMessage(message);
+
+            string quitMessage;
 
             switch (messageObject.Type)
             {
@@ -439,26 +418,28 @@ namespace NarutoBot3
                         now = DateTime.ParseExact(currentStamp, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
                         then = DateTime.ParseExact(pongcmd, format, System.Globalization.CultureInfo.CreateSpecificCulture("en-EN"));
 
-                        TimeDifference = now.Subtract(then);
+                        TimeSpan TimeDifference = now.Subtract(then);
 
                         WaitingForPong = false;
                         timeoutTimer.Stop();
 
-                        OnPongReceived(EventArgs.Empty);
+                        OnPongReceived(new PongEventArgs(TimeDifference));
                     }
 
                     break;
 
                 case ("JOIN"):
 
+                    string joinMessage;
+
                     if (messageObject.Sender.Contains("!"))
                     {
                         Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
-                        JoinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!") + 1);
+                        joinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!") + 1);
                     }
                     else {
                         Who = messageObject.Sender;
-                        JoinMessage = "";
+                        joinMessage = "";
                     }
 
                     found = false;
@@ -472,7 +453,7 @@ namespace NarutoBot3
 
                     userList.Sort();
 
-                    OnJoin(EventArgs.Empty);
+                    OnJoin(new UserJoinLeftMessageEventArgs(Who, joinMessage));
 
                     ul.setUserOnline(removeUserMode(Who));
 
@@ -488,6 +469,7 @@ namespace NarutoBot3
                     if (messageObject.Sender.Contains("!"))
                         WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                     else WhoLeft = messageObject.Sender;
+
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
@@ -506,7 +488,7 @@ namespace NarutoBot3
 
                     ul.setUserOffline(WhoLeft);
 
-                    OnLeave(EventArgs.Empty);
+                    OnLeave(new UserJoinLeftMessageEventArgs( Who, quitMessage));
                     break;
 
 
@@ -534,7 +516,7 @@ namespace NarutoBot3
                     ul.setUserOffline(WhoLeft);
 
 
-                    OnLeave(EventArgs.Empty);
+                    OnLeave(new UserJoinLeftMessageEventArgs(Who, quitMessage));
                     break;
 
 
@@ -562,11 +544,7 @@ namespace NarutoBot3
                     userList.Add(newnick);
                     userList.Sort();
 
-
-                    NewNick = newnick;
-                    Who = oldnick;
-
-                    OnNickChange(EventArgs.Empty);
+                    OnNickChange(new NickChangeEventArgs(oldnick, newnick));
 
                     ul.setUserOffline(oldnick);
                     ul.setUserOnline(removeUserMode(newnick));
@@ -4037,16 +4015,20 @@ namespace NarutoBot3
             string[] choices;
             Message message;
 
+            arg = arg.Replace("  ", " ");
+
             if (arg.Contains(','))
                 choices = arg.Split(new char[] { ',' });
             else
                 choices = arg.Split(new char[] { ' ' });
 
-            int random = r.Next(choices.Length);
+            if (choices.Length != 0) { 
 
-            message = new Privmsg(CHANNEL, user+": "+ choices[random].Trim());
+                int random = r.Next(choices.Length);
+                message = new Privmsg(CHANNEL, user + ": " + choices[random].Trim());
+                sendMessage(message);
 
-            sendMessage(message);
+            }
             stats.choose();
         }
 
@@ -4055,26 +4037,33 @@ namespace NarutoBot3
             if (ul.userIsMuted(user) || !Settings.Default.shuffleEnabled) return;
 
             Random r = new Random();
-            string message;
-            string[] choices = arg.Split(new char[] { ' ' });
+            string message = "";
+            string[] choices;
             List<string> sList = new List<string>();
+
+            arg = arg.Replace("  ", " ");
+
+            if (arg.Contains(','))
+                choices = arg.Split(new char[] { ',' });
+            else
+                choices = arg.Split(new char[] { ' ' });
 
             foreach(string s in choices){
                 sList.Add(s);
             }
 
-            message = "";
-
-            while (sList.Count > 0)
+            if (sList.Count != 0)
             {
-                int random = r.Next(sList.Count);
-                message = message + " " + sList[random];
-                sList.Remove(sList[random]);
+                while (sList.Count > 0)
+                {
+                    int random = r.Next(sList.Count);
+                    message = message + " " + sList[random];
+                    sList.Remove(sList[random]);
+                }
+
+                sendMessage(new Privmsg(CHANNEL, user + ":" + message));
             }
 
-
-
-            sendMessage(new Privmsg(CHANNEL, user + ":" + message));
             stats.shuffle();
         }
 

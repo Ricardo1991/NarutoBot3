@@ -277,7 +277,7 @@ Hello <target>! Did you know Rya, resident hexchat pervert, believes that kissin
 <target> is often confused by <user>’s sexual advances.
 <target> despite denying <user> several times, will still often be asked by <user> on a date to Olive Garden.
 <target> brings all his dates to Olive Garden, only ordering the breadsticks.
-<target> has tapped their feet together, in order to effectively simulate being a worm. 
+<target> has taped their feet together, in order to effectively simulate being a worm. 
 <target> has been disowned by their mother. 
 <target> has been disowned by their housepets. 
 <target> has been disowned by all the items they own. 
