@@ -224,9 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomCommand.cs" />
+    <Compile Include="Events\ModeChangedEventArgs.cs" />
     <Compile Include="Events\NickChangeEventArgs.cs" />
     <Compile Include="Events\PongEventArgs.cs" />
+    <Compile Include="Events\TopicChangedEventArgs.cs" />
     <Compile Include="Events\UserJoinLeftMessageEventArgs.cs" />
+    <Compile Include="Events\UserKickedEventArgs.cs" />
     <Compile Include="Forms\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>

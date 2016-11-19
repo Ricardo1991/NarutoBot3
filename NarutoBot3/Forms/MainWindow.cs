@@ -18,7 +18,7 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         delegate void SetTextCallback(string text);
-        delegate void SetEventCallback(object sender, EventArgs e, string text);
+        delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
         delegate void SetBoolCallback(bool status);
         delegate void ChangeDataSource();
         delegate void ChangeTimeStamp(object sender, PongEventArgs e);
@@ -313,12 +313,12 @@ namespace NarutoBot3
             bot.Left += new EventHandler<UserJoinLeftMessageEventArgs>(userLeft);
 
             bot.NickChanged += new EventHandler<NickChangeEventArgs>(userNickChange);
-            bot.Kicked += (sender, e) => userKicked(bot.Who);
-            bot.ModeChanged += (sender, e) => userModeChanged(bot.Who, bot.Mode);
+            bot.Kicked += new EventHandler<UserKickedEventArgs>(userKicked);
+            bot.ModeChanged += new EventHandler<ModeChangedEventArgs>(userModeChanged);
 
             bot.Timeout += new EventHandler<EventArgs>(timeout);
 
-            bot.BotNickChanged += (sender, e) => eventChangeTitle(sender, e);
+            bot.BotNickChanged += new EventHandler<EventArgs>(eventChangeTitle);
 
             bot.BotSilenced += new EventHandler<EventArgs>(botSilence);
             bot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
@@ -329,7 +329,7 @@ namespace NarutoBot3
 
             bot.PongReceived += new EventHandler<PongEventArgs>(updateLag);
 
-            bot.TopicChange += (sender, e) => changeTopicTextBox(sender, e, bot.Topic);
+            bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
 
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
 
@@ -444,48 +444,48 @@ namespace NarutoBot3
             UpdateDataSource();
         }
 
-        private void userModeChanged(string user, string mode)
+        private void userModeChanged(object sender, ModeChangedEventArgs e)
         {
-            switch (mode)
+            switch (e.Mode)
             {
                 case ("+o"):
-                    WriteMessage("** " + user + " was opped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-o"):
-                    WriteMessage("** " + user + " was deopped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+v"):
-                    WriteMessage("** " + user + " was voiced", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was voiced", currentColorScheme.StatusChanged);
                     break;
                 case ("-v"):
-                    WriteMessage("** " + user + " was devoiced", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was devoiced", currentColorScheme.StatusChanged);
                     break;
                 case ("+h"):
-                    WriteMessage("** " + user + " was half opped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was half opped", currentColorScheme.StatusChanged);
                     break;
                 case ("-h"):
-                    WriteMessage("** " + user + " was half deopped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was half deopped", currentColorScheme.StatusChanged);
                     break;
                 case ("+q"):
-                    WriteMessage("** " + user + " was given Owner permissions", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was given Owner permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-q"):
-                    WriteMessage("** " + user + " was removed as a Owner", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was removed as a Owner", currentColorScheme.StatusChanged);
                     break;
                 case ("+a"):
-                    WriteMessage("** " + user + " was given Admin permissions", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was given Admin permissions", currentColorScheme.StatusChanged);
                     break;
                 case ("-a"):
-                    WriteMessage("** " + user + " was removed as an Admin", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was removed as an Admin", currentColorScheme.StatusChanged);
                     break;
             }
 
             UpdateDataSource();
         }
 
-        private void userKicked(string userkicked)
+        private void userKicked(object sender, UserKickedEventArgs e)
         {
-            WriteMessage("** " + userkicked + " was kicked", currentColorScheme.Leave);
+            WriteMessage("** " + e.KickedUser + " was kicked", currentColorScheme.Leave);
             UpdateDataSource();
         }
 
@@ -631,16 +631,16 @@ namespace NarutoBot3
 
         ////// Events
 
-        private void changeTopicTextBox(object sender, EventArgs e, string p)
+        private void changeTopicTextBox(object sender, TopicChangedEventArgs e)
         {
             if (tbTopic.InvokeRequired)
             {
                 SetEventCallback d = new SetEventCallback(changeTopicTextBox);
-                this.Invoke(d, new object[] { sender, e, p });
+                this.Invoke(d, new object[] { sender, e });
             }
             else
             {
-                tbTopic.Text = p;
+                tbTopic.Text = e.Topic;
             }
         }
 

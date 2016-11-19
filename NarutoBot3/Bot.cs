@@ -53,16 +53,6 @@ namespace NarutoBot3
 
         private StatsManager stats = new StatsManager();
 
-        string mode;
-        public string Mode{ get { return mode; } set { mode = value; } }
-
-        string who;
-        public string Who{get { return who; }set { who = value; }}
-
-        string whoLeft;
-        public string WhoLeft{get { return whoLeft; }set { whoLeft = value; }}
-
-
         bool conneceted = false;
         public bool IsConnected{get { return conneceted; }set { conneceted = value; }}
 
@@ -71,8 +61,8 @@ namespace NarutoBot3
         public event EventHandler<UserJoinLeftMessageEventArgs> Joined;
         public event EventHandler<UserJoinLeftMessageEventArgs> Left;
         public event EventHandler<NickChangeEventArgs> NickChanged;
-        public event EventHandler<EventArgs> ModeChanged;
-        public event EventHandler<EventArgs> Kicked;
+        public event EventHandler<ModeChangedEventArgs> ModeChanged;
+        public event EventHandler<UserKickedEventArgs> Kicked;
         public event EventHandler<EventArgs> Timeout;
         public event EventHandler<PongEventArgs> PongReceived;
         public event EventHandler<EventArgs> Connected;
@@ -81,7 +71,7 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> BotSilenced;
         public event EventHandler<EventArgs> BotUnsilenced;
         public event EventHandler<EventArgs> Quit;
-        public event EventHandler<EventArgs> TopicChange;
+        public event EventHandler<TopicChangedEventArgs> TopicChange;
         public event EventHandler<EventArgs> EnforceMirrorChanged;
 
         private System.Timers.Timer timeoutTimer;
@@ -94,20 +84,10 @@ namespace NarutoBot3
         string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
 
         private Reddit reddit;
-
-        string topic;
-
         private List<int> killsUsed = new List<int>();
         private List<int> factsUsed = new List<int>();
 
         private TwitterService service;
-
-        public string Topic
-        {
-            get { return topic; }
-            set { topic = value; }
-        }
-       
 
         public bool WaitingForPong
         {
@@ -115,7 +95,7 @@ namespace NarutoBot3
             set { waitingForPong = value; }
         }
 
-        protected virtual void OnTopicChange(EventArgs e)
+        protected virtual void OnTopicChange(TopicChangedEventArgs e)
         {
             if (TopicChange != null)
                 TopicChange(this, e);
@@ -197,13 +177,13 @@ namespace NarutoBot3
                 Connected(this, e);
         }
 
-        protected virtual void OnModeChange(EventArgs e)
+        protected virtual void OnModeChange(ModeChangedEventArgs e)
         {
             if (ModeChanged != null)
                 ModeChanged(this, e);  
         }
 
-        protected virtual void OnKick(EventArgs e)
+        protected virtual void OnKick(UserKickedEventArgs e)
         {
             if (Kicked != null)
                 Kicked(this, e);
@@ -295,14 +275,12 @@ namespace NarutoBot3
             bool found;
             ParsedMessage messageObject;
 
-            Who = "";
-            WhoLeft = "";
-
             if (String.IsNullOrEmpty(message)) return;
 
             messageObject = new ParsedMessage(message);
 
             string quitMessage;
+            string topic;
 
             switch (messageObject.Type)
             {
@@ -344,7 +322,7 @@ namespace NarutoBot3
                 case ("332"): //TOPIC
 
                     topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 3)[2];
-                    OnTopicChange(EventArgs.Empty); //Tell the ui the topic changed
+                    OnTopicChange(new TopicChangedEventArgs(topic)); //Tell the ui the topic changed
                     break;
 
                 case ("353"): //USERLIST
@@ -395,8 +373,8 @@ namespace NarutoBot3
 
                 case ("TOPIC"):   //TOPIC
 
-                    Topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
-                    OnTopicChange(EventArgs.Empty);
+                    topic = messageObject.CompleteMessage.Split(new char[] { ' ' }, 2)[1];
+                    OnTopicChange(new TopicChangedEventArgs(topic));
                     break;
 
                 case ("PONG"):
@@ -431,51 +409,54 @@ namespace NarutoBot3
                 case ("JOIN"):
 
                     string joinMessage;
+                    string userJoin;
 
                     if (messageObject.Sender.Contains("!"))
                     {
-                        Who = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                        userJoin = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
                         joinMessage = messageObject.Sender.Substring(messageObject.Sender.IndexOf("!") + 1);
                     }
                     else {
-                        Who = messageObject.Sender;
+                        userJoin = messageObject.Sender;
                         joinMessage = "";
                     }
 
                     found = false;
 
                     foreach(string s in userList)
-                        if (string.Compare(s, Who, true) == 0) 
+                        if (string.Compare(s, userJoin, true) == 0) 
                             found = true; 
 
                     if (!found)
-                        userList.Add(Who);
+                        userList.Add(userJoin);
 
                     userList.Sort();
 
-                    OnJoin(new UserJoinLeftMessageEventArgs(Who, joinMessage));
+                    OnJoin(new UserJoinLeftMessageEventArgs(userJoin, joinMessage));
 
-                    ul.setUserOnline(removeUserMode(Who));
+                    ul.setUserOnline(removeUserMode(userJoin));
 
-                    greetUser(removeUserMode(Who));
+                    greetUser(removeUserMode(userJoin));
 
-                    messageDelivery(removeUserMode(Who), Who);
+                    messageDelivery(removeUserMode(userJoin), userJoin);
 
                     break;
 
 
                 case ("PART"):
 
+                    string whoLeft;
+
                     if (messageObject.Sender.Contains("!"))
-                        WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
-                    else WhoLeft = messageObject.Sender;
+                        whoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    else whoLeft = messageObject.Sender;
 
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
 
                     foreach (string userP in userList)
-                        if (string.Compare(removeUserMode(userP), removeUserMode(WhoLeft), true) != 0)
+                        if (string.Compare(removeUserMode(userP), removeUserMode(whoLeft), true) != 0)
                             userTemp.Add(userP);
                         
                     userList.Clear();
@@ -486,23 +467,26 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.setUserOffline(WhoLeft);
+                    ul.setUserOffline(whoLeft);
 
-                    OnLeave(new UserJoinLeftMessageEventArgs( Who, quitMessage));
+                    OnLeave(new UserJoinLeftMessageEventArgs(whoLeft, quitMessage));
                     break;
 
 
                 case ("QUIT"):
+
+                    string whoQuit;
+
                     if (messageObject.Sender.Contains("!"))
-                        WhoLeft = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
-                    else WhoLeft = messageObject.Sender;
+                        whoQuit = messageObject.Sender.Substring(0, messageObject.Sender.IndexOf("!"));
+                    else whoQuit = messageObject.Sender;
 
                     quitMessage = messageObject.CompleteMessage;
 
                     userTemp = new List<string>();
 
                     foreach (string userB in userList)
-                        if (string.Compare(removeUserMode(userB), removeUserMode(WhoLeft), true) != 0)
+                        if (string.Compare(removeUserMode(userB), removeUserMode(whoQuit), true) != 0)
                             userTemp.Add(userB);
 
                     userList.Clear();
@@ -513,10 +497,10 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.setUserOffline(WhoLeft);
+                    ul.setUserOffline(whoQuit);
 
 
-                    OnLeave(new UserJoinLeftMessageEventArgs(Who, quitMessage));
+                    OnLeave(new UserJoinLeftMessageEventArgs(whoQuit, quitMessage));
                     break;
 
 
@@ -655,9 +639,7 @@ namespace NarutoBot3
 
                     }
                     
-
-                    Who = affectedUser;
-                    OnModeChange(EventArgs.Empty);
+                    OnModeChange(new ModeChangedEventArgs(affectedUser, modechange));
                     userList.Sort();
                     userTemp.Clear();
 
@@ -680,11 +662,10 @@ namespace NarutoBot3
                     userList.Sort();
 
                     userTemp.Clear();
-                    Who = kickedUser;
 
                     ul.setUserOffline(kickedUser);
 
-                    OnKick(EventArgs.Empty);
+                    OnKick(new UserKickedEventArgs(kickedUser));
                     break;
 
                 case ("PRIVMSG"):
