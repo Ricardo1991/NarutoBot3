@@ -29,7 +29,7 @@ namespace NarutoBot3
 
             if (!foundRepeated)
             {
-                ul.opUser(t_muted.Text);
+                ul.setUserMuteStatus(t_muted.Text, true);
                 updateList();
             }
 
@@ -41,7 +41,7 @@ namespace NarutoBot3
 
         private void bUnmute_Click(object sender, EventArgs e)
         {
-            ul.unmuteUser(listMuted.SelectedItem.ToString());
+            ul.setUserMuteStatus(listMuted.SelectedItem.ToString(), false);
             updateList();
             ul.saveData();
         }

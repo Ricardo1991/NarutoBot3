@@ -336,7 +336,7 @@ namespace NarutoBot3
                         if (!found) 
                             userList.Add(s);
 
-                        ul.setUserOnline(removeUserMode(s));
+                        ul.setUserOnlineStatus(removeUserMode(s), true);
 
                         if (s[0] == '@')
                             ul.setUserChannelOP(s, true);
@@ -434,7 +434,7 @@ namespace NarutoBot3
 
                     OnJoin(new UserJoinLeftMessageEventArgs(userJoin, joinMessage));
 
-                    ul.setUserOnline(removeUserMode(userJoin));
+                    ul.setUserOnlineStatus(removeUserMode(userJoin), true);
 
                     greetUser(removeUserMode(userJoin));
 
@@ -467,7 +467,7 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.setUserOffline(whoLeft);
+                    ul.setUserOnlineStatus(whoLeft,false);
 
                     OnLeave(new UserJoinLeftMessageEventArgs(whoLeft, quitMessage));
                     break;
@@ -497,7 +497,7 @@ namespace NarutoBot3
                     userList.Sort();
                     userTemp.Clear();
 
-                    ul.setUserOffline(whoQuit);
+                    ul.setUserOnlineStatus(whoQuit, false);
 
 
                     OnLeave(new UserJoinLeftMessageEventArgs(whoQuit, quitMessage));
@@ -530,8 +530,8 @@ namespace NarutoBot3
 
                     OnNickChange(new NickChangeEventArgs(oldnick, newnick));
 
-                    ul.setUserOffline(oldnick);
-                    ul.setUserOnline(removeUserMode(newnick));
+                    ul.setUserOnlineStatus(oldnick, false);
+                    ul.setUserOnlineStatus(removeUserMode(newnick), true);
 
 
                     messageDelivery(removeUserMode(newnick), newnick);
@@ -663,7 +663,7 @@ namespace NarutoBot3
 
                     userTemp.Clear();
 
-                    ul.setUserOffline(kickedUser);
+                    ul.setUserOnlineStatus(kickedUser,false);
 
                     OnKick(new UserKickedEventArgs(kickedUser));
                     break;
@@ -1873,7 +1873,7 @@ namespace NarutoBot3
             if (!ul.userIsOperator(nick))
                 return false;
 
-            ul.opUser(targetUser);
+            ul.setUserOperatorStatus(targetUser, true);
             message = new Notice(nick, targetUser + " was set as a bot operator!");
             sendMessage(message);
             return true;
@@ -1889,7 +1889,7 @@ namespace NarutoBot3
             if (!ul.userIsOperator(nick))
                 return false;
 
-            ul.muteUser(targetUser);
+            ul.setUserMuteStatus(targetUser, true);
             message = new Notice(nick, targetUser + " was muted!");
             sendMessage(message);
             return true;
@@ -1905,7 +1905,7 @@ namespace NarutoBot3
             if (!ul.userIsOperator(nick))
                 return false;
 
-            ul.unmuteUser(targetUser);
+            ul.setUserMuteStatus(targetUser, false);
             message = new Notice(nick, targetUser + " was unmuted!");
             sendMessage(message);
             return true;
@@ -4222,24 +4222,24 @@ namespace NarutoBot3
        
         public void muteUser(string nick)
         {
-            ul.muteUser(nick);
+            ul.setUserMuteStatus(nick, true);
             ul.saveData();
         }
         public void unmuteUser(string nick)
         {
-            ul.unmuteUser(nick);
+            ul.setUserMuteStatus(nick,false);
             ul.saveData();
         }
 
         public void giveOps(string nick)
         {
-            ul.opUser(nick);
+            ul.setUserOperatorStatus(nick, true);
             ul.saveData();
 
         }
         public void takeOps(string nick)
         {
-            ul.deopUser(nick);
+            ul.setUserOperatorStatus(nick,false);
             ul.saveData();
         }
 

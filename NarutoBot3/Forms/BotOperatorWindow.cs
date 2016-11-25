@@ -29,7 +29,7 @@ namespace NarutoBot3
 
             if (!foundRepeated)
             {
-                ul.opUser(t_operator.Text);
+                ul.setUserOperatorStatus(t_operator.Text, true);
                 updateList();
             }
 
@@ -41,7 +41,7 @@ namespace NarutoBot3
 
         private void bRemove_Click(object sender, EventArgs e)
         {
-            ul.deopUser(listOperators.SelectedItem.ToString());
+            ul.setUserOperatorStatus(listOperators.SelectedItem.ToString(),false);
             updateList();
             ul.saveData();
         }

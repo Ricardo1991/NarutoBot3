@@ -58,7 +58,7 @@ namespace NarutoBot3
 
             //Themes
             loadThemes();
-            applyTheme(Settings.Default.themeName);
+            applyScheme(Settings.Default.themeName);
             //
 
             //Show ConnectWindow Form and try to connect
@@ -209,7 +209,7 @@ namespace NarutoBot3
         }
 
 
-        private void applyTheme(string themeName)
+        private void applyScheme(string themeName)
         {
             foreach(ColorScheme c in schemeColection)
             {

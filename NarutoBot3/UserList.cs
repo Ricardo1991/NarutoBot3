@@ -36,283 +36,164 @@ namespace NarutoBot3
             {
                 users = new List<User>();
             }
-
-
         }
 
-        public bool userExists(string name)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nick">Name of the User</param>
+        /// <param name="status">True for Online, False for Offline</param>
+        public void setUserOnlineStatus(string nick, bool status)
         {
-            if (string.IsNullOrWhiteSpace(name)) return false;
+            User u = getUserByName(nick);
 
-            name = name.Replace("@", string.Empty).Replace("+", string.Empty);
-            name = name.Trim();
-
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (string.Compare(u.Nick, name, true) == 0)
-                    return true;
+                u.IsOnline = status;
+
             }
-
-            return false;
+            else users.Add(new User(nick, status));
         }
 
-        public void setUserOnline(string n)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nick">Name of the User</param>
+        /// <param name="status">True to give Operator, False to remove Operator</param>
+        public void setUserOperatorStatus(string nick, bool status)
         {
-            if (string.IsNullOrWhiteSpace(n)) return;
+            User u = getUserByName(nick);
 
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-
-            if (userExists(n))
+            if (u != null)
             {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsOnline = true;
-                }
-            }
+                u.IsOperator = status;
 
-            else users.Add(new User(n, true));
-        }
-
-        public void setUserOffline(string n)
-        {
-            if (string.IsNullOrWhiteSpace(n)) return;
-
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-            if (userExists(n))
-            {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsOnline = false;
-                }
-            }
-            else users.Add(new User(n, false));
-        }
-
-        public void opUser(string n)
-        {
-            if (string.IsNullOrWhiteSpace(n)) return;
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-
-            if (userExists(n))
-            {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsOperator = true;
-                }
             }
             else
             {
-                User u = new User(n);
-                u.IsOperator = true;
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
+                u.IsOperator = status;
                 users.Add(u);
             }
         }
 
-        public void deopUser(string n)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nick">Name of the User</param>
+        /// <param name="status">True to mute, False to unmute</param>
+        public void setUserMuteStatus(string nick, bool status)
         {
-            if (string.IsNullOrWhiteSpace(n)) return;
+            User u = getUserByName(nick);
 
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-            if (userExists(n))
+            if (u != null)
             {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsOperator = false;
-                }
+                u.IsMuted = status;
+                
             }
             else
             {
-                User u = new User(n);
-                u.IsOperator = false;
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
+                u.IsMuted = status;
                 users.Add(u);
             }
         }
 
-        public void muteUser(string n)
+        public void setGreeting(string nick, string greeting, bool enabled)
         {
-            if (string.IsNullOrWhiteSpace(n)) return;
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
+            User u = getUserByName(nick);
 
-            if (userExists(n))
+            if (u != null)
             {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsMuted = true;
-                }
-            }
-            else
-            {
-                User u = new User(n);
-                u.IsMuted = true;
-                users.Add(u);
-            }
-        }
-
-        public void unmuteUser(string n)
-        {
-            if (string.IsNullOrWhiteSpace(n)) return;
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-            if (userExists(n))
-            {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, n, true) == 0)
-                        u.IsMuted = false;
-                }
-            }
-            else
-            {
-                User u = new User(n);
-                u.IsMuted = false;
-                users.Add(u);
-            }
-        }
-
-        public void setGreeting(string n, string greeting, bool enabled)
-        {
-            if (string.IsNullOrWhiteSpace(n)) return;
-            n = n.Replace("@", string.Empty).Replace("+", string.Empty);
-            n = n.Trim();
-            if (userExists(n))
-            {
-                foreach (User u in Users)
-                {
-                    if (String.Compare(u.Nick, n, true) == 0)
-                    {
-                        u.Greeting = greeting;
-                        u.GreetingEnabled = enabled;
-                    }
-
-                }
-            }
-            else
-            {
-                User u = new User(n);
                 u.Greeting = greeting;
                 u.GreetingEnabled = enabled;
+            }
+            else
+            {
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
+                u.Greeting = greeting;
+                u.GreetingEnabled = enabled;
+
                 users.Add(u);
             }
         }
 
         public bool userIsOperator(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.IsOperator) return true;
-            }
+            if (u != null && u.IsOperator) return true;
+
             return false;
         }
 
         public bool userIsMuted(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.IsMuted) return true;
-            }
+            if (u != null && u.IsMuted) return true;
+
             return false;
         }
 
         public bool userHasChannelOP(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.HasOP) return true;
-            }
+            if (u != null && u.HasOP) return true;
+
             return false;
         }
 
         public bool userHasChannelVoice(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.HasVoice) return true;
-            }
+            if (u != null && u.HasVoice) return true;
+            
             return false;
         }
 
         public void setUserChannelVoice(string nick, bool status)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                    u.HasVoice = status;
+                u.HasVoice = status;
             }
             return;
         }
 
         public void setUserChannelOP(string nick, bool status)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                    u.HasOP = status;
+                u.HasOP = status;
             }
-            return;
         }
 
         public bool userIsMirrored(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.MirrorMode) return true;
-            }
+            if (u != null && u.MirrorMode)
+                return true;
+           
             return false;
         }
 
         public bool toogleMirror(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                {
-                    u.MirrorMode = !u.MirrorMode;
+                u.MirrorMode = !u.MirrorMode;
                     return u.MirrorMode;
-                }
+                
             }
             return false;
         }
@@ -320,41 +201,27 @@ namespace NarutoBot3
         public int userMessageCount(string nick)
         {
 
-            if (string.IsNullOrWhiteSpace(nick)) return 0;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                {
-                    if (u.DeliveredMessages != null)
+                if (u.DeliveredMessages != null)
                         return u.DeliveredMessages.Count;
-                    else return 0;
-                }
-
             }
+
             return 0;
         }
 
+
         public UserMessage getUserMessage(string nick, int index)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return null;
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
+            User u = getUserByName(nick);
 
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                {
-                    if (u.DeliveredMessages.Count > 0)
-                    {
-                        return u.DeliveredMessages[index];
-
-                    }
-                }
+                if (u.DeliveredMessages.Count >= index+1)
+                    return u.DeliveredMessages[index];
             }
 
             return null;
@@ -362,27 +229,20 @@ namespace NarutoBot3
 
         public void addUserMessage(string destinatary, string sender, string message)
         {
-            if (string.IsNullOrWhiteSpace(destinatary)) return;
-            destinatary = destinatary.Replace("@", string.Empty).Replace("+", string.Empty);
-            destinatary = destinatary.Trim();
+            User u = getUserByName(destinatary);
 
-            if (userExists(destinatary))
+            if (u != null)
             {
-                foreach (User u in Users)
-                {
-                    if (string.Compare(u.Nick, destinatary, true) == 0)
-                    {
-                        if (u.DeliveredMessages == null)
-                            u.DeliveredMessages = new List<UserMessage>();
+                
+                if (u.DeliveredMessages == null)
+                    u.DeliveredMessages = new List<UserMessage>();
 
-                        u.DeliveredMessages.Add(new UserMessage(message, sender));
-                    }
-                        
-                }
+                u.DeliveredMessages.Add(new UserMessage(message, sender));
+                     
             }
             else
             {
-                User u = new User(destinatary);
+                u = new User(destinatary.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
 
                 if (u.DeliveredMessages == null)
                     u.DeliveredMessages = new List<UserMessage>();
@@ -394,19 +254,12 @@ namespace NarutoBot3
 
         public bool clearUserMessages(string nick)
         {
-            if (string.IsNullOrWhiteSpace(nick)) return false;
+            User u = getUserByName(nick);
 
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
-
-            foreach (User u in Users)
+            if (u != null)
             {
-                if (String.Compare(u.Nick, nick, true) == 0)
-                {
-                    u.DeliveredMessages.Clear();
+                u.DeliveredMessages.Clear();
                     return true;
-                }
-
             }
 
             return false;
@@ -423,33 +276,52 @@ namespace NarutoBot3
             }
             catch
             {
-
+                return false;
             }
 
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
 
 
-            foreach (User u in Users)
-            {
-                if (String.Compare(u.Nick, nick, true) == 0)
+            User u = getUserByName(nick);
+
+            if(u != null)
+            { 
+                try
                 {
-                    try
-                    {
-                        u.DeliveredMessages.RemoveAt(messageNumber - 1);
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        return false;
-                    }
-                    
+                    u.DeliveredMessages.RemoveAt(messageNumber - 1);
                     return true;
                 }
-
+                catch (ArgumentOutOfRangeException)
+                {
+                    return false;
+                }
             }
 
-            return false;
+            else return false;
         }
+
+
+
+
+        public User getUserByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return null;
+
+            name = name.Replace("@", string.Empty).Replace("+", string.Empty);
+            name = name.Trim();
+
+            foreach (User u in Users)
+            {
+                if (String.Compare(u.Nick, name, true) == 0)
+                {
+                    return u;
+                }
+            }
+
+            return null;
+        }
+
     }
 
     public class User
