@@ -252,7 +252,6 @@
     <Compile Include="Forms\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Greetings.cs" />
     <Compile Include="Forms\HelpTextWindow.cs">
       <SubType>Form</SubType>
     </Compile>
