@@ -11,7 +11,7 @@ namespace NarutoBot3.Messages
 
         public Kick(string destinatary, string body)
         {
-            this.destinatary = null;
+            this.destinatary = destinatary;
             this.body = body;
             this.header = "KICK";
         }

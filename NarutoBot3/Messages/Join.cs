@@ -12,11 +12,9 @@ namespace NarutoBot3.Messages
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="destinatary">Not used</param>
         /// <param name="body">Channel to Join</param>
-        public Join(string destinatary, string body)
+        public Join(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "JOIN";
         }

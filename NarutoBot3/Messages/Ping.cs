@@ -12,11 +12,9 @@ namespace NarutoBot3.Messages
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="destinatary">Not used</param>
         /// <param name="body">Message to return</param>
-        public Ping(string destinatary, string body)
+        public Ping(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "PING";
         }

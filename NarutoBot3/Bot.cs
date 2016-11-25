@@ -286,7 +286,7 @@ namespace NarutoBot3
             {
                 case ("PING"):
 
-                    sendMessage(new Pong(null, messageObject.SplitMessage[0]));
+                    sendMessage(new Pong(messageObject.SplitMessage[0]));
 
                     #if DEBUG
                         WriteMessage(messageObject.SplitMessage[0]);
@@ -1530,7 +1530,7 @@ namespace NarutoBot3
         }
         public void whoisUser(string nick)
         {
-            Message message = new Whois(null, nick);
+            Message message = new Whois(nick);
             sendMessage(message);
 
         }
@@ -4252,7 +4252,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (Client.isConnected)
             {
-                Message message = new Nick(null,Client.NICK);
+                Message message = new Nick(Client.NICK);
                 sendMessage(message);
                 return true;
             }
@@ -4350,7 +4350,7 @@ namespace NarutoBot3
         {
             if (!WaitingForPong)
             {
-                Message message = new Ping(null,GetTimestamp(DateTime.Now));
+                Message message = new Ping(GetTimestamp(DateTime.Now));
 
                 #if DEBUG
                     WriteMessage(message.body);

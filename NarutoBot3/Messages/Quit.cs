@@ -9,9 +9,8 @@ namespace NarutoBot3.Messages
     class Quit : Message
     {
 
-        public Quit(string destinatary, string body)
+        public Quit(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "QUIT";
         }

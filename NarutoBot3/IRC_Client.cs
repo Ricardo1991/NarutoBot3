@@ -35,9 +35,9 @@ namespace NarutoBot3
             NICK = nick;
             REALNAME = realName;
 
-            user_message = new Messages.User(null, NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
-            nick_message = new Nick(null, NICK);
-            join_message = new Join(null, HOME_CHANNEL);
+            user_message = new Messages.User(NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
+            nick_message = new Nick(NICK);
+            join_message = new Join(HOME_CHANNEL);
         }
 
         public bool Connect()
@@ -71,7 +71,7 @@ namespace NarutoBot3
 
         public void Join(string channel)
         {
-            sendMessage(new Join(null, channel));
+            sendMessage(new Join(channel));
             isConnected = true;
         }
 
@@ -117,7 +117,7 @@ namespace NarutoBot3
         {
             try
             {
-                if (writer != null) sendMessage(new Quit(null, quitMessage));
+                if (writer != null) sendMessage(new Quit(quitMessage));
 
                 isConnected = false;
 

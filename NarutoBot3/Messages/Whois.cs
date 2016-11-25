@@ -12,11 +12,9 @@ namespace NarutoBot3.Messages
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="destinatary">Not used</param>
         /// <param name="body">Channel to Join</param>
-        public Whois(string destinatary, string body)
+        public Whois(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "WHOIS";
         }

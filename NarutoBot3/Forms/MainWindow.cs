@@ -39,7 +39,7 @@ namespace NarutoBot3
         int PORT;
         string REALNAME;
 
-        List<String> lastCommand = new List<String>();
+        List<string> lastCommand = new List<string>();
         int lastCommandIndex = 0;
 
         bool exitTheLoop = false;
@@ -62,9 +62,7 @@ namespace NarutoBot3
             //
 
             //Show ConnectWindow Form and try to connect
-
             loadSettings();
-
             ConnectWindow connect = new ConnectWindow();
 
             if (connect.ShowDialog() == DialogResult.OK)
@@ -154,13 +152,13 @@ namespace NarutoBot3
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
 
-            if (String.IsNullOrEmpty(Settings.Default.redditUser) || String.IsNullOrEmpty(Settings.Default.redditPass))
+            if (string.IsNullOrEmpty(Settings.Default.redditUser) || string.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
 
-            if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                    String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+            if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
                 Settings.Default.twitterEnabled = false;
 
             mangaReleaseTimer = new System.Timers.Timer(Settings.Default.checkInterval);
@@ -213,7 +211,7 @@ namespace NarutoBot3
         {
             foreach(ColorScheme c in schemeColection)
             {
-                if (String.Compare(c.Name, themeName, true) == 0)
+                if (string.Compare(c.Name, themeName, true) == 0)
                 {
                     currentColorScheme = c;
 
@@ -239,7 +237,7 @@ namespace NarutoBot3
         {
             foreach (ColorScheme c in schemeColection)
             {
-                if (String.Compare(c.Name, name, true) == 0)
+                if (string.Compare(c.Name, name, true) == 0)
                     return true;
                 else
                     return false;
@@ -361,7 +359,7 @@ namespace NarutoBot3
             ChangeTitle("NarutoBot");
         }
 
-        public void WriteMessage(String message) //Writes Message on the TextBox (bot console)
+        public void WriteMessage(string message) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -374,11 +372,11 @@ namespace NarutoBot3
             }
             else
             {
-                string timeString = DateTime.Now.ToString("[hh:mm:ss]");
-
                 if (Settings.Default.showTimeStamps)
+                {
+                    string timeString = DateTime.Now.ToString("[hh:mm:ss]");
                     this.OutputBox.AppendText(timeString + " " + message + "\n");
-
+                }
                 else
                     this.OutputBox.AppendText(message + "\n");
 
@@ -392,7 +390,7 @@ namespace NarutoBot3
             //also, should make a log
         }
 
-        public void WriteMessage(String message, Color color) //Writes Message on the TextBox (bot console)
+        public void WriteMessage(string message, Color color) //Writes Message on the TextBox (bot console)
         {
             if (OutputBox.InvokeRequired)
             {
@@ -405,12 +403,11 @@ namespace NarutoBot3
             }
             else
             {
-                string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
                 if (Settings.Default.showTimeStamps)
                 {
-                    this.OutputBox.AppendText(timeString + " ");
-                    this.OutputBox.AppendText(message + "\n", color);
+                    string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+                    this.OutputBox.AppendText(timeString + " " + message + "\n", color);
                 }
 
                 else
@@ -494,7 +491,7 @@ namespace NarutoBot3
             client.NICK = Settings.Default.Nick = nick;
             Settings.Default.Save();
 
-            if (!String.IsNullOrEmpty(client.HOST_SERVER))
+            if (!string.IsNullOrEmpty(client.HOST_SERVER))
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
@@ -502,14 +499,14 @@ namespace NarutoBot3
             //do Nick change to server
             if (client.isConnected)
             {
-                bot.sendMessage(new Nick(null,client.NICK));
+                bot.sendMessage(new Nick(client.NICK));
                 return true;
             }
 
             return false;
         }
 
-        public void ChangeConnectingLabel(String message)
+        public void ChangeConnectingLabel(string message)
         {
             try
             {
@@ -545,7 +542,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ChangeTitle(String title)
+        public void ChangeTitle(string title)
         {
             if (this.InvokeRequired)
             {
@@ -558,7 +555,7 @@ namespace NarutoBot3
             }
 
         }
-        public void ChangeInput(String title)
+        public void ChangeInput(string title)
         {
             if (InputBox.InvokeRequired)
             {
@@ -718,9 +715,9 @@ namespace NarutoBot3
                     NICK = Settings.Default.Nick;
                     PORT = Convert.ToInt32(Settings.Default.Port);
 
-                    if (String.IsNullOrWhiteSpace(HOME_CHANNEL)) HOME_CHANNEL = "#reddit-naruto";
-                    if (String.IsNullOrWhiteSpace(HOST)) HOST = "irc.freenode.net";
-                    if (String.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
+                    if (string.IsNullOrWhiteSpace(HOME_CHANNEL)) HOME_CHANNEL = "#reddit-naruto";
+                    if (string.IsNullOrWhiteSpace(HOST)) HOST = "irc.freenode.net";
+                    if (string.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
                     if (PORT <= 0 || PORT > 65535) PORT = 6667;
 
                     if (connect()) //If connected with success, then start the bot
@@ -867,7 +864,7 @@ namespace NarutoBot3
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
-                if (String.IsNullOrEmpty(InputBox.Text)) return;
+                if (string.IsNullOrEmpty(InputBox.Text)) return;
 
                 parseInputMessage(InputBox.Text);
 
@@ -882,7 +879,7 @@ namespace NarutoBot3
 
             if (!client.isConnected) return;
             
-            if (parsed.Length >= 2 && !String.IsNullOrEmpty(parsed[1]))
+            if (parsed.Length >= 2 && !string.IsNullOrEmpty(parsed[1]))
             {
                 if (parsed[0][0] == '/')
                 {
@@ -890,10 +887,10 @@ namespace NarutoBot3
                         message = new Messages.Action(HOME_CHANNEL,parsed[1]);
 
                     else if (parsed[0].ToLower() == "/whois")  //Action send
-                        message = new Whois(null, parsed[1]);
+                        message = new Whois(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/whowas")  //Action send
-                        message = new Whowas(null, parsed[1]);
+                        message = new Whowas(parsed[1]);
 
                     else if (parsed[0].ToLower() == "/nick")  //Action send
                         changeNick(parsed[1]);
@@ -926,7 +923,7 @@ namespace NarutoBot3
                 else //Normal send
                     message = new Privmsg(HOME_CHANNEL, InputBox.Text);
 
-            if (message != null && !String.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
+            if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
         }
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1119,7 +1116,7 @@ namespace NarutoBot3
 
         public void eventChangeTitle(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(client.HOST_SERVER))
+            if (!string.IsNullOrEmpty(client.HOST_SERVER))
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
             else
                 ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);

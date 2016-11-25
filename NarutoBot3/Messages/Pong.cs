@@ -12,11 +12,9 @@ namespace NarutoBot3.Messages
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="destinatary">Not used</param>
         /// <param name="body">Message to return</param>
-        public Pong(string destinatary, string body)
+        public Pong(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "PONG";
         }

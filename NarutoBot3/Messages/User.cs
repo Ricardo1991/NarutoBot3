@@ -9,9 +9,8 @@ namespace NarutoBot3.Messages
     public class User : Message
     {
 
-        public User(string destinatary, string body)
+        public User(string body)
         {
-            this.destinatary = null;
             this.body = body;
             this.header = "USER";
         }
