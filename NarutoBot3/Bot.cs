@@ -4135,8 +4135,8 @@ namespace NarutoBot3
 
             if (CustomCommand.commandExists(cmd, customCommands) == false)
             {
-                message = new Privmsg(CHANNEL, "Command " + cmd + " doesn't exist.");
-                sendMessage(message);
+                //message = new Privmsg(CHANNEL, "Command " + cmd + " doesn't exist.");
+                //sendMessage(message);
 
                 return;
 
