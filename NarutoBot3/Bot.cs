@@ -54,7 +54,6 @@ namespace NarutoBot3
         private StatsManager stats = new StatsManager();
 
         bool conneceted = false;
-        public bool IsConnected{get { return conneceted; }set { conneceted = value; }}
 
         public event EventHandler<EventArgs> DuplicatedNick;
         public event EventHandler<EventArgs> Created;
@@ -88,12 +87,6 @@ namespace NarutoBot3
         private List<int> factsUsed = new List<int>();
 
         private TwitterService service;
-
-        public bool WaitingForPong
-        {
-            get { return waitingForPong; }
-            set { waitingForPong = value; }
-        }
 
         protected virtual void OnTopicChange(TopicChangedEventArgs e)
         {
@@ -205,7 +198,6 @@ namespace NarutoBot3
         
         public Bot(ref IRC_Client client, ref RichTextBox output, ColorScheme color)
         {
-
             qq = new Questions();
 
             Client = client;
@@ -275,7 +267,7 @@ namespace NarutoBot3
             bool found;
             ParsedMessage messageObject;
 
-            if (String.IsNullOrEmpty(message)) return;
+            if (string.IsNullOrEmpty(message)) return;
 
             messageObject = new ParsedMessage(message);
 
@@ -357,10 +349,10 @@ namespace NarutoBot3
 
                 case ("376"): //END OF MOTD
 
-                    IsConnected = true;
+                    conneceted = true;
                     OnConnect(EventArgs.Empty);
 
-                    if (!String.IsNullOrEmpty(Client.HOST_SERVER))
+                    if (!string.IsNullOrEmpty(Client.HOST_SERVER))
                         OnConnectedWithServer(EventArgs.Empty);
 
                     break;
@@ -386,7 +378,7 @@ namespace NarutoBot3
                         WriteMessage(message);
                     #endif
 
-                    if (WaitingForPong)
+                    if (waitingForPong)
                     {
                         string currentStamp = GetTimestamp(DateTime.Now);
                         string format = "mmssffff";
@@ -398,7 +390,7 @@ namespace NarutoBot3
 
                         TimeSpan TimeDifference = now.Subtract(then);
 
-                        WaitingForPong = false;
+                        waitingForPong = false;
                         timeoutTimer.Stop();
 
                         OnPongReceived(new PongEventArgs(TimeDifference));
@@ -428,9 +420,10 @@ namespace NarutoBot3
                             found = true; 
 
                     if (!found)
+                    {
                         userList.Add(userJoin);
-
-                    userList.Sort();
+                        userList.Sort();
+                    }
 
                     OnJoin(new UserJoinLeftMessageEventArgs(userJoin, joinMessage));
 
@@ -672,7 +665,7 @@ namespace NarutoBot3
 
                     string user;
                     string whoSent = messageObject.Source;                         //Who sent is the Source of the Message. (The Channel, or User if private Message)
-                    string msg = messageObject.SplitMessage[1].Replace("\r", String.Empty).Replace("\n", String.Empty).Trim();
+                    string msg = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
                     string cmd = msg.Split(' ')[0];
                     string arg = "";
 
@@ -683,7 +676,7 @@ namespace NarutoBot3
 
                     user = removeUserMode(user);
 
-                    if (String.Compare(whoSent, Client.NICK, true) == 0)
+                    if (string.Compare(whoSent, Client.NICK, true) == 0)
                     {
                         //If its a user sending, check if it has mirror mode
                         
@@ -699,9 +692,9 @@ namespace NarutoBot3
                     //Write Message on Console
                     if (msg.Contains("\x01"+"ACTION "))
                     {
-                        msg = msg.Replace("\x01" + "ACTION ", String.Empty).Replace("\x01", String.Empty);
+                        msg = msg.Replace("\x01" + "ACTION ", string.Empty).Replace("\x01", string.Empty);
 
-                        if (String.Compare(whoSent, Client.NICK, true) == 0)
+                        if (string.Compare(whoSent, Client.NICK, true) == 0)
                             WriteMessage("             * : " + user + " " + msg, currentColorScheme.Notice);
                         
                         else if (msg.ToLower().Contains(Client.NICK.ToLower()))
@@ -712,7 +705,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        if (String.Compare(whoSent, Client.NICK, true) == 0)
+                        if (string.Compare(whoSent, Client.NICK, true) == 0)
                         {
                             string alignedNick = user.Truncate(13);
                             int tab = 15 - alignedNick.Length;
@@ -743,16 +736,16 @@ namespace NarutoBot3
                     }
 
                     //StartParsing
-                    if ((String.Compare(cmd.Replace(",", String.Empty), "hello", true) == 0
-                            || String.Compare(cmd.Replace(",", String.Empty), "hi", true) == 0
-                            || String.Compare(cmd.Replace(",", String.Empty), "hey", true) == 0)
+                    if ((string.Compare(cmd.Replace(",", string.Empty), "hello", true) == 0
+                            || string.Compare(cmd.Replace(",", string.Empty), "hi", true) == 0
+                            || string.Compare(cmd.Replace(",", string.Empty), "hey", true) == 0)
                             && arg.ToLower().Contains(Client.NICK.ToLower()))
                         {
                             WriteMessage("* Received a hello from " + user, currentColorScheme.BotReport);
                             hello(whoSent, user);
                         }
 
-                    else if (String.Compare(cmd, Client.NICK + ",", true) == 0 && !String.IsNullOrWhiteSpace(arg))
+                    else if (string.Compare(cmd, Client.NICK + ",", true) == 0 && !string.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
                             parseQuestion(whoSent, user, arg);
@@ -761,56 +754,56 @@ namespace NarutoBot3
                         {
                             cmd = cmd.Substring(1);
 
-                        if (String.Compare(msg, "!anime best anime ever", true) == 0)
+                        if (string.Compare(msg, "!anime best anime ever", true) == 0)
                         {
                             sendMessage(new Privmsg(whoSent, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
                         }
-                        else if (String.Compare(cmd, "help", true) == 0)
+                        else if (string.Compare(cmd, "help", true) == 0)
                         {
                             WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                             help(user);
                         }
 
-                        else if (String.Compare(cmd, "mirror", true) == 0)
+                        else if (string.Compare(cmd, "mirror", true) == 0)
                         {
                             WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
                             toogleMirror(user);
                         }
-                        else if (String.Compare(cmd, "enforcemirror", true) == 0)
+                        else if (string.Compare(cmd, "enforcemirror", true) == 0)
                         {
                             WriteMessage("* Received an enforce mirror off toogle request from " + user, currentColorScheme.BotReport);
                             toogleEnforceOff(user);
                         }
 
-                        else if (String.Compare(cmd, "rules", true) == 0)
+                        else if (string.Compare(cmd, "rules", true) == 0)
                         {
                             WriteMessage("* Received a Rules request from " + user, currentColorScheme.BotReport);
                             rules(whoSent, user);
                         }
 
-                        else if (String.Compare(cmd, "quit", true) == 0)
+                        else if (string.Compare(cmd, "quit", true) == 0)
                         {
                             WriteMessage("* Received a quit request from " + user, currentColorScheme.BotReport);
                             quitIRC(user);
                         }
-                        else if (String.Compare(cmd, "oplist", true) == 0)
+                        else if (string.Compare(cmd, "oplist", true) == 0)
                         {
                             WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
                             opList(user);
                         }
-                        else if (String.Compare(cmd, "roll", true) == 0)
+                        else if (string.Compare(cmd, "roll", true) == 0)
                         {
                             WriteMessage("* Received a Roll request from " + user, currentColorScheme.BotReport);
                             roll(whoSent, user);
                         }
-                        else if (String.Compare(cmd, "say", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "say", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a say request from " + user, currentColorScheme.BotReport);
                             say(Client.HOME_CHANNEL, arg, user);
                         }
-                        else if (String.Compare(cmd, "greetme", true) == 0)
+                        else if (string.Compare(cmd, "greetme", true) == 0)
                         {
-                            if (String.IsNullOrEmpty(arg))
+                            if (string.IsNullOrEmpty(arg))
                             {
                                 WriteMessage("* Received a Greet TOOGLE request from " + user, currentColorScheme.BotReport);
                                 GreetToogle(user);
@@ -821,122 +814,122 @@ namespace NarutoBot3
                                 AddGreetings(arg, user);
                             }
                         }
-                        else if (String.Compare(cmd, "greetmenow", true) == 0)
+                        else if (string.Compare(cmd, "greetmenow", true) == 0)
                         {
                             WriteMessage("* Received a Greet me now request from " + user, currentColorScheme.BotReport);
                             greetUser(user);
                         }
-                        else if (String.Compare(cmd, "me", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "me", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a me request from " + user, currentColorScheme.BotReport);
                             me(Client.HOME_CHANNEL, arg, user);
                         }
 
-                        else if (String.Compare(cmd, "silence", true) == 0)
+                        else if (string.Compare(cmd, "silence", true) == 0)
                         {
                             WriteMessage("* Received a silence request from " + user, currentColorScheme.BotReport);
                             silence(user);
                         }
-                        else if (String.Compare(cmd, "rename", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "rename", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Rename request from " + user, currentColorScheme.BotReport);
                             if (ul.userIsOperator(user)) changeNick(arg);
                         }
 
-                        else if (String.Compare(cmd, "op", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "op", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a op request from " + user, currentColorScheme.BotReport);
                             addBotOP(user, arg);
                         }
-                        else if (String.Compare(cmd, "deop", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "deop", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a deop request from " + user, currentColorScheme.BotReport);
                             removeBotOP(user, arg);
                         }
-                        else if (String.Compare(cmd, "mute", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "mute", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a mute request from " + user, currentColorScheme.BotReport);
                             muteUser(user, arg);
                         }
-                        else if (String.Compare(cmd, "unmute", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "unmute", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a unmute request from " + user, currentColorScheme.BotReport);
                             unmuteUser(user, arg);
                         }
-                        else if (String.Compare(cmd, "toF", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "toF", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a temp. conversion to F request from " + user, currentColorScheme.BotReport);
                             toFahrenheit(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "toC", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "toC", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a temp. conversion to C request from " + user, currentColorScheme.BotReport);
                             toCelcius(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "time", true) == 0)
+                        else if (string.Compare(cmd, "time", true) == 0)
                         {
                             WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
                             time(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "wiki", true) == 0)
+                        else if (string.Compare(cmd, "wiki", true) == 0)
                         {
                             WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
                             wiki(whoSent, user, arg);
                         }
 
-                        else if (String.Compare(cmd, "anime", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "anime", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
                             animeSearch(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "youtube", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "youtube", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                             youtubeSearch(whoSent, user, arg);
                         }
-                        else if ((String.Compare(cmd, "giphy", true) == 0 || String.Compare(cmd, "g", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "giphy", true) == 0 || string.Compare(cmd, "g", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
                             giphySearch(whoSent, user, arg);
                         }
 
-                        else if (String.Compare(cmd, "poke", true) == 0)
+                        else if (string.Compare(cmd, "poke", true) == 0)
                         {
                             WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
                             poke(whoSent, user);
                         }
 
-                        else if (String.Compare(cmd, "trivia", true) == 0)
+                        else if (string.Compare(cmd, "trivia", true) == 0)
                         {
                             WriteMessage("* Received a Trivia request from " + user, currentColorScheme.BotReport);
                             trivia(whoSent, user);
                         }
-                        else if (String.Compare(cmd, "nick", true) == 0)
+                        else if (string.Compare(cmd, "nick", true) == 0)
                         {
                             WriteMessage("* Received a nickname request from " + user, currentColorScheme.BotReport);
                             nickGen(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "kill", true) == 0)
+                        else if (string.Compare(cmd, "kill", true) == 0)
                         {
                             WriteMessage("* Received a Kill request from " + user, currentColorScheme.BotReport);
                             killUser(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "fact", true) == 0 || String.Compare(cmd, "facts", true) == 0)
+                        else if (string.Compare(cmd, "fact", true) == 0 || string.Compare(cmd, "facts", true) == 0)
                         {
                             WriteMessage("* Received a Fact request from " + user, currentColorScheme.BotReport);
                             factUser(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "lastkill", true) == 0)
+                        else if (string.Compare(cmd, "lastkill", true) == 0)
                         {
                             WriteMessage("* Received a lastkill request from " + user, currentColorScheme.BotReport);
                             lastKill(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "rkill", true) == 0)
+                        else if (string.Compare(cmd, "rkill", true) == 0)
                         {
                             WriteMessage("* Received a randomkill request from " + user, currentColorScheme.BotReport);
                             randomKill(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "quote", true) == 0 || String.Compare(cmd, "q", true) == 0)
+                        else if (string.Compare(cmd, "quote", true) == 0 || string.Compare(cmd, "q", true) == 0)
                         {
                             WriteMessage("* Received a Quote request from " + user, currentColorScheme.BotReport);
 
@@ -950,83 +943,83 @@ namespace NarutoBot3
                             }
 
                         }
-                        else if ((String.Compare(cmd, "choose", true) == 0 || String.Compare(cmd, "c", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "choose", true) == 0 || string.Compare(cmd, "c", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Choose request from " + user, currentColorScheme.BotReport);
                             choose(whoSent, user, arg);
                         }
-                        else if ((String.Compare(cmd, "shuffle", true) == 0 || String.Compare(cmd, "s", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "shuffle", true) == 0 || string.Compare(cmd, "s", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Shuffle request from " + user, currentColorScheme.BotReport);
                             shuffle(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "funk", true) == 0 || String.Compare(cmd, "f", true) == 0)
+                        else if (string.Compare(cmd, "funk", true) == 0 || string.Compare(cmd, "f", true) == 0)
                         {
                             WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
 
-                            if (String.IsNullOrEmpty(arg)) //lookup or random
+                            if (string.IsNullOrEmpty(arg)) //lookup or random
                                 printFunk(whoSent, arg, user);
 
                             else
                                 addFunk(arg, user);
                         }
-                        else if (String.Compare(cmd, "reload", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "reload", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a reload request from " + user, currentColorScheme.BotReport);
                             reloadTexts(user, arg);
                         }
-                        else if (String.Compare(cmd, "names", true) == 0)
+                        else if (string.Compare(cmd, "names", true) == 0)
                         {
                             WriteMessage("* Received a names request from " + user, currentColorScheme.BotReport);
                             printNames(user);
                         }
-                        else if (String.Compare(cmd, "stats", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "stats", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a stats request from " + user, currentColorScheme.BotReport);
                             statsPrint(whoSent, user, arg);
                         }
-                        else if (String.Compare(cmd, "set", true) == 0 && !String.IsNullOrEmpty(arg))
+                        else if (string.Compare(cmd, "set", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a set options request from " + user, currentColorScheme.BotReport);
                             setSetting(user, arg);
                         }
 
-                        else if (String.Compare(cmd, "acknowledge", true) == 0 || String.Compare(cmd, "a", true) == 0)
+                        else if (string.Compare(cmd, "acknowledge", true) == 0 || string.Compare(cmd, "a", true) == 0)
                         {
                             WriteMessage("* Received a acknowledge request from " + user, currentColorScheme.BotReport);
 
-                            if (String.IsNullOrEmpty(arg))
+                            if (string.IsNullOrEmpty(arg))
                                 ul.clearUserMessages(user);
                             else
                                 ul.clearUserMessages(user, arg);
                         }
-                        else if ((String.Compare(cmd, "tell", true) == 0 || String.Compare(cmd, "message", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "tell", true) == 0 || string.Compare(cmd, "message", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Tell request from " + user, currentColorScheme.BotReport);
                             tell(user, arg);
 
                         }
-                        else if ((String.Compare(cmd, "addcmd", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "addcmd", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received an Add Custom Command request from " + user, currentColorScheme.BotReport);
                             addCustomCommand(whoSent, arg, user);
 
                         }
 
-                        else if ((String.Compare(cmd, "removecmd", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "removecmd", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
                             removeCustomCommand(whoSent, arg, user);
 
                         }
 
-                        else if ((String.Compare(cmd, "inspectmessages", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "inspectmessages", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received an Inspect Messages request from " + user, currentColorScheme.BotReport);
                             inspectMessages(whoSent, arg, user);
 
                         }
-                        else if ((String.Compare(cmd, "cleanmessages", true) == 0) && !String.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "cleanmessages", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
                             cleanMessages(whoSent, arg, user);
@@ -1036,10 +1029,10 @@ namespace NarutoBot3
 
 
                         else
-                        {
-                            //check for custom commands
-                            useCustomCommand(whoSent,cmd ,arg, user);
-                        }
+                            {
+                                //check for custom commands
+                                useCustomCommand(whoSent,cmd ,arg, user);
+                            }
 
                         
                         }
@@ -1183,7 +1176,7 @@ namespace NarutoBot3
 
             foreach (string u in userList)
             {
-                if (String.Compare(u.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty), user, true) == 0)
+                if (string.Compare(u.Replace("@", string.Empty).Replace("+", string.Empty).Replace("%", string.Empty).Replace("~", string.Empty).Replace("&", string.Empty), user, true) == 0)
                 {
                     switch (u[0])
                     {
@@ -1555,8 +1548,6 @@ namespace NarutoBot3
         /// </summary>
         /// <param Name="Nick">the User that called the command</param>
         /// <param Name="targetUser">the User to be made bot operator</param>
-        /// 
-
         void reloadTexts(string user, string arg)
         {
             if (!ul.userIsOperator(user)) return;
@@ -1705,7 +1696,6 @@ namespace NarutoBot3
                     default: break;
                 }
             }
-
         }
         void setSetting(string user, string arg)
         {
@@ -2331,7 +2321,7 @@ namespace NarutoBot3
 
         public void youtube(string CHANNEL, string nick, string line)
         {
-            if (String.IsNullOrEmpty(line)) return;
+            if (string.IsNullOrEmpty(line)) return;
             if (ul.userIsMuted(nick)) return;
 
             if (!Settings.Default.silence && Settings.Default.youtube_Enabled)
@@ -2500,7 +2490,7 @@ namespace NarutoBot3
 
                         // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
                         // show a single decimal place, and no space.
-                        string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+                        string result = string.Format("{0:0.##} {1}", len, sizes[order]);
 
 
                         message = new Privmsg(CHANNEL, "[" + headers["Content-Type"] + "] " + result);
@@ -2528,7 +2518,7 @@ namespace NarutoBot3
             int i = 0;
             bool found = false;
 
-            if (ul.userIsMuted(nick) || Settings.Default.silence|| !Settings.Default.aniSearchEnabled || String.IsNullOrWhiteSpace(query))  
+            if (ul.userIsMuted(nick) || Settings.Default.silence|| !Settings.Default.aniSearchEnabled || string.IsNullOrWhiteSpace(query))  
                 return;
 
             query = query.ToLower();
@@ -2694,7 +2684,7 @@ namespace NarutoBot3
 
             if (ul.userIsMuted(nick)) return;
             if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
-            if (String.IsNullOrWhiteSpace(query)) return;
+            if (string.IsNullOrWhiteSpace(query)) return;
 
             //query = query.Replace(" ", "%20");
 
@@ -2837,12 +2827,12 @@ namespace NarutoBot3
         }
         public void lastKill(string CHANNEL, string nick, string arg)
         {
-            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
+            if (ul.userIsMuted(nick) || string.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
 
             Message message;
             int index = 0;
 
-            if (!String.IsNullOrWhiteSpace(arg))
+            if (!string.IsNullOrWhiteSpace(arg))
             {
                 try
                 {
@@ -2881,7 +2871,7 @@ namespace NarutoBot3
 
             int MAX_KILLS = 500;
 
-            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || kill.Count < 1) return;
+            if (ul.userIsMuted(nick) || string.IsNullOrEmpty(nick) || kill.Count < 1) return;
 
             var regex = new Regex(Regex.Escape("<random>"));
 
@@ -2899,7 +2889,7 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
+                    if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                         target = removeUserMode(userList[r.Next((userList.Count))]);
                     else
                         target = args.Trim();
@@ -2965,7 +2955,7 @@ namespace NarutoBot3
 
             int MAX_FACTS = 300;
 
-            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick) || facts.Count <1) return;
+            if (ul.userIsMuted(nick) || string.IsNullOrEmpty(nick) || facts.Count <1) return;
 
             var regex = new Regex(Regex.Escape("<random>"));
 
@@ -2973,7 +2963,7 @@ namespace NarutoBot3
             {
                 Message message;
                 
-                if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
+                if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                     target = removeUserMode(userList[r.Next((userList.Count))]);
                 else
                     target = args.Trim();
@@ -3030,14 +3020,14 @@ namespace NarutoBot3
 
             Message message;
 
-            if (ul.userIsMuted(nick) || String.IsNullOrEmpty(nick)) return;
+            if (ul.userIsMuted(nick) || string.IsNullOrEmpty(nick)) return;
 
             var regex = new Regex(Regex.Escape("<random>"));
 
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
                
-                if (String.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
+                if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                     target = removeUserMode(userList[r.Next((userList.Count))]);
                 else
                     target = args.Trim();
@@ -3087,7 +3077,7 @@ namespace NarutoBot3
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
             string subjectNPL = string.Empty;
-            subjectNPL = qq.questionParser(arg, user);
+            subjectNPL = qq.questionParser(arg);
 
             Message message = null;
             Random r = new Random();
@@ -3128,13 +3118,13 @@ namespace NarutoBot3
 
                 if (split.Length >= 1)
                 {
-                    if (String.Compare(split[0], "how", true) == 0)
+                    if (string.Compare(split[0], "how", true) == 0)
                     {
                         if (split.Length >= 2)
                         {
-                            if (String.Compare(split[1], "many", true) == 0)
+                            if (string.Compare(split[1], "many", true) == 0)
                             {
-                                if (String.Compare(arg, "how many killstrings do you have", true) == 0 || String.Compare(arg, "how many kills do you have", true) == 0)
+                                if (string.Compare(arg, "how many killstrings do you have", true) == 0 || string.Compare(arg, "how many kills do you have", true) == 0)
                                     message = new Privmsg(CHANNEL, "I have " + kill.Count + " killstrings loaded in.");
                                 else if (arg == "how many fucks do you give")
                                     message = new Privmsg(CHANNEL, "I always give 0 fucks.");
@@ -3142,45 +3132,45 @@ namespace NarutoBot3
                                     message = new Privmsg(CHANNEL, (howMany[r.Next(howMany.Length)] + " " + r.Next(21)).Trim());
                             }
 
-                            else if (split.Length >= 2 && String.Compare(split[1], "are", true) == 0)
+                            else if (split.Length >= 2 && string.Compare(split[1], "are", true) == 0)
                             {
-                                if (String.Compare(arg, "how are you", true) == 0 || String.Compare(arg, "how are you doing", true) == 0)
+                                if (string.Compare(arg, "how are you", true) == 0 || string.Compare(arg, "how are you doing", true) == 0)
                                     message = new Privmsg(CHANNEL, "I'm fine, thanks for asking. And you?");
                                 else
                                     message = new Privmsg(CHANNEL, "I dont know yet, ask later");
                             }
 
-                            else if (String.Compare(split[1], "is", true) == 0)
+                            else if (string.Compare(split[1], "is", true) == 0)
                             {
                                 if (split.Length == 3)
                                     message = new Privmsg(CHANNEL, split[2] + " is " + howIs[r.Next(howIs.Length)]);
                             }
 
-                            else if (String.Compare(split[1], "did", true) == 0 && String.Compare(split[split.Length], "die", true) == 0)
+                            else if (string.Compare(split[1], "did", true) == 0 && string.Compare(split[split.Length], "die", true) == 0)
                             {
                                 killUser(CHANNEL, user, Useful.getBetween(arg, "did", "die"));
                                 return;
                             }
 
-                            else if (String.Compare(split[1], "old", true) == 0)
+                            else if (string.Compare(split[1], "old", true) == 0)
                             {
                                 if (split.Length >= 4)
                                 {
                                     string replaced = questionsRegex(subjectNPL);
 
-                                    if (String.Compare(split[2], "is", true) == 0)
+                                    if (string.Compare(split[2], "is", true) == 0)
                                     {
                                         message = new Privmsg(CHANNEL, replaced + " is " + r.Next(41) + " years old");
                                     }
-                                    else if (String.Compare(split[2], "are", true) == 0)
+                                    else if (string.Compare(split[2], "are", true) == 0)
                                     {
-                                        if (String.Compare(subjectNPL, "you", true) == 0)
+                                        if (string.Compare(subjectNPL, "you", true) == 0)
                                             message = new Privmsg(CHANNEL, "I was compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToString("R"));
                                         else
                                             message = new Privmsg(CHANNEL, replaced + " are " + r.Next(41) + " years old");
                                     }
 
-                                    else if (String.Compare(split[2], "am", true) == 0 || String.Compare(split[3], "i", true) == 0)
+                                    else if (string.Compare(split[2], "am", true) == 0 || string.Compare(split[3], "i", true) == 0)
                                         message = new Privmsg(CHANNEL, "You are " + r.Next(41) + " years old");
                                 }
                             }
@@ -3189,19 +3179,19 @@ namespace NarutoBot3
                             message = new Privmsg(CHANNEL, user + ", no idea...");
                     }
 
-                    else if (String.Compare(split[0], "how's", true) == 0)
+                    else if (string.Compare(split[0], "how's", true) == 0)
                     {
                         string replaced = questionsRegex(subjectNPL);
                         message = new Privmsg(CHANNEL, replaced + " is " + howIs[r.Next(howIs.Length)]);
                     }
 
-                    else if (String.Compare(split[0], "why", true) == 0)
+                    else if (string.Compare(split[0], "why", true) == 0)
                     {
                         if (split.Length >= 2)
                             message = new Privmsg(CHANNEL, "Because " + removeUserMode(userList[r.Next(userList.Count)]) + " " + because[r.Next(because.Length)]);
                     }
 
-                    else if (String.Compare(split[0], "is", true) == 0)
+                    else if (string.Compare(split[0], "is", true) == 0)
                     {
                         bool yes = false;
 
@@ -3227,7 +3217,7 @@ namespace NarutoBot3
                                 message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my") + " isn't " + replaced).Trim());
                         }
                     }
-                    else if (String.Compare(split[0], "was", true) == 0)
+                    else if (string.Compare(split[0], "was", true) == 0)
                     {
                         bool yes = false;
 
@@ -3253,17 +3243,17 @@ namespace NarutoBot3
                                 message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + subject.Replace("your", "my").Replace("Your", "my") + " wasn't " + replaced).Trim());
                         }
                     }
-                    else if (String.Compare(split[0], "when", true) == 0)
+                    else if (string.Compare(split[0], "when", true) == 0)
                     {
                         message = new Privmsg(CHANNEL, when[r.Next(when.Length)]);
                     }
 
-                    else if (String.Compare(split[0], "are", true) == 0)
+                    else if (string.Compare(split[0], "are", true) == 0)
                     {
-                        if (String.Compare(arg, "are you real", true) == 0)
+                        if (string.Compare(arg, "are you real", true) == 0)
                             message = new Privmsg(CHANNEL, "Yes, i am real");
 
-                        else if (String.Compare(arg, "are you a real person", true) == 0 || String.Compare(arg, "are you a real human", true) == 0 || String.Compare(arg, "are you human", true) == 0)
+                        else if (string.Compare(arg, "are you a real person", true) == 0 || string.Compare(arg, "are you a real human", true) == 0 || string.Compare(arg, "are you human", true) == 0)
                             message = new Privmsg(CHANNEL, "No, i'm a bot");
 
 
@@ -3314,11 +3304,11 @@ namespace NarutoBot3
 
                     }
 
-                    else if (String.Compare(split[0], "can", true) == 0)
+                    else if (string.Compare(split[0], "can", true) == 0)
                     {
-                        if (String.Compare(arg, "can you give me a nick", true) == 0 || String.Compare(arg, "can you make me a nick", true) == 0 ||
-                            String.Compare(arg, "can you generate a nick", true) == 0 || String.Compare(arg, "can you create a nick", true) == 0 ||
-                            String.Compare(arg, "can you make me a new nick", true) == 0)
+                        if (string.Compare(arg, "can you give me a nick", true) == 0 || string.Compare(arg, "can you make me a nick", true) == 0 ||
+                            string.Compare(arg, "can you generate a nick", true) == 0 || string.Compare(arg, "can you create a nick", true) == 0 ||
+                            string.Compare(arg, "can you make me a new nick", true) == 0)
                         {
                             message = new Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
                             stats.nick();
@@ -3334,25 +3324,25 @@ namespace NarutoBot3
                             message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
 
-                    else if (String.Compare(split[0], "would", true) == 0)
+                    else if (string.Compare(split[0], "would", true) == 0)
                     {
-                        if (String.Compare(arg, "would you make me a nick", true) == 0 || String.Compare(arg, "would you generate a nick", true) == 0 ||
-                            String.Compare(arg, "would you create a nick", true) == 0 || String.Compare(arg, "would you make me a new nick", true) == 0)
+                        if (string.Compare(arg, "would you make me a nick", true) == 0 || string.Compare(arg, "would you generate a nick", true) == 0 ||
+                            string.Compare(arg, "would you create a nick", true) == 0 || string.Compare(arg, "would you make me a new nick", true) == 0)
                             message = new Privmsg(CHANNEL, "Yes, here it is: " + NickGen.GenerateNick(nickGenStrings, nickGenStrings.Count, false, false, false, false));
 
                         else
                             message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
 
-                    else if (String.Compare(split[0], "where", true) == 0)
+                    else if (string.Compare(split[0], "where", true) == 0)
                     {
                         message = new Privmsg(CHANNEL, where[r.Next(where.Length)]);
 
                     }
 
-                    else if (String.Compare(split[0], "who", true) == 0 || String.Compare(split[0], "who's", true) == 0)
+                    else if (string.Compare(split[0], "who", true) == 0 || string.Compare(split[0], "who's", true) == 0)
                     {
-                        if (String.Compare(arg, "who are you", true) == 0)
+                        if (string.Compare(arg, "who are you", true) == 0)
                             message = new Privmsg(CHANNEL, "I'm a bot!");
                         else if (split[1] == "do")
                             message = new Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
@@ -3360,9 +3350,9 @@ namespace NarutoBot3
                             message = new Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(userList[r.Next(userList.Count)]));
                     }
 
-                    else if (String.Compare(split[0], "what", true) == 0 || String.Compare(split[0], "what's", true) == 0)
+                    else if (string.Compare(split[0], "what", true) == 0 || string.Compare(split[0], "what's", true) == 0)
                     {
-                        if (String.Compare(arg, "what are you", true) == 0)
+                        if (string.Compare(arg, "what are you", true) == 0)
                             message = new Privmsg(CHANNEL, "I'm a bot!");
                         else
                         {
@@ -3370,7 +3360,7 @@ namespace NarutoBot3
                         }
                     }
 
-                    else if (String.Compare(split[0], "if", true) == 0)
+                    else if (string.Compare(split[0], "if", true) == 0)
                     {
                         try { 
                             string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
@@ -3383,7 +3373,7 @@ namespace NarutoBot3
                         }
 
                     }
-                    else if (String.Compare(split[0], "am", true) == 0 && String.Compare(split[1], "i", true) == 0)
+                    else if (string.Compare(split[0], "am", true) == 0 && string.Compare(split[1], "i", true) == 0)
                     {
                         bool yes = false;
 
@@ -3406,7 +3396,7 @@ namespace NarutoBot3
                             message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " you aren't " + replaced).Trim());
                     }
 
-                    else if (String.Compare(split[0], "do", true) == 0)
+                    else if (string.Compare(split[0], "do", true) == 0)
                     {
                         bool yes = false;
                         if (r.Next(0, 2) == 1)
@@ -3450,7 +3440,7 @@ namespace NarutoBot3
                         }
                     }
 
-                    else if (String.Compare(split[0], "should", true) == 0)
+                    else if (string.Compare(split[0], "should", true) == 0)
                     {
                         bool yes = false;
                         if (r.Next(0, 2) == 1)
@@ -3501,7 +3491,7 @@ namespace NarutoBot3
                         }
                     }
 
-                    else if (String.Compare(split[0], "did", true) == 0)
+                    else if (string.Compare(split[0], "did", true) == 0)
                     {
                         bool yes = false;
                         if (r.Next(0, 2) == 1)
@@ -3547,7 +3537,7 @@ namespace NarutoBot3
 
                     }
 
-                    else if (String.Compare(split[0], "does", true) == 0)
+                    else if (string.Compare(split[0], "does", true) == 0)
                     {
                         bool yes = false;
                         if (r.Next(0, 2) == 1)
@@ -3576,7 +3566,7 @@ namespace NarutoBot3
                         }
                     }
 
-                    else if (String.Compare(split[0], "will", true) == 0)
+                    else if (string.Compare(split[0], "will", true) == 0)
                     {
                         bool yes = false;
 
@@ -3635,7 +3625,7 @@ namespace NarutoBot3
                 }
             }
 
-            if (message!= null && !String.IsNullOrWhiteSpace(message.body))
+            if (message!= null && !string.IsNullOrWhiteSpace(message.body))
             {
                 message.body = message.body.Replace("  ", " ");
                 sendMessage(message);
@@ -3645,7 +3635,7 @@ namespace NarutoBot3
 
         public void nickGen(string CHANNEL, string nick, string args)
         {
-            if (String.IsNullOrEmpty(nick)) return;
+            if (string.IsNullOrEmpty(nick)) return;
             Random rnd = new Random();
 
             bool randomnumber = false;
@@ -3704,7 +3694,7 @@ namespace NarutoBot3
 
         public void redditLink(string CHANNEL, string nick, string line)
         {
-            if (String.IsNullOrEmpty(line) || String.IsNullOrEmpty(nick)) return;
+            if (string.IsNullOrEmpty(line) || string.IsNullOrEmpty(nick)) return;
 
             string[] temp = line.Split(' ');
             string subreddit;
@@ -3723,7 +3713,7 @@ namespace NarutoBot3
 
                     string[] linkParse = url.Replace("\r", string.Empty).Split('/');
 
-                    if (linkParse.Length >= 7 && !String.IsNullOrEmpty(linkParse[6]))    //With Comment
+                    if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]))    //With Comment
                     {
                         redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6].Split(new char[] { '?' }, 2)[0]);
 
@@ -3823,7 +3813,7 @@ namespace NarutoBot3
 
             foreach (User u in ul.Users)
             {
-                if (String.Compare(u.Nick, nick, true) == 0 && u.GreetingEnabled)
+                if (string.Compare(u.Nick, nick, true) == 0 && u.GreetingEnabled)
                 {
                     Message mensagem = new Privmsg(Client.HOME_CHANNEL, u.Greeting);
                     sendMessage(mensagem);
@@ -3855,7 +3845,7 @@ namespace NarutoBot3
 
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
-            if (String.IsNullOrWhiteSpace(args) && quotes.Count>0) //pring random
+            if (string.IsNullOrWhiteSpace(args) && quotes.Count>0) //pring random
             {
                 i = r.Next(quotes.Count);
                 message = new Privmsg(CHANNEL, quotes[i]);
@@ -4089,10 +4079,7 @@ namespace NarutoBot3
                 args = result + " : " + args;
             }
 
-
-
-
-                funk.Add(args);
+            funk.Add(args);
 
             saveFunk();
             stats.funk();
@@ -4130,8 +4117,6 @@ namespace NarutoBot3
                 CustomCommand.saveCustomCommands(customCommands);
             }
         }
-
-        
 
         void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
         {
@@ -4348,7 +4333,7 @@ namespace NarutoBot3
 
         public void pingSever()
         {
-            if (!WaitingForPong)
+            if (!waitingForPong)
             {
                 Message message = new Ping(GetTimestamp(DateTime.Now));
 
@@ -4358,7 +4343,7 @@ namespace NarutoBot3
 
                 sendMessage(message);
 
-                WaitingForPong = true;
+                waitingForPong = true;
 
                 timeoutTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
                 timeoutTimer.Elapsed += (sender, e) => checkIfTimeout(sender, e);
@@ -4374,10 +4359,10 @@ namespace NarutoBot3
 
         void checkIfTimeout(object sender, EventArgs e)
         {
-            if (WaitingForPong)
+            if (waitingForPong)
             {
                 OnTimeout(EventArgs.Empty);
-                WaitingForPong = false;
+                waitingForPong = false;
             }
         }
 
@@ -4470,7 +4455,7 @@ namespace NarutoBot3
                     {"i", someVariable1}
             };
 
-            var regex = new Regex("(?i)(\\b" + String.Join("\\b|\\b", replacements.Keys) + "\\b)");
+            var regex = new Regex("(?i)(\\b" + string.Join("\\b|\\b", replacements.Keys) + "\\b)");
             var replaced = regex.Replace(rest, m => replacements[m.Value]);
 
             return replaced;

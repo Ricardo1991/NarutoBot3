@@ -18,11 +18,11 @@ namespace NarutoBot3
             lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
         }
 
-        public string questionParser(string question, string user)
+        public string questionParser(string question)
         {
             if (lp == null)
             {
-                
+                lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
             }
             string subjectNPL = string.Empty;
 
