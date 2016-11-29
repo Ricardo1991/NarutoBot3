@@ -882,7 +882,7 @@ namespace NarutoBot3
                             WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
                             animeSearch(whoSent, user, arg);
                         }
-                        else if (string.Compare(cmd, "youtube", true) == 0 && !string.IsNullOrEmpty(arg))
+                        else if ((string.Compare(cmd, "youtube", true) == 0 || string.Compare(cmd, "yt", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                             youtubeSearch(whoSent, user, arg);
