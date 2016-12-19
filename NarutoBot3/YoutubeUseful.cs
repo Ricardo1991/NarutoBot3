@@ -39,14 +39,15 @@ namespace NarutoBot3
         {
             string id;
 
-            if (url.Contains("youtu.be") && !url.Contains("&feature"))
+
+            if (url.ToLower().Contains("youtu.be") && !url.ToLower().Contains("&feature"))
             {
-                id = Useful.getBetween(url, "youtu.be/", "?t");
+                id = Useful.getBetween(url, "youtu.be/", "?");
             
             }
             else
             {
-                if (url.Contains("?v="))
+                if (url.ToLower().Contains("?v="))
                     id = Useful.getBetween(url, "?v=", "&");
                 else
                     id = Useful.getBetween(url, "&v=", "&");
