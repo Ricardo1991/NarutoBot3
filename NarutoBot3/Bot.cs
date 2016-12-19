@@ -1,5 +1,4 @@
 ﻿using ChatterBotAPI;
-using GiphySearch;
 using NarutoBot3.Events;
 using NarutoBot3.Messages;
 using NarutoBot3.Properties;
@@ -33,8 +32,6 @@ namespace NarutoBot3
         public TextMarkovChain killgen = new TextMarkovChain();
         int tmcCount = 0;
 
-        ChatterBotFactory factory = new ChatterBotFactory();
-        ChatterBot bot1;
         ChatterBotSession bot1session;
 
         private List<string> rls = new List<string>();
@@ -216,9 +213,7 @@ namespace NarutoBot3
 
             ul.loadData();
 
-            bot1 = factory.Create(ChatterBotType.CLEVERBOT);
-            bot1session = bot1.CreateSession();
-
+            bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
 
             if (File.Exists("textSample.xml"))
             {
@@ -887,12 +882,6 @@ namespace NarutoBot3
                             WriteMessage("* Received a youtubeSearch request from " + user, currentColorScheme.BotReport);
                             youtubeSearch(whoSent, user, arg);
                         }
-                        else if ((string.Compare(cmd, "giphy", true) == 0 || string.Compare(cmd, "g", true) == 0) && !string.IsNullOrEmpty(arg))
-                        {
-                            WriteMessage("* Received a Giphy request from " + user, currentColorScheme.BotReport);
-                            giphySearch(whoSent, user, arg);
-                        }
-
                         else if (string.Compare(cmd, "poke", true) == 0)
                         {
                             WriteMessage("* Received a Poke request from " + user, currentColorScheme.BotReport);
@@ -1038,8 +1027,8 @@ namespace NarutoBot3
                         }
 
 
-                    else if ((msg.Contains("youtu.be") && (msg.Contains("?v=") == false && msg.Contains("&v=") == false)) 
-                        || (msg.Contains("youtube") && msg.Contains("watch") && (msg.Contains("?v=") || msg.Contains("&v="))))
+                    else if ((msg.ToLower().Contains("youtu.be") && (msg.ToLower().Contains("?v=") == false && msg.ToLower().Contains("&v=") == false)) 
+                        || (msg.ToLower().Contains("youtube") && msg.ToLower().Contains("watch") && (msg.ToLower().Contains("?v=") || msg.ToLower().Contains("&v="))))
                         {
                             WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                             youtube(whoSent, user, msg);
@@ -1669,9 +1658,6 @@ namespace NarutoBot3
                     case "funk":
                         sendMessage(new Privmsg(whoSent, "Session: " + stats.getFunk()[0] + " Lifetime: " + stats.getFunk()[1]));
                         break;
-                    case "giphy":
-                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getGiphy()[0] + " Lifetime: " + stats.getGiphy()[1]));
-                        break;
                     case "nick":
                     case "nicks":
                         sendMessage(new Privmsg(whoSent, "Session: " + stats.getNick()[0] + " Lifetime: " + stats.getNick()[1]));
@@ -1810,11 +1796,6 @@ namespace NarutoBot3
                     Settings.Default.funkEnabled = status;
                     sendMessage(new Notice(user, "Funk is now " + (status ? "enabled" : "disabled")));
                     break;
-                case "giphy":
-                    Settings.Default.giphyEnabled = status;
-                    sendMessage(new Notice(user, "Giphy is now " + (status ? "enabled" : "disabled")));
-                    break;
-
                 case "reddit":
                 case "reddittitle":
                     Settings.Default.redditEnabled = status;
@@ -2404,12 +2385,13 @@ namespace NarutoBot3
             try
             {
                 string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
+                
                 message = new Privmsg(CHANNEL, answer);
             }
-            catch
+            catch(Exception ex)
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                bot1session = bot1.CreateSession();
+                bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
             }
 
             sendMessage(message);
@@ -2734,42 +2716,7 @@ namespace NarutoBot3
             stats.youtube();
             return;
         }
-
-        public void giphySearch(string CHANNEL, string nick, string query)
-        {
-            if (ul.userIsMuted(nick)) return;
-            if (Settings.Default.silence == true || Settings.Default.giphyEnabled == false) return;
-
-            Message message = new Privmsg(CHANNEL, "No results found");
-            string request = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=";
-            string jsonResult;
-            GiphyResult g = new GiphyResult();
-
-            request += HttpUtility.UrlEncode(query);
-
-            var webClient = new WebClient();
-            webClient.Encoding = Encoding.UTF8;
-
-            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
-
-            try
-            {
-                jsonResult = webClient.DownloadString(request);
-                JsonConvert.PopulateObject(jsonResult, g);
-
-                if (g.data != null)
-                    message = new Privmsg(CHANNEL, query + ": " + g.data.url);
-            }
-            catch
-            {
-            }
-
-            sendMessage(message);
-            stats.giphy();
-
-            return;
-        }
-
+     
         public void vimeo(string CHANNEL, string nick, string line)
         {
             if (ul.userIsMuted(nick)) return;
@@ -3366,10 +3313,10 @@ namespace NarutoBot3
                             string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
                             message = new Privmsg(CHANNEL, answer);
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            bot1session = bot1.CreateSession();
+                            bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
                         }
 
                     }
@@ -3603,10 +3550,10 @@ namespace NarutoBot3
                         string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
                         message = new Privmsg(CHANNEL, answer);
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        bot1session = bot1.CreateSession();
+                        bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
                     }
                 }
             }
@@ -3618,10 +3565,10 @@ namespace NarutoBot3
                     string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
                     message = new Privmsg(CHANNEL, answer);
                 }
-                catch
+                catch (Exception ex)
                 {
                     message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                    bot1session = bot1.CreateSession();
+                    bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
                 }
             }
 

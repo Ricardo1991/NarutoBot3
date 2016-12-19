@@ -61,7 +61,6 @@ namespace NarutoBot3
             Settings.Default.chooseEnabled = cb_choose.Checked;
             Settings.Default.funkEnabled = cbFunk.Checked;
             Settings.Default.shuffleEnabled = cbShuffle.Checked;
-            Settings.Default.giphyEnabled = cbGiphy.Checked;
             Settings.Default.urlTitleEnabled = cbPageTitle.Checked;
             Settings.Default.tellEnabled = cbTell.Checked;
             Settings.Default.factsEnabled = cbFacts.Checked;
@@ -181,7 +180,6 @@ namespace NarutoBot3
             cb_choose.Checked = Settings.Default.chooseEnabled;
             cbFunk.Checked = Settings.Default.funkEnabled;
             cbShuffle.Checked = Settings.Default.shuffleEnabled;
-            cbGiphy.Checked = Settings.Default.giphyEnabled;
             cbPageTitle.Checked = Settings.Default.urlTitleEnabled;
             cbTell.Checked = Settings.Default.tellEnabled;
             cbFacts.Checked = Settings.Default.factsEnabled;

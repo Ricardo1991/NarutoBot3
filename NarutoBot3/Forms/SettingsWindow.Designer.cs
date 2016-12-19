@@ -50,16 +50,16 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
-            this.cbGiphy = new System.Windows.Forms.CheckBox();
+            this.cbFacts = new System.Windows.Forms.CheckBox();
             this.cbFunk = new System.Windows.Forms.CheckBox();
             this.cbQuotes = new System.Windows.Forms.CheckBox();
-            this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.cb_Questions = new System.Windows.Forms.CheckBox();
             this.cb_Kill = new System.Windows.Forms.CheckBox();
             this.cb_nicks = new System.Windows.Forms.CheckBox();
             this.cb_Trivia = new System.Windows.Forms.CheckBox();
             this.cb_Poke = new System.Windows.Forms.CheckBox();
             this.cb_randomText = new System.Windows.Forms.CheckBox();
+            this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesBasic = new System.Windows.Forms.GroupBox();
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.enableDisableTab = new System.Windows.Forms.TabPage();
@@ -109,7 +109,6 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbFacts = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -374,7 +373,6 @@
             // gb_FeaturesFun
             // 
             this.gb_FeaturesFun.Controls.Add(this.cbFacts);
-            this.gb_FeaturesFun.Controls.Add(this.cbGiphy);
             this.gb_FeaturesFun.Controls.Add(this.cbFunk);
             this.gb_FeaturesFun.Controls.Add(this.cbQuotes);
             this.gb_FeaturesFun.Controls.Add(this.cb_Questions);
@@ -390,15 +388,15 @@
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
             // 
-            // cbGiphy
+            // cbFacts
             // 
-            this.cbGiphy.AutoSize = true;
-            this.cbGiphy.Location = new System.Drawing.Point(6, 205);
-            this.cbGiphy.Name = "cbGiphy";
-            this.cbGiphy.Size = new System.Drawing.Size(53, 17);
-            this.cbGiphy.TabIndex = 15;
-            this.cbGiphy.Text = "Giphy";
-            this.cbGiphy.UseVisualStyleBackColor = true;
+            this.cbFacts.AutoSize = true;
+            this.cbFacts.Location = new System.Drawing.Point(6, 204);
+            this.cbFacts.Name = "cbFacts";
+            this.cbFacts.Size = new System.Drawing.Size(52, 17);
+            this.cbFacts.TabIndex = 16;
+            this.cbFacts.Text = "Facts";
+            this.cbFacts.UseVisualStyleBackColor = true;
             // 
             // cbFunk
             // 
@@ -419,16 +417,6 @@
             this.cbQuotes.TabIndex = 13;
             this.cbQuotes.Text = "Quotes";
             this.cbQuotes.UseVisualStyleBackColor = true;
-            // 
-            // cb_greetings
-            // 
-            this.cb_greetings.AutoSize = true;
-            this.cb_greetings.Location = new System.Drawing.Point(6, 64);
-            this.cb_greetings.Name = "cb_greetings";
-            this.cb_greetings.Size = new System.Drawing.Size(71, 17);
-            this.cb_greetings.TabIndex = 12;
-            this.cb_greetings.Text = "Greetings";
-            this.cb_greetings.UseVisualStyleBackColor = true;
             // 
             // cb_Questions
             // 
@@ -501,6 +489,16 @@
             this.cb_randomText.TabIndex = 9;
             this.cb_randomText.Text = "Random Text";
             this.cb_randomText.UseVisualStyleBackColor = true;
+            // 
+            // cb_greetings
+            // 
+            this.cb_greetings.AutoSize = true;
+            this.cb_greetings.Location = new System.Drawing.Point(6, 64);
+            this.cb_greetings.Name = "cb_greetings";
+            this.cb_greetings.Size = new System.Drawing.Size(71, 17);
+            this.cb_greetings.TabIndex = 12;
+            this.cb_greetings.Text = "Greetings";
+            this.cb_greetings.UseVisualStyleBackColor = true;
             // 
             // gb_FeaturesBasic
             // 
@@ -989,16 +987,6 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // cbFacts
-            // 
-            this.cbFacts.AutoSize = true;
-            this.cbFacts.Location = new System.Drawing.Point(7, 229);
-            this.cbFacts.Name = "cbFacts";
-            this.cbFacts.Size = new System.Drawing.Size(52, 17);
-            this.cbFacts.TabIndex = 16;
-            this.cbFacts.Text = "Facts";
-            this.cbFacts.UseVisualStyleBackColor = true;
-            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1127,7 +1115,6 @@
         private System.Windows.Forms.CheckBox cb_choose;
         private System.Windows.Forms.CheckBox cbFunk;
         private System.Windows.Forms.CheckBox cbShuffle;
-        private System.Windows.Forms.CheckBox cbGiphy;
         private System.Windows.Forms.CheckBox cbPageTitle;
         private System.Windows.Forms.GroupBox gbQuitMessage;
         private System.Windows.Forms.TextBox tbQuitMessage;
