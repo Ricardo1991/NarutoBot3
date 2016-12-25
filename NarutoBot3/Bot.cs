@@ -2513,6 +2513,9 @@ namespace NarutoBot3
 
             string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
 
+
+            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
+
             try
             {
                 jsonGoogle = webClient.DownloadString(getString);
@@ -2524,10 +2527,8 @@ namespace NarutoBot3
                 return;
             }
 
-            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
-
             if (g.items == null) {
-                message = new Privmsg(CHANNEL, "Could not find anything, try http://myanimelist.net/anime.php?q=" + query);
+                message = new Privmsg(CHANNEL, "Could not find anything, try https://myanimelist.net/anime.php?q=" + query);
                 sendMessage(message);
                 return;
             }
@@ -2540,7 +2541,7 @@ namespace NarutoBot3
             {
                 if (!user)
                 {
-                    if (g.items[i].link.Contains("http://myanimelist.net/anime/"))
+                    if (g.items[i].link.Contains("myanimelist.net/anime/"))
                     {
                         found = true;
                         string[] split = g.items[i].link.Split('/');
@@ -2557,7 +2558,7 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    if (g.items[i].link.Contains("http://myanimelist.net/profile/"))
+                    if (g.items[i].link.Contains("myanimelist.net/profile/"))
                         found = true;
                     
                     else i++;
@@ -2572,7 +2573,7 @@ namespace NarutoBot3
                 if (!user)
                 {
                     string animeName = name.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
-                    getString = "http://myanimelist.net/api/anime/search.xml?q=" + animeName;
+                    getString = "https://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
                     xmlAnime = webClient.DownloadString(getString);
 
@@ -2632,7 +2633,7 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    string xmlUser = webClient.DownloadString("http://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u",string.Empty)).Trim();
+                    string xmlUser = webClient.DownloadString("https://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u",string.Empty)).Trim();
 
                     myanimelist u = new myanimelist();
 
