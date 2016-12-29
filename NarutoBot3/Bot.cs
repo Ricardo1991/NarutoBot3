@@ -50,7 +50,7 @@ namespace NarutoBot3
 
         private StatsManager stats = new StatsManager();
 
-        bool conneceted = false;
+        
 
         public event EventHandler<EventArgs> DuplicatedNick;
         public event EventHandler<EventArgs> Created;
@@ -344,7 +344,6 @@ namespace NarutoBot3
 
                 case ("376"): //END OF MOTD
 
-                    conneceted = true;
                     OnConnect(EventArgs.Empty);
 
                     if (!string.IsNullOrEmpty(Client.HOST_SERVER))
@@ -2388,7 +2387,7 @@ namespace NarutoBot3
                 
                 message = new Privmsg(CHANNEL, answer);
             }
-            catch(Exception ex)
+            catch
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
                 bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
@@ -3024,8 +3023,7 @@ namespace NarutoBot3
             if (ul.userIsMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
-            string subjectNPL = string.Empty;
-            subjectNPL = qq.getSubject(arg);
+            string subjectNPL = qq.getSubject(arg);
 
             Message message = null;
             Random r = new Random();
@@ -3060,7 +3058,6 @@ namespace NarutoBot3
 
             if(arg[arg.Length - 1] == '?')
             {
-
                 arg = arg.Replace("?", string.Empty).TrimStart(new char[] { ' ' });
                 string[] split = arg.Split(new char[] { ' ' });
 
@@ -3314,7 +3311,7 @@ namespace NarutoBot3
                             string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
                             message = new Privmsg(CHANNEL, answer);
                         }
-                        catch(Exception ex)
+                        catch
                         {
                             message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
                             bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
@@ -3361,9 +3358,11 @@ namespace NarutoBot3
                             }
                             rest = rest.TrimEnd(' ').Replace(subjectNPL, string.Empty);
 
+
+
                             string replaced = questionsRegex(rest);
 
-                            if (split[1] == "you")
+                            if (string.Compare(split[1], "you", true) == 0)
                             {
 
                                 if (yes)
@@ -3371,7 +3370,7 @@ namespace NarutoBot3
                                 else
                                     message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I don't " + replaced).Trim());
                             }
-                            else if (split[1] == "i")
+                            else if (string.Compare(split[1], "i", true) == 0)
                             {
                                 if (yes)
                                     message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you do " + replaced).Trim());
@@ -3407,7 +3406,7 @@ namespace NarutoBot3
 
                             string replaced = questionsRegex(rest);
 
-                            if (split[1] == "you")
+                            if (string.Compare(split[1], "you", true) == 0)
                             {
 
                                 if (yes)
@@ -3415,7 +3414,7 @@ namespace NarutoBot3
                                 else
                                     message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I shouldn't " + replaced).Trim());
                             }
-                            else if (split[1] == "i")
+                            else if (string.Compare(split[1], "i", true) == 0)
                             {
                                 if (yes)
                                     message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you should " + replaced).Trim());
@@ -3458,7 +3457,7 @@ namespace NarutoBot3
 
                             string replaced = questionsRegex(rest);
 
-                            if (split[1] == "you")
+                            if (string.Compare(split[1], "you", true) == 0)
                             {
 
                                 if (yes)
@@ -3466,7 +3465,7 @@ namespace NarutoBot3
                                 else
                                     message = new Privmsg(CHANNEL, (whyN[r.Next(whyN.Length)] + " " + "I didn't " + replaced).Trim());
                             }
-                            else if (split[1] == "i")
+                            else if (string.Compare(split[1], "i", true) == 0)
                             {
                                 if (yes)
                                     message = new Privmsg(CHANNEL, (whyY[r.Next(whyY.Length)] + " " + "you did " + replaced).Trim());
@@ -3551,7 +3550,7 @@ namespace NarutoBot3
                         string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
                         message = new Privmsg(CHANNEL, answer);
                     }
-                    catch(Exception ex)
+                    catch
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
                         bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
@@ -3566,7 +3565,7 @@ namespace NarutoBot3
                     string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
                     message = new Privmsg(CHANNEL, answer);
                 }
-                catch (Exception ex)
+                catch
                 {
                     message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
                     bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
