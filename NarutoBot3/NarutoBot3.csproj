@@ -98,9 +98,9 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChatterBotAPI, Version=1.1.5984.28099, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ChatterBotAPI, Version=1.1.6207.1163, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\chatter-bot-api-master\dotnet\ChatterBotAPI\bin\Debug\ChatterBotAPI.dll</HintPath>
+      <HintPath>..\chatter-bot-api\ChatterBotAPI.dll</HintPath>
     </Reference>
     <Reference Include="ejml-0.23">
       <HintPath>..\packages\Stanford.NLP.Parser.3.5.2\lib\ejml-0.23.dll</HintPath>
