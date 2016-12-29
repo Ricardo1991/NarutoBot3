@@ -18,12 +18,9 @@ namespace NarutoBot3
             lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
         }
 
-        public string questionParser(string question)
+        public string getSubject(string question)
         {
-            if (lp == null)
-            {
-                lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
-            }
+           
             string subjectNPL = string.Empty;
 
             var tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
@@ -32,27 +29,17 @@ namespace NarutoBot3
             sent2Reader.close();
             var tree = lp.apply(rawWords2);
 
-            
-
-            //var rawWords = Sentence.toCoreLabelList(tokens);
-            //var tree = lp.apply(rawWords);
-            //tree.pennPrint();
-
-            // Extract dependencies from lexical tree
-            var tlp = new PennTreebankLanguagePack();
-            var gsf = tlp.grammaticalStructureFactory();
-            var gs = gsf.newGrammaticalStructure(tree);
-            
-            var tdl = gs.typedDependenciesCCprocessed();
-            //System.Console.WriteLine("\n{0}\n", tdl);
-
             var tp = new TreePrint("xmlTree");
+
 
             PrintWriter p = new PrintWriter("parse.xml", "UTF-8");
             tp.printTree(tree, p);
 
+            p.close();
+
             BufferedReader br = new BufferedReader(new FileReader("parse.xml"));
             String xmlS;
+
             try
             {
                 StringBuilder sb = new StringBuilder();
@@ -60,15 +47,16 @@ namespace NarutoBot3
 
                 while (line != null)
                 {
-                    sb.Append(line);
-                    sb.Append('\r');
+                    sb.AppendLine(line);
                     line = br.readLine();
+
                 }
                 xmlS = sb.ToString();
             }
             finally
             {
                 br.close();
+                System.IO.File.Delete("parse.xml");
             }
 
 

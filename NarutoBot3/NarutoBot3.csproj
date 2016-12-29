@@ -192,6 +192,10 @@
     <Reference Include="IKVM.Runtime.JNI">
       <HintPath>..\packages\IKVM.8.0.5449.1\lib\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
+    <Reference Include="RedditSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\reddit-sharp\RedditSharp.dll</HintPath>
+    </Reference>
     <Reference Include="stanford-parser">
       <HintPath>..\packages\Stanford.NLP.Parser.3.5.2\lib\stanford-parser.dll</HintPath>
     </Reference>
@@ -407,10 +411,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GitHub\RedditSharp\RedditSharp\RedditSharp.csproj">
-      <Project>{A368CB75-75F0-4489-904D-B5CEBB0FE624}</Project>
-      <Name>RedditSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AutoComplete\AutoComplete.csproj">
       <Project>{88b1a2d4-0b5f-4586-92df-878e37f855f4}</Project>
       <Name>AutoComplete</Name>

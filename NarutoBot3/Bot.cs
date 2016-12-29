@@ -3025,7 +3025,7 @@ namespace NarutoBot3
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
             string subjectNPL = string.Empty;
-            subjectNPL = qq.questionParser(arg);
+            subjectNPL = qq.getSubject(arg);
 
             Message message = null;
             Random r = new Random();
