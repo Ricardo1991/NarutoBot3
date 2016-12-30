@@ -29,11 +29,17 @@ namespace NarutoBot3
             {
                 TextReader stream = new StreamReader("data.json");
                 string json = stream.ReadToEnd();
-                JsonConvert.PopulateObject(json, users);
+
+                JsonSerializerSettings jss = new JsonSerializerSettings();
+                jss.MissingMemberHandling = MissingMemberHandling.Ignore;
+                jss.DefaultValueHandling = DefaultValueHandling.Populate;
+
+                JsonConvert.PopulateObject(json, users, jss);
                 stream.Close();
             }
             catch
             {
+                System.IO.File.Move("data.json", "data.json.bak");
                 users = new List<User>();
             }
         }
@@ -50,6 +56,7 @@ namespace NarutoBot3
             if (u != null)
             {
                 u.IsOnline = status;
+                u.LastSeen = DateTime.UtcNow;
 
             }
             else users.Add(new User(nick, status));
@@ -227,6 +234,29 @@ namespace NarutoBot3
             return null;
         }
 
+        public DateTime getUserSeenUTC(string nick)
+        {
+
+            User u = getUserByName(nick);
+
+            if (u != null)
+            {
+                return u.LastSeen;
+            }
+
+            return new DateTime(0);
+        }
+
+        public void markUserSeen(string nick)
+        {
+            User u = getUserByName(nick);
+
+            if (u != null)
+            {
+                u.LastSeen = DateTime.UtcNow;
+            }
+        }
+
         public void addUserMessage(string destinatary, string sender, string message)
         {
             User u = getUserByName(destinatary);
@@ -303,7 +333,6 @@ namespace NarutoBot3
 
 
 
-
         public User getUserByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return null;
@@ -334,12 +363,13 @@ namespace NarutoBot3
             set { deliveredMessages = value; }
         }
 
-        string nick;
-        string greeting;
-        bool isOperator;
-        bool isMuted;
-        bool greetingEnabled;
-        bool mirrorMode;
+        string nick = "User";
+        string greeting = "";
+        bool isOperator = false;
+        bool isMuted = false;
+        bool greetingEnabled = false;
+        bool mirrorMode = false;
+        DateTime lastSeen = new DateTime(0);
 
         public bool MirrorMode
         {
@@ -348,7 +378,7 @@ namespace NarutoBot3
         }
 
         [JsonIgnore]
-        bool isOnline=false;
+        bool isOnline = false;
 
         [JsonIgnore]
         bool hasOP = false;
@@ -384,6 +414,7 @@ namespace NarutoBot3
             isMuted = false;
             greetingEnabled = false;
             mirrorMode = false;
+            LastSeen = DateTime.UtcNow;
 
             deliveredMessages = new List<UserMessage>();
         }
@@ -397,6 +428,7 @@ namespace NarutoBot3
             isMuted = false;
             greetingEnabled = false;
             mirrorMode = false;
+            LastSeen = DateTime.UtcNow;
 
             deliveredMessages = new List<UserMessage>();
         }
@@ -410,6 +442,7 @@ namespace NarutoBot3
             isMuted = mute;
             greetingEnabled = greet;
             mirrorMode = mirror;
+            LastSeen = DateTime.UtcNow;
 
             deliveredMessages = new List<UserMessage>();
         }
@@ -449,6 +482,19 @@ namespace NarutoBot3
         {
             get { return greetingEnabled; }
             set { greetingEnabled = value; }
+        }
+
+        public DateTime LastSeen
+        {
+            get
+            {
+                return lastSeen;
+            }
+
+            set
+            {
+                lastSeen = value;
+            }
         }
     }
 

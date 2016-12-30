@@ -670,6 +670,8 @@ namespace NarutoBot3
 
                     user = removeUserMode(user);
 
+                    ul.markUserSeen(user);
+
                     if (string.Compare(whoSent, Client.NICK, true) == 0)
                     {
                         //If its a user sending, check if it has mirror mode
@@ -762,6 +764,11 @@ namespace NarutoBot3
                         {
                             WriteMessage("* Received a mirror toogle request from " + user, currentColorScheme.BotReport);
                             toogleMirror(user);
+                        }
+                        else if (string.Compare(cmd, "seen", true) == 0 && !string.IsNullOrEmpty(arg))
+                        {
+                            WriteMessage("* Received a seen toogle request from " + user, currentColorScheme.BotReport);
+                            checkSeen(whoSent, user, arg);
                         }
                         else if (string.Compare(cmd, "enforcemirror", true) == 0)
                         {
@@ -2025,6 +2032,48 @@ namespace NarutoBot3
             
             message = new Notice(nick, "MirrorMode is now " + (mirror ? "enabled" :"disabled"));
             sendMessage(message);  
+        }
+
+        void checkSeen(string CHANNEL, string nick, string arg)
+        {
+            Message message;
+            DateTime seenTime;
+            DateTime now = DateTime.UtcNow;
+            TimeSpan diff;
+
+            seenTime = ul.getUserSeenUTC(arg);
+
+            if(seenTime.CompareTo(new DateTime(0)) == 0)
+                message = new Privmsg(nick, "The user has not been seen yet, or an error as occured");
+            else
+            {
+                diff = now.Subtract(seenTime);
+                string timeDiff = string.Empty;
+
+              
+                if (diff.Days >= 1)
+                    if (diff.Days == 1)
+                        timeDiff += diff.Days + " day, ";
+                    else
+                        timeDiff += diff.Days + " days, ";
+
+                if (diff.Hours >= 1)
+                    if (diff.Hours == 1)
+                        timeDiff += diff.Hours + " hour ago";
+                    else
+                        timeDiff += diff.Hours + " hours ago";
+                else
+                    if (diff.Minutes == 1)
+                    timeDiff += diff.Minutes + " minute ago";
+                else
+                    timeDiff += diff.Minutes + " minutes ago";
+                
+
+                message = new Privmsg(CHANNEL, "The user " +arg + " was last seen " + timeDiff );
+            }
+                
+
+            sendMessage(message);
         }
 
         void toogleEnforceOff(string nick)
