@@ -2044,7 +2044,7 @@ namespace NarutoBot3
             seenTime = ul.getUserSeenUTC(arg);
 
             if(seenTime.CompareTo(new DateTime(0)) == 0)
-                message = new Privmsg(nick, "The user has not been seen yet, or an error as occured");
+                message = new Privmsg(CHANNEL, "The user has not been seen yet, or an error as occured");
             else
             {
                 diff = now.Subtract(seenTime);
