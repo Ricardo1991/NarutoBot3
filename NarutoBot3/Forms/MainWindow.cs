@@ -340,7 +340,6 @@ namespace NarutoBot3
         {
             if (bot != null)
             {
-                bot.userList.Clear();
                 bot.ul.saveData();
                 bot.tmc.save("textSample.xml");
             }
@@ -601,15 +600,16 @@ namespace NarutoBot3
             }
             else
             {
-                bot.userList.Sort();
-                InterfaceUserList.DataSource = null;
-                InterfaceUserList.DataSource = bot.userList;
+                List<User> ul = bot.ul.getAllOnlineUsers();
+                ul.Sort();
+                InterfaceUserList.DataSource = ul;
 
                 List<string> temp = new List<string>();
+                List<User> lu = bot.ul.getAllOnlineUsers();
 
-                foreach (string s in bot.userList.ToArray())
+                foreach (User s in lu)
                 {
-                    temp.Add(Bot.removeUserMode(s));
+                    temp.Add(s.Nick);
                 }
 
                 InputBox.Values = temp.ToArray();
@@ -1021,12 +1021,14 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (Object o, EventArgs a) { bot.pokeUser(nick); }));
             contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (Object o, EventArgs a) { bot.whoisUser(nick); }));
+            
 
-            if (Bot.getUserMode(NICK, bot.userList) == '@')
+            if (bot.ul.getUserMode(NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
                 contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (Object o, EventArgs a) { bot.kickUser(nick); }));
             }
+
         }
 
         private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)

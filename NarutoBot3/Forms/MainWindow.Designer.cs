@@ -158,7 +158,7 @@
             // 
             this.connectMenuItem1.Image = global::NarutoBot3.Properties.Resources.connect_black;
             this.connectMenuItem1.Name = "connectMenuItem1";
-            this.connectMenuItem1.Size = new System.Drawing.Size(142, 22);
+            this.connectMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.connectMenuItem1.Text = "&Connect...";
             this.connectMenuItem1.Click += new System.EventHandler(this.connectMenuItem1_Click);
             // 
@@ -166,33 +166,33 @@
             // 
             this.disconnectToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.disconnect_black;
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disconnectToolStripMenuItem.Text = "&Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // changeNickToolStripMenuItem
             // 
             this.changeNickToolStripMenuItem.Name = "changeNickToolStripMenuItem";
-            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.changeNickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.changeNickToolStripMenuItem.Text = "Change &Nick";
             this.changeNickToolStripMenuItem.Click += new System.EventHandler(this.changeNickToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::NarutoBot3.Properties.Resources.close_black;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "&Quit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -200,10 +200,10 @@
             // 
             this.toolStripButtonSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.commandsToolStripMenuItem,
+            this.toolStripSeparator2,
             this.silencedToolStripMenuItem,
             this.forceMirrorModeOffToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.commandsToolStripMenuItem,
             this.randomTextIntervalToolStripMenuItem,
             this.toolStripSeparator6,
             this.operatorsToolStripMenuItem,
@@ -258,21 +258,21 @@
             // t30
             // 
             this.t30.Name = "t30";
-            this.t30.Size = new System.Drawing.Size(152, 22);
+            this.t30.Size = new System.Drawing.Size(132, 22);
             this.t30.Text = "30 minutes";
             this.t30.Click += new System.EventHandler(this.t30_Click);
             // 
             // t45
             // 
             this.t45.Name = "t45";
-            this.t45.Size = new System.Drawing.Size(152, 22);
+            this.t45.Size = new System.Drawing.Size(132, 22);
             this.t45.Text = "45 minutes";
             this.t45.Click += new System.EventHandler(this.t45_Click);
             // 
             // t60
             // 
             this.t60.Name = "t60";
-            this.t60.Size = new System.Drawing.Size(152, 22);
+            this.t60.Size = new System.Drawing.Size(132, 22);
             this.t60.Text = "60 minutes";
             this.t60.Click += new System.EventHandler(this.t60_Click);
             // 

@@ -170,6 +170,26 @@ namespace NarutoBot3
             return;
         }
 
+        public char getUserMode(string nick)
+        {
+            User u = getUserByName(nick);
+
+            if (u == null) return (char)0;
+
+            return u.UserMode;
+        }
+
+        public void setUserMode(string nick, char mode)
+        {
+            User u = getUserByName(nick);
+
+            if (u != null)
+            {
+                u.UserMode = mode;
+            }
+            return;
+        }
+
         public void setUserChannelOP(string nick, bool status)
         {
             User u = getUserByName(nick);
@@ -338,6 +358,19 @@ namespace NarutoBot3
             return null;
         }
 
+        public List<User> getAllOnlineUsers()
+        {
+            List<User> ul = new List<User>();
+
+            foreach (User u in Users)
+            {
+                if (u.IsOnline)
+                    ul.Add(u);
+            }
+
+            return ul;
+        }
+
         public IEnumerator<User> GetEnumerator()
         {
             return new UserListEnumerator(this.Users);
@@ -416,7 +449,7 @@ namespace NarutoBot3
         }
     }
 
-    public class User
+    public class User : IComparer<User>, IComparable<User>, IEquatable<User>
     {
         private List<UserMessage> deliveredMessages;
 
@@ -426,6 +459,7 @@ namespace NarutoBot3
             set { deliveredMessages = value; }
         }
 
+        private char userMode = '0';
         private string nick = "User";
         private string greeting = "";
         private bool isOperator = false;
@@ -510,6 +544,33 @@ namespace NarutoBot3
             deliveredMessages = new List<UserMessage>();
         }
 
+        public override string ToString()
+        {
+            if (UserMode == '0')
+                return Nick;
+            else return UserMode + Nick;
+        }
+
+        static public int Compare1(User x, User y)
+        {
+            return x.ToString().CompareTo(y.ToString());
+        }
+
+        public int Compare(User x, User y)
+        {
+            return x.ToString().CompareTo(y.ToString());
+        }
+
+        public int CompareTo(User other)
+        {
+            return this.ToString().CompareTo(other.ToString());
+        }
+
+        public bool Equals(User other)
+        {
+            return this.ToString().CompareTo(other.ToString()) == 0;
+        }
+
         public string Nick
         {
             get { return nick; }
@@ -557,6 +618,19 @@ namespace NarutoBot3
             set
             {
                 lastSeen = value;
+            }
+        }
+
+        public char UserMode
+        {
+            get
+            {
+                return userMode;
+            }
+
+            set
+            {
+                userMode = value;
             }
         }
     }
