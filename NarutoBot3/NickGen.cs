@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace NarutoBot3
 {
-    static class NickGen
+    internal static class NickGen
     {
-        static int lineNumber;
-        static List<string> nickStrings;
+        private static int lineNumber;
+        private static List<string> nickStrings;
 
         public static int LineNumber
         {
@@ -24,12 +24,12 @@ namespace NarutoBot3
             return Creator(rd_numb, rd_uppr, rd_switch, rd_ique);
         }
 
-        static public string replaceChar(int index, string word ,char newChar)
+        static public string replaceChar(int index, string word, char newChar)
         {
             return word.Substring(0, index) + newChar + word.Substring(index + 1);
         }
 
-        static string letterSwitch(string nick_gen)//Used in the Nick gen
+        private static string letterSwitch(string nick_gen)//Used in the Nick gen
         {
             Random rnd = new Random();
             int changed = 0;
@@ -111,15 +111,17 @@ namespace NarutoBot3
             }
             return nick_gen;
         }
-        static string randomNumber(string nick_gen, int size = 2)//Used in the Nick gen
+
+        private static string randomNumber(string nick_gen, int size = 2)//Used in the Nick gen
         {
             Random rnd = new Random();
 
-            nick_gen = nick_gen + rnd.Next(0, ( (int)Math.Pow(10, size)-1)); 
+            nick_gen = nick_gen + rnd.Next(0, ((int)Math.Pow(10, size) - 1));
 
             return nick_gen;
         }
-        static string randomUpper(string nick_gen)//Used in the Nick gen
+
+        private static string randomUpper(string nick_gen)//Used in the Nick gen
         {
             Random rnd = new Random();
             int changed = 0;
@@ -140,7 +142,6 @@ namespace NarutoBot3
                             nick_gen = replaceChar(i, nick_gen, Char.ToUpper(nick_gen[i]));
                             changed = 1;
                             letras = 0;
-                            
                         }
                     }
                     i++;
@@ -149,7 +150,8 @@ namespace NarutoBot3
 
             return nick_gen;
         }
-        static string addSuffix(string nick_gen, string suffix)//Used in the Nick gen
+
+        private static string addSuffix(string nick_gen, string suffix)//Used in the Nick gen
         {
             string last = nick_gen[nick_gen.Length - 1].ToString();
             if (last == "a".ToString() || last == "e".ToString() || last == "i".ToString() || last == "o".ToString() || last == "u".ToString())
@@ -159,10 +161,9 @@ namespace NarutoBot3
             nick_gen = nick_gen + suffix;
 
             return nick_gen;
-
         }
 
-        static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool sufix) //Used to create nicks
+        private static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool sufix) //Used to create nicks
         {
             Random rnd = new Random();
             int rd = rnd.Next(lineNumber);

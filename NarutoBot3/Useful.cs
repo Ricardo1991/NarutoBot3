@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,7 +18,6 @@ namespace NarutoBot3
 
             if (string.IsNullOrWhiteSpace(strSource)) return string.Empty;
 
-            
             if (String.IsNullOrEmpty(strEnd))
             {
                 if (String.IsNullOrEmpty(strStart))
@@ -30,7 +28,6 @@ namespace NarutoBot3
                 End = strSource.Length;
                 return strSource.Substring(Start, End - Start);
             }
-
             else if (strSource.Contains(strStart) && strSource.Contains(strEnd))
             {
                 if (String.IsNullOrEmpty(strStart))
@@ -67,6 +64,7 @@ namespace NarutoBot3
             box.SelectionColor = box.ForeColor;
         }
     }
+
     public static class StringExt
     {
         public static string Truncate(this string value, int maxLength)

@@ -17,34 +17,38 @@ namespace NarutoBot3
 {
     public partial class MainWindow : Form
     {
-        delegate void SetTextCallback(string text);
-        delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-        delegate void SetBoolCallback(bool status);
-        delegate void ChangeDataSource();
-        delegate void ChangeTimeStamp(object sender, PongEventArgs e);
+        private delegate void SetTextCallback(string text);
+
+        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+
+        private delegate void SetBoolCallback(bool status);
+
+        private delegate void ChangeDataSource();
+
+        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
         public ColorScheme currentColorScheme = new ColorScheme();
-        List<ColorScheme> schemeColection = new List<ColorScheme>();
-       
+        private List<ColorScheme> schemeColection = new List<ColorScheme>();
+
         private Bot bot;
         private IRC_Client client;
 
-        System.Timers.Timer mangaReleaseTimer;      //To check for manga releases
-        System.Timers.Timer randomTextTimer;        //To check for random text
-        System.Timers.Timer timeoutTimer;           //To check for connection lost
+        private System.Timers.Timer mangaReleaseTimer;      //To check for manga releases
+        private System.Timers.Timer randomTextTimer;        //To check for random text
+        private System.Timers.Timer timeoutTimer;           //To check for connection lost
 
-        string HOME_CHANNEL;
-        string HOST;
-        string NICK;
-        int PORT;
-        string REALNAME;
+        private string HOME_CHANNEL;
+        private string HOST;
+        private string NICK;
+        private int PORT;
+        private string REALNAME;
 
-        List<string> lastCommand = new List<string>();
-        int lastCommandIndex = 0;
+        private List<string> lastCommand = new List<string>();
+        private int lastCommandIndex = 0;
 
-        bool exitTheLoop = false;
+        private bool exitTheLoop = false;
 
-        BackgroundWorker backgroundWorker = new BackgroundWorker();
+        private BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
         {
@@ -73,7 +77,7 @@ namespace NarutoBot3
                     Thread.Sleep(250);
                     backgroundWorker.CancelAsync();
                 }
-                    
+
                 if (this.connect())          //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();
                 else
@@ -82,7 +86,7 @@ namespace NarutoBot3
             //
         }
 
-        public bool connect()   
+        public bool connect()
         {
             ChangeConnectingLabel("Connecting...");
 
@@ -101,7 +105,6 @@ namespace NarutoBot3
 
                 return true;
             }
-
             else
             {
                 timeoutTimer.Enabled = false;
@@ -112,10 +115,10 @@ namespace NarutoBot3
 
         private void doAutojoinCommand()
         {
-            if(!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
             {
                 parseInputMessage(Settings.Default.autojoinCommand);
-            }        
+            }
         }
 
         public void loadSettings()
@@ -128,12 +131,15 @@ namespace NarutoBot3
                 case 30:
                     t30.Checked = true;
                     break;
+
                 case 45:
                     t45.Checked = true;
                     break;
+
                 case 60:
                     t60.Checked = true;
                     break;
+
                 default:
                     Settings.Default.randomTextInterval = 30;
                     t30.Checked = true;
@@ -206,10 +212,9 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-
         private void applyScheme(string themeName)
         {
-            foreach(ColorScheme c in schemeColection)
+            foreach (ColorScheme c in schemeColection)
             {
                 if (string.Compare(c.Name, themeName, true) == 0)
                 {
@@ -266,7 +271,6 @@ namespace NarutoBot3
                 if (!schemeExists(tmpScheme.Name))
                     schemeColection.Add(tmpScheme);
                 tmpScheme = null;
-
             }
         }
 
@@ -288,7 +292,7 @@ namespace NarutoBot3
                     byte[] bytes = Encoding.UTF8.GetBytes(buffer);
                     line = Encoding.UTF8.GetString(bytes);
 
-                    if(line.Length>0) bot.processMessage(line);
+                    if (line.Length > 0) bot.processMessage(line);
                 }
                 catch
                 { }
@@ -330,8 +334,6 @@ namespace NarutoBot3
             bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
 
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
-
-
         }
 
         private void disconnectClient()
@@ -342,7 +344,6 @@ namespace NarutoBot3
                 bot.ul.saveData();
                 bot.tmc.save("textSample.xml");
             }
-
 
             CustomCommand.saveCustomCommands(bot.customCommands);
 
@@ -403,13 +404,11 @@ namespace NarutoBot3
             }
             else
             {
-
                 if (Settings.Default.showTimeStamps)
                 {
                     string timeString = DateTime.Now.ToString("[hh:mm:ss]");
                     this.OutputBox.AppendText(timeString + " " + message + "\n", color);
                 }
-
                 else
                     this.OutputBox.AppendText(message + "\n", color);
 
@@ -418,7 +417,6 @@ namespace NarutoBot3
                     OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
                     OutputBox.ScrollToCaret();                          //Now scroll it automatically
                 }
-
             }
 
             //also, should make a log
@@ -432,9 +430,10 @@ namespace NarutoBot3
 
         private void userLeft(object sender, UserJoinLeftMessageEventArgs e)
         {
-            WriteMessage("** " + e.Who + " parted ("+e.Message.Trim()+")", currentColorScheme.Leave);
+            WriteMessage("** " + e.Who + " parted (" + e.Message.Trim() + ")", currentColorScheme.Leave);
             UpdateDataSource();
         }
+
         private void userNickChange(object sender, NickChangeEventArgs e)
         {
             WriteMessage("** " + e.OldNick + " is now known as " + e.NewNick, currentColorScheme.Rename);
@@ -448,30 +447,39 @@ namespace NarutoBot3
                 case ("+o"):
                     WriteMessage("** " + e.User + " was opped", currentColorScheme.StatusChanged);
                     break;
+
                 case ("-o"):
                     WriteMessage("** " + e.User + " was deopped", currentColorScheme.StatusChanged);
                     break;
+
                 case ("+v"):
                     WriteMessage("** " + e.User + " was voiced", currentColorScheme.StatusChanged);
                     break;
+
                 case ("-v"):
                     WriteMessage("** " + e.User + " was devoiced", currentColorScheme.StatusChanged);
                     break;
+
                 case ("+h"):
                     WriteMessage("** " + e.User + " was half opped", currentColorScheme.StatusChanged);
                     break;
+
                 case ("-h"):
                     WriteMessage("** " + e.User + " was half deopped", currentColorScheme.StatusChanged);
                     break;
+
                 case ("+q"):
                     WriteMessage("** " + e.User + " was given Owner permissions", currentColorScheme.StatusChanged);
                     break;
+
                 case ("-q"):
                     WriteMessage("** " + e.User + " was removed as a Owner", currentColorScheme.StatusChanged);
                     break;
+
                 case ("+a"):
                     WriteMessage("** " + e.User + " was given Admin permissions", currentColorScheme.StatusChanged);
                     break;
+
                 case ("-a"):
                     WriteMessage("** " + e.User + " was removed as an Admin", currentColorScheme.StatusChanged);
                     break;
@@ -525,7 +533,6 @@ namespace NarutoBot3
             else
             {
                 toolStripStatusLabelSilence.Visible = status;
-
             }
         }
 
@@ -553,8 +560,8 @@ namespace NarutoBot3
             {
                 this.Text = title;
             }
-
         }
+
         public void ChangeInput(string title)
         {
             if (InputBox.InvokeRequired)
@@ -616,7 +623,8 @@ namespace NarutoBot3
                 ChangeTimeStamp d = new ChangeTimeStamp(updateLag);
                 this.Invoke(d, new object[] { sender, e });
             }
-            else { 
+            else
+            {
                 try
                 {
                     int seconds = e.TimeDifference.Seconds * 60 + e.TimeDifference.Seconds;
@@ -640,7 +648,6 @@ namespace NarutoBot3
                 tbTopic.Text = e.Topic;
             }
         }
-
 
         private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
         {
@@ -683,7 +690,6 @@ namespace NarutoBot3
 
                             if (connect()) //If connected with success, then start the bot
                                 backgroundWorker.RunWorkerAsync();
-                            
                             else
                             {
                                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -741,7 +747,7 @@ namespace NarutoBot3
                 bot.tmc.save("textSample.xml");
             }
 
-            if (client != null && client.isConnected) 
+            if (client != null && client.isConnected)
                 disconnectClient();
 
             this.Close();
@@ -772,7 +778,6 @@ namespace NarutoBot3
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             SettingsWindow settingsWindow = new SettingsWindow(ref currentColorScheme);
             settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
@@ -783,15 +788,13 @@ namespace NarutoBot3
             try
             {
                 if (Settings.Default.redditUserEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-                
             }
-            catch {
+            catch
+            {
             }
 
             if (Settings.Default.randomTextEnabled)
                 randomTextTimer.Start();
-
-                
         }
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
@@ -813,7 +816,6 @@ namespace NarutoBot3
             else
                 operatorsWindow = new BotOperatorWindow(ref bot.ul);
 
-
             operatorsWindow.ShowDialog();
         }
 
@@ -833,8 +835,6 @@ namespace NarutoBot3
                     if (lastCommandIndex + 1 < lastCommand.Count)
                         lastCommandIndex++;
                 }
-
-
             }
             else if (e.KeyCode == Keys.Down)
             {
@@ -851,10 +851,7 @@ namespace NarutoBot3
 
                     InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
                     InputBox.ScrollToCaret();                          //Now scroll it automatically
-
                 }
-
-
             }
             else lastCommandIndex = 0;
 
@@ -874,33 +871,27 @@ namespace NarutoBot3
 
         private void parseInputMessage(string inmessage)
         {
-            string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest    
+            string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
             Message message = null;
 
             if (!client.isConnected) return;
-            
+
             if (parsed.Length >= 2 && !string.IsNullOrEmpty(parsed[1]))
             {
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = new Messages.Action(HOME_CHANNEL,parsed[1]);
-
+                        message = new Messages.Action(HOME_CHANNEL, parsed[1]);
                     else if (parsed[0].ToLower() == "/whois")  //Action send
                         message = new Whois(parsed[1]);
-
                     else if (parsed[0].ToLower() == "/whowas")  //Action send
                         message = new Whowas(parsed[1]);
-
                     else if (parsed[0].ToLower() == "/nick")  //Action send
                         changeNick(parsed[1]);
-
                     else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
                         message = new Privmsg("NickServ", parsed[1]);
-
                     else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
                         message = new Privmsg("ChanServ", parsed[1]);
-
                     else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
                     {
                         parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
@@ -912,16 +903,14 @@ namespace NarutoBot3
                     else if (parsed[0].ToLower() == "/identify")
                         message = new Privmsg("NickServ", "identify " + parsed[1]);
                 }
-
                 else //Normal send
                     message = new Privmsg(HOME_CHANNEL, InputBox.Text);
             }
             else
                 if (parsed[0][0] == '/')
-                    WriteMessage("Not enough arguments");
-
-                else //Normal send
-                    message = new Privmsg(HOME_CHANNEL, InputBox.Text);
+                WriteMessage("Not enough arguments");
+            else //Normal send
+                message = new Privmsg(HOME_CHANNEL, InputBox.Text);
 
             if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
         }
@@ -948,7 +937,6 @@ namespace NarutoBot3
                 UserList ul = Bot.getSavedUsers();
                 mutedWindow = new MutedUsersWindow(ref ul);
             }
-                
             else
                 mutedWindow = new MutedUsersWindow(ref bot.ul);
 
@@ -992,8 +980,8 @@ namespace NarutoBot3
 
             if (connect()) //If connected with success, then start the bot
                 backgroundWorker.RunWorkerAsync();
-
-            else{
+            else
+            {
                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
             }
@@ -1019,28 +1007,27 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            if (bot!=null && !bot.ul.userIsOperator(nick))
-                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.giveOps(nick); }));
+            if (bot != null && !bot.ul.userIsOperator(nick))
+                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (Object o, EventArgs a) { bot.giveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate(Object o, EventArgs a) { bot.takeOps(nick); }));
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (Object o, EventArgs a) { bot.takeOps(nick); }));
 
             if (bot != null && !bot.ul.userIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate(Object o, EventArgs a) { bot.muteUser(nick); }));
+                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (Object o, EventArgs a) { bot.muteUser(nick); }));
             else
-                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate(Object o, EventArgs a) { bot.unmuteUser(nick); }));
-
+                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (Object o, EventArgs a) { bot.unmuteUser(nick); }));
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate(Object o, EventArgs a) { bot.pokeUser(nick); }));
-            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate(Object o, EventArgs a) { bot.whoisUser(nick); }));
+            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (Object o, EventArgs a) { bot.pokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (Object o, EventArgs a) { bot.whoisUser(nick); }));
 
-            if (Bot.getUserMode(NICK, bot.userList) == '@') { 
+            if (Bot.getUserMode(NICK, bot.userList) == '@')
+            {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate(Object o, EventArgs a) { bot.kickUser(nick); }));
+                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (Object o, EventArgs a) { bot.kickUser(nick); }));
             }
         }
-
 
         private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1141,7 +1128,6 @@ namespace NarutoBot3
                 if (connect())  //If connected with success, then start the bot
                     backgroundWorker.RunWorkerAsync();
             }
-            
         }
 
         private void pingServer(object sender, EventArgs e)
@@ -1155,8 +1141,8 @@ namespace NarutoBot3
             aboutbox.ShowDialog();
         }
 
-        public void refreshTheme(object sender, EventArgs e){
-
+        public void refreshTheme(object sender, EventArgs e)
+        {
             SettingsWindow s = (SettingsWindow)sender;
 
             currentColorScheme = s.currentColorScheme;
@@ -1174,7 +1160,7 @@ namespace NarutoBot3
 
             OutputBox.Clear();
 
-            if(bot != null)
+            if (bot != null)
                 bot.updateTheme(currentColorScheme);
         }
 

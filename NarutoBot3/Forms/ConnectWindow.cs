@@ -6,7 +6,8 @@ namespace NarutoBot3
 {
     public partial class ConnectWindow : Form
     {
-        public bool gotData { get; set; } 
+        public bool gotData { get; set; }
+
         public ConnectWindow()
         {
             InitializeComponent();
@@ -30,9 +31,8 @@ namespace NarutoBot3
             Settings.Default.silence = cb_silence.Checked;
             Settings.Default.Save();
 
-
             //do connect after this
-            this.DialogResult=System.Windows.Forms.DialogResult.OK;
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
         }
 
@@ -53,7 +53,6 @@ namespace NarutoBot3
                 Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
-
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
@@ -70,7 +69,6 @@ namespace NarutoBot3
                 Settings.Default.Port = t_port.Text;
                 Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
-
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -95,7 +93,6 @@ namespace NarutoBot3
                 Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
-
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
@@ -113,7 +110,6 @@ namespace NarutoBot3
                 Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
 
-
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
@@ -130,7 +126,6 @@ namespace NarutoBot3
                 Settings.Default.Port = t_port.Text;
                 Settings.Default.RealName = t_RealName.Text;
                 Settings.Default.Save();
-
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;

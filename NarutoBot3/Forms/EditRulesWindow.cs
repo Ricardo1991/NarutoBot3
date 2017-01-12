@@ -7,7 +7,7 @@ namespace NarutoBot3
 {
     public partial class EditRulesWindow : Form
     {
-        static List<string> rls = new List<string>();
+        private static List<string> rls = new List<string>();
 
         static private void SaveRLS()
         {
@@ -18,10 +18,9 @@ namespace NarutoBot3
                     newTask.WriteLine(rl);
                 }
             }
-
-
         }
-        static void readRLS()
+
+        private static void readRLS()
         {
             StreamReader sr = new StreamReader("TextFiles/rules.txt");
             try
@@ -37,7 +36,6 @@ namespace NarutoBot3
 
             sr.Close();
         }
-
 
         public EditRulesWindow()
         {
@@ -61,10 +59,8 @@ namespace NarutoBot3
             readRLS();
             foreach (string rl in rls)
             {
-                rulesBox.AppendText(rl+"\n");
-
+                rulesBox.AppendText(rl + "\n");
             }
-            
         }
     }
 }

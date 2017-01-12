@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
 namespace NarutoBot3
 {
-    public class UserList
+    public class UserList : IEnumerable<User>
     {
         private List<User> users = new List<User>();
 
@@ -45,7 +46,7 @@ namespace NarutoBot3
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True for Online, False for Offline</param>
@@ -57,13 +58,12 @@ namespace NarutoBot3
             {
                 u.IsOnline = status;
                 u.LastSeen = DateTime.UtcNow;
-
             }
             else users.Add(new User(nick, status));
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True to give Operator, False to remove Operator</param>
@@ -74,7 +74,6 @@ namespace NarutoBot3
             if (u != null)
             {
                 u.IsOperator = status;
-
             }
             else
             {
@@ -85,7 +84,7 @@ namespace NarutoBot3
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True to mute, False to unmute</param>
@@ -96,7 +95,6 @@ namespace NarutoBot3
             if (u != null)
             {
                 u.IsMuted = status;
-                
             }
             else
             {
@@ -157,7 +155,7 @@ namespace NarutoBot3
             User u = getUserByName(nick);
 
             if (u != null && u.HasVoice) return true;
-            
+
             return false;
         }
 
@@ -188,7 +186,7 @@ namespace NarutoBot3
 
             if (u != null && u.MirrorMode)
                 return true;
-           
+
             return false;
         }
 
@@ -199,35 +197,31 @@ namespace NarutoBot3
             if (u != null)
             {
                 u.MirrorMode = !u.MirrorMode;
-                    return u.MirrorMode;
-                
+                return u.MirrorMode;
             }
             return false;
         }
 
         public int userMessageCount(string nick)
         {
-
             User u = getUserByName(nick);
 
             if (u != null)
             {
                 if (u.DeliveredMessages != null)
-                        return u.DeliveredMessages.Count;
+                    return u.DeliveredMessages.Count;
             }
 
             return 0;
         }
 
-
         public UserMessage getUserMessage(string nick, int index)
         {
-
             User u = getUserByName(nick);
 
             if (u != null)
             {
-                if (u.DeliveredMessages.Count >= index+1)
+                if (u.DeliveredMessages.Count >= index + 1)
                     return u.DeliveredMessages[index];
             }
 
@@ -236,7 +230,6 @@ namespace NarutoBot3
 
         public DateTime getUserSeenUTC(string nick)
         {
-
             User u = getUserByName(nick);
 
             if (u != null)
@@ -263,12 +256,10 @@ namespace NarutoBot3
 
             if (u != null)
             {
-                
                 if (u.DeliveredMessages == null)
                     u.DeliveredMessages = new List<UserMessage>();
 
                 u.DeliveredMessages.Add(new UserMessage(message, sender));
-                     
             }
             else
             {
@@ -289,7 +280,7 @@ namespace NarutoBot3
             if (u != null)
             {
                 u.DeliveredMessages.Clear();
-                    return true;
+                return true;
             }
 
             return false;
@@ -312,11 +303,10 @@ namespace NarutoBot3
             nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
             nick = nick.Trim();
 
-
             User u = getUserByName(nick);
 
-            if(u != null)
-            { 
+            if (u != null)
+            {
                 try
                 {
                     u.DeliveredMessages.RemoveAt(messageNumber - 1);
@@ -327,11 +317,8 @@ namespace NarutoBot3
                     return false;
                 }
             }
-
             else return false;
         }
-
-
 
         public User getUserByName(string name)
         {
@@ -351,11 +338,87 @@ namespace NarutoBot3
             return null;
         }
 
+        public IEnumerator<User> GetEnumerator()
+        {
+            return new UserListEnumerator(this.Users);
+        }
+
+        private IEnumerator GetEnumerator1()
+        {
+            return this.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator1();
+        }
+    }
+
+    public class UserListEnumerator : IEnumerator<User>
+    {
+        private List<User> _userlist;
+        private User _current;
+        private int index = 0;
+
+        public UserListEnumerator(List<User> ul)
+        {
+            _userlist = ul;
+        }
+
+        public User Current
+        {
+            get
+            {
+                if (_userlist == null || _current == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                return _current;
+            }
+        }
+
+        private object Current1
+        {
+            get { return this.Current; }
+        }
+
+        object IEnumerator.Current
+        {
+            get { return Current1; }
+        }
+
+        public bool MoveNext()
+        {
+            try
+            {
+                _current = _userlist[index++];
+            }
+            catch
+            {
+                _current = null;
+            }
+
+            if (_current == null)
+                return false;
+            return true;
+        }
+
+        public void Reset()
+        {
+            _current = null;
+            index = 0;
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class User
     {
-        List<UserMessage> deliveredMessages;
+        private List<UserMessage> deliveredMessages;
 
         public List<UserMessage> DeliveredMessages
         {
@@ -363,13 +426,13 @@ namespace NarutoBot3
             set { deliveredMessages = value; }
         }
 
-        string nick = "User";
-        string greeting = "";
-        bool isOperator = false;
-        bool isMuted = false;
-        bool greetingEnabled = false;
-        bool mirrorMode = false;
-        DateTime lastSeen = new DateTime(0);
+        private string nick = "User";
+        private string greeting = "";
+        private bool isOperator = false;
+        private bool isMuted = false;
+        private bool greetingEnabled = false;
+        private bool mirrorMode = false;
+        private DateTime lastSeen = new DateTime(0);
 
         public bool MirrorMode
         {
@@ -378,10 +441,10 @@ namespace NarutoBot3
         }
 
         [JsonIgnore]
-        bool isOnline = false;
+        private bool isOnline = false;
 
         [JsonIgnore]
-        bool hasOP = false;
+        private bool hasOP = false;
 
         [JsonIgnore]
         public bool HasOP
@@ -389,8 +452,9 @@ namespace NarutoBot3
             get { return hasOP; }
             set { hasOP = value; }
         }
+
         [JsonIgnore]
-        bool hasVoice = false;
+        private bool hasVoice = false;
 
         [JsonIgnore]
         public bool HasVoice
@@ -402,7 +466,6 @@ namespace NarutoBot3
         [JsonConstructor]
         private User()
         {
-
         }
 
         public User(string n)
@@ -458,7 +521,7 @@ namespace NarutoBot3
             get { return greeting; }
             set { greeting = value; }
         }
-       
+
         public bool IsMuted
         {
             get { return isMuted; }
@@ -500,21 +563,23 @@ namespace NarutoBot3
 
     public class UserMessage
     {
-        string message;
+        private string message;
 
         public string Message
         {
             get { return message; }
             set { message = value; }
         }
-        string sender;
+
+        private string sender;
 
         public string Sender
         {
             get { return sender; }
             set { sender = value; }
         }
-        DateTime timestamp;
+
+        private DateTime timestamp;
 
         public DateTime Timestamp
         {
@@ -529,6 +594,5 @@ namespace NarutoBot3
 
             timestamp = DateTime.Now.ToUniversalTime();
         }
-
     }
 }

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace NarutoBot3
 {
-    public class IRC_Client : IDisposable
+    public class IRC_Client
     {
         public bool isConnected = false;
 
@@ -50,14 +50,16 @@ namespace NarutoBot3
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream) { AutoFlush = true };
 
-            try{
+            try
+            {
                 sendMessage(user_message);
-                
+
                 sendMessage(nick_message);
-                
+
                 return true;    //Weee, we connected!
             }
-            catch (SocketException se){
+            catch (SocketException se)
+            {
                 Console.Out.Write(se);
                 return false;   //Boo, we didnt connect
             }
@@ -81,10 +83,9 @@ namespace NarutoBot3
 
             try
             {
-
                 while (message.toString().Length > 420)
                 {
-                    var nextMessage = (Message) message.Clone();
+                    var nextMessage = (Message)message.Clone();
                     message.body = message.body.Substring(0, 390);
                     nextMessage.body = nextMessage.body.Substring(390);
 
@@ -93,8 +94,6 @@ namespace NarutoBot3
                     message = nextMessage;
                 }
 
-                
-               
                 writer.WriteLine(message.toString());
 
                 writer.Flush();
@@ -123,28 +122,6 @@ namespace NarutoBot3
 
                 if (stream != null)
                     stream.Close();
-                if(writer!=null)
-                    writer.Close();
-                if (reader != null)
-                    reader.Close();
-                if (irc != null)
-                    irc.Close();
-            }
-            catch { }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if(stream!=null)
-                    stream.Close();
                 if (writer != null)
                     writer.Close();
                 if (reader != null)
@@ -152,6 +129,7 @@ namespace NarutoBot3
                 if (irc != null)
                     irc.Close();
             }
+            catch { }
         }
     }
 }

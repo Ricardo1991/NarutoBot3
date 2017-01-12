@@ -3,33 +3,37 @@ using System.Linq;
 
 namespace NarutoBot3
 {
-    class ParsedMessage
+    internal class ParsedMessage
     {
-        string sender;          //Who sends the message. Nick, or server
+        private string sender;          //Who sends the message. Nick, or server
 
         public string Sender
         {
             get { return sender; }
         }
-        string type;            //Type of message (PRIVMSG, PING, 233, etc)
+
+        private string type;            //Type of message (PRIVMSG, PING, 233, etc)
 
         public string Type
         {
             get { return type; }
         }
-        string source;          //Source of the message, usually the channel
+
+        private string source;          //Source of the message, usually the channel
 
         public string Source
         {
             get { return source; }
         }
-        string[] splitMessage;  //message split per words
+
+        private string[] splitMessage;  //message split per words
 
         public string[] SplitMessage
         {
             get { return splitMessage; }
         }
-        string completeMessage; //String with the message
+
+        private string completeMessage; //String with the message
 
         public string CompleteMessage
         {

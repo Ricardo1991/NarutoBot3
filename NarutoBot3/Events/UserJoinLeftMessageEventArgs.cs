@@ -4,8 +4,8 @@ namespace NarutoBot3.Events
 {
     public class UserJoinLeftMessageEventArgs : EventArgs
     {
-        string who;
-        string message;
+        private string who;
+        private string message;
 
         public string Who
         {
@@ -35,10 +35,8 @@ namespace NarutoBot3.Events
 
         public UserJoinLeftMessageEventArgs(string w, string m)
         {
-
             Message = m;
             Who = w;
-
         }
     }
 }

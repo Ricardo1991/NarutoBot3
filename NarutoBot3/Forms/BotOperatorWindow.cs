@@ -6,8 +6,8 @@ namespace NarutoBot3
 {
     public partial class BotOperatorWindow : Form
     {
-        List<string> ops = new List<string>();
-        UserList ul = new UserList();
+        private List<string> ops = new List<string>();
+        private UserList ul = new UserList();
 
         public BotOperatorWindow(ref UserList ul)
         {
@@ -32,7 +32,6 @@ namespace NarutoBot3
                 ul.setUserOperatorStatus(t_operator.Text, true);
                 updateList();
             }
-
             else
                 MessageBox.Show("User is already an operator", "Duplicated", MessageBoxButtons.OK);
 
@@ -41,7 +40,7 @@ namespace NarutoBot3
 
         private void bRemove_Click(object sender, EventArgs e)
         {
-            ul.setUserOperatorStatus(listOperators.SelectedItem.ToString(),false);
+            ul.setUserOperatorStatus(listOperators.SelectedItem.ToString(), false);
             updateList();
             ul.saveData();
         }

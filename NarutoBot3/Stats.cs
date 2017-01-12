@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace NarutoBot3
 {
-    class StatsManager
+    internal class StatsManager
     {
         private Stats session = new Stats();
         private Stats lifetime = new Stats();
 
-        public StatsManager() { 
+        public StatsManager()
+        {
             loadData();
         }
 
@@ -22,6 +21,7 @@ namespace NarutoBot3
 
             WriteFileStream.Close();
         }
+
         public void loadData()
         {
             try
@@ -50,108 +50,126 @@ namespace NarutoBot3
             lifetime.incrementFact();
             saveData();
         }
+
         public void youtube()
         {
             session.incrementYoutube();
             lifetime.incrementYoutube();
             saveData();
         }
+
         public void nick()
         {
             session.incrementNick();
             lifetime.incrementNick();
             saveData();
         }
+
         public void giphy()
         {
             session.incrementGiphy();
             lifetime.incrementGiphy();
             saveData();
         }
+
         public void funk()
         {
             session.incrementFunk();
             lifetime.incrementFunk();
             saveData();
         }
+
         public void shuffle()
         {
             session.incrementShuffle();
             lifetime.incrementShuffle();
             saveData();
         }
+
         public void choose()
         {
             session.incrementChoose();
             lifetime.incrementChoose();
             saveData();
         }
+
         public void quote()
         {
             session.incrementQuote();
             lifetime.incrementQuote();
             saveData();
         }
+
         public void trivia()
         {
             session.incrementTrivia();
             lifetime.incrementTrivia();
             saveData();
         }
+
         public void poke()
         {
             session.incrementPoke();
             lifetime.incrementPoke();
             saveData();
         }
+
         public void wiki()
         {
             session.incrementWiki();
             lifetime.incrementWiki();
             saveData();
         }
+
         public void temperature()
         {
             session.incrementTemperature();
             lifetime.incrementTemperature();
             saveData();
         }
+
         public void time()
         {
             session.incrementTime();
             lifetime.incrementTime();
             saveData();
         }
+
         public void greet()
         {
             session.incrementGreet();
             lifetime.incrementGreet();
             saveData();
         }
+
         public void rules()
         {
             session.incrementRules();
             lifetime.incrementRules();
             saveData();
         }
+
         public void help()
         {
             session.incrementHelp();
             lifetime.incrementHelp();
             saveData();
         }
+
         public void anime()
         {
             session.incrementAnime();
             lifetime.incrementAnime();
             saveData();
         }
+
         public void roll()
         {
             session.incrementRoll();
             lifetime.incrementRoll();
             saveData();
         }
+
         public void question()
         {
             session.incrementQuestion();
@@ -166,79 +184,96 @@ namespace NarutoBot3
             saveData();
         }
 
-
         public int[] getKill()
         {
-            return new int[2] {session.Kill, lifetime.Kill};
+            return new int[2] { session.Kill, lifetime.Kill };
         }
+
         public int[] getYoutube()
         {
             return new int[2] { session.Youtube, lifetime.Youtube };
         }
+
         public int[] getQuestion()
         {
             return new int[2] { session.Question, lifetime.Question };
         }
+
         public int[] getNick()
         {
             return new int[2] { session.Nick, lifetime.Nick };
         }
+
         public int[] getGiphy()
         {
             return new int[2] { session.Giphy, lifetime.Giphy };
         }
+
         public int[] getFunk()
         {
             return new int[2] { session.Funk, lifetime.Funk };
         }
+
         public int[] getShuffle()
         {
             return new int[2] { session.Shuffle, lifetime.Shuffle };
         }
+
         public int[] getChoose()
         {
             return new int[2] { session.Choose, lifetime.Choose };
         }
+
         public int[] getQuote()
         {
             return new int[2] { session.Quote, lifetime.Quote };
         }
+
         public int[] getTrivia()
         {
             return new int[2] { session.Trivia, lifetime.Trivia };
         }
+
         public int[] getPoke()
         {
             return new int[2] { session.Poke, lifetime.Poke };
         }
+
         public int[] getWiki()
         {
             return new int[2] { session.Wiki, lifetime.Wiki };
         }
+
         public int[] getTemperature()
         {
             return new int[2] { session.Temperature, lifetime.Temperature };
         }
+
         public int[] getTime()
         {
             return new int[2] { session.Time, lifetime.Time };
         }
+
         public int[] getGreet()
         {
             return new int[2] { session.Greet, lifetime.Greet };
         }
+
         public int[] getRules()
         {
             return new int[2] { session.Rules, lifetime.Rules };
         }
+
         public int[] getHelp()
         {
             return new int[2] { session.Help, lifetime.Help };
         }
+
         public int[] getAnime()
         {
             return new int[2] { session.Anime, lifetime.Anime };
         }
+
         public int[] getRoll()
         {
             return new int[2] { session.Roll, lifetime.Roll };
@@ -255,9 +290,9 @@ namespace NarutoBot3
         }
     }
 
-    class Stats
+    internal class Stats
     {
-        int kill;
+        private int kill;
 
         public int Kill
         {
@@ -265,133 +300,151 @@ namespace NarutoBot3
             set { kill = value; }
         }
 
-        int fact;
+        private int fact;
 
         public int Fact
         {
             get { return fact; }
             set { fact = value; }
         }
-        int youtube;
+
+        private int youtube;
 
         public int Youtube
         {
             get { return youtube; }
             set { youtube = value; }
         }
-        int question;
+
+        private int question;
 
         public int Question
         {
             get { return question; }
             set { question = value; }
         }
-        int nick;
+
+        private int nick;
 
         public int Nick
         {
             get { return nick; }
             set { nick = value; }
         }
-        int giphy;
+
+        private int giphy;
 
         public int Giphy
         {
             get { return giphy; }
             set { giphy = value; }
         }
-        int funk;
+
+        private int funk;
 
         public int Funk
         {
             get { return funk; }
             set { funk = value; }
         }
-        int shuffle;
+
+        private int shuffle;
 
         public int Shuffle
         {
             get { return shuffle; }
             set { shuffle = value; }
         }
-        int choose;
+
+        private int choose;
 
         public int Choose
         {
             get { return choose; }
             set { choose = value; }
         }
-        int quote;
+
+        private int quote;
 
         public int Quote
         {
             get { return quote; }
             set { quote = value; }
         }
-        int trivia;
+
+        private int trivia;
 
         public int Trivia
         {
             get { return trivia; }
             set { trivia = value; }
         }
-        int poke;
+
+        private int poke;
 
         public int Poke
         {
             get { return poke; }
             set { poke = value; }
         }
-        int wiki;
+
+        private int wiki;
 
         public int Wiki
         {
             get { return wiki; }
             set { wiki = value; }
         }
-        int temperature;
+
+        private int temperature;
 
         public int Temperature
         {
             get { return temperature; }
             set { temperature = value; }
         }
-        int time;
+
+        private int time;
 
         public int Time
         {
             get { return time; }
             set { time = value; }
         }
-        int greet;
+
+        private int greet;
 
         public int Greet
         {
             get { return greet; }
             set { greet = value; }
         }
-        int rules;
+
+        private int rules;
 
         public int Rules
         {
             get { return rules; }
             set { rules = value; }
         }
-        int help;
+
+        private int help;
 
         public int Help
         {
             get { return help; }
             set { help = value; }
         }
-        int anime;
+
+        private int anime;
 
         public int Anime
         {
             get { return anime; }
             set { anime = value; }
         }
-        int roll;
+
+        private int roll;
 
         public int Roll
         {
@@ -399,7 +452,7 @@ namespace NarutoBot3
             set { roll = value; }
         }
 
-        int tell;
+        private int tell;
 
         public int Tell
         {
@@ -432,33 +485,109 @@ namespace NarutoBot3
             tell = 0;
         }
 
-        
+        public void incrementKill()
+        {
+            Kill++;
+        }
 
+        public void incrementFact()
+        {
+            Fact++;
+        }
 
+        public void incrementYoutube()
+        {
+            Youtube++;
+        }
 
+        public void incrementQuestion()
+        {
+            Question++;
+        }
 
-        public void incrementKill() {Kill++;}
-        public void incrementFact() { Fact++; }
-        public void incrementYoutube() { Youtube++; }
-        public void incrementQuestion() { Question++; }
-        public void incrementNick() { Nick++; }
-        public void incrementGiphy() { Giphy++; }
-        public void incrementFunk() { Funk++; }
-        public void incrementShuffle() { Shuffle++; }
-        public void incrementChoose() { Choose++; }
-        public void incrementQuote() { Quote++; }
-        public void incrementTrivia() { Trivia++; }
-        public void incrementPoke() { Poke++; }
-        public void incrementWiki() { Wiki++; }
-        public void incrementTemperature() { Temperature++; }
-        public void incrementTime() { Time++; }
-        public void incrementGreet() { Greet++; }
-        public void incrementRules() { Rules++; }
-        public void incrementHelp() { Help++; }
-        public void incrementAnime() { Anime++; }
-        public void incrementRoll() { Roll++; }
+        public void incrementNick()
+        {
+            Nick++;
+        }
 
-        public void incrementTell() { Tell++; }
+        public void incrementGiphy()
+        {
+            Giphy++;
+        }
 
+        public void incrementFunk()
+        {
+            Funk++;
+        }
+
+        public void incrementShuffle()
+        {
+            Shuffle++;
+        }
+
+        public void incrementChoose()
+        {
+            Choose++;
+        }
+
+        public void incrementQuote()
+        {
+            Quote++;
+        }
+
+        public void incrementTrivia()
+        {
+            Trivia++;
+        }
+
+        public void incrementPoke()
+        {
+            Poke++;
+        }
+
+        public void incrementWiki()
+        {
+            Wiki++;
+        }
+
+        public void incrementTemperature()
+        {
+            Temperature++;
+        }
+
+        public void incrementTime()
+        {
+            Time++;
+        }
+
+        public void incrementGreet()
+        {
+            Greet++;
+        }
+
+        public void incrementRules()
+        {
+            Rules++;
+        }
+
+        public void incrementHelp()
+        {
+            Help++;
+        }
+
+        public void incrementAnime()
+        {
+            Anime++;
+        }
+
+        public void incrementRoll()
+        {
+            Roll++;
+        }
+
+        public void incrementTell()
+        {
+            Tell++;
+        }
     }
 }

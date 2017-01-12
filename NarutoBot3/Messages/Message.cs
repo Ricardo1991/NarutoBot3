@@ -15,6 +15,4 @@ namespace NarutoBot3
 
         abstract public object Clone();
     }
-
-
 }

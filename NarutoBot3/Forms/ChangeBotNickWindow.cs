@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NarutoBot3.Properties;
+using System;
 using System.Windows.Forms;
-using NarutoBot3.Properties;
 
 namespace NarutoBot3
 {
@@ -21,7 +21,7 @@ namespace NarutoBot3
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-           if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
@@ -31,7 +31,6 @@ namespace NarutoBot3
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
         }
     }
 }

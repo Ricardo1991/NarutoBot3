@@ -4,7 +4,7 @@ namespace NarutoBot3.Events
 {
     public class PongEventArgs : EventArgs
     {
-        TimeSpan timeDifference;
+        private TimeSpan timeDifference;
 
         public PongEventArgs(TimeSpan time)
         {

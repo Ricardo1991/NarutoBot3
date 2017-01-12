@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace YoutubeSearch
 {
     public class YoutubeSearch
@@ -63,4 +64,3 @@ namespace YoutubeSearch
         public System.Uri url { get; set; }
     }
 }
-

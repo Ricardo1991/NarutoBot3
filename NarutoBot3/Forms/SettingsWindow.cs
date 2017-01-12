@@ -10,10 +10,9 @@ namespace NarutoBot3
     public partial class SettingsWindow : Form
     {
         public ColorScheme currentColorScheme = new ColorScheme();
-        List<ColorScheme> schemeColection = new List<ColorScheme>();
+        private List<ColorScheme> schemeColection = new List<ColorScheme>();
 
-        List<string> colorSchemeNames = new List<string>();
-
+        private List<string> colorSchemeNames = new List<string>();
 
         public event EventHandler<EventArgs> ThemeChanged;
 
@@ -30,7 +29,6 @@ namespace NarutoBot3
         {
             if (ThemeChanged != null)
                 ThemeChanged(this, e);
-
         }
 
         private void bSave_Click(object sender, EventArgs e)
@@ -64,7 +62,6 @@ namespace NarutoBot3
             Settings.Default.urlTitleEnabled = cbPageTitle.Checked;
             Settings.Default.tellEnabled = cbTell.Checked;
             Settings.Default.factsEnabled = cbFacts.Checked;
-
 
             Settings.Default.twitterAccessToken = tb_AccessToken.Text;
             Settings.Default.twitterAccessTokenSecret = tb_AccessTokenSecret.Text;
@@ -108,7 +105,7 @@ namespace NarutoBot3
             {
                 if (String.Compare(c.Name, name, true) == 0)
                     return true;
-                else 
+                else
                     return false;
             }
             return false;
@@ -136,15 +133,13 @@ namespace NarutoBot3
 
                 stream.Close();
 
-
                 if (!schemeAlreadyExists(a.Name))
                 {
                     colorSchemeNames.Add(a.Name);
                     schemeColection.Add(a);
                 }
-                    
+
                 a = null;
-                
             }
 
             themeList.DataSource = colorSchemeNames;
@@ -153,7 +148,6 @@ namespace NarutoBot3
 
         private void EnabledCommandsWindow_Shown(object sender, EventArgs e)
         {
-
             cb_ConnectCommand.Text = Settings.Default.autojoinCommand;
 
             cbQuotes.Checked = Settings.Default.quotesEnabled;
@@ -207,7 +201,6 @@ namespace NarutoBot3
             //Read schemes
 
             updateSchemes();
-
         }
 
         private void b_Login_Click(object sender, EventArgs e)
@@ -217,7 +210,6 @@ namespace NarutoBot3
                 Settings.Default.redditUser = tb_User.Text;
                 Settings.Default.redditPass = tb_Pass.Text;
                 Settings.Default.redditUserEnabled = true;
-
             }
             else
             {

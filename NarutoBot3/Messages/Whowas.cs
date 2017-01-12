@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NarutoBot3.Messages
+﻿namespace NarutoBot3.Messages
 {
-    class Whowas : Message
+    internal class Whowas : Message
     {
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="body">Channel to Join</param>
         public Whowas(string body)
@@ -23,6 +16,7 @@ namespace NarutoBot3.Messages
         {
             return header + " " + body + footer;
         }
+
         public override bool isValid()
         {
             return !string.IsNullOrWhiteSpace(body);
@@ -30,7 +24,6 @@ namespace NarutoBot3.Messages
 
         public override object Clone()
         {
-
             return this.MemberwiseClone();
         }
     }

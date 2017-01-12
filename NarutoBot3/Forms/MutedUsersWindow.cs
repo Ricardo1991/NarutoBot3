@@ -6,8 +6,8 @@ namespace NarutoBot3
 {
     public partial class MutedUsersWindow : Form
     {
-        List<string> mute = new List<string>();
-        UserList ul = new UserList();
+        private List<string> mute = new List<string>();
+        private UserList ul = new UserList();
 
         public MutedUsersWindow(ref UserList ul)
         {
@@ -32,7 +32,6 @@ namespace NarutoBot3
                 ul.setUserMuteStatus(t_muted.Text, true);
                 updateList();
             }
-
             else
                 MessageBox.Show("User is already Muted", "Duplicated", MessageBoxButtons.OK);
 

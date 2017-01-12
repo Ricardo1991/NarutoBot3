@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NarutoBot3.Events
 {
     public class UserKickedEventArgs : EventArgs
     {
-        string kickedUser;
+        private string kickedUser;
 
         public string KickedUser
         {

@@ -7,7 +7,7 @@ namespace NarutoBot3
 {
     public partial class HelpTextWindow : Form
     {
-        static List<string> hlp = new List<string>();
+        private static List<string> hlp = new List<string>();
 
         static private void SaveHLP()
         {
@@ -18,10 +18,9 @@ namespace NarutoBot3
                     newTask.WriteLine(hp);
                 }
             }
-
-
         }
-        static void readHLP()
+
+        private static void readHLP()
         {
             hlp.Clear();
             StreamReader sr = new StreamReader("TextFiles/help.txt");

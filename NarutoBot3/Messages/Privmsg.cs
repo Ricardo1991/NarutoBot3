@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NarutoBot3.Messages
+﻿namespace NarutoBot3.Messages
 {
     public class Privmsg : Message
     {
-
         public Privmsg(string destinatary, string body)
         {
             this.destinatary = destinatary;
@@ -28,9 +21,7 @@ namespace NarutoBot3.Messages
 
         public override object Clone()
         {
-
             return this.MemberwiseClone();
         }
-
     }
 }

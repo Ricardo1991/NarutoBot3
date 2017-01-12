@@ -1,5 +1,6 @@
 ﻿namespace GoogleSearch
-{   public class GoogleSearch
+{
+    public class GoogleSearch
     {
         public string kind { get; set; }
         public Url url { get; set; }
@@ -98,5 +99,4 @@
     {
         public string author { get; set; }
     }
-
 }

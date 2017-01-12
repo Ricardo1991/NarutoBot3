@@ -4,8 +4,8 @@ namespace NarutoBot3.Events
 {
     public class NickChangeEventArgs : EventArgs
     {
-        string oldNick;
-        string newNick;
+        private string oldNick;
+        private string newNick;
 
         public string OldNick
         {

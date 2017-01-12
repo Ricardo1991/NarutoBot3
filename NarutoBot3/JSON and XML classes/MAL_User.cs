@@ -1,13 +1,10 @@
-﻿
-namespace NarutoBot3
+﻿namespace NarutoBot3
 {
-
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class myanimelist
     {
-
         private myanimelistMyinfo myinfoField;
 
         private myanimelistAnime[] animeField;
@@ -45,7 +42,6 @@ namespace NarutoBot3
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class myanimelistMyinfo
     {
-
         private uint user_idField;
 
         private string user_nameField;
@@ -171,7 +167,6 @@ namespace NarutoBot3
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class myanimelistAnime
     {
-
         private uint series_animedb_idField;
 
         private string series_titleField;
@@ -457,8 +452,4 @@ namespace NarutoBot3
             }
         }
     }
-
-
-
-
 }

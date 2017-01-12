@@ -1,6 +1,5 @@
 ﻿namespace YoutubeVideoInfo
 {
-
     public class YoutubeVideoInfo
     {
         public string kind { get; set; }
@@ -98,6 +97,4 @@
         public string favoriteCount { get; set; }
         public string commentCount { get; set; }
     }
-
-
 }

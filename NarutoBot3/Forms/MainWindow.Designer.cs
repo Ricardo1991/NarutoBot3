@@ -15,8 +15,6 @@
         {
             if (disposing && (components != null))
             {
-                if (bot != null) bot.Dispose();
-                if (client != null) client.Dispose();
 
                 components.Dispose();
             }

@@ -8,10 +8,10 @@ namespace AutoComplete
     {
         private String[] _values;
         private String _formerValue = String.Empty;
-        bool autoCompleting = false;
+        private bool autoCompleting = false;
 
-        String[] matches;
-        int matchesIndex = 0;
+        private String[] matches;
+        private int matchesIndex = 0;
 
         public AutoCompleteTextBox()
         {
@@ -59,6 +59,7 @@ namespace AutoComplete
             {
                 case Keys.Tab:
                     return true;
+
                 default:
                     return base.IsInputKey(keyData);
             }
@@ -77,7 +78,6 @@ namespace AutoComplete
                 {
                     autoCompleting = true;
                     matchesIndex = 0;
-
                 }
             }
         }
@@ -109,7 +109,6 @@ namespace AutoComplete
             String firstPart = text.Substring(0, posStart) + newTag;
             String updatedText = firstPart + ((posEnd == -1) ? "" : text.Substring(posEnd, text.Length - posEnd));
 
-
             Text = updatedText;
             SelectionStart = firstPart.Length;
         }
@@ -134,6 +133,5 @@ namespace AutoComplete
                 return new List<String>(result);
             }
         }
-
     }
 }

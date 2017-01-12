@@ -10,17 +10,16 @@ namespace NarutoBot3
 {
     public class Questions
     {
-        LexicalizedParser lp;
+        private LexicalizedParser lp;
 
-        public Questions(){
-
+        public Questions()
+        {
             // Loading english PCFG parser from file
             lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
         }
 
         public string getSubject(string question)
         {
-           
             string subjectNPL = string.Empty;
 
             var tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
@@ -30,7 +29,6 @@ namespace NarutoBot3
             var tree = lp.apply(rawWords2);
 
             var tp = new TreePrint("xmlTree");
-
 
             PrintWriter p = new PrintWriter("parse.xml", "UTF-8");
             tp.printTree(tree, p);
@@ -49,7 +47,6 @@ namespace NarutoBot3
                 {
                     sb.AppendLine(line);
                     line = br.readLine();
-
                 }
                 xmlS = sb.ToString();
             }
@@ -59,13 +56,10 @@ namespace NarutoBot3
                 System.IO.File.Delete("parse.xml");
             }
 
-
-
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlS);
 
             XmlNodeList xnList = xml.SelectNodes("//*");
-
 
             XmlNode npTree = null;
 
@@ -83,7 +77,6 @@ namespace NarutoBot3
                     }
                 }
                 if (npTree != null) break;
-
             }
 
             if (npTree != null)
@@ -100,7 +93,6 @@ namespace NarutoBot3
                         {
                             if (xn.ParentNode.Attributes["value"].InnerText == "," || ac["value"].InnerText == "_" || ac["value"].InnerText == "'" || ac["value"].InnerText == "'s")
                                 subjectNPL = subjectNPL.Trim();
-
 
                             subjectNPL += ac["value"].InnerText + " ";
                         }
