@@ -31,6 +31,11 @@ namespace NarutoBot3
             set { ownMessage = value; }
         }
 
+        public override string ToString()
+        {
+            return name;
+        }
+
         public Color Leave
         {
             get { return leave; }

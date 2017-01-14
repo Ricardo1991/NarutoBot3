@@ -1,28 +1,24 @@
 ﻿using NarutoBot3.Properties;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 
 namespace NarutoBot3
 {
     public partial class SettingsWindow : Form
     {
-        public ColorScheme currentColorScheme = new ColorScheme();
-        private List<ColorScheme> schemeColection = new List<ColorScheme>();
+        public ThemeCollection themes;
 
         private List<string> colorSchemeNames = new List<string>();
 
         public event EventHandler<EventArgs> ThemeChanged;
 
-        public SettingsWindow(ref ColorScheme currentS)
+        public SettingsWindow(ref ThemeCollection themes)
         {
             InitializeComponent();
-            this.currentColorScheme = currentS;
-            schemeColection.Add(currentColorScheme);
+            this.themes = themes;
 
-            updateSchemes();
+            updateDataSource();
         }
 
         protected virtual void OnThemeChanged(EventArgs e)
@@ -99,50 +95,9 @@ namespace NarutoBot3
             this.Close();
         }
 
-        private bool schemeAlreadyExists(string name)
+        private void updateDataSource()
         {
-            foreach (ColorScheme c in schemeColection)
-            {
-                if (String.Compare(c.Name, name, true) == 0)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
-
-        private void updateSchemes()
-        {
-            schemeColection.Clear();
-            schemeColection.Add(currentColorScheme);
-
-            colorSchemeNames.Clear();
-            colorSchemeNames.Add(currentColorScheme.Name);
-
-            ColorScheme a = new ColorScheme();
-
-            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
-
-            foreach (string dir in dirs)
-            {
-                a = new ColorScheme();
-
-                TextReader stream = new StreamReader(dir);
-                string json = stream.ReadToEnd();
-                JsonConvert.PopulateObject(json, a);
-
-                stream.Close();
-
-                if (!schemeAlreadyExists(a.Name))
-                {
-                    colorSchemeNames.Add(a.Name);
-                    schemeColection.Add(a);
-                }
-
-                a = null;
-            }
-
-            themeList.DataSource = colorSchemeNames;
+            themeList.DataSource = themes.ThemeColection;
             themeList.SelectedIndex = 0;
         }
 
@@ -200,7 +155,7 @@ namespace NarutoBot3
 
             //Read schemes
 
-            updateSchemes();
+            updateDataSource();
         }
 
         private void b_Login_Click(object sender, EventArgs e)
@@ -240,8 +195,9 @@ namespace NarutoBot3
 
         private void bApplyTheme_Click(object sender, EventArgs e)
         {
-            currentColorScheme = schemeColection[themeList.SelectedIndex];
-            Settings.Default.themeName = currentColorScheme.Name;
+            themes.selectTheme(themeList.SelectedIndex);
+
+            Settings.Default.themeName = themes.CurrentColorScheme.Name;
             OnThemeChanged(EventArgs.Empty);
             Settings.Default.Save();
         }

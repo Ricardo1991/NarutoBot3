@@ -1,13 +1,11 @@
 ﻿using NarutoBot3.Events;
 using NarutoBot3.Messages;
 using NarutoBot3.Properties;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Timers;
@@ -27,8 +25,7 @@ namespace NarutoBot3
 
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
-        public ColorScheme currentColorScheme = new ColorScheme();
-        private List<ColorScheme> schemeColection = new List<ColorScheme>();
+        public ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
         private IRC_Client client;
@@ -61,8 +58,7 @@ namespace NarutoBot3
             //
 
             //Themes
-            loadThemes();
-            applyScheme(Settings.Default.themeName);
+            applyTheme(Settings.Default.themeName);
             //
 
             //Show ConnectWindow Form and try to connect
@@ -212,71 +208,29 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        private void applyScheme(string themeName)
+        private void applyTheme(string themeName)
         {
-            foreach (ColorScheme c in schemeColection)
-            {
-                if (string.Compare(c.Name, themeName, true) == 0)
-                {
-                    currentColorScheme = c;
+            ColorScheme currentColorScheme = themes.CurrentColorScheme;
 
-                    //Apply UI Colors
-                    this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
-                    this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+            //Apply UI Colors
+            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
 
-                    this.tbTopic.BackColor = currentColorScheme.TopicBG;
-                    this.tbTopic.ForeColor = currentColorScheme.TopicText;
+            this.tbTopic.BackColor = currentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = currentColorScheme.TopicText;
 
-                    this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
-                    this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
 
-                    this.InputBox.BackColor = currentColorScheme.InputBG;
-                    this.InputBox.ForeColor = currentColorScheme.InputText;
-                    /////
-                    return;
-                }
-            }
-        }
-
-        private bool schemeExists(string name)
-        {
-            foreach (ColorScheme c in schemeColection)
-            {
-                if (string.Compare(c.Name, name, true) == 0)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
-
-        private void loadThemes()
-        {
-            schemeColection.Clear();
-            schemeColection.Add(currentColorScheme);
-
-            ColorScheme tmpScheme = new ColorScheme();
-
-            string[] dirs = Directory.GetFiles(@"Theme", "*.json");
-
-            foreach (string dir in dirs)
-            {
-                tmpScheme = new ColorScheme();
-
-                TextReader stream = new StreamReader(dir);
-                string json = stream.ReadToEnd();
-                JsonConvert.PopulateObject(json, tmpScheme);
-
-                stream.Close();
-                if (!schemeExists(tmpScheme.Name))
-                    schemeColection.Add(tmpScheme);
-                tmpScheme = null;
-            }
+            this.InputBox.BackColor = currentColorScheme.InputBG;
+            this.InputBox.ForeColor = currentColorScheme.InputText;
+            /////
+            return;
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
         {
-            bot = new Bot(ref client, ref OutputBox, currentColorScheme);
+            bot = new Bot(ref client, ref OutputBox, themes.CurrentColorScheme);
 
             initializeBotEvents();
 
@@ -423,19 +377,19 @@ namespace NarutoBot3
 
         private void userJoined(object sender, UserJoinLeftMessageEventArgs e)
         {
-            WriteMessage("** " + e.Who + " (" + e.Message + ") joined", currentColorScheme.Join);
+            WriteMessage("** " + e.Who + " (" + e.Message + ") joined", themes.CurrentColorScheme.Join);
             UpdateDataSource();
         }
 
         private void userLeft(object sender, UserJoinLeftMessageEventArgs e)
         {
-            WriteMessage("** " + e.Who + " parted (" + e.Message.Trim() + ")", currentColorScheme.Leave);
+            WriteMessage("** " + e.Who + " parted (" + e.Message.Trim() + ")", themes.CurrentColorScheme.Leave);
             UpdateDataSource();
         }
 
         private void userNickChange(object sender, NickChangeEventArgs e)
         {
-            WriteMessage("** " + e.OldNick + " is now known as " + e.NewNick, currentColorScheme.Rename);
+            WriteMessage("** " + e.OldNick + " is now known as " + e.NewNick, themes.CurrentColorScheme.Rename);
             UpdateDataSource();
         }
 
@@ -444,43 +398,43 @@ namespace NarutoBot3
             switch (e.Mode)
             {
                 case ("+o"):
-                    WriteMessage("** " + e.User + " was opped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was opped", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("-o"):
-                    WriteMessage("** " + e.User + " was deopped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was deopped", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("+v"):
-                    WriteMessage("** " + e.User + " was voiced", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was voiced", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("-v"):
-                    WriteMessage("** " + e.User + " was devoiced", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was devoiced", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("+h"):
-                    WriteMessage("** " + e.User + " was half opped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was half opped", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("-h"):
-                    WriteMessage("** " + e.User + " was half deopped", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was half deopped", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("+q"):
-                    WriteMessage("** " + e.User + " was given Owner permissions", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was given Owner permissions", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("-q"):
-                    WriteMessage("** " + e.User + " was removed as a Owner", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was removed as a Owner", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("+a"):
-                    WriteMessage("** " + e.User + " was given Admin permissions", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was given Admin permissions", themes.CurrentColorScheme.StatusChanged);
                     break;
 
                 case ("-a"):
-                    WriteMessage("** " + e.User + " was removed as an Admin", currentColorScheme.StatusChanged);
+                    WriteMessage("** " + e.User + " was removed as an Admin", themes.CurrentColorScheme.StatusChanged);
                     break;
             }
 
@@ -489,7 +443,7 @@ namespace NarutoBot3
 
         private void userKicked(object sender, UserKickedEventArgs e)
         {
-            WriteMessage("** " + e.KickedUser + " was kicked", currentColorScheme.Leave);
+            WriteMessage("** " + e.KickedUser + " was kicked", themes.CurrentColorScheme.Leave);
             UpdateDataSource();
         }
 
@@ -778,7 +732,7 @@ namespace NarutoBot3
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(ref currentColorScheme);
+            SettingsWindow settingsWindow = new SettingsWindow(ref themes);
             settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
 
             settingsWindow.ShowDialog();
@@ -1021,14 +975,12 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (Object o, EventArgs a) { bot.pokeUser(nick); }));
             contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (Object o, EventArgs a) { bot.whoisUser(nick); }));
-            
 
             if (bot.ul.getUserMode(NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
                 contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (Object o, EventArgs a) { bot.kickUser(nick); }));
             }
-
         }
 
         private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
@@ -1147,7 +1099,7 @@ namespace NarutoBot3
         {
             SettingsWindow s = (SettingsWindow)sender;
 
-            currentColorScheme = s.currentColorScheme;
+            ColorScheme currentColorScheme = themes.CurrentColorScheme;
             this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
             this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
 
