@@ -160,7 +160,7 @@ namespace NarutoBot3
 
         private void b_Login_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(Settings.Default.redditUser) && !String.IsNullOrEmpty(Settings.Default.redditPass))
+            if (!String.IsNullOrEmpty(tb_User.Text) && !String.IsNullOrEmpty(tb_User.Text))
             {
                 Settings.Default.redditUser = tb_User.Text;
                 Settings.Default.redditPass = tb_Pass.Text;

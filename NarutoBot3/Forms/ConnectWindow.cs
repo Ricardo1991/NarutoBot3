@@ -6,7 +6,6 @@ namespace NarutoBot3
 {
     public partial class ConnectWindow : Form
     {
-        public bool gotData { get; set; }
 
         public ConnectWindow()
         {

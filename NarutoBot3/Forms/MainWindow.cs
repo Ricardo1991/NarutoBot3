@@ -30,7 +30,6 @@ namespace NarutoBot3
         private Bot bot;
         private IRC_Client client;
 
-        private System.Timers.Timer mangaReleaseTimer;      //To check for manga releases
         private System.Timers.Timer randomTextTimer;        //To check for random text
         private System.Timers.Timer timeoutTimer;           //To check for connection lost
 
@@ -51,18 +50,17 @@ namespace NarutoBot3
         {
             InitializeComponent();
 
+            loadSettings();
+
             //Events for BGWorker
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
-            //
 
             //Themes
             applyTheme(Settings.Default.themeName);
-            //
 
             //Show ConnectWindow Form and try to connect
-            loadSettings();
             ConnectWindow connect = new ConnectWindow();
 
             if (connect.ShowDialog() == DialogResult.OK)
@@ -109,7 +107,7 @@ namespace NarutoBot3
             }
         }
 
-        private void doAutojoinCommand()
+        private void doAutoJoinCommand()
         {
             if (!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
             {
@@ -163,9 +161,6 @@ namespace NarutoBot3
                     string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
                 Settings.Default.twitterEnabled = false;
 
-            mangaReleaseTimer = new System.Timers.Timer(Settings.Default.checkInterval);
-            mangaReleaseTimer.Enabled = false;
-
             randomTextTimer = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
             randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
             randomTextTimer.Elapsed += (sender, e) => randomTextSender(sender, e);
@@ -210,22 +205,19 @@ namespace NarutoBot3
 
         private void applyTheme(string themeName)
         {
-            ColorScheme currentColorScheme = themes.CurrentColorScheme;
-
             //Apply UI Colors
-            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+            this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = themes.CurrentColorScheme.MainWindowText;
 
-            this.tbTopic.BackColor = currentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+            this.tbTopic.BackColor = themes.CurrentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = themes.CurrentColorScheme.TopicText;
 
-            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+            this.InterfaceUserList.BackColor = themes.CurrentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = themes.CurrentColorScheme.UserListText;
 
-            this.InputBox.BackColor = currentColorScheme.InputBG;
-            this.InputBox.ForeColor = currentColorScheme.InputText;
-            /////
-            return;
+            this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
+            this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
+
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
@@ -614,10 +606,7 @@ namespace NarutoBot3
             browser.Close();
         }
 
-        private void killToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadKills();
-        }
+
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
@@ -737,14 +726,19 @@ namespace NarutoBot3
 
             settingsWindow.ShowDialog();
 
-            if (Settings.Default.twitterEnabled) bot.TwitterLogin();
+            if (bot != null)
+            {
+                if (Settings.Default.twitterEnabled)
+                    bot.TwitterLogin();
 
-            try
-            {
-                if (Settings.Default.redditUserEnabled) bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-            }
-            catch
-            {
+                try
+                {
+                    if (Settings.Default.redditUserEnabled)
+                        bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                }
+                catch
+                {
+                }
             }
 
             if (Settings.Default.randomTextEnabled)
@@ -755,7 +749,9 @@ namespace NarutoBot3
         {
             ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
             nickWindow.ShowDialog();
-            bot.changeNick(Settings.Default.Nick);
+
+            if (bot != null)
+                bot.changeNick(Settings.Default.Nick);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -873,13 +869,20 @@ namespace NarutoBot3
         {
             EditRulesWindow rulesWindow = new EditRulesWindow();
             rulesWindow.ShowDialog();
+            if (bot != null)
+            {
+                bot.ReadRules();
+            }
         }
 
         private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             HelpTextWindow helpWindow = new HelpTextWindow();
             helpWindow.ShowDialog();
-            bot.ReadHelp();
+            if (bot != null)
+            {
+                bot.ReadHelp();
+            }
         }
 
         private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -896,25 +899,67 @@ namespace NarutoBot3
 
             mutedWindow.ShowDialog();
         }
+        private void killToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.ReadKills();
+        }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.ReadRules();
+            if (bot != null)
+                bot.ReadRules();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.ReadHelp();
+            if (bot != null)
+                bot.ReadHelp();
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.ReadNickGen();
+            if (bot != null)
+                bot.ReadNickGen();
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bot.ReadTrivia();
+            if (bot != null)
+                bot.ReadTrivia();
+        }
+        private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.ReadQuotes();
+        }
+
+        private void funkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.ReadFunk();
+        }
+
+
+        private void factsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.ReadFacts();
+        }
+
+        private void allToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+            {
+                bot.ReadFunk();
+                bot.ReadQuotes();
+                bot.ReadKills();
+                bot.ReadTrivia();
+                bot.ReadNickGen();
+                bot.ReadHelp();
+                bot.ReadRules();
+                bot.ReadFacts();
+            }
         }
 
         private void botSilence(object sender, EventArgs e)
@@ -1037,7 +1082,7 @@ namespace NarutoBot3
             client.Join();
             ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
 
-            doAutojoinCommand();
+            doAutoJoinCommand();
         }
 
         private void nowConnectedWithServer(object sender, EventArgs e)
@@ -1052,7 +1097,8 @@ namespace NarutoBot3
 
         public void randomTextSender(object source, ElapsedEventArgs e)
         {
-            bot.randomTextSender(source, e);
+            if (bot != null)
+                bot.randomTextSender(source, e);
         }
 
         public void eventChangeTitle(object sender, EventArgs e)
@@ -1086,7 +1132,8 @@ namespace NarutoBot3
 
         private void pingServer(object sender, EventArgs e)
         {
-            bot.pingSever();
+            if (bot != null)
+                bot.pingSever();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1130,28 +1177,6 @@ namespace NarutoBot3
             browser.Close();
         }
 
-        private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadQuotes();
-        }
-
-        private void funkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadFunk();
-        }
-
-        private void allToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadFunk();
-            bot.ReadQuotes();
-            bot.ReadKills();
-            bot.ReadTrivia();
-            bot.ReadNickGen();
-            bot.ReadHelp();
-            bot.ReadRules();
-            bot.ReadFacts();
-        }
-
         private void forceMirrorModeOffToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Settings.Default.enforceMirrorOff == true)
@@ -1172,9 +1197,5 @@ namespace NarutoBot3
             forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
         }
 
-        private void factsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bot.ReadFacts();
-        }
     }
 }
