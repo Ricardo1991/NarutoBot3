@@ -320,7 +320,7 @@ namespace NarutoBot3
             {
                 if (Settings.Default.showTimeStamps)
                 {
-                    string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+                    string timeString = DateTime.Now.ToString("[HH:mm:ss]");
                     this.OutputBox.AppendText(timeString + " " + message + "\n");
                 }
                 else
@@ -351,7 +351,7 @@ namespace NarutoBot3
             {
                 if (Settings.Default.showTimeStamps)
                 {
-                    string timeString = DateTime.Now.ToString("[hh:mm:ss]");
+                    string timeString = DateTime.Now.ToString("[HH:mm:ss]");
                     this.OutputBox.AppendText(timeString + " " + message + "\n", color);
                 }
                 else
