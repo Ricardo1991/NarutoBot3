@@ -409,12 +409,15 @@ namespace NarutoBot3
 
                     OnJoin(new UserJoinLeftMessageEventArgs(userJoin, joinMessage));
 
-                    ul.setUserOnlineStatus(removeUserMode(userJoin), true);
-                    ul.setUserMode(userJoin, getUserMode(userJoin));
+                    char mode = getUserMode(userJoin);
+                    userJoin = removeUserMode(userJoin);
 
-                    greetUser(removeUserMode(userJoin));
+                    ul.setUserOnlineStatus(userJoin, true);
+                    ul.setUserMode(userJoin, mode);
 
-                    messageDelivery(removeUserMode(userJoin), userJoin);
+                    greetUser(userJoin);
+
+                    messageDelivery(userJoin);
 
                     break;
 
@@ -464,7 +467,7 @@ namespace NarutoBot3
                     ul.setUserOnlineStatus(oldnick, false);
                     ul.setUserOnlineStatus(removeUserMode(newnick), true);
 
-                    messageDelivery(removeUserMode(newnick), newnick);
+                    messageDelivery(newnick);
 
                     break;
 
@@ -2024,7 +2027,7 @@ namespace NarutoBot3
                 {
                     userNumber = rnd.Next((list.Count));
                 }
-                while (removeUserMode(list[userNumber].Nick) == nick);
+                while (list[userNumber].Nick == nick);
 
                 message = new Messages.Action(CHANNEL, "pokes " + list[userNumber].Nick);
                 sendMessage(message);
@@ -2793,7 +2796,7 @@ namespace NarutoBot3
                 else
                 {
                     if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
-                        target = removeUserMode(listU[r.Next(listU.Count)].Nick);
+                        target = listU[r.Next(listU.Count)].Nick;
                     else
                         target = args.Trim();
 
@@ -2836,7 +2839,7 @@ namespace NarutoBot3
                 {
                     do
                     {
-                        randomTarget = removeUserMode(listU[r.Next(listU.Count)].Nick).Trim();
+                        randomTarget = listU[r.Next(listU.Count)].Nick;
                     } while (string.Compare(target, randomTarget, true) == 0 || listU.Count < 2);
 
                     message.body = regex.Replace(message.body, randomTarget, 1);
@@ -2868,7 +2871,7 @@ namespace NarutoBot3
                 Message message;
 
                 if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
-                    target = removeUserMode(listU[r.Next((listU.Count))].Nick);
+                    target = listU[r.Next((listU.Count))].Nick;
                 else
                     target = args.Trim();
 
@@ -2901,7 +2904,7 @@ namespace NarutoBot3
                 {
                     do
                     {
-                        randomTarget = removeUserMode(listU[r.Next(listU.Count)].Nick).Trim();
+                        randomTarget = listU[r.Next(listU.Count)].Nick;
                     } while (string.Compare(target, randomTarget, true) == 0 || listU.Count < 2);
 
                     message.body = regex.Replace(message.body, randomTarget, 1);
@@ -2930,7 +2933,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == false && Settings.Default.killEnabled == true)
             {
                 if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
-                    target = removeUserMode(listU[r.Next((listU.Count))].Nick);
+                    target = listU[r.Next((listU.Count))].Nick;
                 else
                     target = args.Trim();
 
@@ -2956,7 +2959,7 @@ namespace NarutoBot3
                     {
                         do
                         {
-                            randomTarget = removeUserMode(listU[r.Next(listU.Count)].Nick).Trim();
+                            randomTarget = listU[r.Next(listU.Count)].Nick;
                         } while (string.Compare(target, randomTarget, true) == 0 || listU.Count < 2);
 
                         message.body = regex.Replace(message.body, randomTarget, 1);
@@ -3079,7 +3082,7 @@ namespace NarutoBot3
                     else if (string.Compare(split[0], "why", true) == 0)
                     {
                         if (split.Length >= 2)
-                            message = new Privmsg(CHANNEL, "Because " + removeUserMode(listU[r.Next(listU.Count)].Nick) + " " + because[r.Next(because.Length)]);
+                            message = new Privmsg(CHANNEL, "Because " + listU[r.Next(listU.Count)].Nick + " " + because[r.Next(because.Length)]);
                     }
                     else if (string.Compare(split[0], "is", true) == 0)
                     {
@@ -3217,9 +3220,9 @@ namespace NarutoBot3
                         if (string.Compare(arg, "who are you", true) == 0)
                             message = new Privmsg(CHANNEL, "I'm a bot!");
                         else if (split[1] == "do")
-                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + removeUserMode(listU[r.Next(listU.Count)].Nick));
+                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDo.Length)] + " " + listU[r.Next(listU.Count)].Nick);
                         else
-                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + removeUserMode(listU[r.Next(listU.Count)].Nick));
+                            message = new Privmsg(CHANNEL, whoDid[r.Next(whoDid.Length)] + " " + listU[r.Next(listU.Count)].Nick);
                     }
                     else if (string.Compare(split[0], "what", true) == 0 || string.Compare(split[0], "what's", true) == 0)
                     {
@@ -3997,7 +4000,7 @@ namespace NarutoBot3
             {
                 do
                 {
-                    randomTarget = removeUserMode(listU[r.Next(listU.Count)].Nick).Trim();
+                    randomTarget = listU[r.Next(listU.Count)].Nick;
                 } while (string.Compare(args, randomTarget, true) == 0 || listU.Count < 2);
 
                 response = regex.Replace(response, randomTarget, 1);
@@ -4199,6 +4202,11 @@ namespace NarutoBot3
                 OnTimeout(EventArgs.Empty);
                 waitingForPong = false;
             }
+        }
+
+        private void messageDelivery(string user)
+        {
+            messageDelivery(user, user);
         }
 
         private void messageDelivery(string user, string destinary)

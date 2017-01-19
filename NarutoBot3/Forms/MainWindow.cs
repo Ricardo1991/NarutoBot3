@@ -217,7 +217,6 @@ namespace NarutoBot3
 
             this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
             this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
-
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
@@ -606,8 +605,6 @@ namespace NarutoBot3
             browser.Close();
         }
 
-
-
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
             ConnectWindow Connect = new ConnectWindow();
@@ -899,6 +896,7 @@ namespace NarutoBot3
 
             mutedWindow.ShowDialog();
         }
+
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
@@ -928,6 +926,7 @@ namespace NarutoBot3
             if (bot != null)
                 bot.ReadTrivia();
         }
+
         private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
@@ -939,7 +938,6 @@ namespace NarutoBot3
             if (bot != null)
                 bot.ReadFunk();
         }
-
 
         private void factsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1196,6 +1194,5 @@ namespace NarutoBot3
         {
             forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
         }
-
     }
 }
