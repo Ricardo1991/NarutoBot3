@@ -663,6 +663,10 @@ namespace NarutoBot3
                         WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
                         parseQuestion(whoSent, user, arg);
                     }
+                    else if(string.Compare(cmd, "gg",true) == 0 && string.Compare(arg, "ez", true) == 0){
+                        WriteMessage("* Received a gg ez from " + user, currentColorScheme.BotReport);
+                        doGgEz(whoSent, user);
+                    }
                     else if (cmd[0] == Client.SYMBOL)   //Bot Command
                     {
                         cmd = cmd.Substring(1);
@@ -1939,6 +1943,36 @@ namespace NarutoBot3
             message = new Notice(nick, "MirrorMode is now " + (mirror ? "enabled" : "disabled"));
             sendMessage(message);
         }
+
+        private void doGgEz(string CHANNEL, string nick)
+        {
+            if (ul.userIsMuted(nick)) return;
+
+            Random r = new Random();
+            string[] ggez = {   "Great game, everyone!",
+                                "It was an honor to play with you all. Thank you.",
+                                "Wishing you all the best.",
+                                "Good game! Best of luck to you all!",
+                                "Gee whiz! That was fun. Good playing!",
+                                "Well played. I salute you all.",
+                                "I'm wrestling with some insecurity issues in my life but thank you all for playing with me.",
+                                "Ah shucks... you guys are the best!",
+                                "It's past my bedtime. Please don't tell my mommy.",
+                                "I could really use a hug right now.",
+                                "I feel very, very small... please hold me...",
+                                "I'm trying to be a nicer person. It's hard, but I am trying, guys.",
+                                "C'mon, Mom! One more game before you tuck me in. Oops mistell.",
+                                "Mommy says people my age shouldn't suck their thumbs.",
+                                "For glory and honor! Huzzah comrades!", };
+
+
+
+            Message message = new Privmsg(CHANNEL, (ggez[r.Next(ggez.Length)]));
+            sendMessage(message);
+
+
+        }
+
 
         private void checkSeen(string CHANNEL, string nick, string arg)
         {
