@@ -663,7 +663,8 @@ namespace NarutoBot3
                         WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
                         parseQuestion(whoSent, user, arg);
                     }
-                    else if(string.Compare(cmd, "gg",true) == 0 && string.Compare(arg, "ez", true) == 0){
+                    else if((string.Compare(cmd, "gg",true) == 0 && !string.IsNullOrWhiteSpace(arg) && string.Compare(arg.Split(' ')[0], "ez", true) == 0) || string.Compare(cmd, "ggez", true) == 0)
+                    {
                         WriteMessage("* Received a gg ez from " + user, currentColorScheme.BotReport);
                         doGgEz(whoSent, user);
                     }
