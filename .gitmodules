@@ -1,3 +1,6 @@
 [submodule "RedditSharp"]
 	path = RedditSharp
 	url = https://github.com/CrustyJew/RedditSharp
+[submodule "MarkovChainSentenceGeneratorGit"]
+	path = MarkovChainSentenceGeneratorGit
+	url = https://github.com/treydwilson/MarkovChainSentenceGenerator
