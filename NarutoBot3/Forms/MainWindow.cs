@@ -66,6 +66,8 @@ namespace NarutoBot3
 
             if (connect.ShowDialog() == DialogResult.OK)
             {
+                setSilenceMarks();
+
                 if (backgroundWorker.IsBusy)
                 {
                     disconnectClient();
@@ -175,16 +177,7 @@ namespace NarutoBot3
 
             Settings.Default.releaseEnabled = false;
 
-            if (Settings.Default.silence == true)
-            {
-                silencedToolStripMenuItem.Checked = true;
-                toolStripStatusLabelSilence.Visible = true;
-            }
-            else
-            {
-                silencedToolStripMenuItem.Checked = false;
-                toolStripStatusLabelSilence.Visible = false;
-            }
+            setSilenceMarks();
 
             if (Settings.Default.enforceMirrorOff)
             {
@@ -202,6 +195,20 @@ namespace NarutoBot3
             REALNAME = Settings.Default.RealName;
 
             Settings.Default.Save();
+        }
+
+        private void setSilenceMarks()
+        {
+            if (Settings.Default.silence == true)
+            {
+                silencedToolStripMenuItem.Checked = true;
+                toolStripStatusLabelSilence.Visible = true;
+            }
+            else
+            {
+                silencedToolStripMenuItem.Checked = false;
+                toolStripStatusLabelSilence.Visible = false;
+            }
         }
 
         private void applyTheme(string themeName)
