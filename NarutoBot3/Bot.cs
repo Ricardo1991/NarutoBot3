@@ -3665,9 +3665,9 @@ namespace NarutoBot3
                 comment = reddit.GetComment(new Uri("https://" + url));
 
                 if (comment.Body.ToString().Length > 300)
-                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
+                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.AuthorName + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Truncate(300).Replace("\r", " ").Replace("\n", " ") + "(...)" + "\x02"));
                 else
-                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.Author + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
+                    message = new Privmsg(CHANNEL, "\x02" + "Comment by " + comment.AuthorName + " [↑" + comment.Upvotes + "] " + HttpUtility.HtmlDecode(comment.Body.Replace("\r", " ").Replace("\n", " ") + "\x02"));
                 sendMessage(message);
             }
             catch
