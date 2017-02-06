@@ -96,6 +96,8 @@ namespace NarutoBot3
 
         private TwitterService service;
 
+        private string lastImgurID;
+
         protected virtual void OnTopicChange(TopicChangedEventArgs e)
         {
             if (TopicChange != null)
@@ -925,6 +927,11 @@ namespace NarutoBot3
                             WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
                             cleanMessages(whoSent, arg, user);
                         }
+                        else if ((string.Compare(cmd, "filmot", true) == 0))
+                        {
+                            WriteMessage("* Received a Filmot Convert request from " + user, currentColorScheme.BotReport);
+                            filmot(whoSent, arg, user);
+                        }
                         else
                         {
                             //check for custom commands
@@ -951,6 +958,10 @@ namespace NarutoBot3
                     {
                         WriteMessage("* Detected a twitter link from " + user, currentColorScheme.BotReport);
                         twitter(whoSent, user, msg);
+                    }
+                    else if (msg.Contains("imgur.com"))
+                    {
+                        updateLastImgurLink(msg);
                     }
                     else if (msg.Contains("http://") || msg.Contains("https://"))
                     {
@@ -1055,6 +1066,11 @@ namespace NarutoBot3
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
             }
+        }
+
+        private void updateLastImgurLink(string msg)
+        {
+            lastImgurID = Useful.getBetween(msg, "imgur.com/", "");
         }
 
         static public char getUserMode(string user)
@@ -3860,6 +3876,21 @@ namespace NarutoBot3
             else
                 if (ul.clearUserMessages(split[0], split[1]))
                 sendMessage(new Notice(split[0], "Success!"));
+        }
+
+        private void filmot(string CHANNEL, string args, string user)
+        {
+            if (string.IsNullOrWhiteSpace(args))
+            {
+                if (string.IsNullOrWhiteSpace(lastImgurID))
+                    sendMessage(new Privmsg(CHANNEL, "No links in memory to convert"));
+                sendMessage(new Privmsg(CHANNEL, "http://i.filmot.org/" + lastImgurID));
+            }
+            else
+            {
+                string id = Useful.getBetween(args, "imgur.com/", "");
+                sendMessage(new Privmsg(CHANNEL, "http://i.filmot.org/" + id));
+            }
         }
 
         private void choose(string CHANNEL, string user, string arg)
