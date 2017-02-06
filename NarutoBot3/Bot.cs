@@ -3607,7 +3607,7 @@ namespace NarutoBot3
 
                     string[] linkParse = url.Replace("\r", string.Empty).Split('/');
 
-                    if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]))    //With Comment
+                    if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?") )   //With Comment
                     {
                         redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6].Split(new char[] { '?' }, 2)[0]);
                     }
@@ -3663,17 +3663,14 @@ namespace NarutoBot3
 
         private void redditInfo(string CHANNEL, string url, string postName)
         {
-            RedditSharp.Things.Post post;
-
             Message message;
-            string subreddit = Useful.getBetween(url, "/r/", "/");
 
             try
             {
-                //post = (RedditSharp.Things.Post)reddit.GetThingByFullname("t3_" + linkParse[4]);
-                post = reddit.GetPost(new Uri("http://" + url));
-
-                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
+                RedditSharp.Things.Post post;
+                post = reddit.GetPost(new Uri("https://www.reddit.com/" + postName));
+                
+                message = new Privmsg(CHANNEL, "\x02" + "[/r/" + post.SubredditName + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                 sendMessage(message);
 
                 if (!post.IsSelfPost)
@@ -3681,6 +3678,9 @@ namespace NarutoBot3
             }
             catch
             {
+                string subreddit = Useful.getBetween(url, "/r/", "/");
+                if (string.IsNullOrWhiteSpace(subreddit)) subreddit = "?";
+
                 message = new Privmsg(CHANNEL, "\x02" + "[/r/" + subreddit.Trim() + "] " + "Failed to get post info" + "\x02");
                 sendMessage(message);
             }
