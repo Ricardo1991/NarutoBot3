@@ -3771,13 +3771,13 @@ namespace NarutoBot3
             }
             else   //search
             {
-                string[] queries = args.Trim().ToLower().Split(new char[] { ' ' });
+                string[] queries = args.Trim().ToLower().Split(' ');
 
-                foreach (string s in quotes)
+                foreach (string quote in quotes)
                 {
-                    if (Regex.IsMatch(s, "\\b" + queries[0] + "\\b"))
+                    if (Regex.IsMatch(quote, "\\b" + queries[0] + "\\b", RegexOptions.IgnoreCase))
                     {
-                        temp.Add(s);
+                        temp.Add(quote);
                     }
                 }
 
@@ -3787,7 +3787,7 @@ namespace NarutoBot3
                     {
                         for (int d = 1; d < queries.Length; d++)
                         {
-                            if (Regex.IsMatch(t, "\\b" + queries[d] + "\\b"))
+                            if (Regex.IsMatch(t, "\\b" + queries[d] + "\\b", RegexOptions.IgnoreCase))
                             {
                                 temp2.Add(t);
                             }
