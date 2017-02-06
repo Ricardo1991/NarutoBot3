@@ -3754,12 +3754,12 @@ namespace NarutoBot3
 
             if (ul.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
-            if (string.IsNullOrWhiteSpace(args) && quotes.Count > 0) //pring random
+            if (string.IsNullOrWhiteSpace(args) && quotes.Count > 0) //print random
             {
                 i = r.Next(quotes.Count);
                 message = new Privmsg(CHANNEL, quotes[i]);
             }
-            else if (args[0] == '#')
+            else if (args[0] == '#')    //Print quote by number
             {
                 string split = args.Split(new char[] { ' ' }, 2)[0];
                 int number = Convert.ToInt32(split.Replace("#", string.Empty));
@@ -3767,47 +3767,39 @@ namespace NarutoBot3
                 if (number <= quotes.Count)
                     message = new Privmsg(CHANNEL, quotes[number - 1]);
                 else
-                    message = new Privmsg(CHANNEL, "Quote " + number + " not found");
+                    message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
             }
-            else
+            else   //search
             {
                 string[] queries = args.Trim().ToLower().Split(new char[] { ' ' });
 
-                if (queries.Length > 1)
+                foreach (string s in quotes)
                 {
-                    foreach (string s in quotes)
+                    if (Regex.IsMatch(s, "\\b" + queries[0] + "\\b"))
                     {
-                        if (s.ToLower().Contains(queries[0]))
-                            temp.Add(s);
+                        temp.Add(s);
                     }
+                }
 
+                if (queries.Length > 1) //refine search
+                {
                     foreach (string t in temp)
                     {
                         for (int d = 1; d < queries.Length; d++)
                         {
-                            if (t.ToLower().Contains(queries[d].ToLower()))
+                            if (Regex.IsMatch(t, "\\b" + queries[d] + "\\b"))
                             {
                                 temp2.Add(t);
                             }
                         }
                     }
-                    if (temp2.Count > 0)
-                        message = new Privmsg(CHANNEL, temp2[r.Next(temp2.Count)]);
-                    else message = new Privmsg(CHANNEL, "No quotes found");
+                    temp = temp2;
                 }
-                else
-                {
-                    foreach (string s in quotes)
-                    {
-                        if (s.ToLower().Contains(args.ToLower()))
-                        {
-                            temp.Add(s);
-                        }
-                    }
-                    if (temp.Count > 0)
-                        message = new Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
-                    else message = new Privmsg(CHANNEL, "No quotes found");
-                }
+
+                if (temp.Count > 0)
+                    message = new Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
+                else message = new Privmsg(CHANNEL, "No Quotes Found!");
+                
             }
 
             sendMessage(message);
