@@ -1,20 +1,17 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    internal class Whowas : Message
+    public class Kick : IrcMessage
     {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="body">Channel to Join</param>
-        public Whowas(string body)
+        public Kick(string destinatary, string body)
         {
+            this.destinatary = destinatary;
             this.body = body;
-            this.header = "WHOWAS";
+            this.header = "KICK";
         }
 
         public override string toString()
         {
-            return header + " " + body + footer;
+            return header + " " + destinatary + " " + body + footer;
         }
 
         public override bool isValid()

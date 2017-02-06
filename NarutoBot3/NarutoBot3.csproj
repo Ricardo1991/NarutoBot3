@@ -288,7 +288,6 @@
     <Compile Include="Forms\HelpTextWindow.Designer.cs">
       <DependentUpon>HelpTextWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="IRC_Client.cs" />
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,19 +308,6 @@
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="JSON and XML classes\MAL_User.cs" />
-    <Compile Include="Messages\Action.cs" />
-    <Compile Include="Messages\Join.cs" />
-    <Compile Include="Messages\Kick.cs" />
-    <Compile Include="Messages\Message.cs" />
-    <Compile Include="Messages\Nick.cs" />
-    <Compile Include="Messages\Notice.cs" />
-    <Compile Include="Messages\Ping.cs" />
-    <Compile Include="Messages\Pong.cs" />
-    <Compile Include="Messages\Privmsg.cs" />
-    <Compile Include="Messages\Quit.cs" />
-    <Compile Include="Messages\User.cs" />
-    <Compile Include="Messages\Whois.cs" />
-    <Compile Include="Messages\Whowas.cs" />
     <Compile Include="ParsedMessage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -445,6 +431,10 @@
     <ProjectReference Include="..\chatter-bot-api-git\dotnet\ChatterBotAPI\ChatterBotAPI.csproj">
       <Project>{2e624962-f155-432c-a90a-e1ce75dee9ea}</Project>
       <Name>ChatterBotAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IrcClient\IrcClient.csproj">
+      <Project>{6f084264-cab0-46a2-b7a4-b722b2adb0a4}</Project>
+      <Name>IrcClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\MarkovChainSentenceGeneratorGit\TextMarkovChains\TextMarkovChains.csproj">
       <Project>{fc6d37a9-a17a-4d22-8fca-91a9fef74152}</Project>

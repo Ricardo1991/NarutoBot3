@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NarutoBot3
+namespace IrcClient.Messages
 {
-    abstract public class Message : ICloneable
+    abstract public class IrcMessage : ICloneable
     {
         public string header;
         public string body;

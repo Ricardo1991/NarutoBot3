@@ -1,15 +1,15 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Whois : Message
+    public class Whowas : IrcMessage
     {
         /// <summary>
         ///
         /// </summary>
         /// <param name="body">Channel to Join</param>
-        public Whois(string body)
+        public Whowas(string body)
         {
             this.body = body;
-            this.header = "WHOIS";
+            this.header = "WHOWAS";
         }
 
         public override string toString()

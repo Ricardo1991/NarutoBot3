@@ -1,5 +1,6 @@
 ﻿using NarutoBot3.Events;
-using NarutoBot3.Messages;
+using IrcClient;
+using IrcClient.Messages;
 using NarutoBot3.Properties;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace NarutoBot3
         public ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
-        private IRC_Client client;
+        private IrcClient.IRC_Client client;
 
         private System.Timers.Timer randomTextTimer;        //To check for random text
         private System.Timers.Timer timeoutTimer;           //To check for connection lost
@@ -819,7 +820,7 @@ namespace NarutoBot3
         private void parseInputMessage(string inmessage)
         {
             string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
-            Message message = null;
+            IrcMessage message = null;
 
             if (!client.isConnected) return;
 
@@ -828,7 +829,7 @@ namespace NarutoBot3
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = new Messages.Action(HOME_CHANNEL, parsed[1]);
+                        message = new IrcClient.Messages.Action(HOME_CHANNEL, parsed[1]);
                     else if (parsed[0].ToLower() == "/whois")  //Action send
                         message = new Whois(parsed[1]);
                     else if (parsed[0].ToLower() == "/whowas")  //Action send

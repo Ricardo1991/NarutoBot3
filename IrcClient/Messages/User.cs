@@ -1,15 +1,11 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Join : Message
+    public class User : IrcMessage
     {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="body">Channel to Join</param>
-        public Join(string body)
+        public User(string body)
         {
             this.body = body;
-            this.header = "JOIN";
+            this.header = "USER";
         }
 
         public override string toString()

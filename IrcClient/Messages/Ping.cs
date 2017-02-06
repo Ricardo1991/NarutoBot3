@@ -1,17 +1,20 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Action : Message
+    public class Ping : IrcMessage
     {
-        public Action(string destinatary, string body)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="body">Message to return</param>
+        public Ping(string body)
         {
-            this.destinatary = destinatary;
             this.body = body;
-            this.header = "PRIVMSG";
+            this.header = "PING";
         }
 
         public override string toString()
         {
-            return header + " " + destinatary + " :" + "\x01" + "ACTION " + body.Trim() + "\x01" + footer;
+            return header + " :" + body + footer;
         }
 
         public override bool isValid()

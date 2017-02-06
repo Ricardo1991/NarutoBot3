@@ -1,9 +1,9 @@
-﻿using NarutoBot3.Messages;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using IrcClient.Messages;
 
-namespace NarutoBot3
+namespace IrcClient
 {
     public class IRC_Client
     {
@@ -18,9 +18,9 @@ namespace NarutoBot3
 
         public string HOST_SERVER;
 
-        private Message user_message;
-        private Message nick_message;
-        private Message join_message;
+        private IrcMessage user_message;
+        private IrcMessage nick_message;
+        private IrcMessage join_message;
 
         private NetworkStream stream;
         private TcpClient irc;
@@ -77,7 +77,7 @@ namespace NarutoBot3
             isConnected = true;
         }
 
-        public bool sendMessage(Message message)
+        public bool sendMessage(IrcMessage message)
         {
             if (!message.isValid() || writer == null) return false;
 
@@ -85,7 +85,7 @@ namespace NarutoBot3
             {
                 while (message.toString().Length > 420)
                 {
-                    var nextMessage = (Message)message.Clone();
+                    var nextMessage = (IrcMessage)message.Clone();
                     message.body = message.body.Substring(0, 390);
                     nextMessage.body = nextMessage.body.Substring(390);
 
@@ -133,3 +133,4 @@ namespace NarutoBot3
         }
     }
 }
+

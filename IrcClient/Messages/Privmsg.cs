@@ -1,6 +1,6 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Privmsg : Message
+    public class Privmsg : IrcMessage
     {
         public Privmsg(string destinatary, string body)
         {

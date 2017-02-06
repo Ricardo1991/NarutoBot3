@@ -1,6 +1,6 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    internal class Quit : Message
+    internal class Quit : IrcMessage
     {
         public Quit(string body)
         {

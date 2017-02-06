@@ -1,16 +1,20 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class User : Message
+    public class Pong : IrcMessage
     {
-        public User(string body)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="body">Message to return</param>
+        public Pong(string body)
         {
             this.body = body;
-            this.header = "USER";
+            this.header = "PONG";
         }
 
         public override string toString()
         {
-            return header + " " + body + footer;
+            return header + " :" + body + footer;
         }
 
         public override bool isValid()

@@ -1,20 +1,20 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Ping : Message
+    public class Whois : IrcMessage
     {
         /// <summary>
         ///
         /// </summary>
-        /// <param name="body">Message to return</param>
-        public Ping(string body)
+        /// <param name="body">Channel to Join</param>
+        public Whois(string body)
         {
             this.body = body;
-            this.header = "PING";
+            this.header = "WHOIS";
         }
 
         public override string toString()
         {
-            return header + " :" + body + footer;
+            return header + " " + body + footer;
         }
 
         public override bool isValid()

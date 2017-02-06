@@ -1,22 +1,22 @@
-﻿namespace NarutoBot3.Messages
+﻿namespace IrcClient.Messages
 {
-    public class Kick : Message
+    public class Notice : IrcMessage
     {
-        public Kick(string destinatary, string body)
+        public Notice(string destinatary, string body)
         {
             this.destinatary = destinatary;
             this.body = body;
-            this.header = "KICK";
+            this.header = "NOTICE";
         }
 
         public override string toString()
         {
-            return header + " " + destinatary + " " + body + footer;
+            return header + " " + destinatary + " :" + body.Trim() + footer;
         }
 
         public override bool isValid()
         {
-            return !string.IsNullOrWhiteSpace(body);
+            return (!string.IsNullOrWhiteSpace(body) && !string.IsNullOrWhiteSpace(destinatary));
         }
 
         public override object Clone()
