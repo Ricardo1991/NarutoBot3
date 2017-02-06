@@ -2988,7 +2988,7 @@ namespace NarutoBot3
                         message = new Privmsg(CHANNEL, killString);
                     }
                     else
-                        message = new Privmsg(CHANNEL, "\x01" + "ACTION " + killString + "\x01");
+                        message = new Messages.Action(CHANNEL, killString);
 
                     while (message.body.Contains("<random>"))
                     {
