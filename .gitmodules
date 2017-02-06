@@ -4,3 +4,6 @@
 [submodule "MarkovChainSentenceGeneratorGit"]
 	path = MarkovChainSentenceGeneratorGit
 	url = https://github.com/treydwilson/MarkovChainSentenceGenerator
+[submodule "chatter-bot-api-git"]
+	path = chatter-bot-api-git
+	url = https://github.com/pierredavidbelanger/chatter-bot-api
