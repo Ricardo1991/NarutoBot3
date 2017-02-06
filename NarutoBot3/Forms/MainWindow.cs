@@ -1,6 +1,6 @@
-﻿using NarutoBot3.Events;
-using IrcClient;
+﻿using IrcClient;
 using IrcClient.Messages;
+using NarutoBot3.Events;
 using NarutoBot3.Properties;
 using System;
 using System.Collections.Generic;
@@ -29,16 +29,10 @@ namespace NarutoBot3
         public ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
-        private IrcClient.IRC_Client client;
+        private IRC_Client client;
 
         private System.Timers.Timer randomTextTimer;        //To check for random text
         private System.Timers.Timer timeoutTimer;           //To check for connection lost
-
-        private string HOME_CHANNEL;
-        private string HOST;
-        private string NICK;
-        private int PORT;
-        private string REALNAME;
 
         private List<string> lastCommand = new List<string>();
         private int lastCommandIndex = 0;
@@ -87,13 +81,8 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connecting...");
 
-            HOME_CHANNEL = Settings.Default.Channel;
-            HOST = Settings.Default.Server;
-            NICK = Settings.Default.Nick;
-            PORT = Convert.ToInt32(Settings.Default.Port);
-            REALNAME = Settings.Default.RealName;
-
-            client = new IRC_Client(HOME_CHANNEL, HOST, PORT, NICK, REALNAME);
+            client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
+                Settings.Default.Nick, Settings.Default.RealName);
 
             if (client.Connect())
             {
@@ -120,28 +109,7 @@ namespace NarutoBot3
 
         public void loadSettings()
         {
-            t30.Checked = false;
-            t45.Checked = false;
-            t60.Checked = false;
-            switch (Settings.Default.randomTextInterval)
-            {
-                case 30:
-                    t30.Checked = true;
-                    break;
-
-                case 45:
-                    t45.Checked = true;
-                    break;
-
-                case 60:
-                    t60.Checked = true;
-                    break;
-
-                default:
-                    Settings.Default.randomTextInterval = 30;
-                    t30.Checked = true;
-                    break;
-            }
+            setRandomTextIntervalCheckmarks();
 
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
                 Settings.Default.aniSearchEnabled = false;
@@ -188,13 +156,33 @@ namespace NarutoBot3
                 forceMirrorModeOffToolStripMenuItem.Checked = false;
             }
 
-            HOME_CHANNEL = Settings.Default.Channel;
-            HOST = Settings.Default.Server;
-            NICK = Settings.Default.Nick;
-            PORT = Convert.ToInt32(Settings.Default.Port);
-            REALNAME = Settings.Default.RealName;
-
             Settings.Default.Save();
+        }
+
+        private void setRandomTextIntervalCheckmarks()
+        {
+            t30.Checked = false;
+            t45.Checked = false;
+            t60.Checked = false;
+            switch (Settings.Default.randomTextInterval)
+            {
+                case 30:
+                    t30.Checked = true;
+                    break;
+
+                case 45:
+                    t45.Checked = true;
+                    break;
+
+                case 60:
+                    t60.Checked = true;
+                    break;
+
+                default:
+                    Settings.Default.randomTextInterval = 30;
+                    t30.Checked = true;
+                    break;
+            }
         }
 
         private void setSilenceMarks()
@@ -664,15 +652,10 @@ namespace NarutoBot3
                 {
                     ChangeConnectingLabel("Connecting...");
 
-                    HOME_CHANNEL = Settings.Default.Channel;
-                    HOST = Settings.Default.Server;
-                    NICK = Settings.Default.Nick;
-                    PORT = Convert.ToInt32(Settings.Default.Port);
-
-                    if (string.IsNullOrWhiteSpace(HOME_CHANNEL)) HOME_CHANNEL = "#reddit-naruto";
-                    if (string.IsNullOrWhiteSpace(HOST)) HOST = "irc.freenode.net";
-                    if (string.IsNullOrWhiteSpace(NICK)) NICK = "NarutoBot";
-                    if (PORT <= 0 || PORT > 65535) PORT = 6667;
+                    if (string.IsNullOrWhiteSpace(Settings.Default.Channel)) Settings.Default.Channel = "#reddit-naruto";
+                    if (string.IsNullOrWhiteSpace(Settings.Default.Server)) Settings.Default.Server = "irc.freenode.net";
+                    if (string.IsNullOrWhiteSpace(Settings.Default.Nick)) Settings.Default.Nick = "NarutoBot";
+                    if (Convert.ToInt32(Settings.Default.Port) <= 0 || Convert.ToInt32(Settings.Default.Port) > 65535) Settings.Default.Port = 6667.ToString();
 
                     if (connect()) //If connected with success, then start the bot
                     {
@@ -836,7 +819,7 @@ namespace NarutoBot3
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = new IrcClient.Messages.Action(HOME_CHANNEL, parsed[1]);
+                        message = new IrcClient.Messages.Action(client.HOME_CHANNEL, parsed[1]);
                     else if (parsed[0].ToLower() == "/whois")  //Action send
                         message = new Whois(parsed[1]);
                     else if (parsed[0].ToLower() == "/whowas")  //Action send
@@ -859,13 +842,13 @@ namespace NarutoBot3
                         message = new Privmsg("NickServ", "identify " + parsed[1]);
                 }
                 else //Normal send
-                    message = new Privmsg(HOME_CHANNEL, InputBox.Text);
+                    message = new Privmsg(client.HOME_CHANNEL, InputBox.Text);
             }
             else
                 if (parsed[0][0] == '/')
                 WriteMessage("Not enough arguments");
             else //Normal send
-                message = new Privmsg(HOME_CHANNEL, InputBox.Text);
+                message = new Privmsg(client.HOME_CHANNEL, InputBox.Text);
 
             if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
         }
@@ -1027,7 +1010,7 @@ namespace NarutoBot3
             contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (Object o, EventArgs a) { bot.pokeUser(nick); }));
             contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (Object o, EventArgs a) { bot.whoisUser(nick); }));
 
-            if (bot.ul.getUserMode(NICK) == '@')
+            if (bot.ul.getUserMode(client.NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
                 contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (Object o, EventArgs a) { bot.kickUser(nick); }));
@@ -1055,9 +1038,9 @@ namespace NarutoBot3
         private void t30_Click(object sender, EventArgs e)
         {
             Settings.Default.randomTextInterval = 30;
-            t30.Checked = true;
-            t45.Checked = false;
-            t60.Checked = false;
+            Settings.Default.Save();
+
+            setRandomTextIntervalCheckmarks();
 
             randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
@@ -1065,19 +1048,18 @@ namespace NarutoBot3
         private void t45_Click(object sender, EventArgs e)
         {
             Settings.Default.randomTextInterval = 45;
-            t30.Checked = false;
-            t45.Checked = true;
-            t60.Checked = false;
+            Settings.Default.Save();
 
+            setRandomTextIntervalCheckmarks();
             randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
 
         private void t60_Click(object sender, EventArgs e)
         {
             Settings.Default.randomTextInterval = 60;
-            t30.Checked = false;
-            t45.Checked = false;
-            t60.Checked = true;
+            Settings.Default.Save();
+
+            setRandomTextIntervalCheckmarks();
 
             randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
         }
@@ -1086,14 +1068,14 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connected");
             client.Join();
-            ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT);
+            ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
 
             doAutoJoinCommand();
         }
 
         private void nowConnectedWithServer(object sender, EventArgs e)
         {
-            ChangeTitle(NICK + " @ " + HOME_CHANNEL + " - " + HOST + ":" + PORT + " (" + client.HOST_SERVER + ")");
+            ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
         }
 
         private void userListCreated(object sender, EventArgs e)

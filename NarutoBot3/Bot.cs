@@ -1,7 +1,7 @@
 ﻿using ChatterBotAPI;
-using NarutoBot3.Events;
 using IrcClient;
 using IrcClient.Messages;
+using NarutoBot3.Events;
 using NarutoBot3.Properties;
 using Newtonsoft.Json;
 using RedditSharp;
@@ -666,7 +666,7 @@ namespace NarutoBot3
                         WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
                         parseQuestion(whoSent, user, arg);
                     }
-                    else if((string.Compare(cmd, "gg",true) == 0 && !string.IsNullOrWhiteSpace(arg) && string.Compare(arg.Split(' ')[0], "ez", true) == 0) || string.Compare(cmd, "ggez", true) == 0)
+                    else if ((string.Compare(cmd, "gg", true) == 0 && !string.IsNullOrWhiteSpace(arg) && string.Compare(arg.Split(' ')[0], "ez", true) == 0) || string.Compare(cmd, "ggez", true) == 0)
                     {
                         WriteMessage("* Received a gg ez from " + user, currentColorScheme.BotReport);
                         doGgEz(whoSent, user);
@@ -1983,14 +1983,9 @@ namespace NarutoBot3
                                 "Mommy says people my age shouldn't suck their thumbs.",
                                 "For glory and honor! Huzzah comrades!", };
 
-
-
             IrcMessage message = new Privmsg(CHANNEL, (ggez[r.Next(ggez.Length)]));
             sendMessage(message);
-
-
         }
-
 
         private void checkSeen(string CHANNEL, string nick, string arg)
         {
@@ -3624,7 +3619,7 @@ namespace NarutoBot3
 
                     string[] linkParse = url.Replace("\r", string.Empty).Split('/');
 
-                    if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?") )   //With Comment
+                    if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?"))   //With Comment
                     {
                         redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6].Split(new char[] { '?' }, 2)[0]);
                     }
@@ -3686,7 +3681,7 @@ namespace NarutoBot3
             {
                 RedditSharp.Things.Post post;
                 post = reddit.GetPost(new Uri("https://www.reddit.com/" + postName));
-                
+
                 message = new Privmsg(CHANNEL, "\x02" + "[/r/" + post.SubredditName + "] " + "[" + "↑" + +post.Upvotes + "] " + "\x02" + HttpUtility.HtmlDecode(post.Title) + "\x02" + ", submitted by /u/" + post.Author + "\x02");
                 sendMessage(message);
 
@@ -3799,7 +3794,6 @@ namespace NarutoBot3
                 if (temp.Count > 0)
                     message = new Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
                 else message = new Privmsg(CHANNEL, "No Quotes Found!");
-                
             }
 
             sendMessage(message);

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using IrcClient.Messages;
+using System;
 using System.IO;
 using System.Net.Sockets;
-using IrcClient.Messages;
 
 namespace IrcClient
 {
@@ -133,4 +133,3 @@ namespace IrcClient
         }
     }
 }
-
