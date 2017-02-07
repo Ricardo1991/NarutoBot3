@@ -75,20 +75,6 @@ namespace NarutoBot3
             Settings.Default.showTimeStamps = cbTimeStamp.Checked;
             Settings.Default.autoScrollToBottom = cbScroll.Checked;
 
-            if (String.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                String.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                String.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret)
-                )
-                Settings.Default.twitterEnabled = false;
-
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
-            {
-                Settings.Default.aniSearchEnabled = false;
-                Settings.Default.timeEnabled = false;
-                Settings.Default.Save();
-            }
-
             Settings.Default.quitMessage = tbQuitMessage.Text;
 
             Settings.Default.Save();
@@ -183,15 +169,6 @@ namespace NarutoBot3
 
             Settings.Default.Save();
         }
-
-        //private void bExport_Click(object sender, EventArgs e)
-        //{
-        //    TextWriter WriteFileStream = new StreamWriter("Theme\\" + currentColorScheme.Name + ".json", false);
-
-        //    WriteFileStream.Write(JsonConvert.SerializeObject(currentColorScheme, Formatting.Indented));
-
-        //    WriteFileStream.Close();
-        //}
 
         private void bApplyTheme_Click(object sender, EventArgs e)
         {

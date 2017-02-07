@@ -37,8 +37,6 @@ namespace NarutoBot3
         private List<string> lastCommand = new List<string>();
         private int lastCommandIndex = 0;
 
-        private bool exitTheLoop = false;
-
         private BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
@@ -64,9 +62,9 @@ namespace NarutoBot3
 
                 if (backgroundWorker.IsBusy)
                 {
+                    backgroundWorker.CancelAsync();
                     disconnectClient();
                     Thread.Sleep(250);
-                    backgroundWorker.CancelAsync();
                 }
 
                 if (this.connect())          //If connected with success, then start the bot
@@ -86,7 +84,6 @@ namespace NarutoBot3
 
             if (client.Connect())
             {
-                exitTheLoop = false;
                 timeoutTimer.Enabled = true;
 
                 return true;
@@ -110,15 +107,10 @@ namespace NarutoBot3
         public void loadSettings()
         {
             setRandomTextIntervalCheckmarks();
-
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
-                Settings.Default.aniSearchEnabled = false;
-
-            if (Settings.Default.apikey.Length < 5)
-            {
-                Settings.Default.timeEnabled = false;
-                Settings.Default.youtubeSearchEnabled = false;
-            }
+            setSilenceMarks();
+            checkTwitterApi();
+            checkGoogleApi();
+            
 
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
@@ -126,11 +118,7 @@ namespace NarutoBot3
             if (string.IsNullOrEmpty(Settings.Default.redditUser) || string.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
 
-            if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
-                Settings.Default.twitterEnabled = false;
+            
 
             randomTextTimer = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
             randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
@@ -145,7 +133,7 @@ namespace NarutoBot3
 
             Settings.Default.releaseEnabled = false;
 
-            setSilenceMarks();
+            
 
             if (Settings.Default.enforceMirrorOff)
             {
@@ -157,6 +145,27 @@ namespace NarutoBot3
             }
 
             Settings.Default.Save();
+        }
+
+        private void checkGoogleApi()
+        {
+            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
+                Settings.Default.aniSearchEnabled = false;
+
+            if (Settings.Default.apikey.Length < 5)
+            {
+                Settings.Default.timeEnabled = false;
+                Settings.Default.youtubeSearchEnabled = false;
+            }
+        }
+
+        private void checkTwitterApi()
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+                Settings.Default.twitterEnabled = false;
         }
 
         private void setRandomTextIntervalCheckmarks()
@@ -221,7 +230,7 @@ namespace NarutoBot3
 
             initializeBotEvents();
 
-            while (!exitTheLoop)
+            while (!backgroundWorker.CancellationPending)
             {
                 string buffer = "";
                 string line;
@@ -293,7 +302,6 @@ namespace NarutoBot3
 
             Thread.Sleep(250);
 
-            exitTheLoop = true;
             timeoutTimer.Enabled = false;
             UpdateDataSource();
             OutputClean();
@@ -382,47 +390,24 @@ namespace NarutoBot3
 
         private void userModeChanged(object sender, ModeChangedEventArgs e)
         {
-            switch (e.Mode)
+            string message;
+            Dictionary<string, string> modeChanges = new Dictionary<string, string>
             {
-                case ("+o"):
-                    WriteMessage("** " + e.User + " was opped", themes.CurrentColorScheme.StatusChanged);
-                    break;
+                { "+o", "was opped" },
+                { "-o", "was deopped" },
+                { "+v", "was voiced" },
+                { "-v", "was devoiced" },
+                { "+h", "was half opped" },
+                { "-h", "was half deopped" },
+                { "+q", "was given Owner permissions" },
+                { "-q", "was removed as a Owner" },
+                { "+a", "was given Admin permissions" },
+                { "-a", "had their Admin permissions removed" },
+            };
 
-                case ("-o"):
-                    WriteMessage("** " + e.User + " was deopped", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("+v"):
-                    WriteMessage("** " + e.User + " was voiced", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("-v"):
-                    WriteMessage("** " + e.User + " was devoiced", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("+h"):
-                    WriteMessage("** " + e.User + " was half opped", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("-h"):
-                    WriteMessage("** " + e.User + " was half deopped", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("+q"):
-                    WriteMessage("** " + e.User + " was given Owner permissions", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("-q"):
-                    WriteMessage("** " + e.User + " was removed as a Owner", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("+a"):
-                    WriteMessage("** " + e.User + " was given Admin permissions", themes.CurrentColorScheme.StatusChanged);
-                    break;
-
-                case ("-a"):
-                    WriteMessage("** " + e.User + " was removed as an Admin", themes.CurrentColorScheme.StatusChanged);
-                    break;
+            if (modeChanges.TryGetValue(e.Mode, out message))
+            {
+                WriteMessage("** " + e.User + " " + message, themes.CurrentColorScheme.StatusChanged);
             }
 
             UpdateDataSource();
@@ -617,8 +602,9 @@ namespace NarutoBot3
                     {
                         resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                        if (resultWarning == System.Windows.Forms.DialogResult.OK)
+                        if (resultWarning == DialogResult.OK)
                         {
+                            backgroundWorker.CancelAsync();
                             disconnectClient();
                             Thread.Sleep(250);
 
@@ -679,9 +665,12 @@ namespace NarutoBot3
             }
 
             if (client != null && client.isConnected)
+            {
+                backgroundWorker.CancelAsync();
                 disconnectClient();
+            }
 
-            this.Close();
+            Close();
         }
 
         private void silencedToolStripMenuItem_Click(object sender, EventArgs e)  //Toogle Silence
@@ -704,7 +693,11 @@ namespace NarutoBot3
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) //Disconnect Button
         {
             if (client.isConnected)
+            {
+                backgroundWorker.CancelAsync();
                 disconnectClient();
+            }
+               
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -716,6 +709,9 @@ namespace NarutoBot3
 
             if (bot != null)
             {
+                checkTwitterApi();
+                checkGoogleApi();
+
                 if (Settings.Default.twitterEnabled)
                     bot.TwitterLogin();
 
@@ -961,6 +957,7 @@ namespace NarutoBot3
 
         private void timeout(object sender, EventArgs e)
         {
+            backgroundWorker.CancelAsync();
             disconnectClient();
 
             ChangeConnectingLabel("Re-Connecting...");
@@ -1099,6 +1096,7 @@ namespace NarutoBot3
 
         public void letsQuit(object sender, EventArgs e)
         {
+            backgroundWorker.CancelAsync();
             disconnectClient();
         }
 
@@ -1108,6 +1106,7 @@ namespace NarutoBot3
 
             if (!client.isConnected)
             {
+                backgroundWorker.CancelAsync();
                 disconnectClient();
 
                 Settings.Default.Nick = client.NICK + r.Next(10);
