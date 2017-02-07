@@ -3,7 +3,7 @@
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class anime
+    public partial class MalAnime
     {
         private animeEntry[] entryField;
 

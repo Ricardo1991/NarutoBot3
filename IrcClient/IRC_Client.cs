@@ -108,7 +108,7 @@ namespace IrcClient
         public string readMessage()
         {
             if (reader != null)
-                return reader.ReadLine();
+               return reader.ReadLine();
             else return string.Empty;
         }
 

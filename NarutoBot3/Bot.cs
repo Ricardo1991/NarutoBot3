@@ -278,6 +278,7 @@ namespace NarutoBot3
             string quitMessage;
             string topic;
 
+            //TODO: Remake this but with delegates
             switch (messageObject.Type)
             {
                 case ("PING"):
@@ -580,6 +581,8 @@ namespace NarutoBot3
                     break;
 
                 case ("PRIVMSG"):
+
+                    //TODO: this one really needs to be redone somehow
 
                     string user;
                     string whoSent = messageObject.Source;                         //Who sent is the Source of the Message. (The Channel, or User if private Message)
@@ -2183,6 +2186,7 @@ namespace NarutoBot3
             args = args.Replace("\n", string.Empty);
             args = args.Replace(" ", string.Empty);
 
+            ///TODO: change this to a dictionary
             string IST = "23.7833, 85.9667";            //Bokaro, india
             string MSK = "55.74941,37.614441";          //Moscow
             string FET = "53.895311,27.563324";         //Minsk
@@ -2501,171 +2505,233 @@ namespace NarutoBot3
             }
         }
 
-        public void animeSearch(string CHANNEL, string nick, string query)
+
+        public GoogleSearch.GoogleSearch googleAnimeSearch(string query)
         {
-            IrcMessage message;
             GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
-            anime a = new anime();
-            string jsonGoogle;
-            string xmlAnime;
-            bool user = false;
-            var webClient = new WebClient();
+            WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
-            string name = "";
-            string id = "";
-            int i_max = 4;
-            int i = 0;
-            bool found = false;
 
-            if (ul.userIsMuted(nick) || Settings.Default.silence || !Settings.Default.aniSearchEnabled || string.IsNullOrWhiteSpace(query))
-                return;
-
-            query = query.ToLower();
-
-            if (query.Contains("-u") || query.Contains("-user"))
-                user = true;
-
-            query = query.Replace(" ", "%20").Replace(" -user", "%20").Replace(" -u", "%20");
+            query = query.ToLower().Replace(" ", "%20").Replace("-user", string.Empty).Replace("-u", string.Empty);
 
             string getString = "https://www.googleapis.com/customsearch/v1?key=" + Settings.Default.apikey + "&cx=" + Settings.Default.cxKey + "&q=" + query;
 
-            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
-
             try
             {
-                jsonGoogle = webClient.DownloadString(getString);
+                string jsonGoogle = webClient.DownloadString(getString);
                 JsonConvert.PopulateObject(jsonGoogle, g);
             }
             catch
             {
-                message = new Privmsg(CHANNEL, "Error while searching for results");
+                return null;
+            }
+
+            return g;
+
+
+        }
+        public void animeUserSearch(string CHANNEL, string nick, string query)
+        {
+            int i = 0;
+            int i_max = 5;
+            bool found = false;
+            IrcMessage message;
+            WebClient webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
+
+            GoogleSearch.GoogleSearch g = googleAnimeSearch(query);
+
+            if (g == null)
+            {
+                message = new Privmsg(CHANNEL, "[Error] Google Search failed");
                 sendMessage(message);
                 return;
             }
 
             if (g.items == null)
             {
-                message = new Privmsg(CHANNEL, "Could not find anything, try https://myanimelist.net/anime.php?q=" + query);
+                message = new Privmsg(CHANNEL, "[Error] Google Search had no results, try https://myanimelist.net/anime.php?q=" + query);
                 sendMessage(message);
                 return;
             }
 
-            if (g.items.Length < 4)
+            if (g.items.Length < 5)
                 i_max = g.items.Length - 1;
 
             while (i <= i_max && found == false)
             {
-                if (!user)
-                {
-                    if (g.items[i].link.Contains("myanimelist.net/anime/"))
-                    {
-                        found = true;
-                        string[] split = g.items[i].link.Split('/');
-
-                        if (split.Length <= 5)
-                            name = split[5];
-                        else
-                            name = query;
-
-                        if (split.Length >= 5)
-                            id = split[4];
-                    }
-                    else i++;
-                }
-                else
-                {
-                    if (g.items[i].link.Contains("myanimelist.net/profile/"))
-                        found = true;
-                    else i++;
-                }
+                if (g.items[i].link.Contains("myanimelist.net/profile/"))
+                    found = true;
+                else i++;
             }
 
-            if (!found)
-                message = new Privmsg(CHANNEL, g.items[0].link);
-            else
+            if (found)
             {
-                if (!user)
+
+                string xmlUser = webClient.DownloadString("https://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u", string.Empty)).Trim();
+
+                myanimelist u = new myanimelist();
+
+                try
                 {
-                    string animeName = name.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
-                    getString = "https://myanimelist.net/api/anime/search.xml?q=" + animeName;
-
-                    xmlAnime = webClient.DownloadString(getString);
-
-                    try
+                    XmlSerializer serializer = new XmlSerializer(typeof(myanimelist));
+                    using (StringReader reader = new StringReader(xmlUser))
                     {
-                        XmlSerializer serializer = new XmlSerializer(typeof(anime));
-                        using (StringReader reader = new StringReader(xmlAnime))
-                        {
-                            a = (anime)(serializer.Deserialize(reader));
-                        }
+                        u = (myanimelist)(serializer.Deserialize(reader));
                     }
-                    catch { }
+                }
+                catch { }
 
-                    if (a.entry == null)
+                if (u == null || u.myinfo == null || xmlUser.Contains("<error>Invalid username</error>"))
+                    message = new Privmsg(CHANNEL, "Error fetching user stats");
+                else
+                    message = new Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/" + u.myinfo.user_name);
+
+            }
+
+            else
+                message = new Privmsg(CHANNEL, "Search Result: " + g.items[0].link);
+
+            sendMessage(message);
+            stats.anime();
+        }
+
+        public void animeSearch(string CHANNEL, string nick, string query)
+        {
+            //TODO: Simplefy this anime search
+
+            IrcMessage message;
+            MalAnime a = new MalAnime();
+            GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
+            string xmlAnime;
+            WebClient webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+            webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
+            string searchResultName = "";
+            string id = "";
+            int i_max = 5;
+            int i = 0;
+            bool foundGoogle = false;
+
+            if (ul.userIsMuted(nick) || Settings.Default.silence || !Settings.Default.aniSearchEnabled || string.IsNullOrWhiteSpace(query))
+                return;
+
+            webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
+
+            if (query.ToLower().Contains("-u") || query.ToLower().Contains("-user"))
+            {
+                animeUserSearch(CHANNEL, nick, query);
+                return;
+            }
+
+            g = googleAnimeSearch(query);
+
+            if (g == null)
+            {
+                message = new Privmsg(CHANNEL, "[Error] Google Search failed");
+                sendMessage(message);
+                return;
+            }
+
+            if (g.items == null)
+            {
+                message = new Privmsg(CHANNEL, "[Error] Google Search had no results, try https://myanimelist.net/anime.php?q=" + query);
+                sendMessage(message);
+                return;
+            }
+
+            if (g.items.Length < 5)
+                i_max = g.items.Length - 1;
+
+
+            while (i <= i_max && foundGoogle == false)
+            {
+
+                if (g.items[i].link.Contains("myanimelist.net/anime/"))
+                {
+                    foundGoogle = true;
+                    string[] split = g.items[i].link.Split('/');
+
+                    if (split.Length >= 5)
                     {
-                        string score = Useful.getBetween(xmlAnime, "<score>", "</score>");
-                        string episodes = Useful.getBetween(xmlAnime, "<episodes>", "</episodes>");
-                        string title = Useful.getBetween(xmlAnime, "<title>", "</title>");
-                        string status = Useful.getBetween(xmlAnime, "<status>", "</status>");
-
-                        if (episodes == "0" || episodes == string.Empty)
-                            episodes = "?";
-                        if (score == string.Empty)
-                            score = "?";
-                        if (title == string.Empty)
-                            title = "?";
-                        if (status == string.Empty)
-                            status = "?";
-
-                        message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
+                        searchResultName = split[5];
+                        id = split[4];
                     }
                     else
+                        searchResultName = query;
+                }
+                else i++;
+
+            }
+
+            if (foundGoogle)
+            {
+
+                string animeName = searchResultName.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
+                string getString = "https://myanimelist.net/api/anime/search.xml?q=" + animeName;
+
+                xmlAnime = webClient.DownloadString(getString);
+
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(MalAnime));
+                    using (StringReader reader = new StringReader(xmlAnime))
                     {
-                        int index = 0;
-
-                        for (int o = 0; o < a.entry.Length; o++)
-                        {
-                            if (a.entry[o].id.ToString() == id)
-                            {
-                                index = o;
-                                break;
-                            }
-                        }
-
-                        string score = a.entry[index].score.ToString();
-                        string episodes = a.entry[index].episodes.ToString();
-                        string title = a.entry[index].title;
-                        string status = a.entry[index].status;
-
-                        if (episodes == "0")
-                            episodes = "?";
-
-                        message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
+                        a = (MalAnime)(serializer.Deserialize(reader));
                     }
+                }
+                catch { }
+
+                if (a.entry == null)
+                {
+                    string score = Useful.getBetween(xmlAnime, "<score>", "</score>");
+                    string episodes = Useful.getBetween(xmlAnime, "<episodes>", "</episodes>");
+                    string title = Useful.getBetween(xmlAnime, "<title>", "</title>");
+                    string status = Useful.getBetween(xmlAnime, "<status>", "</status>");
+
+                    if (episodes == "0" || episodes == string.Empty)
+                        episodes = "?";
+                    if (score == string.Empty)
+                        score = "?";
+                    if (title == string.Empty)
+                        title = "?";
+                    if (status == string.Empty)
+                        status = "?";
+
+                    message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode"
+                        + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
                 }
                 else
                 {
-                    string xmlUser = webClient.DownloadString("https://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u", string.Empty)).Trim();
+                    int index = 0;
 
-                    myanimelist u = new myanimelist();
-
-                    try
+                    for (int o = 0; o < a.entry.Length; o++)
                     {
-                        XmlSerializer serializer = new XmlSerializer(typeof(myanimelist));
-                        using (StringReader reader = new StringReader(xmlUser))
+                        if (a.entry[o].id.ToString() == id)
                         {
-                            u = (myanimelist)(serializer.Deserialize(reader));
+                            index = o;
+                            break;
                         }
                     }
-                    catch { }
 
-                    if (u == null || u.myinfo == null || xmlUser.Contains("<error>Invalid username</error>"))
-                        message = new Privmsg(CHANNEL, "Error fetching user stats");
-                    else
-                        message = new Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/" + u.myinfo.user_name);
+                    string score = a.entry[index].score.ToString();
+                    string episodes = a.entry[index].episodes.ToString();
+                    string title = a.entry[index].title;
+                    string status = a.entry[index].status;
+
+                    if (episodes == "0")
+                        episodes = "?";
+
+                    message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
                 }
+
             }
+
+            else
+                message = new Privmsg(CHANNEL, "Search Result: " + g.items[0].link);
+
             sendMessage(message);
             stats.anime();
         }
@@ -3022,6 +3088,8 @@ namespace NarutoBot3
 
         private void parseQuestion(string CHANNEL, string user, string arg)
         {
+            //This needs to go or be simplified
+
             if (ul.userIsMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
 
@@ -3768,6 +3836,8 @@ namespace NarutoBot3
             {
                 string[] queries = args.Trim().ToLower().Split(' ');
 
+
+                //TODO: make this only one search by matching multiple words in a string
                 foreach (string quote in quotes)
                 {
                     if (Regex.IsMatch(quote, "\\b" + queries[0] + "\\b", RegexOptions.IgnoreCase))
@@ -3968,11 +4038,11 @@ namespace NarutoBot3
             if (string.Compare(splits[0].ToLower(), "add") == 0)
                 args = args.Replace("add ", string.Empty);
 
-            if ((args.Contains("youtu.be") && (args.Contains("?v=") == false && args.Contains("&v=") == false))
+            //TODO: simplify this if
+            if ((args.Contains("youtu.be") && (!args.Contains("?v=") && !args.Contains("&v=")))
                             || (args.Contains("youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
             {
                 string id = YoutubeUseful.getYoutubeIdFromURL(args);
-
                 string result = YoutubeUseful.getYoutubeInfoFromID(id);
 
                 args = result + " : " + args;
@@ -4279,6 +4349,8 @@ namespace NarutoBot3
 
                 string timeDiff = "";
 
+
+                //TODO: Simplify the if/elses here
                 if (diff.Days > 3)
                 {
                     timeDiff += diff.Days + " days ago";

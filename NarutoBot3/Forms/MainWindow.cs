@@ -367,7 +367,7 @@ namespace NarutoBot3
                 }
             }
 
-            //also, should make a log
+            //TODO: should make a log
         }
 
         private void userJoined(object sender, UserJoinLeftMessageEventArgs e)
