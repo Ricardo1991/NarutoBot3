@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -17,13 +16,9 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         private delegate void SetTextCallback(string text);
-
         private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-
         private delegate void SetBoolCallback(bool status);
-
         private delegate void ChangeDataSource();
-
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
         public ThemeCollection themes = new ThemeCollection();
@@ -37,18 +32,11 @@ namespace NarutoBot3
         private List<string> lastCommand = new List<string>();
         private int lastCommandIndex = 0;
 
-        private BackgroundWorker backgroundWorker = new BackgroundWorker();
-
         public MainWindow()
         {
             InitializeComponent();
 
             loadSettings();
-
-            //Events for BGWorker
-            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
-            backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
-            backgroundWorker.WorkerSupportsCancellation = true;
 
             //Show ConnectWindow Form and try to connect
             ConnectWindow connect = new ConnectWindow(false);
@@ -57,16 +45,13 @@ namespace NarutoBot3
             {
                 setSilenceMarks();
 
-                if (backgroundWorker.IsBusy)
+                if (client != null && client.isConnected)
                 {
-                    backgroundWorker.CancelAsync();
                     disconnectClient();
                     Thread.Sleep(250);
                 }
 
-                if (this.connect())          //If connected with success, then start the bot
-                    backgroundWorker.RunWorkerAsync();
-                else
+                if (!this.connect())
                     MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             //
@@ -79,16 +64,17 @@ namespace NarutoBot3
             client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
                 Settings.Default.Nick, Settings.Default.RealName);
 
-            if (client.Connect())
+            bot = new Bot(ref client, ref OutputBox, themes.CurrentColorScheme);
+            initializeBotEvents();
+
+            if (client.Connect(bot.processMessage))
             {
                 timeoutTimer.Enabled = true;
-
                 return true;
             }
             else
             {
                 timeoutTimer.Enabled = false;
-
                 return false;
             }
         }
@@ -205,49 +191,10 @@ namespace NarutoBot3
 
         private void applyTheme(string themeName)
         {
-            //Apply UI Colors
-            this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = themes.CurrentColorScheme.MainWindowText;
-
-            this.tbTopic.BackColor = themes.CurrentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = themes.CurrentColorScheme.TopicText;
-
-            this.InterfaceUserList.BackColor = themes.CurrentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = themes.CurrentColorScheme.UserListText;
-
-            this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
-            this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
+            themes.selectTheme(themes.getThemeByName(themeName));
+            refreshTheme();
         }
 
-        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
-        {
-            bot = new Bot(ref client, ref OutputBox, themes.CurrentColorScheme);
-
-            initializeBotEvents();
-
-            while (!backgroundWorker.CancellationPending)
-            {
-                string buffer = "";
-                string line;
-
-                try
-                {
-                    buffer = client.readMessage();
-
-                    byte[] bytes = Encoding.UTF8.GetBytes(buffer);
-                    line = Encoding.UTF8.GetString(bytes);
-
-                    if (line.Length > 0) bot.processMessage(line);
-                }
-                catch
-                { }
-            }
-        }
-
-        public void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            ChangeConnectingLabel("Disconnected");
-        }
 
         private void initializeBotEvents()
         {
@@ -285,11 +232,10 @@ namespace NarutoBot3
         {
             if (bot != null)
             {
+                CustomCommand.saveCustomCommands(bot.customCommands);
                 bot.ul.saveData();
                 bot.tmc.save("textSample.xml");
             }
-
-            CustomCommand.saveCustomCommands(bot.customCommands);
 
             InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
@@ -592,13 +538,10 @@ namespace NarutoBot3
                 {
                     if (client.isConnected)
                     {
-                        backgroundWorker.CancelAsync();
                         disconnectClient();
                         Thread.Sleep(250);
 
-                        if (connect()) //If connected with success, then start the bot
-                            backgroundWorker.RunWorkerAsync();
-                        else
+                        if (!connect()) //If connected with success, then start the bot
                         {
                             MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             ChangeConnectingLabel("Disconnected");
@@ -606,11 +549,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        if (connect())//If connected with success, then start the bot
-                        {
-                            backgroundWorker.RunWorkerAsync();
-                        }
-                        else
+                        if (!connect())//If connected with success, then start the bot
                         {
                             MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             ChangeConnectingLabel("Disconnected");
@@ -625,11 +564,7 @@ namespace NarutoBot3
                     if (Convert.ToInt32(Settings.Default.Port) <= 0 || Convert.ToInt32(Settings.Default.Port) > 65535) Settings.Default.Port = 6667.ToString();
 
                     if (connect()) //If connected with success, then start the bot
-                    {
-                        backgroundWorker.RunWorkerAsync();
-                    }
-                    else
-                    {
+                    { 
                         MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         ChangeConnectingLabel("Disconnected");
                     }
@@ -647,7 +582,6 @@ namespace NarutoBot3
 
             if (client != null && client.isConnected)
             {
-                backgroundWorker.CancelAsync();
                 disconnectClient();
             }
 
@@ -675,7 +609,6 @@ namespace NarutoBot3
         {
             if (client.isConnected)
             {
-                backgroundWorker.CancelAsync();
                 disconnectClient();
             }
         }
@@ -937,15 +870,12 @@ namespace NarutoBot3
 
         private void timeout(object sender, EventArgs e)
         {
-            backgroundWorker.CancelAsync();
             disconnectClient();
 
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
 
             if (connect()) //If connected with success, then start the bot
-                backgroundWorker.RunWorkerAsync();
-            else
             {
                 MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
@@ -1076,7 +1006,6 @@ namespace NarutoBot3
 
         public void letsQuit(object sender, EventArgs e)
         {
-            backgroundWorker.CancelAsync();
             disconnectClient();
         }
 
@@ -1086,14 +1015,12 @@ namespace NarutoBot3
 
             if (!client.isConnected)
             {
-                backgroundWorker.CancelAsync();
                 disconnectClient();
 
                 Settings.Default.Nick = client.NICK + r.Next(10);
                 Settings.Default.Save();
 
-                if (connect())  //If connected with success, then start the bot
-                    backgroundWorker.RunWorkerAsync();
+                connect();
             }
         }
 
@@ -1111,25 +1038,27 @@ namespace NarutoBot3
 
         public void refreshTheme(object sender, EventArgs e)
         {
-            SettingsWindow s = (SettingsWindow)sender;
+            refreshTheme();
+        }
 
-            ColorScheme currentColorScheme = themes.CurrentColorScheme;
-            this.OutputBox.BackColor = currentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = currentColorScheme.MainWindowText;
+        public void refreshTheme()
+        {
+            this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = themes.CurrentColorScheme.MainWindowText;
 
-            this.tbTopic.BackColor = currentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = currentColorScheme.TopicText;
+            this.tbTopic.BackColor = themes.CurrentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = themes.CurrentColorScheme.TopicText;
 
-            this.InterfaceUserList.BackColor = currentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = currentColorScheme.UserListText;
+            this.InterfaceUserList.BackColor = themes.CurrentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = themes.CurrentColorScheme.UserListText;
 
-            this.InputBox.BackColor = currentColorScheme.InputBG;
-            this.InputBox.ForeColor = currentColorScheme.InputText;
+            this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
+            this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
 
             OutputBox.Clear();
 
             if (bot != null)
-                bot.updateTheme(currentColorScheme);
+                bot.updateTheme(themes.CurrentColorScheme);
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
