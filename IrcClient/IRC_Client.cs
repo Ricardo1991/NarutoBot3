@@ -53,7 +53,6 @@ namespace IrcClient
             try
             {
                 sendMessage(user_message);
-
                 sendMessage(nick_message);
 
                 return true;    //Weee, we connected!
@@ -108,7 +107,7 @@ namespace IrcClient
         public string readMessage()
         {
             if (reader != null)
-               return reader.ReadLine();
+                return reader.ReadLine();
             else return string.Empty;
         }
 

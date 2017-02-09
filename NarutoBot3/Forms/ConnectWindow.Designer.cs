@@ -36,7 +36,7 @@
             this.l_Channel = new System.Windows.Forms.Label();
             this.t_Channel = new System.Windows.Forms.TextBox();
             this.b_Conect = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.bCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.t_port = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -71,7 +71,7 @@
             this.l_Server.Location = new System.Drawing.Point(6, 81);
             this.l_Server.Name = "l_Server";
             this.l_Server.Size = new System.Drawing.Size(38, 13);
-            this.l_Server.TabIndex = 0;
+            this.l_Server.TabIndex = 4;
             this.l_Server.Text = "Server";
             // 
             // t_Server
@@ -81,7 +81,7 @@
             this.t_Server.Location = new System.Drawing.Point(66, 79);
             this.t_Server.Name = "t_Server";
             this.t_Server.Size = new System.Drawing.Size(218, 20);
-            this.t_Server.TabIndex = 2;
+            this.t_Server.TabIndex = 5;
             this.t_Server.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_Server_KeyDown);
             // 
             // l_Channel
@@ -90,7 +90,7 @@
             this.l_Channel.Location = new System.Drawing.Point(6, 133);
             this.l_Channel.Name = "l_Channel";
             this.l_Channel.Size = new System.Drawing.Size(46, 13);
-            this.l_Channel.TabIndex = 0;
+            this.l_Channel.TabIndex = 8;
             this.l_Channel.Text = "Channel";
             // 
             // t_Channel
@@ -100,32 +100,32 @@
             this.t_Channel.Location = new System.Drawing.Point(66, 133);
             this.t_Channel.Name = "t_Channel";
             this.t_Channel.Size = new System.Drawing.Size(218, 20);
-            this.t_Channel.TabIndex = 4;
+            this.t_Channel.TabIndex = 9;
             this.t_Channel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_Channel_KeyDown);
             // 
             // b_Conect
             // 
             this.b_Conect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.b_Conect.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.b_Conect.Location = new System.Drawing.Point(106, 197);
+            this.b_Conect.Location = new System.Drawing.Point(93, 197);
             this.b_Conect.Name = "b_Conect";
-            this.b_Conect.Size = new System.Drawing.Size(196, 30);
-            this.b_Conect.TabIndex = 5;
+            this.b_Conect.Size = new System.Drawing.Size(209, 30);
+            this.b_Conect.TabIndex = 2;
             this.b_Conect.Text = "Save and Connect";
             this.b_Conect.UseVisualStyleBackColor = true;
             this.b_Conect.Click += new System.EventHandler(this.b_Conect_Click);
             // 
-            // button1
+            // bCancel
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(12, 197);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 30);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Close";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.bCancel.Location = new System.Drawing.Point(12, 197);
+            this.bCancel.Name = "bCancel";
+            this.bCancel.Size = new System.Drawing.Size(75, 30);
+            this.bCancel.TabIndex = 1;
+            this.bCancel.Text = "Close";
+            this.bCancel.UseVisualStyleBackColor = true;
+            this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
             // 
             // label1
             // 
@@ -133,7 +133,7 @@
             this.label1.Location = new System.Drawing.Point(6, 107);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(26, 13);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 6;
             this.label1.Text = "Port";
             // 
             // t_port
@@ -143,7 +143,7 @@
             this.t_port.Location = new System.Drawing.Point(66, 106);
             this.t_port.Name = "t_port";
             this.t_port.Size = new System.Drawing.Size(218, 20);
-            this.t_port.TabIndex = 3;
+            this.t_port.TabIndex = 7;
             this.t_port.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_port_KeyDown);
             this.t_port.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.t_port_KeyPress);
             // 
@@ -166,7 +166,7 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(290, 179);
-            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection Info";
             // 
@@ -176,7 +176,7 @@
             this.cb_silence.Location = new System.Drawing.Point(204, 159);
             this.cb_silence.Name = "cb_silence";
             this.cb_silence.Size = new System.Drawing.Size(80, 17);
-            this.cb_silence.TabIndex = 5;
+            this.cb_silence.TabIndex = 10;
             this.cb_silence.Text = "Silence Bot";
             this.cb_silence.UseVisualStyleBackColor = true;
             // 
@@ -186,7 +186,7 @@
             this.l_RealName.Location = new System.Drawing.Point(6, 53);
             this.l_RealName.Name = "l_RealName";
             this.l_RealName.Size = new System.Drawing.Size(60, 13);
-            this.l_RealName.TabIndex = 0;
+            this.l_RealName.TabIndex = 2;
             this.l_RealName.Text = "Real Name";
             // 
             // t_RealName
@@ -196,7 +196,7 @@
             this.t_RealName.Location = new System.Drawing.Point(66, 50);
             this.t_RealName.Name = "t_RealName";
             this.t_RealName.Size = new System.Drawing.Size(218, 20);
-            this.t_RealName.TabIndex = 1;
+            this.t_RealName.TabIndex = 3;
             this.t_RealName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_RealName_KeyDown);
             // 
             // ConnectWindow
@@ -205,7 +205,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(314, 238);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.bCancel);
             this.Controls.Add(this.b_Conect);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(330, 277);
@@ -229,7 +229,7 @@
         private System.Windows.Forms.Label l_Channel;
         private System.Windows.Forms.TextBox t_Channel;
         private System.Windows.Forms.Button b_Conect;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox t_port;
         private System.Windows.Forms.GroupBox groupBox1;

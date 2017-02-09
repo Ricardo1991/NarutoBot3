@@ -2505,7 +2505,6 @@ namespace NarutoBot3
             }
         }
 
-
         public GoogleSearch.GoogleSearch googleAnimeSearch(string query)
         {
             GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
@@ -2528,9 +2527,8 @@ namespace NarutoBot3
             }
 
             return g;
-
-
         }
+
         public void animeUserSearch(string CHANNEL, string nick, string query)
         {
             int i = 0;
@@ -2569,7 +2567,6 @@ namespace NarutoBot3
 
             if (found)
             {
-
                 string xmlUser = webClient.DownloadString("https://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u", string.Empty)).Trim();
 
                 myanimelist u = new myanimelist();
@@ -2588,9 +2585,7 @@ namespace NarutoBot3
                     message = new Privmsg(CHANNEL, "Error fetching user stats");
                 else
                     message = new Privmsg(CHANNEL, "[" + u.myinfo.user_name + "] " + "[Completed: " + u.myinfo.user_completed + " | Currently Watching: " + u.myinfo.user_watching + "]" + " -> http://myanimelist.net/profile/" + u.myinfo.user_name);
-
             }
-
             else
                 message = new Privmsg(CHANNEL, "Search Result: " + g.items[0].link);
 
@@ -2645,10 +2640,8 @@ namespace NarutoBot3
             if (g.items.Length < 5)
                 i_max = g.items.Length - 1;
 
-
             while (i <= i_max && foundGoogle == false)
             {
-
                 if (g.items[i].link.Contains("myanimelist.net/anime/"))
                 {
                     foundGoogle = true;
@@ -2663,12 +2656,10 @@ namespace NarutoBot3
                         searchResultName = query;
                 }
                 else i++;
-
             }
 
             if (foundGoogle)
             {
-
                 string animeName = searchResultName.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
                 string getString = "https://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
@@ -2726,9 +2717,7 @@ namespace NarutoBot3
 
                     message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + g.items[i].link);
                 }
-
             }
-
             else
                 message = new Privmsg(CHANNEL, "Search Result: " + g.items[0].link);
 
@@ -3836,7 +3825,6 @@ namespace NarutoBot3
             {
                 string[] queries = args.Trim().ToLower().Split(' ');
 
-
                 //TODO: make this only one search by matching multiple words in a string
                 foreach (string quote in quotes)
                 {
@@ -4348,7 +4336,6 @@ namespace NarutoBot3
                 TimeSpan diff = DateTime.Now.ToUniversalTime().Subtract(m.Timestamp);
 
                 string timeDiff = "";
-
 
                 //TODO: Simplify the if/elses here
                 if (diff.Days > 3)

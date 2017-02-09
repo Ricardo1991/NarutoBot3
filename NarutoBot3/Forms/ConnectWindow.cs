@@ -6,10 +6,12 @@ namespace NarutoBot3
 {
     public partial class ConnectWindow : Form
     {
+        bool alreadyConencted = false;
 
-        public ConnectWindow()
+        public ConnectWindow(bool alreadyConnected)
         {
             InitializeComponent();
+            this.alreadyConencted = alreadyConnected;
 
             t_Server.Text = Settings.Default.Server;
             t_Channel.Text = Settings.Default.Channel;
@@ -22,20 +24,29 @@ namespace NarutoBot3
 
         private void b_Conect_Click(object sender, EventArgs e)
         {
-            Settings.Default.Channel = t_Channel.Text;
-            Settings.Default.Nick = t_BotNick.Text;
-            Settings.Default.Server = t_Server.Text;
-            Settings.Default.Port = t_port.Text;
-            Settings.Default.RealName = t_RealName.Text;
-            Settings.Default.silence = cb_silence.Checked;
-            Settings.Default.Save();
 
-            //do connect after this
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
+
+            if (alreadyConencted)
+            {
+                DialogResult resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", 
+                    "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+                if (resultWarning == DialogResult.Cancel)
+                {
+                    this.DialogResult = DialogResult.No;
+                    return;
+                }
+                else
+                    save();
+            }
+            else
+                save();
+
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.No;
             this.Close();
@@ -45,12 +56,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Settings.Default.Channel = t_Channel.Text;
-                Settings.Default.Nick = t_BotNick.Text;
-                Settings.Default.Server = t_Server.Text;
-                Settings.Default.Port = t_port.Text;
-                Settings.Default.RealName = t_RealName.Text;
-                Settings.Default.Save();
+                save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -62,12 +68,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Settings.Default.Channel = t_Channel.Text;
-                Settings.Default.Nick = t_BotNick.Text;
-                Settings.Default.Server = t_Server.Text;
-                Settings.Default.Port = t_port.Text;
-                Settings.Default.RealName = t_RealName.Text;
-                Settings.Default.Save();
+                save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -85,12 +86,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Settings.Default.Channel = t_Channel.Text;
-                Settings.Default.Nick = t_BotNick.Text;
-                Settings.Default.Server = t_Server.Text;
-                Settings.Default.Port = t_port.Text;
-                Settings.Default.RealName = t_RealName.Text;
-                Settings.Default.Save();
+                save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -102,12 +98,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Settings.Default.Channel = t_Channel.Text;
-                Settings.Default.Nick = t_BotNick.Text;
-                Settings.Default.Server = t_Server.Text;
-                Settings.Default.Port = t_port.Text;
-                Settings.Default.RealName = t_RealName.Text;
-                Settings.Default.Save();
+                save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -119,17 +110,25 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Settings.Default.Channel = t_Channel.Text;
-                Settings.Default.Nick = t_BotNick.Text;
-                Settings.Default.Server = t_Server.Text;
-                Settings.Default.Port = t_port.Text;
-                Settings.Default.RealName = t_RealName.Text;
-                Settings.Default.Save();
+                save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
             }
+        }
+
+
+        private void save()
+        {
+            Settings.Default.Channel = t_Channel.Text;
+            Settings.Default.Nick = t_BotNick.Text;
+            Settings.Default.Server = t_Server.Text;
+            Settings.Default.Port = t_port.Text;
+            Settings.Default.RealName = t_RealName.Text;
+            Settings.Default.silence = cb_silence.Checked;
+            Settings.Default.Save();
+
         }
     }
 }

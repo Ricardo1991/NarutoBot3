@@ -50,11 +50,8 @@ namespace NarutoBot3
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
             backgroundWorker.WorkerSupportsCancellation = true;
 
-            //Themes
-            applyTheme(Settings.Default.themeName);
-
             //Show ConnectWindow Form and try to connect
-            ConnectWindow connect = new ConnectWindow();
+            ConnectWindow connect = new ConnectWindow(false);
 
             if (connect.ShowDialog() == DialogResult.OK)
             {
@@ -110,15 +107,15 @@ namespace NarutoBot3
             setSilenceMarks();
             checkTwitterApi();
             checkGoogleApi();
-            
+
+            //Themes
+            applyTheme(Settings.Default.themeName);
 
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
 
             if (string.IsNullOrEmpty(Settings.Default.redditUser) || string.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
-
-            
 
             randomTextTimer = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
             randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
@@ -132,8 +129,6 @@ namespace NarutoBot3
             timeoutTimer.Elapsed += new ElapsedEventHandler(pingServer);
 
             Settings.Default.releaseEnabled = false;
-
-            
 
             if (Settings.Default.enforceMirrorOff)
             {
@@ -588,41 +583,29 @@ namespace NarutoBot3
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
-            ConnectWindow Connect = new ConnectWindow();
+            ConnectWindow Connect = new ConnectWindow(client != null && client.isConnected);
 
-            var result = Connect.ShowDialog();
-            DialogResult resultWarning;
-
-            if (result == DialogResult.OK)
+            if (Connect.ShowDialog() == DialogResult.OK)
             {
                 //Re-do Connect!
                 if (client != null)
                 {
                     if (client.isConnected)
                     {
-                        resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        backgroundWorker.CancelAsync();
+                        disconnectClient();
+                        Thread.Sleep(250);
 
-                        if (resultWarning == DialogResult.OK)
+                        if (connect()) //If connected with success, then start the bot
+                            backgroundWorker.RunWorkerAsync();
+                        else
                         {
-                            backgroundWorker.CancelAsync();
-                            disconnectClient();
-                            Thread.Sleep(250);
-
-                            ChangeConnectingLabel("Connecting...");
-
-                            if (connect()) //If connected with success, then start the bot
-                                backgroundWorker.RunWorkerAsync();
-                            else
-                            {
-                                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                ChangeConnectingLabel("Disconnected");
-                            }
+                            MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ChangeConnectingLabel("Disconnected");
                         }
                     }
                     else
                     {
-                        ChangeConnectingLabel("Connecting...");
-
                         if (connect())//If connected with success, then start the bot
                         {
                             backgroundWorker.RunWorkerAsync();
@@ -636,8 +619,6 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    ChangeConnectingLabel("Connecting...");
-
                     if (string.IsNullOrWhiteSpace(Settings.Default.Channel)) Settings.Default.Channel = "#reddit-naruto";
                     if (string.IsNullOrWhiteSpace(Settings.Default.Server)) Settings.Default.Server = "irc.freenode.net";
                     if (string.IsNullOrWhiteSpace(Settings.Default.Nick)) Settings.Default.Nick = "NarutoBot";
@@ -697,7 +678,6 @@ namespace NarutoBot3
                 backgroundWorker.CancelAsync();
                 disconnectClient();
             }
-               
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
