@@ -257,6 +257,13 @@ namespace NarutoBot3
                 catch { }
             }
 
+            if (String.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
+            {
+                Settings.Default.botThinkEnabled = false;
+                Settings.Default.Save();
+            }
+                
+
             if (Settings.Default.twitterEnabled)
                 TwitterLogin();
         }
@@ -921,12 +928,12 @@ namespace NarutoBot3
                             WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
                             removeCustomCommand(whoSent, arg, user);
                         }
-                        else if ((string.Compare(cmd, "inspectmessages", true) == 0) && !string.IsNullOrEmpty(arg))
+                        else if (((string.Compare(cmd, "inspectmessages", true) == 0) || (string.Compare(cmd, "viewmessages", true) == 0))  && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received an Inspect Messages request from " + user, currentColorScheme.BotReport);
                             inspectMessages(whoSent, arg, user);
                         }
-                        else if ((string.Compare(cmd, "cleanmessages", true) == 0) && !string.IsNullOrEmpty(arg))
+                        else if (((string.Compare(cmd, "cleanmessages", true) == 0) || (string.Compare(cmd, "removemessages", true) == 0)) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
                             cleanMessages(whoSent, arg, user);
@@ -2397,7 +2404,7 @@ namespace NarutoBot3
         {
             IrcMessage message;
 
-            if (ul.userIsMuted(nick)) return;
+            if (ul.userIsMuted(nick) || !Settings.Default.botThinkEnabled) return;
 
             string[] split = line.Split(' ');
 

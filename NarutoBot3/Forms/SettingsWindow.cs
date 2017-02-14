@@ -58,6 +58,7 @@ namespace NarutoBot3
             Settings.Default.urlTitleEnabled = cbPageTitle.Checked;
             Settings.Default.tellEnabled = cbTell.Checked;
             Settings.Default.factsEnabled = cbFacts.Checked;
+            Settings.Default.botThinkEnabled = cb_BotThink.Checked;
 
             Settings.Default.twitterAccessToken = tb_AccessToken.Text;
             Settings.Default.twitterAccessTokenSecret = tb_AccessTokenSecret.Text;
@@ -74,6 +75,10 @@ namespace NarutoBot3
 
             Settings.Default.showTimeStamps = cbTimeStamp.Checked;
             Settings.Default.autoScrollToBottom = cbScroll.Checked;
+
+            Settings.Default.cleverbotAPI = t_cleverAPI.Text;
+            if (String.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
+                Settings.Default.botThinkEnabled = false;
 
             Settings.Default.quitMessage = tbQuitMessage.Text;
 
@@ -118,6 +123,7 @@ namespace NarutoBot3
             cbPageTitle.Checked = Settings.Default.urlTitleEnabled;
             cbTell.Checked = Settings.Default.tellEnabled;
             cbFacts.Checked = Settings.Default.factsEnabled;
+            cb_BotThink.Checked = Settings.Default.botThinkEnabled;
 
             cb_TwitterEnabled.Checked = Settings.Default.twitterEnabled;
             tb_AccessToken.Text = Settings.Default.twitterAccessToken;
@@ -133,6 +139,8 @@ namespace NarutoBot3
             tb_User.Text = Settings.Default.redditUser;
             tb_Pass.Text = Settings.Default.redditPass;
             bt_Logout.Enabled = Settings.Default.redditEnabled;
+
+            t_cleverAPI.Text = Settings.Default.cleverbotAPI;
 
             cbTimeStamp.Checked = Settings.Default.showTimeStamps;
             cbScroll.Checked = Settings.Default.autoScrollToBottom;

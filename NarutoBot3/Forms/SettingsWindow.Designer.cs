@@ -109,6 +109,10 @@
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
+            this.cb_BotThink = new System.Windows.Forms.CheckBox();
+            this.cleverbot = new System.Windows.Forms.TabPage();
+            this.groupClever = new System.Windows.Forms.GroupBox();
+            this.t_cleverAPI = new System.Windows.Forms.TextBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -131,6 +135,8 @@
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
+            this.cleverbot.SuspendLayout();
+            this.groupClever.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -372,6 +378,7 @@
             // 
             // gb_FeaturesFun
             // 
+            this.gb_FeaturesFun.Controls.Add(this.cb_BotThink);
             this.gb_FeaturesFun.Controls.Add(this.cbFacts);
             this.gb_FeaturesFun.Controls.Add(this.cbFunk);
             this.gb_FeaturesFun.Controls.Add(this.cbQuotes);
@@ -523,6 +530,7 @@
             this.settingsTabControl.Controls.Add(this.redditCredentialsTab);
             this.settingsTabControl.Controls.Add(this.googleMalTab);
             this.settingsTabControl.Controls.Add(this.twitterCredentialsTab);
+            this.settingsTabControl.Controls.Add(this.cleverbot);
             this.settingsTabControl.HotTrack = true;
             this.settingsTabControl.Location = new System.Drawing.Point(12, 12);
             this.settingsTabControl.Multiline = true;
@@ -673,7 +681,7 @@
             this.redditCredentialsTab.Padding = new System.Windows.Forms.Padding(3);
             this.redditCredentialsTab.Size = new System.Drawing.Size(517, 302);
             this.redditCredentialsTab.TabIndex = 1;
-            this.redditCredentialsTab.Text = "Reddit Credentials";
+            this.redditCredentialsTab.Text = "Reddit API";
             this.redditCredentialsTab.UseVisualStyleBackColor = true;
             // 
             // gb_CredentialsRedditLogin
@@ -764,7 +772,7 @@
             this.googleMalTab.Padding = new System.Windows.Forms.Padding(3);
             this.googleMalTab.Size = new System.Drawing.Size(517, 302);
             this.googleMalTab.TabIndex = 2;
-            this.googleMalTab.Text = "Youtube and Anime Credentials";
+            this.googleMalTab.Text = "Goggle and MAL API";
             this.googleMalTab.UseVisualStyleBackColor = true;
             // 
             // gb_CredentialsMAL
@@ -867,7 +875,7 @@
             this.twitterCredentialsTab.Padding = new System.Windows.Forms.Padding(3);
             this.twitterCredentialsTab.Size = new System.Drawing.Size(517, 302);
             this.twitterCredentialsTab.TabIndex = 3;
-            this.twitterCredentialsTab.Text = "Twitter Credentials";
+            this.twitterCredentialsTab.Text = "Twitter API";
             this.twitterCredentialsTab.UseVisualStyleBackColor = true;
             // 
             // cb_TwitterEnabled
@@ -987,6 +995,44 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
+            // cb_BotThink
+            // 
+            this.cb_BotThink.AutoSize = true;
+            this.cb_BotThink.Location = new System.Drawing.Point(6, 226);
+            this.cb_BotThink.Name = "cb_BotThink";
+            this.cb_BotThink.Size = new System.Drawing.Size(53, 17);
+            this.cb_BotThink.TabIndex = 17;
+            this.cb_BotThink.Text = "Think";
+            this.cb_BotThink.UseVisualStyleBackColor = true;
+            // 
+            // cleverbot
+            // 
+            this.cleverbot.Controls.Add(this.groupClever);
+            this.cleverbot.Location = new System.Drawing.Point(4, 22);
+            this.cleverbot.Name = "cleverbot";
+            this.cleverbot.Padding = new System.Windows.Forms.Padding(3);
+            this.cleverbot.Size = new System.Drawing.Size(517, 302);
+            this.cleverbot.TabIndex = 5;
+            this.cleverbot.Text = "Cleverbot API";
+            this.cleverbot.UseVisualStyleBackColor = true;
+            // 
+            // groupClever
+            // 
+            this.groupClever.Controls.Add(this.t_cleverAPI);
+            this.groupClever.Location = new System.Drawing.Point(7, 7);
+            this.groupClever.Name = "groupClever";
+            this.groupClever.Size = new System.Drawing.Size(490, 48);
+            this.groupClever.TabIndex = 0;
+            this.groupClever.TabStop = false;
+            this.groupClever.Text = "CleverBot API Key";
+            // 
+            // t_cleverAPI
+            // 
+            this.t_cleverAPI.Location = new System.Drawing.Point(6, 19);
+            this.t_cleverAPI.Name = "t_cleverAPI";
+            this.t_cleverAPI.Size = new System.Drawing.Size(478, 20);
+            this.t_cleverAPI.TabIndex = 1;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1036,6 +1082,9 @@
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
+            this.cleverbot.ResumeLayout(false);
+            this.groupClever.ResumeLayout(false);
+            this.groupClever.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1122,5 +1171,9 @@
         private System.Windows.Forms.Label labelConnectCommand;
         private System.Windows.Forms.CheckBox cbTell;
         private System.Windows.Forms.CheckBox cbFacts;
+        private System.Windows.Forms.CheckBox cb_BotThink;
+        private System.Windows.Forms.TabPage cleverbot;
+        private System.Windows.Forms.GroupBox groupClever;
+        private System.Windows.Forms.TextBox t_cleverAPI;
     }
 }
