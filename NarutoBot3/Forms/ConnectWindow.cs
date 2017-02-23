@@ -6,7 +6,7 @@ namespace NarutoBot3
 {
     public partial class ConnectWindow : Form
     {
-        bool alreadyConencted = false;
+        private bool alreadyConencted = false;
 
         public ConnectWindow(bool alreadyConnected)
         {
@@ -24,12 +24,11 @@ namespace NarutoBot3
 
         private void b_Conect_Click(object sender, EventArgs e)
         {
-
             DialogResult = DialogResult.OK;
 
             if (alreadyConencted)
             {
-                DialogResult resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?", 
+                DialogResult resultWarning = MessageBox.Show("This bot is already connected.\nDo you want to end the current connection?",
                     "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                 if (resultWarning == DialogResult.Cancel)
@@ -118,7 +117,6 @@ namespace NarutoBot3
             }
         }
 
-
         private void save()
         {
             Settings.Default.Channel = t_Channel.Text;
@@ -128,7 +126,6 @@ namespace NarutoBot3
             Settings.Default.RealName = t_RealName.Text;
             Settings.Default.silence = cb_silence.Checked;
             Settings.Default.Save();
-
         }
     }
 }

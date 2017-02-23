@@ -1,5 +1,4 @@
-﻿using ChatterBotAPI;
-using IrcClient;
+﻿using IrcClient;
 using IrcClient.Messages;
 using NarutoBot3.Events;
 using NarutoBot3.Properties;
@@ -32,7 +31,7 @@ namespace NarutoBot3
         public TextMarkovChain killgen = new TextMarkovChain();
         private int tmcCount = 0;
 
-        private ChatterBotSession bot1session;
+        private Cleverbot.Net.Cleverbot bot1session;
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -229,7 +228,7 @@ namespace NarutoBot3
 
             ul.loadData();
 
-            bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
+            bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
 
             if (File.Exists("textSample.xml"))
             {
@@ -262,7 +261,6 @@ namespace NarutoBot3
                 Settings.Default.botThinkEnabled = false;
                 Settings.Default.Save();
             }
-                
 
             if (Settings.Default.twitterEnabled)
                 TwitterLogin();
@@ -928,7 +926,7 @@ namespace NarutoBot3
                             WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
                             removeCustomCommand(whoSent, arg, user);
                         }
-                        else if (((string.Compare(cmd, "inspectmessages", true) == 0) || (string.Compare(cmd, "viewmessages", true) == 0))  && !string.IsNullOrEmpty(arg))
+                        else if (((string.Compare(cmd, "inspectmessages", true) == 0) || (string.Compare(cmd, "viewmessages", true) == 0)) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received an Inspect Messages request from " + user, currentColorScheme.BotReport);
                             inspectMessages(whoSent, arg, user);
@@ -2418,14 +2416,14 @@ namespace NarutoBot3
 
             try
             {
-                string answer = HttpUtility.HtmlDecode(bot1session.Think(newLine));
+                string answer = bot1session.GetResponse(newLine).Response;
 
                 message = new Privmsg(CHANNEL, answer);
             }
             catch
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
+                bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
             }
 
             sendMessage(message);
@@ -3348,13 +3346,13 @@ namespace NarutoBot3
                     {
                         try
                         {
-                            string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
+                            string answer = bot1session.GetResponse(arg + "?").Response;
                             message = new Privmsg(CHANNEL, answer);
                         }
                         catch
                         {
                             message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
+                            bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
                         }
                     }
                     else if (string.Compare(split[0], "am", true) == 0 && string.Compare(split[1], "i", true) == 0)
@@ -3572,13 +3570,13 @@ namespace NarutoBot3
                 {
                     try
                     {
-                        string answer = HttpUtility.HtmlDecode(bot1session.Think(arg + "?"));
+                        string answer = bot1session.GetResponse(arg + "?").Response;
                         message = new Privmsg(CHANNEL, answer);
                     }
                     catch
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
+                        bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
                     }
                 }
             }
@@ -3586,13 +3584,13 @@ namespace NarutoBot3
             {
                 try
                 {
-                    string answer = HttpUtility.HtmlDecode(bot1session.Think(arg));
+                    string answer = bot1session.GetResponse(arg + "?").Response;
                     message = new Privmsg(CHANNEL, answer);
                 }
                 catch
                 {
                     message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                    bot1session = new ChatterBotFactory().Create(ChatterBotType.CLEVERBOT).CreateSession();
+                    bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
                 }
             }
 

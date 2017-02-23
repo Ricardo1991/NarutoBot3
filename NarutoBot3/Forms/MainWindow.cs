@@ -16,9 +16,13 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         private delegate void SetTextCallback(string text);
+
         private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+
         private delegate void SetBoolCallback(bool status);
+
         private delegate void ChangeDataSource();
+
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
         public ThemeCollection themes = new ThemeCollection();
@@ -194,7 +198,6 @@ namespace NarutoBot3
             themes.selectTheme(themes.getThemeByName(themeName));
             refreshTheme();
         }
-
 
         private void initializeBotEvents()
         {
@@ -564,7 +567,7 @@ namespace NarutoBot3
                     if (Convert.ToInt32(Settings.Default.Port) <= 0 || Convert.ToInt32(Settings.Default.Port) > 65535) Settings.Default.Port = 6667.ToString();
 
                     if (connect()) //If connected with success, then start the bot
-                    { 
+                    {
                         MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         ChangeConnectingLabel("Disconnected");
                     }
