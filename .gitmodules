@@ -6,7 +6,3 @@
 	path = MarkovChainSentenceGeneratorGit
 	url = https://github.com/treydwilson/MarkovChainSentenceGenerator
 	ignore = dirty
-[submodule "chatter-bot-api-git"]
-	path = chatter-bot-api-git
-	url = https://github.com/pierredavidbelanger/chatter-bot-api
-	ignore = dirty
