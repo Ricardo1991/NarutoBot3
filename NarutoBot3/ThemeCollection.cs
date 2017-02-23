@@ -65,6 +65,19 @@ namespace NarutoBot3
             }
         }
 
+        public ColorScheme getThemeByName(string name)
+        {
+            ColorScheme color = new ColorScheme();
+
+            foreach (ColorScheme c in ThemeColection)
+            {
+                if (string.Compare(c.Name, name, true) == 0)
+                    return c;
+            }
+
+            return color;
+        }
+
         public bool selectTheme(ColorScheme theme)
         {
             CurrentColorScheme = theme;

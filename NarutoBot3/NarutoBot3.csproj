@@ -27,9 +27,10 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>4.10.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -99,6 +100,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cleverbot.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cleverbot.0.7.0\lib\Cleverbot.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.0\lib\ejml-0.23.dll</HintPath>
       <Private>True</Private>
@@ -428,10 +433,6 @@
       <Project>{88b1a2d4-0b5f-4586-92df-878e37f855f4}</Project>
       <Name>AutoComplete</Name>
     </ProjectReference>
-    <ProjectReference Include="..\chatter-bot-api-git\dotnet\ChatterBotAPI\ChatterBotAPI.csproj">
-      <Project>{2e624962-f155-432c-a90a-e1ce75dee9ea}</Project>
-      <Name>ChatterBotAPI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IrcClient\IrcClient.csproj">
       <Project>{6f084264-cab0-46a2-b7a4-b722b2adb0a4}</Project>
       <Name>IrcClient</Name>
@@ -446,9 +447,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

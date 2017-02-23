@@ -1,7 +1,9 @@
 ﻿using IrcClient.Messages;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 
 namespace IrcClient
 {
@@ -27,6 +29,9 @@ namespace IrcClient
         public StreamReader reader;
         public StreamWriter writer;
 
+        public delegate void MessageReceived(string message);
+        private BackgroundWorker backgroundWorker = new BackgroundWorker();
+
         public IRC_Client(string home_channel, string host, int port, string nick, string realName)
         {
             HOME_CHANNEL = home_channel;
@@ -38,13 +43,19 @@ namespace IrcClient
             user_message = new Messages.User(NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
             nick_message = new Nick(NICK);
             join_message = new Join(HOME_CHANNEL);
+
+            //Events for BGWorker
+            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker.WorkerSupportsCancellation = true;
+
         }
 
-        public bool Connect()
+        public bool Connect(MessageReceived messageDelegate)
         {
             if (irc != null) irc.Close();
 
             irc = new TcpClient(HOST, PORT);
+            irc.ReceiveTimeout = 5000;
             stream = irc.GetStream();
 
             reader = new StreamReader(stream);
@@ -54,6 +65,7 @@ namespace IrcClient
             {
                 sendMessage(user_message);
                 sendMessage(nick_message);
+                backgroundWorker.RunWorkerAsync(messageDelegate);
 
                 return true;    //Weee, we connected!
             }
@@ -104,11 +116,29 @@ namespace IrcClient
             }
         }
 
-        public string readMessage()
+        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
         {
-            if (reader != null)
-                return reader.ReadLine();
-            else return string.Empty;
+            MessageReceived messageDelegate = (MessageReceived)e.Argument;
+
+            while (!backgroundWorker.CancellationPending)
+            {
+                string buffer = "";
+                string line;
+
+                try
+                {
+                    if (reader != null)
+                        buffer = reader.ReadLine();
+                    else messageDelegate(string.Empty);
+
+                    byte[] bytes = Encoding.UTF8.GetBytes(buffer);
+                    line = Encoding.UTF8.GetString(bytes);
+
+                    if (line.Length > 0) messageDelegate(line);
+                }
+                catch
+                { }
+            }
         }
 
         public void Disconnect(string quitMessage)
@@ -118,6 +148,7 @@ namespace IrcClient
                 if (writer != null) sendMessage(new Quit(quitMessage));
 
                 isConnected = false;
+                backgroundWorker.CancelAsync();
 
                 if (stream != null)
                     stream.Close();

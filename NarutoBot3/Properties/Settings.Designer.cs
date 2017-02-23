@@ -754,5 +754,29 @@ namespace NarutoBot3.Properties {
                 this["inboxSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cleverbotAPI {
+            get {
+                return ((string)(this["cleverbotAPI"]));
+            }
+            set {
+                this["cleverbotAPI"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool botThinkEnabled {
+            get {
+                return ((bool)(this["botThinkEnabled"]));
+            }
+            set {
+                this["botThinkEnabled"] = value;
+            }
+        }
     }
 }
