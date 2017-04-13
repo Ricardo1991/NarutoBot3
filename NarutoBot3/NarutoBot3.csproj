@@ -100,12 +100,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cleverbot.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cleverbot.0.7.0\lib\Cleverbot.Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.0\lib\ejml-0.23.dll</HintPath>
+      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\ejml-0.23.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -224,16 +220,16 @@
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="slf4j-api, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.0\lib\slf4j-api.dll</HintPath>
+      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\slf4j-api.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="stanford-parser, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.0\lib\stanford-parser.dll</HintPath>
+    <Reference Include="stanford-parser, Version=3.7.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\stanford-parser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
