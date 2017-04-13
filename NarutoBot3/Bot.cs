@@ -20,6 +20,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using TextMarkovChains;
 using TweetSharp;
+using Cleverbot.Net;
 
 namespace NarutoBot3
 {
@@ -31,7 +32,7 @@ namespace NarutoBot3
         public TextMarkovChain killgen = new TextMarkovChain();
         private int tmcCount = 0;
 
-        private Cleverbot.Net.Cleverbot bot1session;
+        private CleverbotSession bot1session;
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -228,7 +229,7 @@ namespace NarutoBot3
 
             ul.loadData();
 
-            bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
+            bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
 
             if (File.Exists("textSample.xml"))
             {
@@ -2423,7 +2424,7 @@ namespace NarutoBot3
             catch
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
+                bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
             }
 
             sendMessage(message);
@@ -3352,7 +3353,7 @@ namespace NarutoBot3
                         catch
                         {
                             message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
+                            bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
                         }
                     }
                     else if (string.Compare(split[0], "am", true) == 0 && string.Compare(split[1], "i", true) == 0)
@@ -3576,7 +3577,7 @@ namespace NarutoBot3
                     catch
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
+                        bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
                     }
                 }
             }
@@ -3590,7 +3591,7 @@ namespace NarutoBot3
                 catch
                 {
                     message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                    bot1session = new Cleverbot.Net.Cleverbot(Settings.Default.cleverbotAPI);
+                    bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
                 }
             }
 

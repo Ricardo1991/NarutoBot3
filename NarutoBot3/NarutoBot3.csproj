@@ -100,6 +100,9 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cleverbot.Net">
+      <HintPath>..\packages\Cleverbot.0.9.0\Cleverbot.Net.dll</HintPath>
+    </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\ejml-0.23.dll</HintPath>
       <Private>True</Private>
