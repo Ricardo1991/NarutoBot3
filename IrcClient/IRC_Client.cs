@@ -97,8 +97,9 @@ namespace IrcClient
                 while (message.toString().Length > 420)
                 {
                     var nextMessage = (IrcMessage)message.Clone();
-                    message.body = message.body.Substring(0, 390);
-                    nextMessage.body = nextMessage.body.Substring(390);
+                    int cut = findCutSpace(message.body, 390);
+                    message.body = message.body.Substring(0, cut);
+                    nextMessage.body = nextMessage.body.Substring(cut);
 
                     writer.WriteLine(message.toString());
 
@@ -114,6 +115,16 @@ namespace IrcClient
             {
                 return false;
             }
+        }
+
+        private int findCutSpace(string body, int startSearch)
+        {
+            for(int i = startSearch; i > startSearch-30 && i > 0; i--)
+            {
+                if(body[i] == ' ')
+                    return i;
+            }
+            return startSearch;
         }
 
         public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop

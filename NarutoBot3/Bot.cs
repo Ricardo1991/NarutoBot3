@@ -1,4 +1,5 @@
-﻿using IrcClient;
+﻿using Cleverbot.Net;
+using IrcClient;
 using IrcClient.Messages;
 using NarutoBot3.Events;
 using NarutoBot3.Properties;
@@ -20,7 +21,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using TextMarkovChains;
 using TweetSharp;
-using Cleverbot.Net;
 
 namespace NarutoBot3
 {
@@ -229,7 +229,10 @@ namespace NarutoBot3
 
             ul.loadData();
 
-            bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
+            if (string.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
+                Settings.Default.botThinkEnabled = false;
+            else
+                bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
 
             if (File.Exists("textSample.xml"))
             {
@@ -2601,7 +2604,7 @@ namespace NarutoBot3
 
         public void animeSearch(string CHANNEL, string nick, string query)
         {
-            //TODO: Simplefy this anime search
+            //TODO: Simplify this anime search
 
             IrcMessage message;
             MalAnime a = new MalAnime();
@@ -3345,15 +3348,19 @@ namespace NarutoBot3
                     }
                     else if (string.Compare(split[0], "if", true) == 0)
                     {
-                        try
+                        if (Settings.Default.botThinkEnabled)
                         {
-                            string answer = bot1session.GetResponse(arg + "?").Response;
-                            message = new Privmsg(CHANNEL, answer);
-                        }
-                        catch
-                        {
-                            message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
+                            try
+                            {
+
+                                string answer = bot1session.GetResponse(arg + "?").Response;
+                                message = new Privmsg(CHANNEL, answer);
+                            }
+                            catch
+                            {
+                                message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                                bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+                            }
                         }
                     }
                     else if (string.Compare(split[0], "am", true) == 0 && string.Compare(split[1], "i", true) == 0)
@@ -3569,6 +3576,25 @@ namespace NarutoBot3
                 }
                 else
                 {
+                    if (Settings.Default.botThinkEnabled)
+                    {
+                        try
+                        {
+                            string answer = bot1session.GetResponse(arg + "?").Response;
+                            message = new Privmsg(CHANNEL, answer);
+                        }
+                        catch
+                        {
+                            message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
+                            bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (Settings.Default.botThinkEnabled)
+                {
                     try
                     {
                         string answer = bot1session.GetResponse(arg + "?").Response;
@@ -3577,21 +3603,8 @@ namespace NarutoBot3
                     catch
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
+                        bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
                     }
-                }
-            }
-            else
-            {
-                try
-                {
-                    string answer = bot1session.GetResponse(arg + "?").Response;
-                    message = new Privmsg(CHANNEL, answer);
-                }
-                catch
-                {
-                    message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                    bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
                 }
             }
 
