@@ -2402,7 +2402,7 @@ namespace NarutoBot3
             }
         }
 
-        public void botThink(string CHANNEL, string line, string nick)
+        public async void botThink(string CHANNEL, string line, string nick)
         {
             IrcMessage message;
 
@@ -2420,9 +2420,8 @@ namespace NarutoBot3
 
             try
             {
-                string answer = bot1session.GetResponse(newLine).Response;
-
-                message = new Privmsg(CHANNEL, answer);
+                CleverbotResponse answer = await bot1session.GetResponseAsync(newLine);
+                message = new Privmsg(CHANNEL, answer.Response);
             }
             catch
             {
@@ -3084,7 +3083,7 @@ namespace NarutoBot3
             }
         }
 
-        private void parseQuestion(string CHANNEL, string user, string arg)
+        private async void parseQuestion(string CHANNEL, string user, string arg)
         {
             //This needs to go or be simplified
 
@@ -3352,9 +3351,8 @@ namespace NarutoBot3
                         {
                             try
                             {
-
-                                string answer = bot1session.GetResponse(arg + "?").Response;
-                                message = new Privmsg(CHANNEL, answer);
+                                CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                                message = new Privmsg(CHANNEL, answer.Response);
                             }
                             catch
                             {
@@ -3580,8 +3578,8 @@ namespace NarutoBot3
                     {
                         try
                         {
-                            string answer = bot1session.GetResponse(arg + "?").Response;
-                            message = new Privmsg(CHANNEL, answer);
+                            CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                            message = new Privmsg(CHANNEL, answer.Response);
                         }
                         catch
                         {
@@ -3597,8 +3595,8 @@ namespace NarutoBot3
                 {
                     try
                     {
-                        string answer = bot1session.GetResponse(arg + "?").Response;
-                        message = new Privmsg(CHANNEL, answer);
+                        CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                        message = new Privmsg(CHANNEL, answer.Response);
                     }
                     catch
                     {
@@ -4329,8 +4327,9 @@ namespace NarutoBot3
         {
             if (waitingForPong)
             {
-                OnTimeout(EventArgs.Empty);
                 waitingForPong = false;
+                timeoutTimer.Enabled = false;
+                OnTimeout(EventArgs.Empty);
             }
         }
 

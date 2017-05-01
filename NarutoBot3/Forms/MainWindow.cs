@@ -31,7 +31,7 @@ namespace NarutoBot3
         private IRC_Client client;
 
         private System.Timers.Timer randomTextTimer;        //To check for random text
-        private System.Timers.Timer timeoutTimer;           //To check for connection lost
+        private System.Timers.Timer pingServerTimer;           //To check for connection lost
 
         private List<string> lastCommand = new List<string>();
         private int lastCommandIndex = 0;
@@ -73,12 +73,12 @@ namespace NarutoBot3
 
             if (client.Connect(bot.processMessage))
             {
-                timeoutTimer.Enabled = true;
+                pingServerTimer.Enabled = true;
                 return true;
             }
             else
             {
-                timeoutTimer.Enabled = false;
+                pingServerTimer.Enabled = false;
                 return false;
             }
         }
@@ -114,9 +114,9 @@ namespace NarutoBot3
             if (Settings.Default.randomTextEnabled)
                 randomTextTimer.Start();
 
-            timeoutTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-            timeoutTimer.Enabled = true;
-            timeoutTimer.Elapsed += new ElapsedEventHandler(pingServer);
+            pingServerTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
+            pingServerTimer.Enabled = true;
+            pingServerTimer.Elapsed += new ElapsedEventHandler(pingServer);
 
             Settings.Default.releaseEnabled = false;
 
@@ -246,7 +246,7 @@ namespace NarutoBot3
 
             Thread.Sleep(250);
 
-            timeoutTimer.Enabled = false;
+            pingServerTimer.Enabled = false;
             UpdateDataSource();
             OutputClean();
             ChangeTitle("NarutoBot");
