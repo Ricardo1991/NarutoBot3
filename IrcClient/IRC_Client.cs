@@ -12,17 +12,17 @@ namespace IrcClient
         public bool isConnected = false;
 
         public string HOME_CHANNEL;
-        public string HOST;
+        public string HOST = null;
         public char SYMBOL = '!';
-        public int PORT;
+        public int PORT = 6667;
         public string NICK;
         public string REALNAME;
 
         public string HOST_SERVER;
 
-        private IrcMessage user_message;
-        private IrcMessage nick_message;
-        private IrcMessage join_message;
+        private IrcMessage user_message = null;
+        private IrcMessage nick_message = null;
+        private IrcMessage join_message = null;
 
         private NetworkStream stream;
         private TcpClient irc;
@@ -30,6 +30,7 @@ namespace IrcClient
         public StreamWriter writer;
 
         public delegate void MessageReceived(string message);
+
         private BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public IRC_Client(string home_channel, string host, int port, string nick, string realName)
@@ -40,19 +41,55 @@ namespace IrcClient
             NICK = nick;
             REALNAME = realName;
 
-            user_message = new Messages.User(NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
+            user_message = new User(NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
             nick_message = new Nick(NICK);
             join_message = new Join(HOME_CHANNEL);
 
             //Events for BGWorker
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
             backgroundWorker.WorkerSupportsCancellation = true;
+        }
 
+        public IRC_Client()
+        {
+            //Events for BGWorker
+            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker.WorkerSupportsCancellation = true;
+        }
+
+        public void changeHomeChannel(string homeChannel)
+        {
+            HOME_CHANNEL = homeChannel;
+            join_message = new Join(HOME_CHANNEL);
+        }
+
+        public void changeHostPort(string host, int port)
+        {
+            HOST = host;
+            PORT = port;
+        }
+
+        public void changeHostPort(string host, string port)
+        {
+            HOST = host;
+            PORT = Convert.ToInt32(port);
+        }
+
+        public void changeNickRealName(string nick, string realname)
+        {
+            NICK = nick;
+            REALNAME = realname;
+
+            user_message = new User(NICK + " " + NICK + "_h" + " " + NICK + "_s" + " :" + REALNAME);
+            nick_message = new Nick(NICK);
         }
 
         public bool Connect(MessageReceived messageDelegate)
         {
             if (irc != null) irc.Close();
+
+            if (HOST == null)
+                throw new Exception("Please provide the host");
 
             irc = new TcpClient(HOST, PORT);
             irc.ReceiveTimeout = 5000;
@@ -60,6 +97,9 @@ namespace IrcClient
 
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream) { AutoFlush = true };
+
+            if (user_message == null || nick_message == null || join_message == null)
+                throw new Exception("Please provide channel, nick and realname");
 
             try
             {
@@ -119,9 +159,9 @@ namespace IrcClient
 
         private int findCutSpace(string body, int startSearch)
         {
-            for(int i = startSearch; i > startSearch-30 && i > 0; i--)
+            for (int i = startSearch; i > startSearch - 30 && i > 0; i--)
             {
-                if(body[i] == ' ')
+                if (body[i] == ' ')
                     return i;
             }
             return startSearch;

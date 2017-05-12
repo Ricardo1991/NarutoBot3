@@ -50,6 +50,7 @@
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
+            this.cb_BotThink = new System.Windows.Forms.CheckBox();
             this.cbFacts = new System.Windows.Forms.CheckBox();
             this.cbFunk = new System.Windows.Forms.CheckBox();
             this.cbQuotes = new System.Windows.Forms.CheckBox();
@@ -58,7 +59,6 @@
             this.cb_nicks = new System.Windows.Forms.CheckBox();
             this.cb_Trivia = new System.Windows.Forms.CheckBox();
             this.cb_Poke = new System.Windows.Forms.CheckBox();
-            this.cb_randomText = new System.Windows.Forms.CheckBox();
             this.cb_greetings = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesBasic = new System.Windows.Forms.GroupBox();
             this.settingsTabControl = new System.Windows.Forms.TabControl();
@@ -107,12 +107,11 @@
             this.label9 = new System.Windows.Forms.Label();
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cb_BotThink = new System.Windows.Forms.CheckBox();
             this.cleverbot = new System.Windows.Forms.TabPage();
             this.groupClever = new System.Windows.Forms.GroupBox();
             this.t_cleverAPI = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.eventLog1 = new System.Diagnostics.EventLog();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -133,10 +132,10 @@
             this.twitterCredentialsTab.SuspendLayout();
             this.gb_CredentialsTwitterAccessTokens.SuspendLayout();
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.cleverbot.SuspendLayout();
             this.groupClever.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -387,7 +386,6 @@
             this.gb_FeaturesFun.Controls.Add(this.cb_nicks);
             this.gb_FeaturesFun.Controls.Add(this.cb_Trivia);
             this.gb_FeaturesFun.Controls.Add(this.cb_Poke);
-            this.gb_FeaturesFun.Controls.Add(this.cb_randomText);
             this.gb_FeaturesFun.Location = new System.Drawing.Point(174, 10);
             this.gb_FeaturesFun.Name = "gb_FeaturesFun";
             this.gb_FeaturesFun.Size = new System.Drawing.Size(162, 276);
@@ -395,10 +393,20 @@
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
             // 
+            // cb_BotThink
+            // 
+            this.cb_BotThink.AutoSize = true;
+            this.cb_BotThink.Location = new System.Drawing.Point(6, 203);
+            this.cb_BotThink.Name = "cb_BotThink";
+            this.cb_BotThink.Size = new System.Drawing.Size(53, 17);
+            this.cb_BotThink.TabIndex = 17;
+            this.cb_BotThink.Text = "Think";
+            this.cb_BotThink.UseVisualStyleBackColor = true;
+            // 
             // cbFacts
             // 
             this.cbFacts.AutoSize = true;
-            this.cbFacts.Location = new System.Drawing.Point(6, 204);
+            this.cbFacts.Location = new System.Drawing.Point(6, 181);
             this.cbFacts.Name = "cbFacts";
             this.cbFacts.Size = new System.Drawing.Size(52, 17);
             this.cbFacts.TabIndex = 16;
@@ -408,7 +416,7 @@
             // cbFunk
             // 
             this.cbFunk.AutoSize = true;
-            this.cbFunk.Location = new System.Drawing.Point(6, 181);
+            this.cbFunk.Location = new System.Drawing.Point(6, 158);
             this.cbFunk.Name = "cbFunk";
             this.cbFunk.Size = new System.Drawing.Size(50, 17);
             this.cbFunk.TabIndex = 14;
@@ -418,7 +426,7 @@
             // cbQuotes
             // 
             this.cbQuotes.AutoSize = true;
-            this.cbQuotes.Location = new System.Drawing.Point(6, 158);
+            this.cbQuotes.Location = new System.Drawing.Point(6, 135);
             this.cbQuotes.Name = "cbQuotes";
             this.cbQuotes.Size = new System.Drawing.Size(60, 17);
             this.cbQuotes.TabIndex = 13;
@@ -430,7 +438,7 @@
             this.cb_Questions.AutoSize = true;
             this.cb_Questions.Checked = true;
             this.cb_Questions.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Questions.Location = new System.Drawing.Point(6, 135);
+            this.cb_Questions.Location = new System.Drawing.Point(6, 112);
             this.cb_Questions.Name = "cb_Questions";
             this.cb_Questions.Size = new System.Drawing.Size(73, 17);
             this.cb_Questions.TabIndex = 11;
@@ -442,7 +450,7 @@
             this.cb_Kill.AutoSize = true;
             this.cb_Kill.Checked = true;
             this.cb_Kill.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Kill.Location = new System.Drawing.Point(6, 111);
+            this.cb_Kill.Location = new System.Drawing.Point(6, 88);
             this.cb_Kill.Name = "cb_Kill";
             this.cb_Kill.Size = new System.Drawing.Size(39, 17);
             this.cb_Kill.TabIndex = 10;
@@ -466,7 +474,7 @@
             this.cb_Trivia.AutoSize = true;
             this.cb_Trivia.Checked = true;
             this.cb_Trivia.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Trivia.Location = new System.Drawing.Point(6, 88);
+            this.cb_Trivia.Location = new System.Drawing.Point(6, 65);
             this.cb_Trivia.Name = "cb_Trivia";
             this.cb_Trivia.Size = new System.Drawing.Size(52, 17);
             this.cb_Trivia.TabIndex = 5;
@@ -478,24 +486,12 @@
             this.cb_Poke.AutoSize = true;
             this.cb_Poke.Checked = true;
             this.cb_Poke.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Poke.Location = new System.Drawing.Point(6, 65);
+            this.cb_Poke.Location = new System.Drawing.Point(6, 42);
             this.cb_Poke.Name = "cb_Poke";
             this.cb_Poke.Size = new System.Drawing.Size(51, 17);
             this.cb_Poke.TabIndex = 7;
             this.cb_Poke.Text = "Poke";
             this.cb_Poke.UseVisualStyleBackColor = true;
-            // 
-            // cb_randomText
-            // 
-            this.cb_randomText.AutoSize = true;
-            this.cb_randomText.Checked = true;
-            this.cb_randomText.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_randomText.Location = new System.Drawing.Point(6, 42);
-            this.cb_randomText.Name = "cb_randomText";
-            this.cb_randomText.Size = new System.Drawing.Size(90, 17);
-            this.cb_randomText.TabIndex = 9;
-            this.cb_randomText.Text = "Random Text";
-            this.cb_randomText.UseVisualStyleBackColor = true;
             // 
             // cb_greetings
             // 
@@ -987,24 +983,6 @@
             this.b_ConsumerKey.TabIndex = 0;
             this.b_ConsumerKey.Text = "Consumer Key";
             // 
-            // errorProvider1
-            // 
-            this.errorProvider1.ContainerControl = this;
-            // 
-            // eventLog1
-            // 
-            this.eventLog1.SynchronizingObject = this;
-            // 
-            // cb_BotThink
-            // 
-            this.cb_BotThink.AutoSize = true;
-            this.cb_BotThink.Location = new System.Drawing.Point(6, 226);
-            this.cb_BotThink.Name = "cb_BotThink";
-            this.cb_BotThink.Size = new System.Drawing.Size(53, 17);
-            this.cb_BotThink.TabIndex = 17;
-            this.cb_BotThink.Text = "Think";
-            this.cb_BotThink.UseVisualStyleBackColor = true;
-            // 
             // cleverbot
             // 
             this.cleverbot.Controls.Add(this.groupClever);
@@ -1032,6 +1010,14 @@
             this.t_cleverAPI.Name = "t_cleverAPI";
             this.t_cleverAPI.Size = new System.Drawing.Size(478, 20);
             this.t_cleverAPI.TabIndex = 1;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // eventLog1
+            // 
+            this.eventLog1.SynchronizingObject = this;
             // 
             // SettingsWindow
             // 
@@ -1080,11 +1066,11 @@
             this.gb_CredentialsTwitterAccessTokens.PerformLayout();
             this.gb_CredentialsTwitterConsumer.ResumeLayout(false);
             this.gb_CredentialsTwitterConsumer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.cleverbot.ResumeLayout(false);
             this.groupClever.ResumeLayout(false);
             this.groupClever.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1105,7 +1091,6 @@
         private System.Windows.Forms.CheckBox cb_vimeo;
         private System.Windows.Forms.CheckBox cb_Poke;
         private System.Windows.Forms.CheckBox cb_Wiki;
-        private System.Windows.Forms.CheckBox cb_randomText;
         private System.Windows.Forms.CheckBox cb_Anime;
         private System.Windows.Forms.CheckBox cb_twitter;
         private System.Windows.Forms.GroupBox gb_FeaturesHelpful;

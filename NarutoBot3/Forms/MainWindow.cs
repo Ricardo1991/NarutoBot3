@@ -1,5 +1,4 @@
-﻿using IrcClient;
-using IrcClient.Messages;
+﻿using IrcClient.Messages;
 using NarutoBot3.Events;
 using NarutoBot3.Properties;
 using System;
@@ -28,10 +27,6 @@ namespace NarutoBot3
         public ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
-        private IRC_Client client;
-
-        private System.Timers.Timer randomTextTimer;        //To check for random text
-        private System.Timers.Timer pingServerTimer;           //To check for connection lost
 
         private List<string> lastCommand = new List<string>();
         private int lastCommandIndex = 0;
@@ -42,6 +37,10 @@ namespace NarutoBot3
 
             loadSettings();
 
+            bot = new Bot(ref OutputBox);
+            bot.updateTheme(themes.CurrentColorScheme);
+            initializeBotEvents();
+
             //Show ConnectWindow Form and try to connect
             ConnectWindow connect = new ConnectWindow(false);
 
@@ -49,8 +48,12 @@ namespace NarutoBot3
             {
                 setSilenceMarks();
 
-                if (client != null && client.isConnected)
+                if (bot.Client != null && bot.Client.isConnected)
                 {
+                    bot.Client.changeHomeChannel(Settings.Default.Channel);
+                    bot.Client.changeHostPort(Settings.Default.Server, Settings.Default.Port);
+                    bot.Client.changeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
+
                     disconnectClient();
                     Thread.Sleep(250);
                 }
@@ -65,22 +68,7 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connecting...");
 
-            client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
-                Settings.Default.Nick, Settings.Default.RealName);
-
-            bot = new Bot(ref client, ref OutputBox, themes.CurrentColorScheme);
-            initializeBotEvents();
-
-            if (client.Connect(bot.processMessage))
-            {
-                pingServerTimer.Enabled = true;
-                return true;
-            }
-            else
-            {
-                pingServerTimer.Enabled = false;
-                return false;
-            }
+            return bot.connect();
         }
 
         private void doAutoJoinCommand()
@@ -93,7 +81,6 @@ namespace NarutoBot3
 
         public void loadSettings()
         {
-            setRandomTextIntervalCheckmarks();
             setSilenceMarks();
             checkTwitterApi();
             checkGoogleApi();
@@ -106,17 +93,6 @@ namespace NarutoBot3
 
             if (string.IsNullOrEmpty(Settings.Default.redditUser) || string.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
-
-            randomTextTimer = new System.Timers.Timer(Settings.Default.randomTextInterval * 60 * 1000);
-            randomTextTimer.Enabled = Settings.Default.randomTextEnabled;
-            randomTextTimer.Elapsed += (sender, e) => randomTextSender(sender, e);
-
-            if (Settings.Default.randomTextEnabled)
-                randomTextTimer.Start();
-
-            pingServerTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-            pingServerTimer.Enabled = true;
-            pingServerTimer.Elapsed += new ElapsedEventHandler(pingServer);
 
             Settings.Default.releaseEnabled = false;
 
@@ -151,32 +127,6 @@ namespace NarutoBot3
                     string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
                     string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
                 Settings.Default.twitterEnabled = false;
-        }
-
-        private void setRandomTextIntervalCheckmarks()
-        {
-            t30.Checked = false;
-            t45.Checked = false;
-            t60.Checked = false;
-            switch (Settings.Default.randomTextInterval)
-            {
-                case 30:
-                    t30.Checked = true;
-                    break;
-
-                case 45:
-                    t45.Checked = true;
-                    break;
-
-                case 60:
-                    t60.Checked = true;
-                    break;
-
-                default:
-                    Settings.Default.randomTextInterval = 30;
-                    t30.Checked = true;
-                    break;
-            }
         }
 
         private void setSilenceMarks()
@@ -229,6 +179,8 @@ namespace NarutoBot3
             bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
 
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
+
+            bot.pingServerTimer.Elapsed += new ElapsedEventHandler(pingServer);
         }
 
         private void disconnectClient()
@@ -236,17 +188,16 @@ namespace NarutoBot3
             if (bot != null)
             {
                 CustomCommand.saveCustomCommands(bot.customCommands);
-                bot.ul.saveData();
-                bot.tmc.save("textSample.xml");
+                bot.userlist.saveData();
             }
 
             InterfaceUserList.DataSource = null;
             ChangeConnectingLabel("Disconnecting...");
-            client.Disconnect(Settings.Default.quitMessage);
+            bot.Client.Disconnect(Settings.Default.quitMessage);
 
             Thread.Sleep(250);
 
-            pingServerTimer.Enabled = false;
+            bot.pingServerTimer.Enabled = false;
             UpdateDataSource();
             OutputClean();
             ChangeTitle("NarutoBot");
@@ -280,7 +231,7 @@ namespace NarutoBot3
                 }
             }
 
-            //also, should make a log
+            //TODO: should make a log
         }
 
         public void WriteMessage(string message, Color color) //Writes Message on the TextBox (bot console)
@@ -365,18 +316,18 @@ namespace NarutoBot3
 
         public bool changeNick(string nick)
         {
-            client.NICK = Settings.Default.Nick = nick;
+            bot.Client.NICK = Settings.Default.Nick = nick;
             Settings.Default.Save();
 
-            if (!string.IsNullOrEmpty(client.HOST_SERVER))
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
             else
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
 
             //do Nick change to server
-            if (client.isConnected)
+            if (bot.Client.isConnected)
             {
-                bot.sendMessage(new Nick(client.NICK));
+                bot.sendMessage(new Nick(bot.Client.NICK));
                 return true;
             }
 
@@ -470,12 +421,12 @@ namespace NarutoBot3
             }
             else
             {
-                List<User> ul = bot.ul.getAllOnlineUsers();
+                List<User> ul = bot.userlist.getAllOnlineUsers();
                 ul.Sort();
                 InterfaceUserList.DataSource = ul;
 
                 List<string> temp = new List<string>();
-                List<User> lu = bot.ul.getAllOnlineUsers();
+                List<User> lu = bot.userlist.getAllOnlineUsers();
 
                 foreach (User s in lu)
                 {
@@ -532,14 +483,14 @@ namespace NarutoBot3
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
-            ConnectWindow Connect = new ConnectWindow(client != null && client.isConnected);
+            ConnectWindow Connect = new ConnectWindow(bot.Client != null && bot.Client.isConnected);
 
             if (Connect.ShowDialog() == DialogResult.OK)
             {
                 //Re-do Connect!
-                if (client != null)
+                if (bot.Client != null)
                 {
-                    if (client.isConnected)
+                    if (bot.Client.isConnected)
                     {
                         disconnectClient();
                         Thread.Sleep(250);
@@ -579,11 +530,10 @@ namespace NarutoBot3
         {
             if (bot != null)
             {
-                bot.ul.saveData();
-                bot.tmc.save("textSample.xml");
+                bot.userlist.saveData();
             }
 
-            if (client != null && client.isConnected)
+            if (bot.Client != null && bot.Client.isConnected)
             {
                 disconnectClient();
             }
@@ -610,7 +560,7 @@ namespace NarutoBot3
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) //Disconnect Button
         {
-            if (client.isConnected)
+            if (bot.Client.isConnected)
             {
                 disconnectClient();
             }
@@ -640,9 +590,6 @@ namespace NarutoBot3
                 {
                 }
             }
-
-            if (Settings.Default.randomTextEnabled)
-                randomTextTimer.Start();
         }
 
         private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
@@ -664,7 +611,7 @@ namespace NarutoBot3
                 operatorsWindow = new BotOperatorWindow(ref ul);
             }
             else
-                operatorsWindow = new BotOperatorWindow(ref bot.ul);
+                operatorsWindow = new BotOperatorWindow(ref bot.userlist);
 
             operatorsWindow.ShowDialog();
         }
@@ -724,14 +671,14 @@ namespace NarutoBot3
             string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
             IrcMessage message = null;
 
-            if (!client.isConnected) return;
+            if (!bot.Client.isConnected) return;
 
             if (parsed.Length >= 2 && !string.IsNullOrEmpty(parsed[1]))
             {
                 if (parsed[0][0] == '/')
                 {
                     if (parsed[0].ToLower() == "/me")  //Action send
-                        message = new IrcClient.Messages.Action(client.HOME_CHANNEL, parsed[1]);
+                        message = new IrcClient.Messages.Action(bot.Client.HOME_CHANNEL, parsed[1]);
                     else if (parsed[0].ToLower() == "/whois")  //Action send
                         message = new Whois(parsed[1]);
                     else if (parsed[0].ToLower() == "/whowas")  //Action send
@@ -754,13 +701,13 @@ namespace NarutoBot3
                         message = new Privmsg("NickServ", "identify " + parsed[1]);
                 }
                 else //Normal send
-                    message = new Privmsg(client.HOME_CHANNEL, InputBox.Text);
+                    message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
             }
             else
                 if (parsed[0][0] == '/')
                 WriteMessage("Not enough arguments");
             else //Normal send
-                message = new Privmsg(client.HOME_CHANNEL, InputBox.Text);
+                message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
 
             if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
         }
@@ -795,7 +742,7 @@ namespace NarutoBot3
                 mutedWindow = new MutedUsersWindow(ref ul);
             }
             else
-                mutedWindow = new MutedUsersWindow(ref bot.ul);
+                mutedWindow = new MutedUsersWindow(ref bot.userlist);
 
             mutedWindow.ShowDialog();
         }
@@ -905,25 +852,25 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            if (bot != null && !bot.ul.userIsOperator(nick))
-                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (Object o, EventArgs a) { bot.giveOps(nick); }));
+            if (bot != null && !bot.userlist.userIsOperator(nick))
+                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.giveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (Object o, EventArgs a) { bot.takeOps(nick); }));
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.takeOps(nick); }));
 
-            if (bot != null && !bot.ul.userIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (Object o, EventArgs a) { bot.muteUser(nick); }));
+            if (bot != null && !bot.userlist.userIsMuted(nick))
+                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.muteUser(nick); }));
             else
-                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (Object o, EventArgs a) { bot.unmuteUser(nick); }));
+                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.unmuteUser(nick); }));
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (Object o, EventArgs a) { bot.pokeUser(nick); }));
-            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (Object o, EventArgs a) { bot.whoisUser(nick); }));
+            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.pokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.whoisUser(nick); }));
 
-            if (bot.ul.getUserMode(client.NICK) == '@')
+            if (bot.userlist.getUserMode(bot.Client.NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (Object o, EventArgs a) { bot.kickUser(nick); }));
+                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (object o, EventArgs a) { bot.kickUser(nick); }));
             }
         }
 
@@ -945,47 +892,18 @@ namespace NarutoBot3
             contextMenuUserList.Items.Clear();
         }
 
-        private void t30_Click(object sender, EventArgs e)
-        {
-            Settings.Default.randomTextInterval = 30;
-            Settings.Default.Save();
-
-            setRandomTextIntervalCheckmarks();
-
-            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
-        }
-
-        private void t45_Click(object sender, EventArgs e)
-        {
-            Settings.Default.randomTextInterval = 45;
-            Settings.Default.Save();
-
-            setRandomTextIntervalCheckmarks();
-            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
-        }
-
-        private void t60_Click(object sender, EventArgs e)
-        {
-            Settings.Default.randomTextInterval = 60;
-            Settings.Default.Save();
-
-            setRandomTextIntervalCheckmarks();
-
-            randomTextTimer.Interval = Settings.Default.randomTextInterval * 60 * 1000;
-        }
-
         private void nowConnected(object sender, EventArgs e)
         {
             ChangeConnectingLabel("Connected");
-            client.Join();
-            ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+            bot.Client.Join();
+            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
 
             doAutoJoinCommand();
         }
 
         private void nowConnectedWithServer(object sender, EventArgs e)
         {
-            ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
         }
 
         private void userListCreated(object sender, EventArgs e)
@@ -993,18 +911,12 @@ namespace NarutoBot3
             UpdateDataSource();
         }
 
-        public void randomTextSender(object source, ElapsedEventArgs e)
-        {
-            if (bot != null)
-                bot.randomTextSender(source, e);
-        }
-
         public void eventChangeTitle(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(client.HOST_SERVER))
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT + " (" + client.HOST_SERVER + ")");
+            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
             else
-                ChangeTitle(client.NICK + " @ " + client.HOME_CHANNEL + " - " + client.HOST + ":" + client.PORT);
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
         }
 
         public void letsQuit(object sender, EventArgs e)
@@ -1016,11 +928,11 @@ namespace NarutoBot3
         {
             Random r = new Random();
 
-            if (!client.isConnected)
+            if (!bot.Client.isConnected)
             {
                 disconnectClient();
 
-                Settings.Default.Nick = client.NICK + r.Next(10);
+                Settings.Default.Nick = bot.Client.NICK + r.Next(10);
                 Settings.Default.Save();
 
                 connect();
