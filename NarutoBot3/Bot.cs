@@ -292,6 +292,17 @@ namespace NarutoBot3
             }
         }
 
+        public bool disconnect(string quitMessage)
+        {
+            userlist.saveData();
+
+            userlist = new UserList();
+            userlist.loadData();
+
+            pingServerTimer.Enabled = false;
+            return client.Disconnect(quitMessage);
+        }
+
         public void processMessage(string message)
         {
             ParsedMessage messageObject;

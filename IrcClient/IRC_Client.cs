@@ -192,7 +192,7 @@ namespace IrcClient
             }
         }
 
-        public void Disconnect(string quitMessage)
+        public bool Disconnect(string quitMessage)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace IrcClient
                 if (irc != null)
                     irc.Close();
             }
-            catch { }
+            catch { return false; }
         }
     }
 }

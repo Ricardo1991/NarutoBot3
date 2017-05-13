@@ -15,13 +15,9 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         private delegate void SetTextCallback(string text);
-
         private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-
         private delegate void SetBoolCallback(bool status);
-
         private delegate void ChangeDataSource();
-
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
         public ThemeCollection themes = new ThemeCollection();
@@ -41,32 +37,47 @@ namespace NarutoBot3
             bot.updateTheme(themes.CurrentColorScheme);
             initializeBotEvents();
 
-            //Show ConnectWindow Form and try to connect
-            ConnectWindow connect = new ConnectWindow(false);
-
-            if (connect.ShowDialog() == DialogResult.OK)
+            string[] args = Environment.GetCommandLineArgs();
+            foreach(string s in args)
             {
-                setSilenceMarks();
-
-                if (bot.Client != null && bot.Client.isConnected)
+                if (s.ToLower().CompareTo("skip") == 0)
                 {
-                    bot.Client.changeHomeChannel(Settings.Default.Channel);
-                    bot.Client.changeHostPort(Settings.Default.Server, Settings.Default.Port);
-                    bot.Client.changeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
-
-                    disconnectClient();
-                    Thread.Sleep(250);
+                    tryConnect();
+                    return;
                 }
-
-                if (!this.connect())
-                    MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            //
+
+            //Show ConnectWindow Form and try to connect
+            ConnectWindow connectWindow = new ConnectWindow(false);
+
+            if (connectWindow.ShowDialog() == DialogResult.OK)
+            {
+                updateSilenceMarks();
+                tryConnect();
+            }
+
+        }
+
+        public bool tryConnect()
+        {
+            bool success = this.connect();
+            if (!success)
+            {
+                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ChangeConnectingLabel("Disconnected");
+            }
+
+            return success;
+                
         }
 
         public bool connect()
         {
             ChangeConnectingLabel("Connecting...");
+
+            bot.Client.changeHomeChannel(Settings.Default.Channel);
+            bot.Client.changeHostPort(Settings.Default.Server, Settings.Default.Port);
+            bot.Client.changeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
 
             return bot.connect();
         }
@@ -81,7 +92,7 @@ namespace NarutoBot3
 
         public void loadSettings()
         {
-            setSilenceMarks();
+            updateSilenceMarks();
             checkTwitterApi();
             checkGoogleApi();
 
@@ -129,7 +140,7 @@ namespace NarutoBot3
                 Settings.Default.twitterEnabled = false;
         }
 
-        private void setSilenceMarks()
+        private void updateSilenceMarks()
         {
             if (Settings.Default.silence == true)
             {
@@ -188,19 +199,18 @@ namespace NarutoBot3
             if (bot != null)
             {
                 CustomCommand.saveCustomCommands(bot.customCommands);
-                bot.userlist.saveData();
+                bot.disconnect(Settings.Default.quitMessage);
+                
             }
 
             InterfaceUserList.DataSource = null;
-            ChangeConnectingLabel("Disconnecting...");
-            bot.Client.Disconnect(Settings.Default.quitMessage);
-
-            Thread.Sleep(250);
-
-            bot.pingServerTimer.Enabled = false;
             UpdateDataSource();
+
+            ChangeConnectingLabel("Disconnecting...");
             OutputClean();
             ChangeTitle("NarutoBot");
+
+            Thread.Sleep(250);
         }
 
         public void WriteMessage(string message) //Writes Message on the TextBox (bot console)
@@ -483,32 +493,17 @@ namespace NarutoBot3
 
         private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
-            ConnectWindow Connect = new ConnectWindow(bot.Client != null && bot.Client.isConnected);
+            ConnectWindow connectWindow = new ConnectWindow(bot.Client != null && bot.Client.isConnected);
 
-            if (Connect.ShowDialog() == DialogResult.OK)
+            if (connectWindow.ShowDialog() == DialogResult.OK)
             {
                 //Re-do Connect!
                 if (bot.Client != null)
                 {
                     if (bot.Client.isConnected)
-                    {
                         disconnectClient();
-                        Thread.Sleep(250);
 
-                        if (!connect()) //If connected with success, then start the bot
-                        {
-                            MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            ChangeConnectingLabel("Disconnected");
-                        }
-                    }
-                    else
-                    {
-                        if (!connect())//If connected with success, then start the bot
-                        {
-                            MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            ChangeConnectingLabel("Disconnected");
-                        }
-                    }
+                    tryConnect();
                 }
                 else
                 {
@@ -517,11 +512,9 @@ namespace NarutoBot3
                     if (string.IsNullOrWhiteSpace(Settings.Default.Nick)) Settings.Default.Nick = "NarutoBot";
                     if (Convert.ToInt32(Settings.Default.Port) <= 0 || Convert.ToInt32(Settings.Default.Port) > 65535) Settings.Default.Port = 6667.ToString();
 
-                    if (connect()) //If connected with success, then start the bot
-                    {
-                        MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        ChangeConnectingLabel("Disconnected");
-                    }
+                    Settings.Default.Save();
+
+                    tryConnect();
                 }
             }
         }
@@ -825,11 +818,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
 
-            if (connect()) //If connected with success, then start the bot
-            {
-                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ChangeConnectingLabel("Disconnected");
-            }
+            tryConnect();
         }
 
         private void botUnsilence(object sender, EventArgs e)
@@ -935,7 +924,7 @@ namespace NarutoBot3
                 Settings.Default.Nick = bot.Client.NICK + r.Next(10);
                 Settings.Default.Save();
 
-                connect();
+                tryConnect();
             }
         }
 
