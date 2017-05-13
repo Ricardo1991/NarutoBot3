@@ -197,11 +197,8 @@ namespace NarutoBot3
         private void disconnectClient()
         {
             if (bot != null)
-            {
-                CustomCommand.saveCustomCommands(bot.customCommands);
                 bot.disconnect(Settings.Default.quitMessage);
-                
-            }
+
 
             InterfaceUserList.DataSource = null;
             UpdateDataSource();
@@ -519,6 +516,11 @@ namespace NarutoBot3
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
         {
+            exitApplication();
+        }
+
+        private void exitApplication()
+        {
             if (bot != null)
             {
                 bot.userlist.saveData();
@@ -529,7 +531,17 @@ namespace NarutoBot3
                 disconnectClient();
             }
 
-            Close();
+
+            if (this.InvokeRequired)
+            {
+                try
+                {
+                    MethodInvoker invoker = () => Close();
+                    Invoke(invoker);
+                }
+                catch { }
+            }
+            
         }
 
         private void silencedToolStripMenuItem_Click(object sender, EventArgs e)  //Toogle Silence
@@ -908,7 +920,7 @@ namespace NarutoBot3
 
         public void letsQuit(object sender, EventArgs e)
         {
-            disconnectClient();
+            exitApplication();
         }
 
         public void duplicatedNick(object sender, EventArgs e)
