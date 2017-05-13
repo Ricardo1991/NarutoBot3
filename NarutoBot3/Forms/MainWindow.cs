@@ -326,18 +326,16 @@ namespace NarutoBot3
 
         public bool changeNick(string nick)
         {
-            bot.Client.NICK = Settings.Default.Nick = nick;
-            Settings.Default.Save();
-
+            //TODO: actually check if the nick change was accepted
             if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
-                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
+                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
             else
-                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
+                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
 
             //do Nick change to server
             if (bot.Client.isConnected)
             {
-                bot.sendMessage(new Nick(bot.Client.NICK));
+                bot.changeNick(nick);
                 return true;
             }
 

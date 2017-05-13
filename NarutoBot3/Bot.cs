@@ -28,7 +28,7 @@ namespace NarutoBot3
 
         public TextMarkovChain killgen = new TextMarkovChain();
 
-        private CleverbotSession bot1session;
+        private CleverbotSession cleverbotSession;
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -85,7 +85,6 @@ namespace NarutoBot3
         private IRC_Client client;
         private RichTextBox OutputBox = null;
         private ColorScheme currentColorScheme = new ColorScheme();
-        private string botVersion = "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp();
 
         private Reddit reddit;
         private List<int> killsUsed = new List<int>();
@@ -248,8 +247,8 @@ namespace NarutoBot3
                 Settings.Default.botThinkEnabled = false;
                 Settings.Default.Save();
             }
-            else
-                bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+            else if(Settings.Default.botThinkEnabled)
+                cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
 
             reddit = new Reddit(false);
 
@@ -394,6 +393,12 @@ namespace NarutoBot3
 
                     OnDuplicatedNick(EventArgs.Empty);
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
+                    break;
+
+                case ("438"): //Nickname change too fast
+
+                    //TODO: revert back to old nick
+
                     break;
 
                 case ("TOPIC"):   //TOPIC
@@ -2427,13 +2432,13 @@ namespace NarutoBot3
 
             try
             {
-                CleverbotResponse answer = await bot1session.GetResponseAsync(newLine);
+                CleverbotResponse answer = await cleverbotSession.GetResponseAsync(newLine);
                 message = new Privmsg(CHANNEL, answer.Response);
             }
             catch
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                bot1session = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
+                cleverbotSession = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
             }
 
             sendMessage(message);
@@ -3358,13 +3363,13 @@ namespace NarutoBot3
                         {
                             try
                             {
-                                CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                                CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
                                 message = new Privmsg(CHANNEL, answer.Response);
                             }
                             catch
                             {
                                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                                bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+                                cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
                             }
                         }
                     }
@@ -3585,13 +3590,13 @@ namespace NarutoBot3
                     {
                         try
                         {
-                            CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                            CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
                             message = new Privmsg(CHANNEL, answer.Response);
                         }
                         catch
                         {
                             message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+                            cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
                         }
                     }
                 }
@@ -3602,13 +3607,13 @@ namespace NarutoBot3
                 {
                     try
                     {
-                        CleverbotResponse answer = await bot1session.GetResponseAsync(arg + "?");
+                        CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
                         message = new Privmsg(CHANNEL, answer.Response);
                     }
                     catch
                     {
                         message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        bot1session = new CleverbotSession(Settings.Default.cleverbotAPI);
+                        cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
                     }
                 }
             }
@@ -4167,7 +4172,7 @@ namespace NarutoBot3
 
         public void ctcpVersion(string u)
         {
-            IrcMessage message = new Notice(u, "\x01" + "VERSION " + botVersion + "\x01");
+            IrcMessage message = new Notice(u, "\x01" + "VERSION " + "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToUniversalTime() + "\x01");
             sendMessage(message);
         }
 
@@ -4205,6 +4210,7 @@ namespace NarutoBot3
 
         public bool changeNick(string nick)
         {
+            string oldnick = Client.NICK;
             Client.NICK = Settings.Default.Nick = nick;
             Settings.Default.Save();
             OnBotNickChanged(EventArgs.Empty);
@@ -4214,6 +4220,9 @@ namespace NarutoBot3
             {
                 IrcMessage message = new Nick(Client.NICK);
                 sendMessage(message);
+
+                userlist.setUserOnlineStatus(oldnick, false);
+                userlist.setUserOnlineStatus(nick, true);
                 return true;
             }
             else return false;

@@ -199,6 +199,7 @@ namespace IrcClient
                 if (writer != null) sendMessage(new Quit(quitMessage));
 
                 isConnected = false;
+                
                 backgroundWorker.CancelAsync();
 
                 if (stream != null)
@@ -209,6 +210,8 @@ namespace IrcClient
                     reader.Close();
                 if (irc != null)
                     irc.Close();
+
+                return true;
             }
             catch { return false; }
         }
