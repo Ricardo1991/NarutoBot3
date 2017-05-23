@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
-using System.Timers;
 using System.Windows.Forms;
 
 namespace NarutoBot3
@@ -164,34 +163,19 @@ namespace NarutoBot3
         {
             bot.Connected += new EventHandler<EventArgs>(nowConnected);
             bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
-
-            bot.Created += new EventHandler<EventArgs>(userListCreated);
-
-            bot.Joined += new EventHandler<UserJoinLeftMessageEventArgs>(userJoined);
-            bot.Left += new EventHandler<UserJoinLeftMessageEventArgs>(userLeft);
-
-            bot.NickChanged += new EventHandler<NickChangeEventArgs>(userNickChange);
-            bot.Kicked += new EventHandler<UserKickedEventArgs>(userKicked);
+            bot.Created += new EventHandler<EventArgs>(UpdateDataSource);
             bot.ModeChanged += new EventHandler<ModeChangedEventArgs>(userModeChanged);
-
             bot.Timeout += new EventHandler<EventArgs>(timeout);
-
             bot.BotNickChanged += new EventHandler<EventArgs>(eventChangeTitle);
-
             bot.BotSilenced += new EventHandler<EventArgs>(botSilence);
             bot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
-
-            bot.Quit += new EventHandler<EventArgs>(letsQuit);
-
+            bot.Quit += new EventHandler<EventArgs>(exitApplication);
             bot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
-
             bot.PongReceived += new EventHandler<PongEventArgs>(updateLag);
-
             bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
-
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
+            bot.UpdateUserListSource += new EventHandler<EventArgs>(UpdateDataSource);
 
-            bot.pingServerTimer.Elapsed += new ElapsedEventHandler(pingServer);
         }
 
         private void disconnectClient()
@@ -272,24 +256,6 @@ namespace NarutoBot3
             //TODO: should make a log
         }
 
-        private void userJoined(object sender, UserJoinLeftMessageEventArgs e)
-        {
-            WriteMessage("** " + e.Who + " (" + e.Message + ") joined", themes.CurrentColorScheme.Join);
-            UpdateDataSource();
-        }
-
-        private void userLeft(object sender, UserJoinLeftMessageEventArgs e)
-        {
-            WriteMessage("** " + e.Who + " parted (" + e.Message.Trim() + ")", themes.CurrentColorScheme.Leave);
-            UpdateDataSource();
-        }
-
-        private void userNickChange(object sender, NickChangeEventArgs e)
-        {
-            WriteMessage("** " + e.OldNick + " is now known as " + e.NewNick, themes.CurrentColorScheme.Rename);
-            UpdateDataSource();
-        }
-
         private void userModeChanged(object sender, ModeChangedEventArgs e)
         {
             string message;
@@ -312,12 +278,6 @@ namespace NarutoBot3
                 WriteMessage("** " + e.User + " " + message, themes.CurrentColorScheme.StatusChanged);
             }
 
-            UpdateDataSource();
-        }
-
-        private void userKicked(object sender, UserKickedEventArgs e)
-        {
-            WriteMessage("** " + e.KickedUser + " was kicked", themes.CurrentColorScheme.Leave);
             UpdateDataSource();
         }
 
@@ -417,6 +377,11 @@ namespace NarutoBot3
             }
         }
 
+        public void UpdateDataSource(object source, EventArgs e)
+        {
+            UpdateDataSource();
+        }
+
         public void UpdateDataSource()
         {
             if (InterfaceUserList.InvokeRequired)
@@ -459,8 +424,6 @@ namespace NarutoBot3
                 catch { }
             }
         }
-
-        ////// Events
 
         private void changeTopicTextBox(object sender, TopicChangedEventArgs e)
         {
@@ -514,7 +477,7 @@ namespace NarutoBot3
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e) //Quit Button
+        public void exitApplication(object sender, EventArgs e)
         {
             exitApplication();
         }
@@ -530,7 +493,6 @@ namespace NarutoBot3
             {
                 disconnectClient();
             }
-
 
             if (this.InvokeRequired)
             {
@@ -905,22 +867,12 @@ namespace NarutoBot3
             ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
         }
 
-        private void userListCreated(object sender, EventArgs e)
-        {
-            UpdateDataSource();
-        }
-
         public void eventChangeTitle(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
                 ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
             else
                 ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
-        }
-
-        public void letsQuit(object sender, EventArgs e)
-        {
-            exitApplication();
         }
 
         public void duplicatedNick(object sender, EventArgs e)
@@ -936,12 +888,6 @@ namespace NarutoBot3
 
                 tryConnect();
             }
-        }
-
-        private void pingServer(object sender, EventArgs e)
-        {
-            if (bot != null)
-                bot.pingSever();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

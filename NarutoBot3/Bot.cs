@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -41,42 +42,22 @@ namespace NarutoBot3
         public List<CustomCommand> customCommands = new List<CustomCommand>();
 
         public UserList userlist = new UserList();
-
         private StatsManager stats = new StatsManager();
 
         public event EventHandler<EventArgs> DuplicatedNick;
-
         public event EventHandler<EventArgs> Created;
-
-        public event EventHandler<UserJoinLeftMessageEventArgs> Joined;
-
-        public event EventHandler<UserJoinLeftMessageEventArgs> Left;
-
-        public event EventHandler<NickChangeEventArgs> NickChanged;
-
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
-
-        public event EventHandler<UserKickedEventArgs> Kicked;
-
         public event EventHandler<EventArgs> Timeout;
-
         public event EventHandler<PongEventArgs> PongReceived;
-
         public event EventHandler<EventArgs> Connected;
-
         public event EventHandler<EventArgs> ConnectedWithServer;
-
         public event EventHandler<EventArgs> BotNickChanged;
-
         public event EventHandler<EventArgs> BotSilenced;
-
         public event EventHandler<EventArgs> BotUnsilenced;
-
         public event EventHandler<EventArgs> Quit;
-
         public event EventHandler<TopicChangedEventArgs> TopicChange;
-
         public event EventHandler<EventArgs> EnforceMirrorChanged;
+        public event EventHandler<EventArgs> UpdateUserListSource;
 
         private System.Timers.Timer timeoutTimer;
 
@@ -169,22 +150,10 @@ namespace NarutoBot3
                 Created(this, e);
         }
 
-        protected virtual void OnJoin(UserJoinLeftMessageEventArgs e)
+        protected virtual void OnUpdateUserListSource(UserJoinLeftMessageEventArgs e)
         {
-            if (Joined != null)
-                Joined(this, e);
-        }
-
-        protected virtual void OnLeave(UserJoinLeftMessageEventArgs e)
-        {
-            if (Left != null)
-                Left(this, e);
-        }
-
-        protected virtual void OnNickChange(NickChangeEventArgs e)
-        {
-            if (NickChanged != null)
-                NickChanged(this, e);
+            if (UpdateUserListSource != null)
+                UpdateUserListSource(this, e);
         }
 
         protected virtual void OnConnect(EventArgs e)
@@ -197,12 +166,6 @@ namespace NarutoBot3
         {
             if (ModeChanged != null)
                 ModeChanged(this, e);
-        }
-
-        protected virtual void OnKick(UserKickedEventArgs e)
-        {
-            if (Kicked != null)
-                Kicked(this, e);
         }
 
         protected virtual void OnEnforceMirrorChanged(EventArgs e)
@@ -241,6 +204,7 @@ namespace NarutoBot3
 
             pingServerTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
             pingServerTimer.Enabled = true;
+            pingServerTimer.Elapsed += new ElapsedEventHandler(pingSever);
 
             if (string.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
             {
@@ -261,7 +225,7 @@ namespace NarutoBot3
                 catch { }
             }
 
-            if (String.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
+            if (string.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
             {
                 Settings.Default.botThinkEnabled = false;
                 Settings.Default.Save();
@@ -452,7 +416,8 @@ namespace NarutoBot3
                         joinMessage = "";
                     }
 
-                    OnJoin(new UserJoinLeftMessageEventArgs(userJoin, joinMessage));
+                    UpdateUserListSource(null, null);
+                    WriteMessage("** " + userJoin + " (" + joinMessage + ") joined", currentColorScheme.Join);
 
                     char mode = getUserMode(userJoin);
                     userJoin = removeUserMode(userJoin);
@@ -478,7 +443,8 @@ namespace NarutoBot3
 
                     userlist.setUserOnlineStatus(whoLeft, false);
 
-                    OnLeave(new UserJoinLeftMessageEventArgs(whoLeft, quitMessage));
+                    UpdateUserListSource(null, null);
+                    WriteMessage("** " + whoLeft + " parted (" + quitMessage.Trim() + ")", currentColorScheme.Leave);
                     break;
 
                 case ("QUIT"):
@@ -493,7 +459,8 @@ namespace NarutoBot3
 
                     userlist.setUserOnlineStatus(whoQuit, false);
 
-                    OnLeave(new UserJoinLeftMessageEventArgs(whoQuit, quitMessage));
+                    UpdateUserListSource(null, null);
+                    WriteMessage("** " + whoQuit + " parted (" + quitMessage.Trim() + ")", currentColorScheme.Leave);
                     break;
 
                 case ("NICK"):
@@ -507,7 +474,8 @@ namespace NarutoBot3
                     if (userMode != '0')
                         newnick = userMode + newnick;
 
-                    OnNickChange(new NickChangeEventArgs(newnick, oldnick));
+                    UpdateUserListSource(null, null);
+                    WriteMessage("** " + oldnick + " is now known as " + newnick, currentColorScheme.Rename);
 
                     userlist.setUserOnlineStatus(oldnick, false);
                     userlist.setUserOnlineStatus(removeUserMode(newnick), true);
@@ -618,7 +586,8 @@ namespace NarutoBot3
 
                     userlist.setUserOnlineStatus(kickedUser, false);
 
-                    OnKick(new UserKickedEventArgs(kickedUser));
+                    WriteMessage("** " + kickedUser + " was kicked", currentColorScheme.Leave);
+                    UpdateUserListSource(null, null);
                     break;
 
                 case ("PRIVMSG"):
@@ -2438,7 +2407,7 @@ namespace NarutoBot3
             catch
             {
                 message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                cleverbotSession = new Cleverbot.Net.CleverbotSession(Settings.Default.cleverbotAPI);
+                cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
             }
 
             sendMessage(message);
@@ -4327,7 +4296,7 @@ namespace NarutoBot3
             return value.ToString("mmssffff");
         }
 
-        public void pingSever()
+        public void pingSever(object sender, EventArgs e)
         {
             if (!waitingForPong)
             {
@@ -4342,8 +4311,8 @@ namespace NarutoBot3
                 waitingForPong = true;
 
                 timeoutTimer = new System.Timers.Timer(Settings.Default.timeOutTimeInterval * 1000);
-                timeoutTimer.Elapsed += (sender, e) => checkIfTimeout(sender, e);
                 timeoutTimer.Enabled = true;
+                timeoutTimer.Elapsed += new ElapsedEventHandler(checkIfTimeout);
             }
         }
 
