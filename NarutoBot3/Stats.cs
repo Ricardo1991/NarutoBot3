@@ -65,13 +65,6 @@ namespace NarutoBot3
             saveData();
         }
 
-        public void giphy()
-        {
-            session.incrementGiphy();
-            lifetime.incrementGiphy();
-            saveData();
-        }
-
         public void funk()
         {
             session.incrementFunk();
@@ -204,11 +197,6 @@ namespace NarutoBot3
             return new int[2] { session.Nick, lifetime.Nick };
         }
 
-        public int[] getGiphy()
-        {
-            return new int[2] { session.Giphy, lifetime.Giphy };
-        }
-
         public int[] getFunk()
         {
             return new int[2] { session.Funk, lifetime.Funk };
@@ -330,14 +318,6 @@ namespace NarutoBot3
         {
             get { return nick; }
             set { nick = value; }
-        }
-
-        private int giphy;
-
-        public int Giphy
-        {
-            get { return giphy; }
-            set { giphy = value; }
         }
 
         private int funk;
@@ -467,7 +447,6 @@ namespace NarutoBot3
             youtube = 0;
             question = 0;
             nick = 0;
-            giphy = 0;
             funk = 0;
             shuffle = 0;
             choose = 0;
@@ -508,11 +487,6 @@ namespace NarutoBot3
         public void incrementNick()
         {
             Nick++;
-        }
-
-        public void incrementGiphy()
-        {
-            Giphy++;
         }
 
         public void incrementFunk()

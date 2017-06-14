@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YoutubeSearch
+namespace YoutubeSearchObject
 {
     public class YoutubeSearch
     {

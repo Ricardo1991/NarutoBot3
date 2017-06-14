@@ -19,7 +19,7 @@ namespace NarutoBot3
         private delegate void ChangeDataSource();
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
-        public ThemeCollection themes = new ThemeCollection();
+        ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
 
@@ -118,7 +118,7 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        private void checkGoogleApi()
+        void checkGoogleApi()
         {
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
                 Settings.Default.aniSearchEnabled = false;
@@ -130,7 +130,7 @@ namespace NarutoBot3
             }
         }
 
-        private void checkTwitterApi()
+        void checkTwitterApi()
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
                     string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
@@ -544,7 +544,7 @@ namespace NarutoBot3
                 checkGoogleApi();
 
                 if (Settings.Default.twitterEnabled)
-                    bot.TwitterLogin();
+                    bot.TwitterLogOn();
 
                 try
                 {
@@ -807,7 +807,7 @@ namespace NarutoBot3
             if (InterfaceUserList.SelectedIndex == -1) return;
 
             contextMenuUserList.Items.Clear();
-            string nick = Bot.removeUserMode(InterfaceUserList.SelectedItem.ToString());
+            string nick = Useful.removeUserMode(InterfaceUserList.SelectedItem.ToString());
 
             contextMenuUserList.Items.Add(nick);
 

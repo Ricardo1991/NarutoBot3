@@ -7,15 +7,54 @@ namespace NarutoBot3
 {
     public class CustomCommand
     {
-        public string name;
-        public string format;
-        public string author;
+        private string name;
+        private string format;
+        private string author;
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+
+        public string Format
+        {
+            get
+            {
+                return format;
+            }
+
+            set
+            {
+                format = value;
+            }
+        }
+
+        public string Author
+        {
+            get
+            {
+                return author;
+            }
+
+            set
+            {
+                author = value;
+            }
+        }
 
         public CustomCommand(string author, string name, string format)
         {
-            this.name = name;
-            this.format = format;
-            this.author = author;
+            this.Name = name;
+            this.Format = format;
+            this.Author = author;
         }
 
         public static List<CustomCommand> loadCustomCommands()
@@ -58,7 +97,7 @@ namespace NarutoBot3
             {
                 foreach (CustomCommand q in commands)
                 {
-                    newTask.WriteLine(q.author + " " + q.name + " " + q.format);
+                    newTask.WriteLine(q.Author + " " + q.Name + " " + q.Format);
                 }
             }
         }
@@ -67,7 +106,7 @@ namespace NarutoBot3
         {
             foreach (CustomCommand q in commands)
             {
-                if (String.Compare(q.name, name, true) == 0)
+                if (String.Compare(q.Name, name, true) == 0)
                     return true;
             }
 
@@ -78,7 +117,7 @@ namespace NarutoBot3
         {
             foreach (CustomCommand q in commands)
             {
-                if (String.Compare(q.name, name, true) == 0)
+                if (String.Compare(q.Name, name, true) == 0)
                     return q;
             }
 
@@ -89,7 +128,7 @@ namespace NarutoBot3
         {
             foreach (CustomCommand q in commands)
             {
-                if (String.Compare(q.name, name, true) == 0)
+                if (String.Compare(q.Name, name, true) == 0)
                 {
                     commands.Remove(getCustomCommandByName(name, commands));
                     return;

@@ -1,4 +1,4 @@
-﻿namespace GoogleTimeZone
+﻿namespace GoogleTimeZoneObject
 {
     public class GoogleTimeZone
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace NarutoBot3
 {
@@ -10,6 +11,15 @@ namespace NarutoBot3
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string removeUserMode(string user)
+        {
+            char[] usermodes = { '@', '+', '%', '~', '&' };
+
+            if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
+                return user.Substring(1).Trim();
+            else return user.Trim();
         }
 
         public static string getBetween(string strSource, string strStart, string strEnd)

@@ -451,7 +451,7 @@ namespace NarutoBot3
 
     public class User : IComparer<User>, IComparable<User>, IEquatable<User>
     {
-        private List<UserMessage> deliveredMessages;
+        List<UserMessage> deliveredMessages;
 
         public List<UserMessage> DeliveredMessages
         {

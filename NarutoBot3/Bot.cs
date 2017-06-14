@@ -27,7 +27,7 @@ namespace NarutoBot3
     {
         private Questions qq;
 
-        public TextMarkovChain killgen = new TextMarkovChain();
+        TextMarkovChain killgen = new TextMarkovChain();
 
         private CleverbotSession cleverbotSession;
 
@@ -39,7 +39,7 @@ namespace NarutoBot3
         private List<string> quotes = new List<string>();
         private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
-        public List<CustomCommand> customCommands = new List<CustomCommand>();
+        List<CustomCommand> customCommands = new List<CustomCommand>();
 
         public UserList userlist = new UserList();
         private StatsManager stats = new StatsManager();
@@ -75,7 +75,7 @@ namespace NarutoBot3
 
         private string lastImgurID;
 
-        public System.Timers.Timer pingServerTimer;        //To check for connection lost
+        System.Timers.Timer pingServerTimer;        //To check for connection lost
 
         public IRC_Client Client
         {
@@ -232,7 +232,7 @@ namespace NarutoBot3
             }
 
             if (Settings.Default.twitterEnabled)
-                TwitterLogin();
+                TwitterLogOn();
         }
 
         public void updateTheme(ColorScheme newColorScheme)
@@ -325,7 +325,7 @@ namespace NarutoBot3
 
                     foreach (string s in messageObject.SplitMessage[3].Split(' '))
                     {
-                        userlist.setUserOnlineStatus(removeUserMode(s), true);
+                        userlist.setUserOnlineStatus(Useful.removeUserMode(s), true);
 
                         if (s[0] == '@')
                             userlist.setUserChannelOP(s, true);
@@ -420,7 +420,7 @@ namespace NarutoBot3
                     WriteMessage("** " + userJoin + " (" + joinMessage + ") joined", currentColorScheme.Join);
 
                     char mode = getUserMode(userJoin);
-                    userJoin = removeUserMode(userJoin);
+                    userJoin = Useful.removeUserMode(userJoin);
 
                     userlist.setUserOnlineStatus(userJoin, true);
                     userlist.setUserMode(userJoin, mode);
@@ -478,7 +478,7 @@ namespace NarutoBot3
                     WriteMessage("** " + oldnick + " is now known as " + newnick, currentColorScheme.Rename);
 
                     userlist.setUserOnlineStatus(oldnick, false);
-                    userlist.setUserOnlineStatus(removeUserMode(newnick), true);
+                    userlist.setUserOnlineStatus(Useful.removeUserMode(newnick), true);
 
                     messageDelivery(newnick);
 
@@ -605,7 +605,7 @@ namespace NarutoBot3
                     else
                         user = messageObject.Sender;
 
-                    user = removeUserMode(user);
+                    user = Useful.removeUserMode(user);
 
                     userlist.markUserSeen(user);
 
@@ -883,7 +883,7 @@ namespace NarutoBot3
                             WriteMessage("* Received a Funk request from " + user, currentColorScheme.BotReport);
 
                             if (string.IsNullOrEmpty(arg)) //lookup or random
-                                printFunk(whoSent, arg, user);
+                                printFunk(whoSent, user);
                             else
                                 addFunk(arg, user);
                         }
@@ -929,17 +929,17 @@ namespace NarutoBot3
                         else if ((string.Compare(cmd, "removecmd", true) == 0) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Remove Custom Command request from " + user, currentColorScheme.BotReport);
-                            removeCustomCommand(whoSent, arg, user);
+                            removeCustomCommand(arg, user);
                         }
                         else if (((string.Compare(cmd, "inspectmessages", true) == 0) || (string.Compare(cmd, "viewmessages", true) == 0)) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received an Inspect Messages request from " + user, currentColorScheme.BotReport);
-                            inspectMessages(whoSent, arg, user);
+                            inspectMessages(arg, user);
                         }
                         else if (((string.Compare(cmd, "cleanmessages", true) == 0) || (string.Compare(cmd, "removemessages", true) == 0)) && !string.IsNullOrEmpty(arg))
                         {
                             WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
-                            cleanMessages(whoSent, arg, user);
+                            cleanMessages(arg, user);
                         }
                         else if ((string.Compare(cmd, "filmot", true) == 0))
                         {
@@ -1077,13 +1077,17 @@ namespace NarutoBot3
             }
         }
 
-        private void updateLastImgurLink(string msg)
+        void updateLastImgurLink(string msg)
         {
             lastImgurID = Useful.getBetween(msg, "imgur.com/", "");
         }
 
-        static public char getUserMode(string user)
+        static char getUserMode(string user)
         {
+            if (string.IsNullOrWhiteSpace(user))
+            {
+                return '0';
+            }
             switch (user[0])
             {
                 case '@':
@@ -1098,14 +1102,7 @@ namespace NarutoBot3
             }
         }
 
-        static public string removeUserMode(string user)
-        {
-            char[] usermodes = { '@', '+', '%', '~', '&' };
 
-            if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
-                return user.Substring(1).Trim();
-            else return user.Trim();
-        }
 
         public void ReadKills()
         {
@@ -1987,6 +1984,8 @@ namespace NarutoBot3
             DateTime now = DateTime.UtcNow;
             TimeSpan diff;
 
+            if (userlist.userIsMuted(nick)) return;
+
             seenTime = userlist.getUserSeenUTC(arg);
 
             if (seenTime.CompareTo(new DateTime(0)) == 0)
@@ -2139,7 +2138,7 @@ namespace NarutoBot3
             return;
         }
 
-        public void printNames(string nick)
+        void printNames(string nick)
         {
             string list = "[";
 
@@ -2156,7 +2155,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        private void time(string CHANNEL, string nick, string args)
+        void time(string CHANNEL, string nick, string args)
         {
             IrcMessage message;
             string timezoneS;
@@ -2167,7 +2166,7 @@ namespace NarutoBot3
 
             DateTime convertedTime;
 
-            GoogleTimeZone.GoogleTimeZone g = new GoogleTimeZone.GoogleTimeZone();
+            GoogleTimeZoneObject.GoogleTimeZone g = new GoogleTimeZoneObject.GoogleTimeZone();
             string json;
 
             if (userlist.userIsMuted(nick)) return;
@@ -2319,7 +2318,7 @@ namespace NarutoBot3
             }
         }
 
-        public void youtube(string CHANNEL, string nick, string line)
+        void youtube(string CHANNEL, string nick, string line)
         {
             if (string.IsNullOrEmpty(line)) return;
             if (userlist.userIsMuted(nick)) return;
@@ -2335,7 +2334,7 @@ namespace NarutoBot3
             }
         }
 
-        public void twitter(string CHANNEL, string nick, string line)
+        void twitter(string CHANNEL, string nick, string line)
         {
             string author, tweet;
 
@@ -2358,11 +2357,11 @@ namespace NarutoBot3
             }
         }
 
-        public void urlTitle(string CHANNEL, string nick, string line)
+        void urlTitle(string CHANNEL, string nick, string line)
         {
             string url;
             string[] split;
-            Dictionary<string, string> headers = new Dictionary<string, string>();
+            //Dictionary<string, string> headers = new Dictionary<string, string>();
 
             if (userlist.userIsMuted(nick)) return;
 
@@ -2383,7 +2382,7 @@ namespace NarutoBot3
             }
         }
 
-        public async void botThink(string CHANNEL, string line, string nick)
+        async void botThink(string CHANNEL, string line, string nick)
         {
             IrcMessage message;
 
@@ -2413,7 +2412,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        private void getURLInfo(string CHANNEL, string url)
+        void getURLInfo(string CHANNEL, string url)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             string html, title;
@@ -2494,12 +2493,14 @@ namespace NarutoBot3
             }
         }
 
-        public GoogleSearch.GoogleSearch googleAnimeSearch(string query)
+        GoogleSearchObject.GoogleSearch googleAnimeSearch(string query)
         {
-            GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
+            GoogleSearchObject.GoogleSearch g = new GoogleSearchObject.GoogleSearch();
             WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
+
+            if (string.IsNullOrWhiteSpace(query)) throw new Exception("No Query");
 
             query = query.ToLower().Replace(" ", "%20").Replace("-user", string.Empty).Replace("-u", string.Empty);
 
@@ -2518,7 +2519,7 @@ namespace NarutoBot3
             return g;
         }
 
-        public void animeUserSearch(string CHANNEL, string nick, string query)
+        void animeUserSearch(string CHANNEL, string query)
         {
             int i = 0;
             int i_max = 5;
@@ -2528,7 +2529,8 @@ namespace NarutoBot3
             webClient.Encoding = Encoding.UTF8;
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
-            GoogleSearch.GoogleSearch g = googleAnimeSearch(query);
+            GoogleSearchObject.GoogleSearch g = googleAnimeSearch(query);
+
 
             if (g == null)
             {
@@ -2582,13 +2584,13 @@ namespace NarutoBot3
             stats.anime();
         }
 
-        public void animeSearch(string CHANNEL, string nick, string query)
+        void animeSearch(string CHANNEL, string nick, string query)
         {
             //TODO: Simplify this anime search
 
             IrcMessage message;
             MalAnime a = new MalAnime();
-            GoogleSearch.GoogleSearch g = new GoogleSearch.GoogleSearch();
+            GoogleSearchObject.GoogleSearch g = new GoogleSearchObject.GoogleSearch();
             string xmlAnime;
             WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
@@ -2606,7 +2608,7 @@ namespace NarutoBot3
 
             if (query.ToLower().Contains("-u") || query.ToLower().Contains("-user"))
             {
-                animeUserSearch(CHANNEL, nick, query);
+                animeUserSearch(CHANNEL, query);
                 return;
             }
 
@@ -2673,11 +2675,11 @@ namespace NarutoBot3
 
                     if (episodes == "0" || episodes == string.Empty)
                         episodes = "?";
-                    if (score == string.Empty)
+                    if (string.IsNullOrWhiteSpace(score))
                         score = "?";
-                    if (title == string.Empty)
+                    if (string.IsNullOrWhiteSpace(title))
                         title = "?";
-                    if (status == string.Empty)
+                    if (string.IsNullOrWhiteSpace(status))
                         status = "?";
 
                     message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + episodes + " episode"
@@ -2714,12 +2716,12 @@ namespace NarutoBot3
             stats.anime();
         }
 
-        public void youtubeSearch(string CHANNEL, string nick, string query)
+        void youtubeSearch(string CHANNEL, string nick, string query)
         {
             IrcMessage message;
             string jsonYoutube, title, duration;
-            YoutubeSearch.YoutubeSearch y = new YoutubeSearch.YoutubeSearch();
-            YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
+            YoutubeSearchObject.YoutubeSearch y = new YoutubeSearchObject.YoutubeSearch();
+            YoutubeVideoInfoObject.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfoObject.YoutubeVideoInfo();
 
             if (userlist.userIsMuted(nick)) return;
             if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
@@ -2772,7 +2774,7 @@ namespace NarutoBot3
             return;
         }
 
-        public void vimeo(string CHANNEL, string nick, string line)
+        void vimeo(string CHANNEL, string nick, string line)
         {
             if (userlist.userIsMuted(nick)) return;
 
@@ -2824,7 +2826,7 @@ namespace NarutoBot3
             }
         }
 
-        public void lastKill(string CHANNEL, string nick, string arg)
+        void lastKill(string CHANNEL, string nick, string arg)
         {
             if (userlist.userIsMuted(nick) || string.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
 
@@ -2857,7 +2859,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        public void killUser(string CHANNEL, string nick, string args)
+        void killUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -2941,7 +2943,7 @@ namespace NarutoBot3
             }
         }
 
-        public void factUser(string CHANNEL, string nick, string args)
+        void factUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -3006,7 +3008,7 @@ namespace NarutoBot3
             }
         }
 
-        public void randomKill(string CHANNEL, string nick, string args)
+        void randomKill(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -3064,7 +3066,7 @@ namespace NarutoBot3
             }
         }
 
-        private async void parseQuestion(string CHANNEL, string user, string arg)
+        async void parseQuestion(string CHANNEL, string user, string arg)
         {
             //This needs to go or be simplified
 
@@ -3595,7 +3597,7 @@ namespace NarutoBot3
             }
         }
 
-        public void nickGen(string CHANNEL, string nick, string args)
+        void nickGen(string CHANNEL, string nick, string args)
         {
             if (string.IsNullOrEmpty(nick)) return;
             Random rnd = new Random();
@@ -3653,7 +3655,7 @@ namespace NarutoBot3
             }
         }
 
-        public void redditLink(string CHANNEL, string nick, string line)
+        void redditLink(string CHANNEL, string nick, string line)
         {
             if (string.IsNullOrEmpty(line) || string.IsNullOrEmpty(nick)) return;
 
@@ -3686,7 +3688,7 @@ namespace NarutoBot3
             }
         }
 
-        private void redditInfoWithComment(string CHANNEL, string url, string postName, string commentName)
+        void redditInfoWithComment(string CHANNEL, string url, string postName, string commentName)
         {
             RedditSharp.Things.Post post;
             RedditSharp.Things.Comment comment;
@@ -3728,7 +3730,7 @@ namespace NarutoBot3
             }
         }
 
-        private void redditInfo(string CHANNEL, string url, string postName)
+        void redditInfo(string CHANNEL, string url, string postName)
         {
             IrcMessage message;
 
@@ -3753,7 +3755,7 @@ namespace NarutoBot3
             }
         }
 
-        private void wiki(string CHANNEL, string nick, string args)
+        void wiki(string CHANNEL, string nick, string args)
         {
             if (userlist.userIsMuted(nick)) return;
 
@@ -3765,7 +3767,7 @@ namespace NarutoBot3
             }
         }
 
-        private void greetUser(string nick)
+        void greetUser(string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.greetingsEnabled || Settings.Default.silence) return;
 
@@ -3781,7 +3783,7 @@ namespace NarutoBot3
             }
         }
 
-        private bool quitIRC(string nick)
+        bool quitIRC(string nick)
         {
             if (userlist.userIsOperator(nick))
             {
@@ -3794,7 +3796,7 @@ namespace NarutoBot3
             return false;
         }
 
-        private void printQuote(string CHANNEL, string args, string nick)
+        void printQuote(string CHANNEL, string args, string nick)
         {
             Random r = new Random();
             int i;
@@ -3856,7 +3858,7 @@ namespace NarutoBot3
             stats.quote();
         }
 
-        private void addQuote(string args, string nick)
+        void addQuote(string args, string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
@@ -3876,7 +3878,7 @@ namespace NarutoBot3
             saveQuotes();
         }
 
-        private void tell(string nick, string args)
+        void tell(string nick, string args)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.tellEnabled) return;
 
@@ -3896,7 +3898,7 @@ namespace NarutoBot3
             }
         }
 
-        private void inspectMessages(string nick, string args, string user)
+        void inspectMessages(string args, string user)
         {
             if (userlist.userIsOperator(user))
             {
@@ -3904,7 +3906,7 @@ namespace NarutoBot3
             }
         }
 
-        private void cleanMessages(string nick, string args, string user)
+        void cleanMessages(string args, string user)
         {
             if (!userlist.userIsOperator(user))
                 return;
@@ -3921,8 +3923,10 @@ namespace NarutoBot3
                 sendMessage(new Notice(split[0], "Success!"));
         }
 
-        private void filmot(string CHANNEL, string args, string user)
+        void filmot(string CHANNEL, string args, string user)
         {
+            if (userlist.userIsMuted(user)) return;
+
             if (string.IsNullOrWhiteSpace(args))
             {
                 if (string.IsNullOrWhiteSpace(lastImgurID))
@@ -3936,7 +3940,7 @@ namespace NarutoBot3
             }
         }
 
-        private void choose(string CHANNEL, string user, string arg)
+        void choose(string CHANNEL, string user, string arg)
         {
             if (userlist.userIsMuted(user) || !Settings.Default.chooseEnabled) return;
 
@@ -3960,7 +3964,7 @@ namespace NarutoBot3
             stats.choose();
         }
 
-        private void shuffle(string CHANNEL, string user, string arg)
+        void shuffle(string CHANNEL, string user, string arg)
         {
             if (userlist.userIsMuted(user) || !Settings.Default.shuffleEnabled) return;
 
@@ -3996,7 +4000,7 @@ namespace NarutoBot3
             stats.shuffle();
         }
 
-        private void printFunk(string CHANNEL, string args, string nick)
+        void printFunk(string CHANNEL, string nick)
         {
             Random r = new Random();
             int i;
@@ -4011,7 +4015,7 @@ namespace NarutoBot3
             stats.funk();
         }
 
-        private void addFunk(string args, string nick)
+        void addFunk(string args, string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
 
@@ -4040,7 +4044,7 @@ namespace NarutoBot3
             stats.funk();
         }
 
-        private void addCustomCommand(string CHANNEL, string args, string nick)
+        void addCustomCommand(string CHANNEL, string args, string nick)
         {
             string[] splits;
             IrcMessage message;
@@ -4058,7 +4062,7 @@ namespace NarutoBot3
             CustomCommand.saveCustomCommands(customCommands);
         }
 
-        private void removeCustomCommand(string CHANNEL, string args, string nick)
+        void removeCustomCommand(string args, string nick)
         {
             string[] splits;
 
@@ -4071,11 +4075,9 @@ namespace NarutoBot3
             }
         }
 
-        private void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
+        void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
         {
-            string[] splits;
             IrcMessage message;
-            splits = args.Split(new char[] { ' ' }, 2);
 
             string response;
             string randomTarget;
@@ -4100,7 +4102,7 @@ namespace NarutoBot3
 
             if (customcommand == null) return;
 
-            response = customcommand.format;
+            response = customcommand.Format;
 
             response = response.Replace("<TARGET>", args.ToUpper()).Replace("<USER>", nick.Trim().ToUpper());
             response = response.Replace("<target>", args).Replace("<user>", nick.Trim());
@@ -4124,7 +4126,7 @@ namespace NarutoBot3
         ///////////////////////////////////
 
         //CTCP replies
-        public void ctcpTime(string u)
+        void ctcpTime(string u)
         {
             DateTime dateValue = new DateTime();
             dateValue = DateTime.Now;
@@ -4139,13 +4141,13 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        public void ctcpVersion(string u)
+        void ctcpVersion(string u)
         {
             IrcMessage message = new Notice(u, "\x01" + "VERSION " + "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToUniversalTime() + "\x01");
             sendMessage(message);
         }
 
-        public void ctcpPing(string u, string stamp)
+        void ctcpPing(string u, string stamp)
         {
             IrcMessage message = new Notice(u, "\x01" + "PING " + stamp + "\x01");
             sendMessage(message);
@@ -4192,6 +4194,8 @@ namespace NarutoBot3
 
                 userlist.setUserOnlineStatus(oldnick, false);
                 userlist.setUserOnlineStatus(nick, true);
+                userlist.setUserChannelVoice(nick, userlist.userHasChannelVoice(oldnick));
+                userlist.setUserChannelOP(nick, userlist.userHasChannelOP(oldnick));
                 return true;
             }
             else return false;
@@ -4415,7 +4419,7 @@ namespace NarutoBot3
             return replaced;
         }
 
-        public void TwitterLogin()
+        public void TwitterLogOn()
         {
             if (Settings.Default.twitterEnabled)
             {

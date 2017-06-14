@@ -1,4 +1,4 @@
-﻿namespace YoutubeVideoInfo
+﻿namespace YoutubeVideoInfoObject
 {
     public class YoutubeVideoInfo
     {

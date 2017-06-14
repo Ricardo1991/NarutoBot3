@@ -1,4 +1,4 @@
-﻿namespace GoogleSearch
+﻿namespace GoogleSearchObject
 {
     public class GoogleSearch
     {

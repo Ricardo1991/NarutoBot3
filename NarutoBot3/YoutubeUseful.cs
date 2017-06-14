@@ -12,7 +12,7 @@ namespace NarutoBot3
         {
             string jsonYoutube = "";
             string title, duration;
-            YoutubeVideoInfo.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo.YoutubeVideoInfo();
+            YoutubeVideoInfoObject.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfoObject.YoutubeVideoInfo();
 
             string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
 
