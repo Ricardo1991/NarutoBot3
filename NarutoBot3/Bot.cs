@@ -2168,25 +2168,23 @@ namespace NarutoBot3
             args = args.Replace("\n", string.Empty);
             args = args.Replace(" ", string.Empty);
 
-            ///TODO: change this to a dictionary
-            string IST = "23.7833, 85.9667";            //Bokaro, india
-            string MSK = "55.74941,37.614441";          //Moscow
-            string FET = "53.895311,27.563324";         //Minsk
-            string EET = "44.4476304,26.0860545";       //bucharest
-            string CET = "48.8588589,2.3470599";        //paris
-
-            string WER = "38.7436266,-9.1602038";       //lisbon
-            string GMT = "51.5232391,-0.1166146";       //london
-
-            string BRT = "-23.5778896,-46.6096585";     //sao paulo
-            string ART = "-34.6158526,-58.4332985";     //buenos aires
-            string AST = "53.3215407,-60.3542792";      //Happy+Valley-Goose+Bay
-            string VET = "10.4683917,-66.8903658";      //caracas
-            string EST = "40.7056308,-73.9780035";      //NYC
-            string CST = "39.091919,-94.5757195";       //kansas city
-            string MST = "40.7609881,-111.8936263";     //salt lake city
-            string PST = "34.0469605,-118.2621293";     //LA
-            string AKDT = "61.1878492,-149.8158133";    //Anchorage
+            Dictionary<string, string> timezones = new Dictionary<string, string>();
+            timezones.Add("IST", "23.7833, 85.9667");            //Bokaro, india
+            timezones.Add("MSK", "55.74941,37.614441");          //Moscow
+            timezones.Add("FET", "53.895311,27.563324");         //Minsk
+            timezones.Add("EET", "44.4476304,26.0860545");       //bucharest
+            timezones.Add("CET", "48.8588589,2.3470599");        //paris
+            timezones.Add("WER", "38.7436266,-9.1602038");       //lisbon
+            timezones.Add("GMT", "51.5232391,-0.1166146");       //london
+            timezones.Add("BRT", "-23.5778896,-46.6096585");     //sao paulo
+            timezones.Add("ART", "-34.6158526,-58.4332985");     //buenos aires
+            timezones.Add("AST", "53.3215407,-60.3542792");      //Happy+Valley-Goose+Bay
+            timezones.Add("VET", "10.4683917,-66.8903658");      //caracas
+            timezones.Add("EST", "40.7056308,-73.9780035");      //NYC
+            timezones.Add("CST", "39.091919,-94.5757195");       //kansas city
+            timezones.Add("MST", "40.7609881,-111.8936263");     //salt lake city
+            timezones.Add("PST", "34.0469605,-118.2621293");     //LA
+            timezones.Add("AKDT", "61.1878492,-149.8158133");    //Anchorage
 
             TimeZone localZone = TimeZone.CurrentTimeZone;
             DateTime currentDate = DateTime.Now;
@@ -2200,34 +2198,34 @@ namespace NarutoBot3
                 switch (args.Replace("\r", string.Empty).ToLower())
                 {
                     case "ist":
-                        location = IST; timezoneS = "IST";
+                        location = timezones["IST"]; timezoneS = "IST";
                         break;
 
                     case "msk":
-                        location = MSK; timezoneS = "MSK";
+                        location = timezones["MSK"]; timezoneS = "MSK";
                         break;
 
                     case "fet":
-                        location = FET; timezoneS = "FET";
+                        location = timezones["FET"]; timezoneS = "FET";
                         break;
 
                     case "eet":
                     case "stillbutterfly":
                     case "romania":
-                        location = EET; timezoneS = "EET";
+                        location = timezones["EET"]; timezoneS = "EET";
                         break;
 
                     case "cet":
-                        location = CET; timezoneS = "CET";
+                        location = timezones["CET"]; timezoneS = "CET";
                         break;
 
                     case "wer":
-                        location = WER; timezoneS = "WER";
+                        location = timezones["WER"]; timezoneS = "WER";
                         break;
 
                     case "gmt":
                     case "masterrace":
-                        location = GMT; timezoneS = "GMT";
+                        location = timezones["GMT"]; timezoneS = "GMT";
                         break;
 
                     case "utc":
@@ -2235,48 +2233,48 @@ namespace NarutoBot3
                         break;
 
                     case "brt":
-                        location = BRT; timezoneS = "BRT";
+                        location = timezones["BRT"]; timezoneS = "BRT";
                         break;
 
                     case "art":
-                        location = ART; timezoneS = "ART";
+                        location = timezones["ART"]; timezoneS = "ART";
                         break;
 
                     case "ast":
-                        location = AST; timezoneS = "AST";
+                        location = timezones["AST"]; timezoneS = "AST";
                         break;
 
                     case "vet":
-                        location = VET; timezoneS = "VET";
+                        location = timezones["VET"]; timezoneS = "VET";
                         break;
 
                     case "est":
-                        location = EST; timezoneS = "EST";
+                        location = timezones["EST"]; timezoneS = "EST";
                         break;
 
                     case "cst":
-                        location = CST; timezoneS = "CST";
+                        location = timezones["CST"]; timezoneS = "CST";
                         break;
 
                     case "mst":
                     case "jhoudiey":
-                        location = MST; timezoneS = "MST";
+                        location = timezones["MST"]; timezoneS = "MST";
                         break;
 
                     case "pst":
-                        location = PST; timezoneS = "PST";
+                        location = timezones["PST"]; timezoneS = "PST";
                         break;
 
                     case "akdt":
-                        location = AKDT; timezoneS = "AKDT";
+                        location = timezones["AKDT"]; timezoneS = "AKDT";
                         break;
 
                     case "":
-                        location = GMT; timezoneS = "GMT";
+                        location = timezones["GMT"]; timezoneS = "GMT";
                         break;
 
                     default:
-                        location = GMT; timezoneS = "GMT"; invalid = true;
+                        location = timezones["GMT"]; timezoneS = "GMT"; invalid = true;
                         break;
                 }
 
@@ -2298,9 +2296,9 @@ namespace NarutoBot3
                     convertedTime = currentUTC;
 
                 if (invalid)
-                    if (args.Replace("\r", string.Empty).ToLower() == "2blaze" || args.Replace("\r", string.Empty).ToLower() == "2blaze1" || args.Replace("\r", string.Empty).ToLower() == "toblaze")
+                    if (args.ToLower() == "2blaze" || args.ToLower() == "2blaze1" || args.ToLower() == "toblaze")
                         message = new Privmsg(CHANNEL, "4:20");
-                    else if (args.Replace("\r", string.Empty).ToLower() == "alan_jackson" || args.Replace("\r", string.Empty).ToLower() == "alan" || args.Replace("\r", string.Empty).ToLower() == "alanjackson")
+                    else if (args.ToLower() == "alan_jackson" || args.ToLower() == "alan" || args.ToLower() == "alanjackson")
                         message = new Privmsg(CHANNEL, "5:00");
                     else
                         message = new Privmsg(CHANNEL, convertedTime.Hour + ":" + convertedTime.Minute.ToString("00") + " " + timezoneS + ". \"" + args + "\" is an invalid argument");
