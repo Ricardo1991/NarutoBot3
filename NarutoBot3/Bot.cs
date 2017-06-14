@@ -1593,6 +1593,10 @@ namespace NarutoBot3
                         sendMessage(new Privmsg(whoSent, "Session: " + stats.getFact()[0] + " Lifetime: " + stats.getFact()[1]));
                         break;
 
+                    case "tell":
+                     sendMessage(new Privmsg(whoSent, "Session: " + stats.getTell()[0] + " Lifetime: " + stats.getTell()[1]));
+                        break;
+
                     default: break;
                 }
             }
