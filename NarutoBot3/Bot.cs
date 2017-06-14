@@ -27,7 +27,7 @@ namespace NarutoBot3
     {
         private Questions qq;
 
-        TextMarkovChain killgen = new TextMarkovChain();
+        private TextMarkovChain killgen = new TextMarkovChain();
 
         private CleverbotSession cleverbotSession = null;
 
@@ -39,24 +39,37 @@ namespace NarutoBot3
         private List<string> quotes = new List<string>();
         private List<string> funk = new List<string>();
         private List<string> nickGenStrings;
-        List<CustomCommand> customCommands = new List<CustomCommand>();
+        private List<CustomCommand> customCommands = new List<CustomCommand>();
 
         public UserList userlist = new UserList();
         private StatsManager stats = new StatsManager();
 
         public event EventHandler<EventArgs> DuplicatedNick;
+
         public event EventHandler<EventArgs> Created;
+
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
+
         public event EventHandler<EventArgs> Timeout;
+
         public event EventHandler<PongEventArgs> PongReceived;
+
         public event EventHandler<EventArgs> Connected;
+
         public event EventHandler<EventArgs> ConnectedWithServer;
+
         public event EventHandler<EventArgs> BotNickChanged;
+
         public event EventHandler<EventArgs> BotSilenced;
+
         public event EventHandler<EventArgs> BotUnsilenced;
+
         public event EventHandler<EventArgs> Quit;
+
         public event EventHandler<TopicChangedEventArgs> TopicChange;
+
         public event EventHandler<EventArgs> EnforceMirrorChanged;
+
         public event EventHandler<EventArgs> UpdateUserListSource;
 
         private System.Timers.Timer timeoutTimer;
@@ -75,7 +88,7 @@ namespace NarutoBot3
 
         private string lastImgurID;
 
-        System.Timers.Timer pingServerTimer;        //To check for connection lost
+        private System.Timers.Timer pingServerTimer;        //To check for connection lost
 
         public IRC_Client Client
         {
@@ -174,7 +187,7 @@ namespace NarutoBot3
                 EnforceMirrorChanged(this, e);
         }
 
-        public static UserList getSavedUsers()
+        internal static UserList getSavedUsers()
         {
             UserList ul = new UserList();
             ul.loadData();
@@ -233,13 +246,13 @@ namespace NarutoBot3
                 TwitterLogOn();
         }
 
-        public void updateTheme(ColorScheme newColorScheme)
+        internal void updateTheme(ColorScheme newColorScheme)
         {
             if (newColorScheme != null)
                 currentColorScheme = newColorScheme;
         }
 
-        public bool connect()
+        internal bool connect()
         {
             if (Client.Connect(processMessage))
             {
@@ -253,7 +266,7 @@ namespace NarutoBot3
             }
         }
 
-        public bool disconnect(string quitMessage)
+        internal bool disconnect(string quitMessage)
         {
             userlist.saveData();
 
@@ -264,7 +277,7 @@ namespace NarutoBot3
             return client.Disconnect(quitMessage);
         }
 
-        public void processMessage(string message)
+        private void processMessage(string message)
         {
             ParsedMessage messageObject;
 
@@ -330,7 +343,7 @@ namespace NarutoBot3
                         else if (s[0] == '+')
                             userlist.setUserChannelVoice(s, true);
 
-                        userlist.setUserMode(s, getUserMode(s));
+                        userlist.setUserMode(s, Useful.getUserMode(s));
                     }
 
                     OnCreate(EventArgs.Empty);
@@ -380,7 +393,7 @@ namespace NarutoBot3
 
                     if (waitingForPong)
                     {
-                        string currentStamp = GetTimestamp(DateTime.Now);
+                        string currentStamp = Useful.GetTimestamp(DateTime.Now);
                         string format = "mmssffff";
 
                         DateTime now, then;
@@ -417,7 +430,7 @@ namespace NarutoBot3
                     UpdateUserListSource(null, null);
                     WriteMessage("** " + userJoin + " (" + joinMessage + ") joined", currentColorScheme.Join);
 
-                    char mode = getUserMode(userJoin);
+                    char mode = Useful.getUserMode(userJoin);
                     userJoin = Useful.removeUserMode(userJoin);
 
                     userlist.setUserOnlineStatus(userJoin, true);
@@ -1075,34 +1088,12 @@ namespace NarutoBot3
             }
         }
 
-        void updateLastImgurLink(string msg)
+        private void updateLastImgurLink(string msg)
         {
             lastImgurID = Useful.getBetween(msg, "imgur.com/", "");
         }
 
-        static char getUserMode(string user)
-        {
-            if (string.IsNullOrWhiteSpace(user))
-            {
-                return '0';
-            }
-            switch (user[0])
-            {
-                case '@':
-                case '+':
-                case '%':
-                case '~':
-                case '&':
-                    return user[0];
-
-                default:
-                    return '0';
-            }
-        }
-
-
-
-        public void ReadKills()
+        internal void ReadKills()
         {
             kill.Clear();
             killsUsed.Clear();
@@ -1137,7 +1128,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadFacts()
+        internal void ReadFacts()
         {
             facts.Clear();
             factsUsed.Clear();
@@ -1170,7 +1161,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadRules()
+        internal void ReadRules()
         {
             rls.Clear();
             if (File.Exists("TextFiles/rules.txt"))
@@ -1195,7 +1186,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadHelp()
+        internal void ReadHelp()
         {
             hlp.Clear();
             if (File.Exists("TextFiles/help.txt"))
@@ -1220,7 +1211,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadTrivia() //Reads the Trivia stuff
+        internal void ReadTrivia() //Reads the Trivia stuff
         {
             tri.Clear();
 
@@ -1246,7 +1237,7 @@ namespace NarutoBot3
             }
         }
 
-        public void AddGreetings(string args, string nick)
+        private void AddGreetings(string args, string nick)
         {
             userlist.setGreeting(nick, args, true);
             userlist.saveData();
@@ -1276,7 +1267,7 @@ namespace NarutoBot3
             sendMessage(new Notice(nick, "You didn't set a Greeting yet"));
         }
 
-        public void ReadNickGen()//These are for the Nick gen
+        internal void ReadNickGen()//These are for the Nick gen
         {
             nickGenStrings = new List<string>();
             nickGenStrings.Clear();
@@ -1302,7 +1293,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadQuotes()
+        internal void ReadQuotes()
         {
             quotes = new List<string>();
             quotes.Clear();
@@ -1324,7 +1315,7 @@ namespace NarutoBot3
             }
         }
 
-        public void saveQuotes()
+        private void saveQuotes()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/quotes.txt", false))
             {
@@ -1335,7 +1326,7 @@ namespace NarutoBot3
             }
         }
 
-        public void ReadFunk()
+        internal void ReadFunk()
         {
             funk = new List<string>();
             funk.Clear();
@@ -1357,7 +1348,7 @@ namespace NarutoBot3
             }
         }
 
-        public void saveFunk()
+        private void saveFunk()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/Funk.txt", false))
             {
@@ -1368,7 +1359,7 @@ namespace NarutoBot3
             }
         }
 
-        public void sendMessage(IrcMessage message)
+        internal void sendMessage(IrcMessage message)
         {
             Client.sendMessage(message);
 
@@ -1387,11 +1378,11 @@ namespace NarutoBot3
                     WriteMessage(Client.NICK + "\t\t: " + message.body);
                 }
             }
-            else if (message is IrcClient.Messages.Action)
+            else if (message is ActionMessage)
             {
                 WriteMessage("             * : " + message.body, currentColorScheme.OwnMessage);
             }
-            else if (message is IrcClient.Messages.Privmsg)
+            else if (message is Privmsg)
             {
                 string alignedNick = Client.NICK.Truncate(13);
                 int tab = 15 - alignedNick.Length;
@@ -1403,13 +1394,13 @@ namespace NarutoBot3
             }
         }
 
-        public void pokeUser(string nick)
+        internal void pokeUser(string nick)
         {
-            IrcMessage message = new IrcClient.Messages.Action(Client.HOME_CHANNEL, "stabs " + nick + " with a sharp knife");
+            IrcMessage message = new ActionMessage(Client.HOME_CHANNEL, "stabs " + nick + " with a sharp knife");
             sendMessage(message);
         }
 
-        public void whoisUser(string nick)
+        internal void whoisUser(string nick)
         {
             IrcMessage message = new Whois(nick);
             sendMessage(message);
@@ -1592,7 +1583,7 @@ namespace NarutoBot3
                         break;
 
                     case "tell":
-                     sendMessage(new Privmsg(whoSent, "Session: " + stats.getTell()[0] + " Lifetime: " + stats.getTell()[1]));
+                        sendMessage(new Privmsg(whoSent, "Session: " + stats.getTell()[0] + " Lifetime: " + stats.getTell()[1]));
                         break;
 
                     default: break;
@@ -1859,10 +1850,10 @@ namespace NarutoBot3
         private void me(string CHANNEL, string args, string nick)
         {
             if (userlist.userIsOperator(nick))
-                sendMessage(new IrcClient.Messages.Action(CHANNEL, args));
+                sendMessage(new ActionMessage(CHANNEL, args));
         }
 
-        public void silence(string nick)
+        private void silence(string nick)
         {
             IrcMessage message;
             if (userlist.userIsOperator(nick))
@@ -2070,7 +2061,7 @@ namespace NarutoBot3
                 }
                 while (list[userNumber].Nick == nick);
 
-                message = new IrcClient.Messages.Action(CHANNEL, "pokes " + list[userNumber].Nick);
+                message = new ActionMessage(CHANNEL, "pokes " + list[userNumber].Nick);
                 sendMessage(message);
                 stats.poke();
             }
@@ -2128,7 +2119,7 @@ namespace NarutoBot3
             return;
         }
 
-        public void trivia(string CHANNEL, string nick)
+        private void trivia(string CHANNEL, string nick)
         {
             if (tri == null || userlist.userIsMuted(nick) || tri.Count == 0 || Settings.Default.silence || !Settings.Default.triviaEnabled) return;
 
@@ -2140,7 +2131,7 @@ namespace NarutoBot3
             return;
         }
 
-        void printNames(string nick)
+        private void printNames(string nick)
         {
             string list = "[";
 
@@ -2157,7 +2148,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        void time(string CHANNEL, string nick, string args)
+        private void time(string CHANNEL, string nick, string args)
         {
             IrcMessage message;
             string timezoneS;
@@ -2202,7 +2193,7 @@ namespace NarutoBot3
 
             DateTime currentUTC = localZone.ToUniversalTime(currentDate);
 
-            double timestamp = ConvertToUnixTimestamp(currentUTC);
+            double timestamp = Useful.ConvertToUnixTimestamp(currentUTC);
 
             if (Settings.Default.silence == false && Settings.Default.timeEnabled == true)
             {
@@ -2301,7 +2292,7 @@ namespace NarutoBot3
                     }
                     catch { }
 
-                    convertedTime = ConvertFromUnixTimestamp(timestamp + g.DSTOffset + g.RawOffset);
+                    convertedTime = Useful.ConvertFromUnixTimestamp(timestamp + g.DSTOffset + g.RawOffset);
                 }
                 else
                     convertedTime = currentUTC;
@@ -2320,7 +2311,7 @@ namespace NarutoBot3
             }
         }
 
-        void youtube(string CHANNEL, string nick, string line)
+        private void youtube(string CHANNEL, string nick, string line)
         {
             if (string.IsNullOrEmpty(line)) return;
             if (userlist.userIsMuted(nick)) return;
@@ -2336,7 +2327,7 @@ namespace NarutoBot3
             }
         }
 
-        void twitter(string CHANNEL, string nick, string line)
+        private void twitter(string CHANNEL, string nick, string line)
         {
             string author, tweet;
 
@@ -2359,7 +2350,7 @@ namespace NarutoBot3
             }
         }
 
-        void urlTitle(string CHANNEL, string nick, string line)
+        private void urlTitle(string CHANNEL, string nick, string line)
         {
             string url;
             string[] split;
@@ -2384,7 +2375,7 @@ namespace NarutoBot3
             }
         }
 
-        async void botThink(string CHANNEL, string line, string nick)
+        private async void botThink(string CHANNEL, string line, string nick)
         {
             IrcMessage message;
 
@@ -2414,7 +2405,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        void getURLInfo(string CHANNEL, string url)
+        private void getURLInfo(string CHANNEL, string url)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             string html, title;
@@ -2495,7 +2486,7 @@ namespace NarutoBot3
             }
         }
 
-        GoogleSearchObject.GoogleSearch googleAnimeSearch(string query)
+        private GoogleSearchObject.GoogleSearch googleAnimeSearch(string query)
         {
             GoogleSearchObject.GoogleSearch g = new GoogleSearchObject.GoogleSearch();
             WebClient webClient = new WebClient();
@@ -2521,7 +2512,7 @@ namespace NarutoBot3
             return g;
         }
 
-        void animeUserSearch(string CHANNEL, string query)
+        private void animeUserSearch(string CHANNEL, string query)
         {
             int i = 0;
             int i_max = 5;
@@ -2532,7 +2523,6 @@ namespace NarutoBot3
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
             GoogleSearchObject.GoogleSearch g = googleAnimeSearch(query);
-
 
             if (g == null)
             {
@@ -2586,7 +2576,7 @@ namespace NarutoBot3
             stats.anime();
         }
 
-        void animeSearch(string CHANNEL, string nick, string query)
+        private void animeSearch(string CHANNEL, string nick, string query)
         {
             //TODO: Simplify this anime search
 
@@ -2718,7 +2708,7 @@ namespace NarutoBot3
             stats.anime();
         }
 
-        void youtubeSearch(string CHANNEL, string nick, string query)
+        private void youtubeSearch(string CHANNEL, string nick, string query)
         {
             IrcMessage message;
             string jsonYoutube, title, duration;
@@ -2776,7 +2766,7 @@ namespace NarutoBot3
             return;
         }
 
-        void vimeo(string CHANNEL, string nick, string line)
+        private void vimeo(string CHANNEL, string nick, string line)
         {
             if (userlist.userIsMuted(nick)) return;
 
@@ -2828,7 +2818,7 @@ namespace NarutoBot3
             }
         }
 
-        void lastKill(string CHANNEL, string nick, string arg)
+        private void lastKill(string CHANNEL, string nick, string arg)
         {
             if (userlist.userIsMuted(nick) || string.IsNullOrEmpty(nick) || Settings.Default.silence || !Settings.Default.killEnabled || killsUsed.Count < 1) return;
 
@@ -2861,7 +2851,7 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        void killUser(string CHANNEL, string nick, string args)
+        private void killUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -2926,7 +2916,7 @@ namespace NarutoBot3
                     }
                     else
                     {
-                        message = new IrcClient.Messages.Action(CHANNEL, killString);
+                        message = new ActionMessage(CHANNEL, killString);
                     }
                 }
 
@@ -2945,7 +2935,7 @@ namespace NarutoBot3
             }
         }
 
-        void factUser(string CHANNEL, string nick, string args)
+        private void factUser(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -3010,7 +3000,7 @@ namespace NarutoBot3
             }
         }
 
-        void randomKill(string CHANNEL, string nick, string args)
+        private void randomKill(string CHANNEL, string nick, string args)
         {
             Random r = new Random();
             string target = "";
@@ -3048,7 +3038,7 @@ namespace NarutoBot3
                         message = new Privmsg(CHANNEL, killString);
                     }
                     else
-                        message = new IrcClient.Messages.Action(CHANNEL, killString);
+                        message = new ActionMessage(CHANNEL, killString);
 
                     while (message.body.Contains("<random>"))
                     {
@@ -3068,7 +3058,7 @@ namespace NarutoBot3
             }
         }
 
-        async void parseQuestion(string CHANNEL, string user, string arg)
+        private async void parseQuestion(string CHANNEL, string user, string arg)
         {
             //This needs to go or be simplified
 
@@ -3599,7 +3589,7 @@ namespace NarutoBot3
             }
         }
 
-        void nickGen(string CHANNEL, string nick, string args)
+        private void nickGen(string CHANNEL, string nick, string args)
         {
             if (string.IsNullOrEmpty(nick)) return;
             Random rnd = new Random();
@@ -3657,7 +3647,7 @@ namespace NarutoBot3
             }
         }
 
-        void redditLink(string CHANNEL, string nick, string line)
+        private void redditLink(string CHANNEL, string nick, string line)
         {
             if (string.IsNullOrEmpty(line) || string.IsNullOrEmpty(nick)) return;
 
@@ -3690,7 +3680,7 @@ namespace NarutoBot3
             }
         }
 
-        void redditInfoWithComment(string CHANNEL, string url, string postName, string commentName)
+        private void redditInfoWithComment(string CHANNEL, string url, string postName, string commentName)
         {
             RedditSharp.Things.Post post;
             RedditSharp.Things.Comment comment;
@@ -3732,7 +3722,7 @@ namespace NarutoBot3
             }
         }
 
-        void redditInfo(string CHANNEL, string url, string postName)
+        private void redditInfo(string CHANNEL, string url, string postName)
         {
             IrcMessage message;
 
@@ -3757,7 +3747,7 @@ namespace NarutoBot3
             }
         }
 
-        void wiki(string CHANNEL, string nick, string args)
+        private void wiki(string CHANNEL, string nick, string args)
         {
             if (userlist.userIsMuted(nick)) return;
 
@@ -3769,7 +3759,7 @@ namespace NarutoBot3
             }
         }
 
-        void greetUser(string nick)
+        private void greetUser(string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.greetingsEnabled || Settings.Default.silence) return;
 
@@ -3785,7 +3775,7 @@ namespace NarutoBot3
             }
         }
 
-        bool quitIRC(string nick)
+        private bool quitIRC(string nick)
         {
             if (userlist.userIsOperator(nick))
             {
@@ -3798,7 +3788,7 @@ namespace NarutoBot3
             return false;
         }
 
-        void printQuote(string CHANNEL, string args, string nick)
+        private void printQuote(string CHANNEL, string args, string nick)
         {
             Random r = new Random();
             int i;
@@ -3860,7 +3850,7 @@ namespace NarutoBot3
             stats.quote();
         }
 
-        void addQuote(string args, string nick)
+        private void addQuote(string args, string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
@@ -3880,7 +3870,7 @@ namespace NarutoBot3
             saveQuotes();
         }
 
-        void tell(string nick, string args)
+        private void tell(string nick, string args)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.tellEnabled) return;
 
@@ -3900,7 +3890,7 @@ namespace NarutoBot3
             }
         }
 
-        void inspectMessages(string args, string user)
+        private void inspectMessages(string args, string user)
         {
             if (userlist.userIsOperator(user))
             {
@@ -3908,7 +3898,7 @@ namespace NarutoBot3
             }
         }
 
-        void cleanMessages(string args, string user)
+        private void cleanMessages(string args, string user)
         {
             if (!userlist.userIsOperator(user))
                 return;
@@ -3925,7 +3915,7 @@ namespace NarutoBot3
                 sendMessage(new Notice(split[0], "Success!"));
         }
 
-        void filmot(string CHANNEL, string args, string user)
+        private void filmot(string CHANNEL, string args, string user)
         {
             if (userlist.userIsMuted(user)) return;
 
@@ -3942,7 +3932,7 @@ namespace NarutoBot3
             }
         }
 
-        void choose(string CHANNEL, string user, string arg)
+        private void choose(string CHANNEL, string user, string arg)
         {
             if (userlist.userIsMuted(user) || !Settings.Default.chooseEnabled) return;
 
@@ -3966,7 +3956,7 @@ namespace NarutoBot3
             stats.choose();
         }
 
-        void shuffle(string CHANNEL, string user, string arg)
+        private void shuffle(string CHANNEL, string user, string arg)
         {
             if (userlist.userIsMuted(user) || !Settings.Default.shuffleEnabled) return;
 
@@ -4002,7 +3992,7 @@ namespace NarutoBot3
             stats.shuffle();
         }
 
-        void printFunk(string CHANNEL, string nick)
+        private void printFunk(string CHANNEL, string nick)
         {
             Random r = new Random();
             int i;
@@ -4017,7 +4007,7 @@ namespace NarutoBot3
             stats.funk();
         }
 
-        void addFunk(string args, string nick)
+        private void addFunk(string args, string nick)
         {
             if (userlist.userIsMuted(nick) || !Settings.Default.funkEnabled) return;
 
@@ -4046,7 +4036,7 @@ namespace NarutoBot3
             stats.funk();
         }
 
-        void addCustomCommand(string CHANNEL, string args, string nick)
+        private void addCustomCommand(string CHANNEL, string args, string nick)
         {
             string[] splits;
             IrcMessage message;
@@ -4064,7 +4054,7 @@ namespace NarutoBot3
             CustomCommand.saveCustomCommands(customCommands);
         }
 
-        void removeCustomCommand(string args, string nick)
+        private void removeCustomCommand(string args, string nick)
         {
             string[] splits;
 
@@ -4077,7 +4067,7 @@ namespace NarutoBot3
             }
         }
 
-        void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
+        private void useCustomCommand(string CHANNEL, string cmd, string args, string nick)
         {
             IrcMessage message;
 
@@ -4128,7 +4118,7 @@ namespace NarutoBot3
         ///////////////////////////////////
 
         //CTCP replies
-        void ctcpTime(string u)
+        private void ctcpTime(string u)
         {
             DateTime dateValue = new DateTime();
             dateValue = DateTime.Now;
@@ -4143,13 +4133,13 @@ namespace NarutoBot3
             sendMessage(message);
         }
 
-        void ctcpVersion(string u)
+        private void ctcpVersion(string u)
         {
             IrcMessage message = new Notice(u, "\x01" + "VERSION " + "NarutoBot3 by Ricardo1991, compiled on " + getCompilationDate.RetrieveLinkerTimestamp().ToUniversalTime() + "\x01");
             sendMessage(message);
         }
 
-        void ctcpPing(string u, string stamp)
+        private void ctcpPing(string u, string stamp)
         {
             IrcMessage message = new Notice(u, "\x01" + "PING " + stamp + "\x01");
             sendMessage(message);
@@ -4157,31 +4147,31 @@ namespace NarutoBot3
 
         ////
 
-        public void muteUser(string nick)
+        internal void muteUser(string nick)
         {
             userlist.setUserMuteStatus(nick, true);
             userlist.saveData();
         }
 
-        public void unmuteUser(string nick)
+        internal void unmuteUser(string nick)
         {
             userlist.setUserMuteStatus(nick, false);
             userlist.saveData();
         }
 
-        public void giveOps(string nick)
+        internal void giveOps(string nick)
         {
             userlist.setUserOperatorStatus(nick, true);
             userlist.saveData();
         }
 
-        public void takeOps(string nick)
+        internal void takeOps(string nick)
         {
             userlist.setUserOperatorStatus(nick, false);
             userlist.saveData();
         }
 
-        public bool changeNick(string nick)
+        internal bool changeNick(string nick)
         {
             string oldnick = Client.NICK;
             Client.NICK = Settings.Default.Nick = nick;
@@ -4203,24 +4193,11 @@ namespace NarutoBot3
             else return false;
         }
 
-        public static DateTime ConvertFromUnixTimestamp(double timestamp)
-        {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return origin.AddSeconds(timestamp);
-        }
-
-        public static double ConvertToUnixTimestamp(DateTime date)
-        {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            TimeSpan diff = date.ToUniversalTime() - origin;
-            return Math.Floor(diff.TotalSeconds);
-        }
-
         /// <summary>
         /// Writes a Message on the output window
         /// </summary>
         /// <param Name="Message">A sting with the Message to write</param>
-        public void WriteMessage(string message) //Writes Message on the TextBox (bot console)
+        private void WriteMessage(string message) //Writes Message on the TextBox (bot console)
         {
             string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
@@ -4257,7 +4234,7 @@ namespace NarutoBot3
             }
         }
 
-        public void WriteMessage(string message, Color color)           //Writes Message on the TextBox (bot console)
+        private void WriteMessage(string message, Color color)           //Writes Message on the TextBox (bot console)
         {
             string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
@@ -4297,16 +4274,11 @@ namespace NarutoBot3
             }
         }
 
-        private static string GetTimestamp(DateTime value)
-        {
-            return value.ToString("mmssffff");
-        }
-
-        public void pingSever(object sender, EventArgs e)
+        internal void pingSever(object sender, EventArgs e)
         {
             if (!waitingForPong)
             {
-                IrcMessage message = new Ping(GetTimestamp(DateTime.Now));
+                IrcMessage message = new Ping(Useful.GetTimestamp(DateTime.Now));
 
 #if DEBUG
                 WriteMessage(message.body);
@@ -4322,7 +4294,7 @@ namespace NarutoBot3
             }
         }
 
-        public void kickUser(string userToBeKicked)
+        internal void kickUser(string userToBeKicked)
         {
             IrcMessage message = new Kick(Client.HOME_CHANNEL, userToBeKicked);
             sendMessage(message);
@@ -4421,7 +4393,7 @@ namespace NarutoBot3
             return replaced;
         }
 
-        public void TwitterLogOn()
+        internal void TwitterLogOn()
         {
             if (Settings.Default.twitterEnabled)
             {

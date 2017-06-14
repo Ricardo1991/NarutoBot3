@@ -14,12 +14,16 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         private delegate void SetTextCallback(string text);
+
         private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+
         private delegate void SetBoolCallback(bool status);
+
         private delegate void ChangeDataSource();
+
         private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
 
-        ThemeCollection themes = new ThemeCollection();
+        private ThemeCollection themes = new ThemeCollection();
 
         private Bot bot;
 
@@ -37,7 +41,7 @@ namespace NarutoBot3
             initializeBotEvents();
 
             string[] args = Environment.GetCommandLineArgs();
-            foreach(string s in args)
+            foreach (string s in args)
             {
                 if (s.ToLower().CompareTo("skip") == 0)
                 {
@@ -54,7 +58,6 @@ namespace NarutoBot3
                 updateSilenceMarks();
                 tryConnect();
             }
-
         }
 
         public bool tryConnect()
@@ -67,7 +70,6 @@ namespace NarutoBot3
             }
 
             return success;
-                
         }
 
         public bool connect()
@@ -118,7 +120,7 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        void checkGoogleApi()
+        private void checkGoogleApi()
         {
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
                 Settings.Default.aniSearchEnabled = false;
@@ -130,7 +132,7 @@ namespace NarutoBot3
             }
         }
 
-        void checkTwitterApi()
+        private void checkTwitterApi()
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
                     string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
@@ -175,14 +177,12 @@ namespace NarutoBot3
             bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
             bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
             bot.UpdateUserListSource += new EventHandler<EventArgs>(UpdateDataSource);
-
         }
 
         private void disconnectClient()
         {
             if (bot != null)
                 bot.disconnect(Settings.Default.quitMessage);
-
 
             InterfaceUserList.DataSource = null;
             UpdateDataSource();
@@ -503,7 +503,6 @@ namespace NarutoBot3
                 }
                 catch { }
             }
-            
         }
 
         private void silencedToolStripMenuItem_Click(object sender, EventArgs e)  //Toogle Silence
@@ -631,45 +630,67 @@ namespace NarutoBot3
             }
         }
 
-        private void parseInputMessage(string inmessage)
+        private void parseInputMessage(string inputMessage)
         {
-            string[] parsed = inmessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
+            string[] parsed = inputMessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
+            string command = parsed[0].Substring(1);
             IrcMessage message = null;
 
             if (!bot.Client.isConnected) return;
 
             if (parsed.Length >= 2 && !string.IsNullOrEmpty(parsed[1]))
             {
+                string args = parsed[1];
                 if (parsed[0][0] == '/')
                 {
-                    if (parsed[0].ToLower() == "/me")  //Action send
-                        message = new IrcClient.Messages.Action(bot.Client.HOME_CHANNEL, parsed[1]);
-                    else if (parsed[0].ToLower() == "/whois")  //Action send
-                        message = new Whois(parsed[1]);
-                    else if (parsed[0].ToLower() == "/whowas")  //Action send
-                        message = new Whowas(parsed[1]);
-                    else if (parsed[0].ToLower() == "/nick")  //Action send
-                        changeNick(parsed[1]);
-                    else if (parsed[0].ToLower() == "/ns" || parsed[0].ToLower() == "/nickserv")  //NickServ send
-                        message = new Privmsg("NickServ", parsed[1]);
-                    else if (parsed[0].ToLower() == "/cs" || parsed[0].ToLower() == "/chanserv")  //Chanserv send
-                        message = new Privmsg("ChanServ", parsed[1]);
-                    else if (parsed[0].ToLower() == "/query" || parsed[0].ToLower() == "/pm" || parsed[0].ToLower() == "/msg")  //Action send
+                    switch (command)
                     {
-                        parsed = InputBox.Text.Split(new char[] { ' ' }, 3);
-                        if (parsed.Length >= 3)
-                            message = new Privmsg(parsed[1], parsed[2]);
-                        else
-                            WriteMessage("Not enough arguments");
+                        case "me":  //Action send
+                            message = new ActionMessage(bot.Client.HOME_CHANNEL, args);
+                            break;
+
+                        case "whois": //Action send
+                            message = new Whois(args);
+                            break;
+
+                        case "whowas": //Action send
+                            message = new Whowas(args);
+                            break;
+
+                        case "nick": //Action send
+                            changeNick(parsed[1]);
+                            break;
+
+                        case "nickserv": //NickServ send
+                        case "ns":
+                            message = new Privmsg("NickServ", args);
+                            break;
+
+                        case "chanserv": //Chanserv send
+                        case "cs":
+                            message = new Privmsg("ChanServ", args);
+                            break;
+
+                        case "query": //Action send
+                        case "pm":
+                        case "msg":
+                            string[] msgargs = args.Split(new char[] { ' ' }, 2);
+                            if (args.Length >= 2)
+                                message = new Privmsg(msgargs[0], msgargs[1]);
+                            else
+                                WriteMessage("Not enough arguments");
+                            break;
+
+                        case "identify":
+                            message = new Privmsg("NickServ", "identify " + args);
+                            break;
                     }
-                    else if (parsed[0].ToLower() == "/identify")
-                        message = new Privmsg("NickServ", "identify " + parsed[1]);
                 }
                 else //Normal send
                     message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
             }
             else
-                if (parsed[0][0] == '/')
+                if (command[0] == '/')
                 WriteMessage("Not enough arguments");
             else //Normal send
                 message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);

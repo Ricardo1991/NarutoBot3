@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace NarutoBot3
 {
@@ -20,6 +20,44 @@ namespace NarutoBot3
             if (usermodes.Any((s) => Convert.ToChar(user.Substring(0, 1)).Equals(s)))
                 return user.Substring(1).Trim();
             else return user.Trim();
+        }
+
+        public static DateTime ConvertFromUnixTimestamp(double timestamp)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return origin.AddSeconds(timestamp);
+        }
+
+        public static double ConvertToUnixTimestamp(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
+
+        public static char getUserMode(string user)
+        {
+            if (string.IsNullOrWhiteSpace(user))
+            {
+                return '0';
+            }
+            switch (user[0])
+            {
+                case '@':
+                case '+':
+                case '%':
+                case '~':
+                case '&':
+                    return user[0];
+
+                default:
+                    return '0';
+            }
+        }
+
+        public static string GetTimestamp(DateTime value)
+        {
+            return value.ToString("mmssffff");
         }
 
         public static string getBetween(string strSource, string strStart, string strEnd)

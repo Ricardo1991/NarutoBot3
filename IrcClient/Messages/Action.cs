@@ -1,8 +1,8 @@
 ﻿namespace IrcClient.Messages
 {
-    public class Action : IrcMessage
+    public class ActionMessage : IrcMessage
     {
-        public Action(string destinatary, string body)
+        public ActionMessage(string destinatary, string body)
         {
             this.destinatary = destinatary;
             this.body = body;

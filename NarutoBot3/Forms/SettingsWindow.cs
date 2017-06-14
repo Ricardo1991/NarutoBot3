@@ -7,7 +7,7 @@ namespace NarutoBot3
 {
     public partial class SettingsWindow : Form
     {
-        ThemeCollection themes;
+        private ThemeCollection themes;
 
         private List<string> colorSchemeNames = new List<string>();
 
