@@ -323,7 +323,9 @@ namespace NarutoBot3
                 case ("333"): //Topic author and Time
                 case ("366"): //End of /NAMES
                 case ("375"): //START OF MOTD
-
+#if DEBUG
+                    WriteMessage(messageObject.SplitMessage[0]);
+#endif
                     break;
 
                 case ("332"): //TOPIC
@@ -373,6 +375,9 @@ namespace NarutoBot3
                 case ("438"): //Nickname change too fast
 
                     //TODO: revert back to old nick
+#if DEBUG
+                    WriteMessage(messageObject.SplitMessage[0]);
+#endif
 
                     break;
 
@@ -984,10 +989,6 @@ namespace NarutoBot3
                         WriteMessage("* Detected a twitter link from " + user, currentColorScheme.BotReport);
                         twitter(whoSent, user, msg);
                     }
-                    else if (msg.Contains("imgur.com"))
-                    {
-                        updateLastImgurLink(msg);
-                    }
                     else if (msg.Contains("http://") || msg.Contains("https://"))
                     {
                         WriteMessage("* Detected an url from " + user, currentColorScheme.BotReport);
@@ -1016,8 +1017,9 @@ namespace NarutoBot3
                             ctcpPing(user, arg);
                         }
                     }
-                    else //No parsing, just a normal Message
+                    if (msg.Contains("imgur.com"))
                     {
+                        updateLastImgurLink(msg);
                     }
 
                     break;
@@ -4182,10 +4184,13 @@ namespace NarutoBot3
                 IrcMessage message = new Nick(Client.NICK);
                 sendMessage(message);
 
-                userlist.setUserOnlineStatus(oldnick, false);
                 userlist.setUserOnlineStatus(nick, true);
+                userlist.setUserMode(nick, userlist.getUserMode(oldnick));
                 userlist.setUserChannelVoice(nick, userlist.userHasChannelVoice(oldnick));
                 userlist.setUserChannelOP(nick, userlist.userHasChannelOP(oldnick));
+
+                userlist.setUserOnlineStatus(oldnick, false);
+
                 return true;
             }
             else return false;

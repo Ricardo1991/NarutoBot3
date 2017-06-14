@@ -396,9 +396,8 @@ namespace NarutoBot3
                 InterfaceUserList.DataSource = ul;
 
                 List<string> temp = new List<string>();
-                List<User> lu = bot.userlist.getAllOnlineUsers();
 
-                foreach (User s in lu)
+                foreach (User s in ul)
                 {
                     temp.Add(s.Nick);
                 }
