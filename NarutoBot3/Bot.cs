@@ -29,7 +29,7 @@ namespace NarutoBot3
 
         TextMarkovChain killgen = new TextMarkovChain();
 
-        private CleverbotSession cleverbotSession;
+        private CleverbotSession cleverbotSession = null;
 
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -211,8 +211,6 @@ namespace NarutoBot3
                 Settings.Default.botThinkEnabled = false;
                 Settings.Default.Save();
             }
-            else if(Settings.Default.botThinkEnabled)
-                cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
 
             reddit = new Reddit(false);
 
