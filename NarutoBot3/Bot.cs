@@ -3670,7 +3670,7 @@ namespace NarutoBot3
 
                     if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?"))   //With Comment
                     {
-                        redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6].Split(new char[] { '?' }, 2)[0]);
+                        redditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6]);
                     }
                     else  //No comment link
                     {
@@ -3691,6 +3691,8 @@ namespace NarutoBot3
             string commentID = commentName;
 
             string subreddit = Useful.getBetween(url, "/r/", "/");
+
+            url = url.Substring(0, url.IndexOf('?'));
 
             try
             {

@@ -310,7 +310,7 @@ namespace NarutoBot3
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
-            int messageNumber = 0;
+            int messageNumber;
             try
             {
                 messageNumber = Int32.Parse(arg);
@@ -319,9 +319,6 @@ namespace NarutoBot3
             {
                 return false;
             }
-
-            nick = nick.Replace("@", string.Empty).Replace("+", string.Empty);
-            nick = nick.Trim();
 
             User u = getUserByName(nick);
 
