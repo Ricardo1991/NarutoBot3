@@ -92,7 +92,7 @@ namespace IrcClient
                 throw new Exception("Please provide the host");
 
             irc = new TcpClient(HOST, PORT);
-            irc.ReceiveTimeout = 5000;
+            //irc.ReceiveTimeout = 5000;
             stream = irc.GetStream();
 
             reader = new StreamReader(stream);
@@ -178,17 +178,21 @@ namespace IrcClient
 
                 try
                 {
-                    if (reader != null)
-                        buffer = reader.ReadLine();
-                    else messageDelegate(string.Empty);
+                    if (reader != null && (buffer = reader.ReadLine()) != null)
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(buffer);
+                        line = Encoding.UTF8.GetString(bytes);
 
-                    byte[] bytes = Encoding.UTF8.GetBytes(buffer);
-                    line = Encoding.UTF8.GetString(bytes);
-
-                    if (line.Length > 0) messageDelegate(line);
+                        if (line.Length > 0) messageDelegate(line);
+                    }
                 }
-                catch
-                { }
+                catch(IOException ex)
+                {
+
+#if DEBUG
+                    messageDelegate(":Client 375 :#debug : " + ex.Message);
+#endif
+                }
             }
         }
 

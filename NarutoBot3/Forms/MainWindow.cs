@@ -689,7 +689,7 @@ namespace NarutoBot3
                     message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
             }
             else
-                if (command[0] == '/')
+                if (!String.IsNullOrWhiteSpace(command) && command[0] == '/')
                 WriteMessage("Not enough arguments");
             else //Normal send
                 message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);

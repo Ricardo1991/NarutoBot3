@@ -3692,7 +3692,8 @@ namespace NarutoBot3
 
             string subreddit = Useful.getBetween(url, "/r/", "/");
 
-            url = url.Substring(0, url.IndexOf('?'));
+            if(url.Contains('?'))
+                url = url.Substring(0, url.IndexOf('?'));
 
             try
             {
