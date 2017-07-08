@@ -3796,15 +3796,13 @@ namespace NarutoBot3
             Random r = new Random();
             int i;
             IrcMessage message;
-            List<string> temp = new List<string>();
-            List<string> temp2 = new List<string>();
 
             if (userlist.userIsMuted(nick) || !Settings.Default.quotesEnabled) return;
 
             if (string.IsNullOrWhiteSpace(args) && quotes.Count > 0) //print random
             {
-                i = r.Next(quotes.Count);
-                message = new Privmsg(CHANNEL, quotes[i]);
+                printRandomQuote(CHANNEL);
+                return;
             }
             else if (args[0] == '#')    //Print quote by number
             {
@@ -3815,42 +3813,70 @@ namespace NarutoBot3
                     message = new Privmsg(CHANNEL, quotes[number - 1]);
                 else
                     message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
+
+                sendMessage(message);
+                stats.quote();
+                return;
             }
             else   //search
             {
                 string[] queries = args.Trim().ToLower().Split(' ');
+                List<string> restults = searchQuotes(queries);
 
-                //TODO: make this only one search by matching multiple words in a string
-                foreach (string quote in quotes)
+                if (restults.Count > 0)
                 {
-                    if (Regex.IsMatch(quote, "\\b" + queries[0] + "\\b", RegexOptions.IgnoreCase))
+                    if (restults.Count > 1)
                     {
-                        temp.Add(quote);
+                        message = new Privmsg(CHANNEL, "Found " + restults.Count + " quotes. Showing one of them:");
+                        sendMessage(message);
                     }
+                    message = new Privmsg(CHANNEL, restults[r.Next(restults.Count)]);
+                    sendMessage(message);
+                    stats.quote();
+                    return;
                 }
 
-                if (queries.Length > 1) //refine search
+                else
                 {
-                    foreach (string t in temp)
-                    {
-                        for (int d = 1; d < queries.Length; d++)
-                        {
-                            if (Regex.IsMatch(t, "\\b" + queries[d] + "\\b", RegexOptions.IgnoreCase))
-                            {
-                                temp2.Add(t);
-                            }
-                        }
-                    }
-                    temp = temp2;
-                }
+                    message = new Privmsg(CHANNEL, "No Quotes Found!");
 
-                if (temp.Count > 0)
-                    message = new Privmsg(CHANNEL, temp[r.Next(temp.Count)]);
-                else message = new Privmsg(CHANNEL, "No Quotes Found!");
+                    sendMessage(message);
+                    stats.quote();
+                    return;
+                }
             }
+        }
+
+        private void printRandomQuote(string CHANNEL)
+        {
+            Random r = new Random();
+            int i = r.Next(quotes.Count);
+            IrcMessage message = new Privmsg(CHANNEL, quotes[i]);
 
             sendMessage(message);
             stats.quote();
+        }
+
+        private List<string> searchQuotes(string[] queries)
+        {
+
+            List<string> results = new List<string>();
+
+            foreach(string quote in quotes)
+            {
+                bool add = true;
+                foreach(string query in queries)
+                {
+                    if (!quote.ToLower().Contains(query))
+                    {
+                        add = false;
+                    }
+                }
+                if (add)
+                    results.Add(quote);
+            }
+
+            return results;
         }
 
         private void addQuote(string args, string nick)
