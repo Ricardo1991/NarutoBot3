@@ -4419,10 +4419,18 @@ namespace NarutoBot3
                     {"i", someVariable1}
             };
 
-            var regex = new Regex("(?i)(\\b" + string.Join("\\b|\\b", replacements.Keys) + "\\b)");
-            var replaced = regex.Replace(rest, m => replacements[m.Value]);
+            try
+            {
+                var regex = new Regex("(?i)(\\b" + string.Join("\\b|\\b", replacements.Keys) + "\\b)");
+                var replaced = regex.Replace(rest, m => replacements[m.Value]);
+                return replaced;
 
-            return replaced;
+            }
+
+            catch
+            {
+                return rest;
+            }
         }
 
         internal void TwitterLogOn()
