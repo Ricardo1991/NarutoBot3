@@ -15,7 +15,7 @@ namespace NarutoBot3
             get { return users; }
         }
 
-        public void saveData()
+        public void SaveData()
         {
             TextWriter WriteFileStream = new StreamWriter("data.json", false);
 
@@ -24,7 +24,7 @@ namespace NarutoBot3
             WriteFileStream.Close();
         }
 
-        public void loadData()
+        public void LoadData()
         {
             try
             {

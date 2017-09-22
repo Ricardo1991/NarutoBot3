@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace NarutoBot3
@@ -13,7 +15,7 @@ namespace NarutoBot3
             return System.Convert.ToBase64String(plainTextBytes);
         }
 
-        public static string removeUserMode(string user)
+        public static string RemoveUserMode(string user)
         {
             char[] usermodes = { '@', '+', '%', '~', '&' };
 
@@ -35,7 +37,7 @@ namespace NarutoBot3
             return Math.Floor(diff.TotalSeconds);
         }
 
-        public static char getUserMode(string user)
+        public static char GetUserMode(string user)
         {
             if (string.IsNullOrWhiteSpace(user))
             {
@@ -60,7 +62,7 @@ namespace NarutoBot3
             return value.ToString("mmssffff");
         }
 
-        public static string getBetween(string strSource, string strStart, string strEnd)
+        public static string GetBetween(string strSource, string strStart, string strEnd)
         {
             int Start, End;
 
@@ -96,6 +98,30 @@ namespace NarutoBot3
                 return strSource.Substring(Start, End - Start);
             }
         }
+
+        public static string FillTags(string template, string user, string target, UserList userlist)
+        {
+            var regex = new Regex(Regex.Escape("<random>"));
+            Random r = new Random();
+            string randomTarget;
+            List<User> listU = userlist.getAllOnlineUsers();
+
+            template = template.Replace("<TARGET>", target.ToUpper()).Replace("<USER>", user.ToUpper());
+            template = template.Replace("<target>", target).Replace("<user>", user);
+
+            while (template.Contains("<random>"))
+            {
+                do
+                {
+                    randomTarget = listU[r.Next(listU.Count)].Nick;
+                } while (string.Compare(target, randomTarget, true) == 0 || listU.Count < 2);
+
+                template = regex.Replace(template, randomTarget, 1);
+            }
+
+
+            return template;
+        }
     }
 
     public static class RichTextBoxExtensions
@@ -122,7 +148,7 @@ namespace NarutoBot3
         }
     }
 
-    public static class getCompilationDate
+    public static class GetCompilationDate
     {
         static public DateTime RetrieveLinkerTimestamp()
         {

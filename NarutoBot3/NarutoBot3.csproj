@@ -104,12 +104,10 @@
       <HintPath>..\packages\Cleverbot.0.9.0\Cleverbot.Net.dll</HintPath>
     </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\ejml-0.23.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Stanford.NLP.Parser.3.8.0.0\lib\ejml-0.23.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="HtmlAgilityPack, Version=1.5.5.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.5.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -224,16 +222,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="slf4j-api, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\slf4j-api.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Stanford.NLP.Parser.3.8.0.0\lib\slf4j-api.dll</HintPath>
     </Reference>
-    <Reference Include="stanford-parser, Version=3.7.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.Parser.3.7.0.1\lib\stanford-parser.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="stanford-parser, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.Parser.3.8.0.0\lib\stanford-parser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -320,6 +315,7 @@
     </Compile>
     <Compile Include="Questions.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="Library\StringLibrary.cs" />
     <Compile Include="ThemeCollection.cs" />
     <Compile Include="UserList.cs" />
     <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />

@@ -43,7 +43,7 @@ namespace NarutoBot3
         public ParsedMessage(string message)
         {
             string trailing = null;
-            sender = type = string.Empty;
+            sender = type = completeMessage = string.Empty;
             splitMessage = new string[] { };
 
             int prefixEnd = -1, trailingStart = message.Length;
@@ -74,7 +74,6 @@ namespace NarutoBot3
             if (!String.IsNullOrEmpty(trailing))
                 splitMessage = splitMessage.Concat(new string[] { trailing }).ToArray();
 
-            completeMessage = "";
             foreach (string s in splitMessage)
                 completeMessage = completeMessage + s + " ";
         }

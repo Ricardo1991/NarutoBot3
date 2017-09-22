@@ -37,7 +37,7 @@ namespace NarutoBot3
             loadSettings();
 
             bot = new Bot(ref OutputBox);
-            bot.updateTheme(themes.CurrentColorScheme);
+            bot.UpdateTheme(themes.CurrentColorScheme);
             initializeBotEvents();
 
             string[] args = Environment.GetCommandLineArgs();
@@ -76,11 +76,11 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connecting...");
 
-            bot.Client.changeHomeChannel(Settings.Default.Channel);
-            bot.Client.changeHostPort(Settings.Default.Server, Settings.Default.Port);
-            bot.Client.changeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
+            bot.Client.ChangeHomeChannel(Settings.Default.Channel);
+            bot.Client.ChangeHostPort(Settings.Default.Server, Settings.Default.Port);
+            bot.Client.ChangeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
 
-            return bot.connect();
+            return bot.Connect();
         }
 
         private void doAutoJoinCommand()
@@ -182,7 +182,7 @@ namespace NarutoBot3
         private void disconnectClient()
         {
             if (bot != null)
-                bot.disconnect(Settings.Default.quitMessage);
+                bot.Disconnect(Settings.Default.quitMessage);
 
             InterfaceUserList.DataSource = null;
             UpdateDataSource();
@@ -485,7 +485,7 @@ namespace NarutoBot3
         {
             if (bot != null)
             {
-                bot.userlist.saveData();
+                bot.userlist.SaveData();
             }
 
             if (bot.Client != null && bot.Client.isConnected)
@@ -570,7 +570,7 @@ namespace NarutoBot3
 
             if (bot == null)
             {
-                UserList ul = Bot.getSavedUsers();
+                UserList ul = Bot.GetSavedUsers();
                 operatorsWindow = new BotOperatorWindow(ref ul);
             }
             else
@@ -694,7 +694,7 @@ namespace NarutoBot3
             else //Normal send
                 message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
 
-            if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.sendMessage(message);
+            if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.SendMessage(message);
         }
 
         private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -703,7 +703,7 @@ namespace NarutoBot3
             rulesWindow.ShowDialog();
             if (bot != null)
             {
-                bot.ReadRules();
+                bot.StringLib.ReloadLibrary("rules");
             }
         }
 
@@ -713,7 +713,7 @@ namespace NarutoBot3
             helpWindow.ShowDialog();
             if (bot != null)
             {
-                bot.ReadHelp();
+                bot.StringLib.ReloadLibrary("help");
             }
         }
 
@@ -723,7 +723,7 @@ namespace NarutoBot3
 
             if (bot == null)
             {
-                UserList ul = Bot.getSavedUsers();
+                UserList ul = Bot.GetSavedUsers();
                 mutedWindow = new MutedUsersWindow(ref ul);
             }
             else
@@ -735,63 +735,56 @@ namespace NarutoBot3
         private void killToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadKills();
+                bot.StringLib.ReloadLibrary("kills");
         }
 
         private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadRules();
+                bot.StringLib.ReloadLibrary("rules");
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadHelp();
+                bot.StringLib.ReloadLibrary("help");
         }
 
         private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadNickGen();
+                bot.StringLib.ReloadLibrary("nick");
         }
 
         private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadTrivia();
+                bot.StringLib.ReloadLibrary("trivia");
         }
 
         private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadQuotes();
+                bot.StringLib.ReloadLibrary("quotes");
         }
 
         private void funkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadFunk();
+                bot.StringLib.ReloadLibrary("funk");
         }
 
         private void factsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
-                bot.ReadFacts();
+                bot.StringLib.ReloadLibrary("facts");
         }
 
         private void allToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
             {
-                bot.ReadFunk();
-                bot.ReadQuotes();
-                bot.ReadKills();
-                bot.ReadTrivia();
-                bot.ReadNickGen();
-                bot.ReadHelp();
-                bot.ReadRules();
-                bot.ReadFacts();
+                bot.StringLib.ReloadLibrary();
             }
         }
 
@@ -827,7 +820,7 @@ namespace NarutoBot3
             if (InterfaceUserList.SelectedIndex == -1) return;
 
             contextMenuUserList.Items.Clear();
-            string nick = Useful.removeUserMode(InterfaceUserList.SelectedItem.ToString());
+            string nick = Useful.RemoveUserMode(InterfaceUserList.SelectedItem.ToString());
 
             contextMenuUserList.Items.Add(nick);
 
@@ -938,7 +931,7 @@ namespace NarutoBot3
             OutputBox.Clear();
 
             if (bot != null)
-                bot.updateTheme(themes.CurrentColorScheme);
+                bot.UpdateTheme(themes.CurrentColorScheme);
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)

@@ -35,21 +35,21 @@ namespace NarutoBot3
             else
                 MessageBox.Show("User is already an operator", "Duplicated", MessageBoxButtons.OK);
 
-            ul.saveData();
+            ul.SaveData();
         }
 
         private void bRemove_Click(object sender, EventArgs e)
         {
             ul.setUserOperatorStatus(listOperators.SelectedItem.ToString(), false);
             updateList();
-            ul.saveData();
+            ul.SaveData();
         }
 
         private void bExit_Click(object sender, EventArgs e)
         {
             t_operator.Text = "";
             this.Close();
-            ul.saveData();
+            ul.SaveData();
         }
 
         private void operators_Shown(object sender, EventArgs e)
