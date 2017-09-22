@@ -31,10 +31,11 @@ namespace NarutoBot3
                 TextReader stream = new StreamReader("data.json");
                 string json = stream.ReadToEnd();
 
-                JsonSerializerSettings jss = new JsonSerializerSettings();
-                jss.MissingMemberHandling = MissingMemberHandling.Ignore;
-                jss.DefaultValueHandling = DefaultValueHandling.Populate;
-
+                JsonSerializerSettings jss = new JsonSerializerSettings()
+                {
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Populate
+                };
                 JsonConvert.PopulateObject(json, users, jss);
                 stream.Close();
             }
@@ -50,9 +51,9 @@ namespace NarutoBot3
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True for Online, False for Offline</param>
-        public void setUserOnlineStatus(string nick, bool status)
+        public void SetUserOnlineStatus(string nick, bool status)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -67,9 +68,9 @@ namespace NarutoBot3
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True to give Operator, False to remove Operator</param>
-        public void setUserOperatorStatus(string nick, bool status)
+        public void SetUserOperatorStatus(string nick, bool status)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -77,8 +78,10 @@ namespace NarutoBot3
             }
             else
             {
-                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
-                u.IsOperator = status;
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim())
+                {
+                    IsOperator = status
+                };
                 users.Add(u);
             }
         }
@@ -88,9 +91,9 @@ namespace NarutoBot3
         /// </summary>
         /// <param name="nick">Name of the User</param>
         /// <param name="status">True to mute, False to unmute</param>
-        public void setUserMuteStatus(string nick, bool status)
+        public void SetUserMuteStatus(string nick, bool status)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -98,15 +101,17 @@ namespace NarutoBot3
             }
             else
             {
-                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
-                u.IsMuted = status;
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim())
+                {
+                    IsMuted = status
+                };
                 users.Add(u);
             }
         }
 
-        public void setGreeting(string nick, string greeting, bool enabled)
+        public void SetGreeting(string nick, string greeting, bool enabled)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -115,53 +120,54 @@ namespace NarutoBot3
             }
             else
             {
-                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim());
-                u.Greeting = greeting;
-                u.GreetingEnabled = enabled;
-
+                u = new User(nick.Replace("@", string.Empty).Replace("+", string.Empty).Trim())
+                {
+                    Greeting = greeting,
+                    GreetingEnabled = enabled
+                };
                 users.Add(u);
             }
         }
 
-        public bool userIsOperator(string nick)
+        public bool UserIsOperator(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null && u.IsOperator) return true;
 
             return false;
         }
 
-        public bool userIsMuted(string nick)
+        public bool UserIsMuted(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null && u.IsMuted) return true;
 
             return false;
         }
 
-        public bool userHasChannelOP(string nick)
+        public bool UserHasChannelOP(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null && u.HasOP) return true;
 
             return false;
         }
 
-        public bool userHasChannelVoice(string nick)
+        public bool UserHasChannelVoice(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null && u.HasVoice) return true;
 
             return false;
         }
 
-        public void setUserChannelVoice(string nick, bool status)
+        public void SetUserChannelVoice(string nick, bool status)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -170,18 +176,18 @@ namespace NarutoBot3
             return;
         }
 
-        public char getUserMode(string nick)
+        public char GetUserMode(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u == null) return (char)0;
 
             return u.UserMode;
         }
 
-        public void setUserMode(string nick, char mode)
+        public void SetUserMode(string nick, char mode)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -190,9 +196,9 @@ namespace NarutoBot3
             return;
         }
 
-        public void setUserChannelOP(string nick, bool status)
+        public void SetUserChannelOP(string nick, bool status)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -200,9 +206,9 @@ namespace NarutoBot3
             }
         }
 
-        public bool userIsMirrored(string nick)
+        public bool UserIsMirrored(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null && u.MirrorMode)
                 return true;
@@ -210,9 +216,9 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool toogleMirror(string nick)
+        public bool ToogleMirror(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -222,9 +228,9 @@ namespace NarutoBot3
             return false;
         }
 
-        public int userMessageCount(string nick)
+        public int UserMessageCount(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -235,9 +241,9 @@ namespace NarutoBot3
             return 0;
         }
 
-        public UserMessage getUserMessage(string nick, int index)
+        public UserMessage GetUserMessage(string nick, int index)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -248,9 +254,9 @@ namespace NarutoBot3
             return null;
         }
 
-        public DateTime getUserSeenUTC(string nick)
+        public DateTime GetUserSeenUTC(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -260,9 +266,9 @@ namespace NarutoBot3
             return new DateTime(0);
         }
 
-        public void markUserSeen(string nick)
+        public void MarkUserSeen(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -270,9 +276,9 @@ namespace NarutoBot3
             }
         }
 
-        public void addUserMessage(string destinatary, string sender, string message)
+        public void AddUserMessage(string destinatary, string sender, string message)
         {
-            User u = getUserByName(destinatary);
+            User u = GetUserByName(destinatary);
 
             if (u != null)
             {
@@ -293,9 +299,9 @@ namespace NarutoBot3
             }
         }
 
-        public bool clearUserMessages(string nick)
+        public bool ClearUserMessages(string nick)
         {
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -306,7 +312,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool clearUserMessages(string nick, string arg)
+        public bool ClearUserMessages(string nick, string arg)
         {
             if (string.IsNullOrWhiteSpace(nick)) return false;
 
@@ -320,7 +326,7 @@ namespace NarutoBot3
                 return false;
             }
 
-            User u = getUserByName(nick);
+            User u = GetUserByName(nick);
 
             if (u != null)
             {
@@ -337,7 +343,7 @@ namespace NarutoBot3
             else return false;
         }
 
-        public User getUserByName(string name)
+        public User GetUserByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return null;
 
@@ -355,7 +361,7 @@ namespace NarutoBot3
             return null;
         }
 
-        public List<User> getAllOnlineUsers()
+        public List<User> GetAllOnlineUsers()
         {
             List<User> ul = new List<User>();
 

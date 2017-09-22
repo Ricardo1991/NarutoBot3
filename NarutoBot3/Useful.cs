@@ -104,7 +104,7 @@ namespace NarutoBot3
             var regex = new Regex(Regex.Escape("<random>"));
             Random r = new Random();
             string randomTarget;
-            List<User> listU = userlist.getAllOnlineUsers();
+            List<User> listU = userlist.GetAllOnlineUsers();
 
             template = template.Replace("<TARGET>", target.ToUpper()).Replace("<USER>", user.ToUpper());
             template = template.Replace("<target>", target).Replace("<user>", user);

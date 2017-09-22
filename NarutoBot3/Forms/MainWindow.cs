@@ -292,7 +292,7 @@ namespace NarutoBot3
             //do Nick change to server
             if (bot.Client.isConnected)
             {
-                bot.changeNick(nick);
+                bot.ChangeNick(nick);
                 return true;
             }
 
@@ -391,7 +391,7 @@ namespace NarutoBot3
             }
             else
             {
-                List<User> ul = bot.userlist.getAllOnlineUsers();
+                List<User> ul = bot.userlist.GetAllOnlineUsers();
                 ul.Sort();
                 InterfaceUserList.DataSource = ul;
 
@@ -547,7 +547,7 @@ namespace NarutoBot3
                 try
                 {
                     if (Settings.Default.redditUserEnabled)
-                        bot.redditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                        bot.RedditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
                 }
                 catch
                 {
@@ -561,7 +561,7 @@ namespace NarutoBot3
             nickWindow.ShowDialog();
 
             if (bot != null)
-                bot.changeNick(Settings.Default.Nick);
+                bot.ChangeNick(Settings.Default.Nick);
         }
 
         private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -826,25 +826,25 @@ namespace NarutoBot3
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            if (bot != null && !bot.userlist.userIsOperator(nick))
-                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.giveOps(nick); }));
+            if (bot != null && !bot.userlist.UserIsOperator(nick))
+                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.takeOps(nick); }));
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.TakeOps(nick); }));
 
-            if (bot != null && !bot.userlist.userIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.muteUser(nick); }));
+            if (bot != null && !bot.userlist.UserIsMuted(nick))
+                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.MuteUser(nick); }));
             else
-                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.unmuteUser(nick); }));
+                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.UnmuteUser(nick); }));
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
-            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.pokeUser(nick); }));
-            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.whoisUser(nick); }));
+            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.PokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.WhoisUser(nick); }));
 
-            if (bot.userlist.getUserMode(bot.Client.NICK) == '@')
+            if (bot.userlist.GetUserMode(bot.Client.NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (object o, EventArgs a) { bot.kickUser(nick); }));
+                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (object o, EventArgs a) { bot.KickUser(nick); }));
             }
         }
 
