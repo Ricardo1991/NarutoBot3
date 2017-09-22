@@ -46,36 +46,36 @@ namespace IrcClient
             join_message = new Join(HOME_CHANNEL);
 
             //Events for BGWorker
-            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_MainBotCycle);
             backgroundWorker.WorkerSupportsCancellation = true;
         }
 
         public IRC_Client()
         {
             //Events for BGWorker
-            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_MainBotCycle);
+            backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_MainBotCycle);
             backgroundWorker.WorkerSupportsCancellation = true;
         }
 
-        public void changeHomeChannel(string homeChannel)
+        public void ChangeHomeChannel(string homeChannel)
         {
             HOME_CHANNEL = homeChannel;
             join_message = new Join(HOME_CHANNEL);
         }
 
-        public void changeHostPort(string host, int port)
+        public void ChangeHostPort(string host, int port)
         {
             HOST = host;
             PORT = port;
         }
 
-        public void changeHostPort(string host, string port)
+        public void ChangeHostPort(string host, string port)
         {
             HOST = host;
             PORT = Convert.ToInt32(port);
         }
 
-        public void changeNickRealName(string nick, string realname)
+        public void ChangeNickRealName(string nick, string realname)
         {
             NICK = nick;
             REALNAME = realname;
@@ -103,8 +103,8 @@ namespace IrcClient
 
             try
             {
-                sendMessage(user_message);
-                sendMessage(nick_message);
+                SendMessage(user_message);
+                SendMessage(nick_message);
                 backgroundWorker.RunWorkerAsync(messageDelegate);
 
                 return true;    //Weee, we connected!
@@ -118,17 +118,17 @@ namespace IrcClient
 
         public void Join()
         {
-            sendMessage(join_message);
+            SendMessage(join_message);
             isConnected = true;
         }
 
         public void Join(string channel)
         {
-            sendMessage(new Join(channel));
+            SendMessage(new Join(channel));
             isConnected = true;
         }
 
-        public bool sendMessage(IrcMessage message)
+        public bool SendMessage(IrcMessage message)
         {
             if (!message.isValid() || writer == null) return false;
 
@@ -137,7 +137,7 @@ namespace IrcClient
                 while (message.toString().Length > 420)
                 {
                     var nextMessage = (IrcMessage)message.Clone();
-                    int cut = findCutSpace(message.body, 390);
+                    int cut = FindCutSpace(message.body, 390);
                     message.body = message.body.Substring(0, cut);
                     nextMessage.body = nextMessage.body.Substring(cut);
 
@@ -157,7 +157,7 @@ namespace IrcClient
             }
         }
 
-        private int findCutSpace(string body, int startSearch)
+        private int FindCutSpace(string body, int startSearch)
         {
             for (int i = startSearch; i > startSearch - 30 && i > 0; i--)
             {
@@ -167,7 +167,7 @@ namespace IrcClient
             return startSearch;
         }
 
-        public void backgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
+        public void BackgroundWorker_MainBotCycle(object sender, DoWorkEventArgs e) //Main Loop
         {
             MessageReceived messageDelegate = (MessageReceived)e.Argument;
 
@@ -200,7 +200,7 @@ namespace IrcClient
         {
             try
             {
-                if (writer != null) sendMessage(new Quit(quitMessage));
+                if (writer != null) SendMessage(new Quit(quitMessage));
 
                 isConnected = false;
                 
