@@ -13,39 +13,30 @@ namespace NarutoBot3
 {
     public partial class MainWindow : Form
     {
-        private delegate void SetTextCallback(string text);
-
-        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-
-        private delegate void SetBoolCallback(bool status);
-
-        private delegate void ChangeDataSource();
-
-        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
-
-        private ThemeCollection themes = new ThemeCollection();
-
         private Bot bot;
 
         private List<string> lastCommand = new List<string>();
+
         private int lastCommandIndex = 0;
+
+        private ThemeCollection themes = new ThemeCollection();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            loadSettings();
+            LoadSettings();
 
             bot = new Bot(ref OutputBox);
             bot.UpdateTheme(themes.CurrentColorScheme);
-            initializeBotEvents();
+            InitializeBotEvents();
 
             string[] args = Environment.GetCommandLineArgs();
             foreach (string s in args)
             {
                 if (s.ToLower().CompareTo("skip") == 0)
                 {
-                    tryConnect();
+                    TryConnect();
                     return;
                 }
             }
@@ -55,24 +46,100 @@ namespace NarutoBot3
 
             if (connectWindow.ShowDialog() == DialogResult.OK)
             {
-                updateSilenceMarks();
-                tryConnect();
+                UpdateSilenceMarks();
+                TryConnect();
             }
         }
 
-        public bool tryConnect()
+        private delegate void ChangeDataSource();
+
+        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
+
+        private delegate void SetBoolCallback(bool status);
+
+        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+
+        private delegate void SetTextCallback(string text);
+        public void ChangeConnectingLabel(string message)
         {
-            bool success = this.connect();
-            if (!success)
+            try
             {
-                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ChangeConnectingLabel("Disconnected");
+                l_Status.Text = message;
             }
-
-            return success;
+            catch { }
         }
 
-        public bool connect()
+        public void ChangeInput(string title)
+        {
+            if (InputBox.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(ChangeInput);
+                this.Invoke(d, new object[] { title });
+            }
+            else
+            {
+                this.InputBox.Text = title;
+            }
+        }
+
+        public bool ChangeNick(string nick)
+        {
+            //TODO: actually check if the nick change was accepted
+            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
+                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
+            else
+                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
+
+            //do Nick change to server
+            if (bot.Client.isConnected)
+            {
+                bot.ChangeNick(nick);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ChangeSilenceCheckBox(bool status)//toolStrip1
+        {
+            if (toolStripMenu.InvokeRequired)
+            {
+                SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
+                this.Invoke(d, new object[] { status });
+            }
+            else
+            {
+                silencedToolStripMenuItem.Checked = status;
+            }
+        }
+
+        public void ChangeSilenceLabel(bool status)
+        {
+            if (statusStripBottom.InvokeRequired)
+            {
+                SetBoolCallback d = new SetBoolCallback(ChangeSilenceLabel);
+                this.Invoke(d, new object[] { status });
+            }
+            else
+            {
+                toolStripStatusLabelSilence.Visible = status;
+            }
+        }
+
+        public void ChangeTitle(string title)
+        {
+            if (this.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(ChangeTitle);
+                this.Invoke(d, new object[] { title });
+            }
+            else
+            {
+                this.Text = title;
+            }
+        }
+
+        public bool Connect()
         {
             ChangeConnectingLabel("Connecting...");
 
@@ -83,22 +150,42 @@ namespace NarutoBot3
             return bot.Connect();
         }
 
-        private void doAutoJoinCommand()
+        public void DuplicatedNick(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
+            Random r = new Random();
+
+            if (!bot.Client.isConnected)
             {
-                parseInputMessage(Settings.Default.autojoinCommand);
+                DisconnectClient();
+
+                Settings.Default.Nick = bot.Client.NICK + r.Next(10);
+                Settings.Default.Save();
+
+                TryConnect();
             }
         }
 
-        public void loadSettings()
+        public void EventChangeTitle(object sender, EventArgs e)
         {
-            updateSilenceMarks();
-            checkTwitterApi();
-            checkGoogleApi();
+            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
+            else
+                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
+        }
+
+        public void ExitApplication(object sender, EventArgs e)
+        {
+            ExitApplication();
+        }
+
+        public void LoadSettings()
+        {
+            UpdateSilenceMarks();
+            CheckTwitterApi();
+            CheckGoogleApi();
 
             //Themes
-            applyTheme(Settings.Default.themeName);
+            ApplyTheme(Settings.Default.themeName);
 
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
                 Settings.Default.aniSearchEnabled = false;
@@ -120,78 +207,86 @@ namespace NarutoBot3
             Settings.Default.Save();
         }
 
-        private void checkGoogleApi()
+        public void OutputClean()
         {
-            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
-                Settings.Default.aniSearchEnabled = false;
-
-            if (Settings.Default.apikey.Length < 5)
+            if (OutputBox.InvokeRequired)
             {
-                Settings.Default.timeEnabled = false;
-                Settings.Default.youtubeSearchEnabled = false;
-            }
-        }
-
-        private void checkTwitterApi()
-        {
-            if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
-                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
-                Settings.Default.twitterEnabled = false;
-        }
-
-        private void updateSilenceMarks()
-        {
-            if (Settings.Default.silence == true)
-            {
-                silencedToolStripMenuItem.Checked = true;
-                toolStripStatusLabelSilence.Visible = true;
+                try
+                {
+                    MethodInvoker invoker = () => OutputClean();
+                    Invoke(invoker);
+                }
+                catch { }
             }
             else
             {
-                silencedToolStripMenuItem.Checked = false;
-                toolStripStatusLabelSilence.Visible = false;
+                OutputBox.Clear();
             }
         }
 
-        private void applyTheme(string themeName)
+        public void RefreshTheme(object sender, EventArgs e)
         {
-            themes.selectTheme(themes.getThemeByName(themeName));
-            refreshTheme();
+            RefreshTheme();
         }
 
-        private void initializeBotEvents()
+        public void RefreshTheme()
         {
-            bot.Connected += new EventHandler<EventArgs>(nowConnected);
-            bot.ConnectedWithServer += new EventHandler<EventArgs>(nowConnectedWithServer);
-            bot.Created += new EventHandler<EventArgs>(UpdateDataSource);
-            bot.ModeChanged += new EventHandler<ModeChangedEventArgs>(userModeChanged);
-            bot.Timeout += new EventHandler<EventArgs>(timeout);
-            bot.BotNickChanged += new EventHandler<EventArgs>(eventChangeTitle);
-            bot.BotSilenced += new EventHandler<EventArgs>(botSilence);
-            bot.BotUnsilenced += new EventHandler<EventArgs>(botUnsilence);
-            bot.Quit += new EventHandler<EventArgs>(exitApplication);
-            bot.DuplicatedNick += new EventHandler<EventArgs>(duplicatedNick);
-            bot.PongReceived += new EventHandler<PongEventArgs>(updateLag);
-            bot.TopicChange += new EventHandler<TopicChangedEventArgs>(changeTopicTextBox);
-            bot.EnforceMirrorChanged += new EventHandler<EventArgs>(enforceChanged);
-            bot.UpdateUserListSource += new EventHandler<EventArgs>(UpdateDataSource);
-        }
+            this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
+            this.OutputBox.ForeColor = themes.CurrentColorScheme.MainWindowText;
 
-        private void disconnectClient()
-        {
+            this.tbTopic.BackColor = themes.CurrentColorScheme.TopicBG;
+            this.tbTopic.ForeColor = themes.CurrentColorScheme.TopicText;
+
+            this.InterfaceUserList.BackColor = themes.CurrentColorScheme.UserListBG;
+            this.InterfaceUserList.ForeColor = themes.CurrentColorScheme.UserListText;
+
+            this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
+            this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
+
+            OutputBox.Clear();
+
             if (bot != null)
-                bot.Disconnect(Settings.Default.quitMessage);
+                bot.UpdateTheme(themes.CurrentColorScheme);
+        }
 
-            InterfaceUserList.DataSource = null;
+        public bool TryConnect()
+        {
+            bool success = this.Connect();
+            if (!success)
+            {
+                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ChangeConnectingLabel("Disconnected");
+            }
+
+            return success;
+        }
+        public void UpdateDataSource(object source, EventArgs e)
+        {
             UpdateDataSource();
+        }
 
-            ChangeConnectingLabel("Disconnecting...");
-            OutputClean();
-            ChangeTitle("NarutoBot");
+        public void UpdateDataSource()
+        {
+            if (InterfaceUserList.InvokeRequired)
+            {
+                ChangeDataSource d = new ChangeDataSource(UpdateDataSource);
+                this.Invoke(d);
+            }
+            else
+            {
+                List<User> ul = bot.userlist.GetAllOnlineUsers();
+                ul.Sort();
+                InterfaceUserList.DataSource = ul;
 
-            Thread.Sleep(250);
+                List<string> temp = new List<string>();
+
+                foreach (User s in ul)
+                {
+                    temp.Add(s.Nick);
+                }
+
+                InputBox.Values = temp.ToArray();
+            }
         }
 
         public void WriteMessage(string message) //Writes Message on the TextBox (bot console)
@@ -256,179 +351,57 @@ namespace NarutoBot3
             //TODO: should make a log
         }
 
-        private void userModeChanged(object sender, ModeChangedEventArgs e)
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string message;
-            Dictionary<string, string> modeChanges = new Dictionary<string, string>
-            {
-                { "+o", "was opped" },
-                { "-o", "was deopped" },
-                { "+v", "was voiced" },
-                { "-v", "was devoiced" },
-                { "+h", "was half opped" },
-                { "-h", "was half deopped" },
-                { "+q", "was given Owner permissions" },
-                { "-q", "was removed as a Owner" },
-                { "+a", "was given Admin permissions" },
-                { "-a", "had their Admin permissions removed" },
-            };
-
-            if (modeChanges.TryGetValue(e.Mode, out message))
-            {
-                WriteMessage("** " + e.User + " " + message, themes.CurrentColorScheme.StatusChanged);
-            }
-
-            UpdateDataSource();
+            AboutBox aboutbox = new AboutBox();
+            aboutbox.ShowDialog();
         }
 
-        public bool changeNick(string nick)
+        private void AllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: actually check if the nick change was accepted
-            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
-                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
-            else
-                ChangeTitle(nick + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
-
-            //do Nick change to server
-            if (bot.Client.isConnected)
+            if (bot != null)
             {
-                bot.ChangeNick(nick);
-                return true;
-            }
-
-            return false;
-        }
-
-        public void ChangeConnectingLabel(string message)
-        {
-            try
-            {
-                l_Status.Text = message;
-            }
-            catch { }
-        }
-
-        public void ChangeSilenceLabel(bool status)
-        {
-            if (statusStripBottom.InvokeRequired)
-            {
-                SetBoolCallback d = new SetBoolCallback(ChangeSilenceLabel);
-                this.Invoke(d, new object[] { status });
-            }
-            else
-            {
-                toolStripStatusLabelSilence.Visible = status;
+                bot.StringLib.ReloadLibrary();
             }
         }
 
-        public void ChangeSilenceCheckBox(bool status)//toolStrip1
+        private void ApplyTheme(string themeName)
         {
-            if (toolStripMenu.InvokeRequired)
-            {
-                SetBoolCallback d = new SetBoolCallback(ChangeSilenceCheckBox);
-                this.Invoke(d, new object[] { status });
-            }
-            else
-            {
-                silencedToolStripMenuItem.Checked = status;
-            }
+            themes.selectTheme(themes.getThemeByName(themeName));
+            RefreshTheme();
         }
 
-        public void ChangeTitle(string title)
+        private void BotSilence(object sender, EventArgs e)
         {
-            if (this.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(ChangeTitle);
-                this.Invoke(d, new object[] { title });
-            }
-            else
-            {
-                this.Text = title;
-            }
+            ChangeSilenceCheckBox(true);
+            Settings.Default.silence = true;
+            ChangeSilenceLabel(true);
+            Settings.Default.Save();
         }
 
-        public void ChangeInput(string title)
+        private void BotUnsilence(object sender, EventArgs e)
         {
-            if (InputBox.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(ChangeInput);
-                this.Invoke(d, new object[] { title });
-            }
-            else
-            {
-                this.InputBox.Text = title;
-            }
+            ChangeSilenceCheckBox(false);
+            Settings.Default.silence = false;
+            ChangeSilenceLabel(false);
+
+            Settings.Default.Save();
         }
 
-        public void OutputClean()
+        private void ChangeNickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (OutputBox.InvokeRequired)
-            {
-                try
-                {
-                    MethodInvoker invoker = () => OutputClean();
-                    Invoke(invoker);
-                }
-                catch { }
-            }
-            else
-            {
-                OutputBox.Clear();
-            }
+            ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
+            nickWindow.ShowDialog();
+
+            if (bot != null)
+                bot.ChangeNick(Settings.Default.Nick);
         }
 
-        public void UpdateDataSource(object source, EventArgs e)
-        {
-            UpdateDataSource();
-        }
-
-        public void UpdateDataSource()
-        {
-            if (InterfaceUserList.InvokeRequired)
-            {
-                ChangeDataSource d = new ChangeDataSource(UpdateDataSource);
-                this.Invoke(d);
-            }
-            else
-            {
-                List<User> ul = bot.userlist.GetAllOnlineUsers();
-                ul.Sort();
-                InterfaceUserList.DataSource = ul;
-
-                List<string> temp = new List<string>();
-
-                foreach (User s in ul)
-                {
-                    temp.Add(s.Nick);
-                }
-
-                InputBox.Values = temp.ToArray();
-            }
-        }
-
-        private void updateLag(object sender, PongEventArgs e)
-        {
-            if (statusStripBottom.InvokeRequired)
-            {
-                ChangeTimeStamp d = new ChangeTimeStamp(updateLag);
-                this.Invoke(d, new object[] { sender, e });
-            }
-            else
-            {
-                try
-                {
-                    int seconds = e.TimeDifference.Seconds * 60 + e.TimeDifference.Seconds;
-                    toolstripLag.Text = seconds + "." + e.TimeDifference.Milliseconds.ToString("000") + "s";
-                }
-                catch { }
-            }
-        }
-
-        private void changeTopicTextBox(object sender, TopicChangedEventArgs e)
+        private void ChangeTopicTextBox(object sender, TopicChangedEventArgs e)
         {
             if (tbTopic.InvokeRequired)
             {
-                SetEventCallback d = new SetEventCallback(changeTopicTextBox);
+                SetEventCallback d = new SetEventCallback(ChangeTopicTextBox);
                 this.Invoke(d, new object[] { sender, e });
             }
             else
@@ -437,18 +410,28 @@ namespace NarutoBot3
             }
         }
 
-        private void output2_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void CheckGoogleApi()
         {
-            Process browser = new Process();
-            string url = e.LinkText;
-            browser.StartInfo.UseShellExecute = true;
-            browser.StartInfo.FileName = url;
-            browser.Start();
+            if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
+                Settings.Default.aniSearchEnabled = false;
 
-            browser.Close();
+            if (Settings.Default.apikey.Length < 5)
+            {
+                Settings.Default.timeEnabled = false;
+                Settings.Default.youtubeSearchEnabled = false;
+            }
         }
 
-        private void connectMenuItem1_Click(object sender, EventArgs e) //Connect to...
+        private void CheckTwitterApi()
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterAccessTokenSecret) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKey) ||
+                    string.IsNullOrWhiteSpace(Settings.Default.twitterConsumerKeySecret))
+                Settings.Default.twitterEnabled = false;
+        }
+
+        private void ConnectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
             ConnectWindow connectWindow = new ConnectWindow(bot.Client != null && bot.Client.isConnected);
 
@@ -458,9 +441,9 @@ namespace NarutoBot3
                 if (bot.Client != null)
                 {
                     if (bot.Client.isConnected)
-                        disconnectClient();
+                        DisconnectClient();
 
-                    tryConnect();
+                    TryConnect();
                 }
                 else
                 {
@@ -471,17 +454,85 @@ namespace NarutoBot3
 
                     Settings.Default.Save();
 
-                    tryConnect();
+                    TryConnect();
                 }
             }
         }
 
-        public void exitApplication(object sender, EventArgs e)
+        private void ContextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            exitApplication();
+            contextMenuUserList.Items.Clear();
         }
 
-        private void exitApplication()
+        private void ContextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            if (InterfaceUserList.SelectedIndex == -1) return;
+
+            contextMenuUserList.Items.Clear();
+            string nick = Useful.RemoveUserMode(InterfaceUserList.SelectedItem.ToString());
+
+            contextMenuUserList.Items.Add(nick);
+
+            contextMenuUserList.Items.Add(new ToolStripSeparator());
+
+            if (bot != null && !bot.userlist.UserIsOperator(nick))
+                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
+            else
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.TakeOps(nick); }));
+
+            if (bot != null && !bot.userlist.UserIsMuted(nick))
+                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.MuteUser(nick); }));
+            else
+                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.UnmuteUser(nick); }));
+
+            contextMenuUserList.Items.Add(new ToolStripSeparator());
+
+            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.PokeUser(nick); }));
+            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.WhoisUser(nick); }));
+
+            if (bot.userlist.GetUserMode(bot.Client.NICK) == '@')
+            {
+                contextMenuUserList.Items.Add(new ToolStripSeparator());
+                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (object o, EventArgs a) { bot.KickUser(nick); }));
+            }
+        }
+
+        private void DisconnectClient()
+        {
+            if (bot != null)
+                bot.Disconnect(Settings.Default.quitMessage);
+
+            InterfaceUserList.DataSource = null;
+            UpdateDataSource();
+
+            ChangeConnectingLabel("Disconnecting...");
+            OutputClean();
+            ChangeTitle("NarutoBot");
+
+            Thread.Sleep(250);
+        }
+
+        private void DisconnectToolStripMenuItem_Click(object sender, EventArgs e) //Disconnect Button
+        {
+            if (bot.Client.isConnected)
+            {
+                DisconnectClient();
+            }
+        }
+
+        private void DoAutoJoinCommand()
+        {
+            if (!string.IsNullOrWhiteSpace(Settings.Default.autojoinCommand))
+            {
+                ParseInputMessage(Settings.Default.autojoinCommand);
+            }
+        }
+        private void EnforceChanged(object sender, EventArgs e)
+        {
+            forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
+        }
+
+        private void ExitApplication()
         {
             if (bot != null)
             {
@@ -490,7 +541,7 @@ namespace NarutoBot3
 
             if (bot.Client != null && bot.Client.isConnected)
             {
-                disconnectClient();
+                DisconnectClient();
             }
 
             if (this.InvokeRequired)
@@ -504,82 +555,80 @@ namespace NarutoBot3
             }
         }
 
-        private void silencedToolStripMenuItem_Click(object sender, EventArgs e)  //Toogle Silence
+        private void FactsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Settings.Default.silence == true)
+            if (bot != null)
+                bot.StringLib.ReloadLibrary("facts");
+        }
+
+        private void ForceMirrorModeOffToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Settings.Default.enforceMirrorOff == true)
             {
-                silencedToolStripMenuItem.Checked = false;
-                Settings.Default.silence = false;
-                toolStripStatusLabelSilence.Visible = false;
+                forceMirrorModeOffToolStripMenuItem.Checked = false;
+                Settings.Default.enforceMirrorOff = false;
             }
             else
             {
-                silencedToolStripMenuItem.Checked = true;
-                Settings.Default.silence = true;
-                toolStripStatusLabelSilence.Visible = true;
+                forceMirrorModeOffToolStripMenuItem.Checked = true;
+                Settings.Default.enforceMirrorOff = true;
             }
             Settings.Default.Save();
         }
 
-        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) //Disconnect Button
+        private void FunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (bot.Client.isConnected)
-            {
-                disconnectClient();
-            }
+            if (bot != null)
+                bot.StringLib.ReloadLibrary("funk");
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(ref themes);
-            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(refreshTheme);
+            Process browser = new Process();
 
-            settingsWindow.ShowDialog();
+            string url = "https://github.com/Ricardo1991/NarutoBot3";
+            browser.StartInfo.UseShellExecute = true;
+            browser.StartInfo.FileName = url;
+            browser.Start();
 
+            browser.Close();
+        }
+
+        private void HelpTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HelpTextWindow helpWindow = new HelpTextWindow();
+            helpWindow.ShowDialog();
             if (bot != null)
             {
-                checkTwitterApi();
-                checkGoogleApi();
-
-                if (Settings.Default.twitterEnabled)
-                    bot.TwitterLogOn();
-
-                try
-                {
-                    if (Settings.Default.redditUserEnabled)
-                        bot.RedditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
-                }
-                catch
-                {
-                }
+                bot.StringLib.ReloadLibrary("help");
             }
         }
 
-        private void changeNickToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ChangeBotNickWindow nickWindow = new ChangeBotNickWindow();
-            nickWindow.ShowDialog();
-
             if (bot != null)
-                bot.ChangeNick(Settings.Default.Nick);
+                bot.StringLib.ReloadLibrary("help");
         }
 
-        private void operatorsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void InitializeBotEvents()
         {
-            BotOperatorWindow operatorsWindow;
-
-            if (bot == null)
-            {
-                UserList ul = Bot.GetSavedUsers();
-                operatorsWindow = new BotOperatorWindow(ref ul);
-            }
-            else
-                operatorsWindow = new BotOperatorWindow(ref bot.userlist);
-
-            operatorsWindow.ShowDialog();
+            bot.Connected += new EventHandler<EventArgs>(NowConnected);
+            bot.ConnectedWithServer += new EventHandler<EventArgs>(NowConnectedWithServer);
+            bot.Created += new EventHandler<EventArgs>(UpdateDataSource);
+            bot.ModeChanged += new EventHandler<ModeChangedEventArgs>(UserModeChanged);
+            bot.Timeout += new EventHandler<EventArgs>(Timeout);
+            bot.BotNickChanged += new EventHandler<EventArgs>(EventChangeTitle);
+            bot.BotSilenced += new EventHandler<EventArgs>(BotSilence);
+            bot.BotUnsilenced += new EventHandler<EventArgs>(BotUnsilence);
+            bot.Quit += new EventHandler<EventArgs>(ExitApplication);
+            bot.DuplicatedNick += new EventHandler<EventArgs>(DuplicatedNick);
+            bot.PongReceived += new EventHandler<PongEventArgs>(UpdateLag);
+            bot.TopicChange += new EventHandler<TopicChangedEventArgs>(ChangeTopicTextBox);
+            bot.EnforceMirrorChanged += new EventHandler<EventArgs>(EnforceChanged);
+            bot.UpdateUserListSource += new EventHandler<EventArgs>(UpdateDataSource);
         }
 
-        private void input_KeyDown(object sender, KeyEventArgs e)
+        private void Input_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
             {
@@ -623,13 +672,93 @@ namespace NarutoBot3
 
                 if (string.IsNullOrEmpty(InputBox.Text)) return;
 
-                parseInputMessage(InputBox.Text);
+                ParseInputMessage(InputBox.Text);
 
                 ChangeInput("");
             }
         }
 
-        private void parseInputMessage(string inputMessage)
+        private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                //select the item under the mouse pointer
+                InterfaceUserList.SelectedIndex = InterfaceUserList.IndexFromPoint(e.Location);
+                if (InterfaceUserList != null && InterfaceUserList.SelectedIndex != -1)
+                {
+                    contextMenuUserList.Show();
+                }
+            }
+        }
+
+        private void KillToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.StringLib.ReloadLibrary("kills");
+        }
+
+        private void MutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MutedUsersWindow mutedWindow;
+
+            if (bot == null)
+            {
+                UserList ul = Bot.GetSavedUsers();
+                mutedWindow = new MutedUsersWindow(ref ul);
+            }
+            else
+                mutedWindow = new MutedUsersWindow(ref bot.userlist);
+
+            mutedWindow.ShowDialog();
+        }
+
+        private void NickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.StringLib.ReloadLibrary("nick");
+        }
+
+        private void NowConnected(object sender, EventArgs e)
+        {
+            ChangeConnectingLabel("Connected");
+            bot.Client.Join();
+            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
+
+            DoAutoJoinCommand();
+        }
+
+        private void NowConnectedWithServer(object sender, EventArgs e)
+        {
+            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
+        }
+
+        private void OperatorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BotOperatorWindow operatorsWindow;
+
+            if (bot == null)
+            {
+                UserList ul = Bot.GetSavedUsers();
+                operatorsWindow = new BotOperatorWindow(ref ul);
+            }
+            else
+                operatorsWindow = new BotOperatorWindow(ref bot.userlist);
+
+            operatorsWindow.ShowDialog();
+        }
+
+        private void Output2_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            Process browser = new Process();
+            string url = e.LinkText;
+            browser.StartInfo.UseShellExecute = true;
+            browser.StartInfo.FileName = url;
+            browser.Start();
+
+            browser.Close();
+        }
+
+        private void ParseInputMessage(string inputMessage)
         {
             string[] parsed = inputMessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
             string command = parsed[0].Substring(1);
@@ -657,7 +786,7 @@ namespace NarutoBot3
                             break;
 
                         case "nick": //Action send
-                            changeNick(parsed[1]);
+                            ChangeNick(parsed[1]);
                             break;
 
                         case "nickserv": //NickServ send
@@ -697,7 +826,13 @@ namespace NarutoBot3
             if (message != null && !string.IsNullOrWhiteSpace(message.body)) bot.SendMessage(message);
         }
 
-        private void rulesTextToolStripMenuItem_Click(object sender, EventArgs e)
+        private void QuotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot != null)
+                bot.StringLib.ReloadLibrary("quotes");
+        }
+
+        private void RulesTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditRulesWindow rulesWindow = new EditRulesWindow();
             rulesWindow.ShowDialog();
@@ -707,263 +842,124 @@ namespace NarutoBot3
             }
         }
 
-        private void helpTextToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            HelpTextWindow helpWindow = new HelpTextWindow();
-            helpWindow.ShowDialog();
-            if (bot != null)
-            {
-                bot.StringLib.ReloadLibrary("help");
-            }
-        }
-
-        private void mutedUsersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MutedUsersWindow mutedWindow;
-
-            if (bot == null)
-            {
-                UserList ul = Bot.GetSavedUsers();
-                mutedWindow = new MutedUsersWindow(ref ul);
-            }
-            else
-                mutedWindow = new MutedUsersWindow(ref bot.userlist);
-
-            mutedWindow.ShowDialog();
-        }
-
-        private void killToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (bot != null)
-                bot.StringLib.ReloadLibrary("kills");
-        }
-
-        private void rulesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
                 bot.StringLib.ReloadLibrary("rules");
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SettingsWindow settingsWindow = new SettingsWindow(ref themes);
+            settingsWindow.ThemeChanged += new EventHandler<EventArgs>(RefreshTheme);
+
+            settingsWindow.ShowDialog();
+
             if (bot != null)
-                bot.StringLib.ReloadLibrary("help");
+            {
+                CheckTwitterApi();
+                CheckGoogleApi();
+
+                if (Settings.Default.twitterEnabled)
+                    bot.TwitterLogOn();
+
+                try
+                {
+                    if (Settings.Default.redditUserEnabled)
+                        bot.RedditLogin(Settings.Default.redditUser, Settings.Default.redditPass);
+                }
+                catch
+                {
+                }
+            }
         }
 
-        private void nickGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SilencedToolStripMenuItem_Click(object sender, EventArgs e)  //Toogle Silence
         {
-            if (bot != null)
-                bot.StringLib.ReloadLibrary("nick");
+            if (Settings.Default.silence == true)
+            {
+                silencedToolStripMenuItem.Checked = false;
+                Settings.Default.silence = false;
+                toolStripStatusLabelSilence.Visible = false;
+            }
+            else
+            {
+                silencedToolStripMenuItem.Checked = true;
+                Settings.Default.silence = true;
+                toolStripStatusLabelSilence.Visible = true;
+            }
+            Settings.Default.Save();
         }
 
-        private void triviaToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Timeout(object sender, EventArgs e)
+        {
+            DisconnectClient();
+
+            ChangeConnectingLabel("Re-Connecting...");
+            WriteMessage("* The connection timed out. Will try to reconnect.");
+
+            TryConnect();
+        }
+
+        private void TriviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bot != null)
                 bot.StringLib.ReloadLibrary("trivia");
         }
 
-        private void quotesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpdateLag(object sender, PongEventArgs e)
         {
-            if (bot != null)
-                bot.StringLib.ReloadLibrary("quotes");
-        }
-
-        private void funkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (bot != null)
-                bot.StringLib.ReloadLibrary("funk");
-        }
-
-        private void factsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (bot != null)
-                bot.StringLib.ReloadLibrary("facts");
-        }
-
-        private void allToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (bot != null)
+            if (statusStripBottom.InvokeRequired)
             {
-                bot.StringLib.ReloadLibrary();
+                ChangeTimeStamp d = new ChangeTimeStamp(UpdateLag);
+                this.Invoke(d, new object[] { sender, e });
             }
-        }
-
-        private void botSilence(object sender, EventArgs e)
-        {
-            ChangeSilenceCheckBox(true);
-            Settings.Default.silence = true;
-            ChangeSilenceLabel(true);
-            Settings.Default.Save();
-        }
-
-        private void timeout(object sender, EventArgs e)
-        {
-            disconnectClient();
-
-            ChangeConnectingLabel("Re-Connecting...");
-            WriteMessage("* The connection timed out. Will try to reconnect.");
-
-            tryConnect();
-        }
-
-        private void botUnsilence(object sender, EventArgs e)
-        {
-            ChangeSilenceCheckBox(false);
-            Settings.Default.silence = false;
-            ChangeSilenceLabel(false);
-
-            Settings.Default.Save();
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-            if (InterfaceUserList.SelectedIndex == -1) return;
-
-            contextMenuUserList.Items.Clear();
-            string nick = Useful.RemoveUserMode(InterfaceUserList.SelectedItem.ToString());
-
-            contextMenuUserList.Items.Add(nick);
-
-            contextMenuUserList.Items.Add(new ToolStripSeparator());
-
-            if (bot != null && !bot.userlist.UserIsOperator(nick))
-                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.TakeOps(nick); }));
-
-            if (bot != null && !bot.userlist.UserIsMuted(nick))
-                contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.MuteUser(nick); }));
-            else
-                contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.UnmuteUser(nick); }));
-
-            contextMenuUserList.Items.Add(new ToolStripSeparator());
-
-            contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.PokeUser(nick); }));
-            contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.WhoisUser(nick); }));
-
-            if (bot.userlist.GetUserMode(bot.Client.NICK) == '@')
             {
-                contextMenuUserList.Items.Add(new ToolStripSeparator());
-                contextMenuUserList.Items.Add("Kick", null, new EventHandler(delegate (object o, EventArgs a) { bot.KickUser(nick); }));
-            }
-        }
-
-        private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                //select the item under the mouse pointer
-                InterfaceUserList.SelectedIndex = InterfaceUserList.IndexFromPoint(e.Location);
-                if (InterfaceUserList != null && InterfaceUserList.SelectedIndex != -1)
+                try
                 {
-                    contextMenuUserList.Show();
+                    int seconds = e.TimeDifference.Seconds * 60 + e.TimeDifference.Seconds;
+                    toolstripLag.Text = seconds + "." + e.TimeDifference.Milliseconds.ToString("000") + "s";
                 }
+                catch { }
             }
         }
 
-        private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        private void UpdateSilenceMarks()
         {
-            contextMenuUserList.Items.Clear();
-        }
-
-        private void nowConnected(object sender, EventArgs e)
-        {
-            ChangeConnectingLabel("Connected");
-            bot.Client.Join();
-            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
-
-            doAutoJoinCommand();
-        }
-
-        private void nowConnectedWithServer(object sender, EventArgs e)
-        {
-            ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
-        }
-
-        public void eventChangeTitle(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(bot.Client.HOST_SERVER))
-                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT + " (" + bot.Client.HOST_SERVER + ")");
-            else
-                ChangeTitle(bot.Client.NICK + " @ " + bot.Client.HOME_CHANNEL + " - " + bot.Client.HOST + ":" + bot.Client.PORT);
-        }
-
-        public void duplicatedNick(object sender, EventArgs e)
-        {
-            Random r = new Random();
-
-            if (!bot.Client.isConnected)
+            if (Settings.Default.silence == true)
             {
-                disconnectClient();
-
-                Settings.Default.Nick = bot.Client.NICK + r.Next(10);
-                Settings.Default.Save();
-
-                tryConnect();
-            }
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox aboutbox = new AboutBox();
-            aboutbox.ShowDialog();
-        }
-
-        public void refreshTheme(object sender, EventArgs e)
-        {
-            refreshTheme();
-        }
-
-        public void refreshTheme()
-        {
-            this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
-            this.OutputBox.ForeColor = themes.CurrentColorScheme.MainWindowText;
-
-            this.tbTopic.BackColor = themes.CurrentColorScheme.TopicBG;
-            this.tbTopic.ForeColor = themes.CurrentColorScheme.TopicText;
-
-            this.InterfaceUserList.BackColor = themes.CurrentColorScheme.UserListBG;
-            this.InterfaceUserList.ForeColor = themes.CurrentColorScheme.UserListText;
-
-            this.InputBox.BackColor = themes.CurrentColorScheme.InputBG;
-            this.InputBox.ForeColor = themes.CurrentColorScheme.InputText;
-
-            OutputBox.Clear();
-
-            if (bot != null)
-                bot.UpdateTheme(themes.CurrentColorScheme);
-        }
-
-        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process browser = new Process();
-
-            string url = "https://github.com/Ricardo1991/NarutoBot3";
-            browser.StartInfo.UseShellExecute = true;
-            browser.StartInfo.FileName = url;
-            browser.Start();
-
-            browser.Close();
-        }
-
-        private void forceMirrorModeOffToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Settings.Default.enforceMirrorOff == true)
-            {
-                forceMirrorModeOffToolStripMenuItem.Checked = false;
-                Settings.Default.enforceMirrorOff = false;
+                silencedToolStripMenuItem.Checked = true;
+                toolStripStatusLabelSilence.Visible = true;
             }
             else
             {
-                forceMirrorModeOffToolStripMenuItem.Checked = true;
-                Settings.Default.enforceMirrorOff = true;
+                silencedToolStripMenuItem.Checked = false;
+                toolStripStatusLabelSilence.Visible = false;
             }
-            Settings.Default.Save();
         }
-
-        private void enforceChanged(object sender, EventArgs e)
+        private void UserModeChanged(object sender, ModeChangedEventArgs e)
         {
-            forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
+            Dictionary<string, string> modeChanges = new Dictionary<string, string>
+            {
+                { "+o", "was opped" },
+                { "-o", "was deopped" },
+                { "+v", "was voiced" },
+                { "-v", "was devoiced" },
+                { "+h", "was half opped" },
+                { "-h", "was half deopped" },
+                { "+q", "was given Owner permissions" },
+                { "-q", "was removed as a Owner" },
+                { "+a", "was given Admin permissions" },
+                { "-a", "had their Admin permissions removed" },
+            };
+
+            if (modeChanges.TryGetValue(e.Mode, out string message))
+            {
+                WriteMessage("** " + e.User + " " + message, themes.CurrentColorScheme.StatusChanged);
+            }
+
+            UpdateDataSource();
         }
     }
 }
