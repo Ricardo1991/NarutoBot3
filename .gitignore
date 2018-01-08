@@ -212,3 +212,6 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+NarutoBot3/TextFiles/stats.json
+NarutoBot3/TextFiles/data.json
+NarutoBot3/TextFiles/quotes.txt
