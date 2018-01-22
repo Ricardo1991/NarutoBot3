@@ -2945,10 +2945,15 @@ namespace NarutoBot3
 
                     subreddit = Useful.GetBetween(url, "/r/", "/");
 
-                    string[] linkParse = url.Replace("\r", string.Empty).Split('/');
+                    string[] linkParse = url.Replace("\r", string.Empty).Split(new char[] { '/' }, 7);
 
                     if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?"))   //With Comment
                     {
+                        if (linkParse[6].Contains('/')) { 
+                            linkParse[6] = linkParse[6].Substring(0,linkParse[6].LastIndexOf('/'));
+                            url = url.Substring(0, url.LastIndexOf('/'));
+                        }
+
                         RedditInfoWithComment(CHANNEL, url, linkParse[4], linkParse[6]);
                     }
                     else  //No comment link
