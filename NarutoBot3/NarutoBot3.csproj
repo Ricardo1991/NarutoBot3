@@ -28,7 +28,7 @@
     <ProductName>NarutoBot3</ProductName>
     <PublisherName>Ricardo Ribeiro</PublisherName>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>4.10.0.%2a</ApplicationVersion>
+    <ApplicationVersion>4.11.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

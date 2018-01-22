@@ -185,7 +185,8 @@ FakesAssemblies/
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -212,6 +213,10 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+######
 NarutoBot3/TextFiles/stats.json
 NarutoBot3/TextFiles/data.json
 NarutoBot3/TextFiles/quotes.txt
+.vs/NarutoBot3/v15/Server/
+.vs/NarutoBot3/v15/sqlite3/

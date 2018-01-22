@@ -760,66 +760,117 @@ namespace NarutoBot3
 
         private void ParseInputMessage(string inputMessage)
         {
-            string[] parsed = inputMessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), parsed[1] is the rest
-            string command = parsed[0].Substring(1);
             IrcMessage message = null;
 
             if (!bot.Client.isConnected) return;
 
-            if (parsed.Length >= 2 && !string.IsNullOrEmpty(parsed[1]))
+
+            if (inputMessage.StartsWith("/"))
             {
-                string args = parsed[1];
-                if (parsed[0][0] == '/')
+                string[] parsed = inputMessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), arg is the rest
+                string command = parsed[0].Substring(1);
+                string arg;
+
+
+                try
                 {
-                    switch (command)
-                    {
-                        case "me":  //Action send
-                            message = new ActionMessage(bot.Client.HOME_CHANNEL, args);
-                            break;
-
-                        case "whois": //Action send
-                            message = new Whois(args);
-                            break;
-
-                        case "whowas": //Action send
-                            message = new Whowas(args);
-                            break;
-
-                        case "nick": //Action send
-                            ChangeNick(parsed[1]);
-                            break;
-
-                        case "nickserv": //NickServ send
-                        case "ns":
-                            message = new Privmsg("NickServ", args);
-                            break;
-
-                        case "chanserv": //Chanserv send
-                        case "cs":
-                            message = new Privmsg("ChanServ", args);
-                            break;
-
-                        case "query": //Action send
-                        case "pm":
-                        case "msg":
-                            string[] msgargs = args.Split(new char[] { ' ' }, 2);
-                            if (args.Length >= 2)
-                                message = new Privmsg(msgargs[0], msgargs[1]);
-                            else
-                                WriteMessage("Not enough arguments");
-                            break;
-
-                        case "identify":
-                            message = new Privmsg("NickServ", "identify " + args);
-                            break;
-                    }
+                    arg = parsed[1];
                 }
-                else //Normal send
-                    message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
+                catch (IndexOutOfRangeException ex)
+                {
+                    arg = String.Empty;
+                }
+
+                switch (command)
+                {
+                    case "me":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        message = new ActionMessage(bot.Client.HOME_CHANNEL, arg);
+                        break;
+
+                    case "whois":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        message = new Whois(arg);
+                        break;
+
+                    case "whowas":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        message = new Whowas(arg);
+                        break;
+
+                    case "nick":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        ChangeNick(arg);
+                        break;
+
+                    case "nickserv":
+                    case "ns":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        message = new Privmsg("NickServ", arg);
+                        break;
+
+                    case "chanserv":
+                    case "cs":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+                        message = new Privmsg("ChanServ", arg);
+                        break;
+
+                    case "query":
+                    case "pm":
+                    case "msg":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+
+                        string[] msgargs = arg.Split(new char[] { ' ' }, 2);
+                        if (arg.Length >= 2)
+                            message = new Privmsg(msgargs[0], msgargs[1]);
+                        else
+                            WriteMessage("Not enough arguments");
+                        break;
+
+                    case "identify":
+                        if(String.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("Not enough arguments");
+                            break;
+                        }
+
+                        message = new Privmsg("NickServ", "identify " + arg);
+                        break;
+                    case "clear":
+                    case "clean":
+                        OutputClean();
+                        break;
+                }  
             }
-            else
-                if (!String.IsNullOrWhiteSpace(command) && command[0] == '/')
-                WriteMessage("Not enough arguments");
+
             else //Normal send
                 message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
 
