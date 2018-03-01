@@ -269,7 +269,7 @@
     </Compile>
     <Compile Include="Bot.cs" />
     <Compile Include="ColorScheme.cs" />
-    <Compile Include="JSON and XML classes\GoogleSearch.cs" />
+    <Compile Include="JSON and XML classes\Google.cs" />
     <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,14 +300,13 @@
     <Compile Include="Forms\MutedUsersWindow.Designer.cs">
       <DependentUpon>MutedUsersWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON and XML classes\MAL_Anime.cs" />
+    <Compile Include="JSON and XML classes\MyAnimeList.cs" />
     <Compile Include="Forms\ChangeBotNickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON and XML classes\MAL_User.cs" />
     <Compile Include="ParsedMessage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -316,10 +315,9 @@
     </Compile>
     <Compile Include="Questions.cs" />
     <Compile Include="Stats.cs" />
-    <Compile Include="Library\StringLibrary.cs" />
+    <Compile Include="TextLibrary\StringLibrary.cs" />
     <Compile Include="ThemeCollection.cs" />
     <Compile Include="UserList.cs" />
-    <Compile Include="JSON and XML classes\YoutubeVideoInfo.cs" />
     <Compile Include="NickGen.cs" />
     <Compile Include="Forms\BotOperatorWindow.cs">
       <SubType>Form</SubType>
@@ -335,9 +333,8 @@
     <Compile Include="Forms\EditRulesWindow.Designer.cs">
       <DependentUpon>EditRulesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON and XML classes\GoogleTimeZone.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="JSON and XML classes\YoutubeSearch.cs" />
+    <Compile Include="JSON and XML classes\Youtube.cs" />
     <Compile Include="Useful.cs" />
     <Compile Include="YoutubeUseful.cs" />
     <EmbeddedResource Include="Forms\AboutBox.resx">

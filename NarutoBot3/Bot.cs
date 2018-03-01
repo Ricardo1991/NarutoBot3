@@ -498,8 +498,8 @@ namespace NarutoBot3
             //TODO: Simplify this anime search
 
             IrcMessage message;
-            MalAnime malAnime = new MalAnime();
-            GoogleSearchObject.GoogleSearch googleObject = new GoogleSearchObject.GoogleSearch();
+            MyAnimeList.MalAnimeData malAnime = new MyAnimeList.MalAnimeData();
+            Google.GoogleSearch googleObject = new Google.GoogleSearch();
             WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
@@ -568,10 +568,10 @@ namespace NarutoBot3
 
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(MalAnime));
+                    XmlSerializer serializer = new XmlSerializer(typeof(MyAnimeList.MalAnimeData));
                     using (StringReader reader = new StringReader(xmlAnime))
                     {
-                        malAnime = (MalAnime)(serializer.Deserialize(reader));
+                        malAnime = (MyAnimeList.MalAnimeData)(serializer.Deserialize(reader));
                     }
                 }
                 catch { }
@@ -639,7 +639,7 @@ namespace NarutoBot3
             };
             webClient.Headers.Add("User-Agent", Settings.Default.UserAgent);
 
-            GoogleSearchObject.GoogleSearch g = GoogleAnimeSearch(query);
+            Google.GoogleSearch g = GoogleAnimeSearch(query);
 
             if (g == null)
             {
@@ -669,14 +669,14 @@ namespace NarutoBot3
             {
                 string xmlUser = webClient.DownloadString("https://myanimelist.net/malappinfo.php?u=" + query.Replace("%20", string.Empty).Replace("-u", string.Empty)).Trim();
 
-                myanimelist u = new myanimelist();
+                MyAnimeList.MalUserData u = new MyAnimeList.MalUserData();
 
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(myanimelist));
+                    XmlSerializer serializer = new XmlSerializer(typeof(MyAnimeList.MalUserData));
                     using (StringReader reader = new StringReader(xmlUser))
                     {
-                        u = (myanimelist)(serializer.Deserialize(reader));
+                        u = (MyAnimeList.MalUserData)(serializer.Deserialize(reader));
                     }
                 }
                 catch { }
@@ -1022,9 +1022,9 @@ namespace NarutoBot3
             }
         }
 
-        private GoogleSearchObject.GoogleSearch GoogleAnimeSearch(string query)
+        private Google.GoogleSearch GoogleAnimeSearch(string query)
         {
-            GoogleSearchObject.GoogleSearch g = new GoogleSearchObject.GoogleSearch();
+            Google.GoogleSearch g = new Google.GoogleSearch();
             WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
@@ -1348,7 +1348,7 @@ namespace NarutoBot3
                     else if (s.ToLower() == "iq") Ique = true;
                 }
 
-                string nick_ = NarutoBot3.NickGen.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
+                string nick_ = NarutoBot3.NickGenerator.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, randomnumber, randomUpper, switchLetterNumb, Ique);
 
                 if (targeted)
                     message = new Privmsg(CHANNEL, nick + " generated a nick for " + target + ": " + nick_);
@@ -1597,7 +1597,7 @@ namespace NarutoBot3
                             string.Compare(arg, "can you generate a nick", true) == 0 || string.Compare(arg, "can you create a nick", true) == 0 ||
                             string.Compare(arg, "can you make me a new nick", true) == 0)
                         {
-                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NarutoBot3.NickGen.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, false, false, false, false));
+                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NarutoBot3.NickGenerator.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, false, false, false, false));
                             stats.nick();
                         }
                         else if (arg.ToLower().Contains("can you kill "))
@@ -1612,7 +1612,7 @@ namespace NarutoBot3
                     {
                         if (string.Compare(arg, "would you make me a nick", true) == 0 || string.Compare(arg, "would you generate a nick", true) == 0 ||
                             string.Compare(arg, "would you create a nick", true) == 0 || string.Compare(arg, "would you make me a new nick", true) == 0)
-                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NarutoBot3.NickGen.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, false, false, false, false));
+                            message = new Privmsg(CHANNEL, "Yes, here it is: " + NarutoBot3.NickGenerator.GenerateNick(StringLib.NickGenStrings, StringLib.NickGenStrings.Count, false, false, false, false));
                         else
                             message = new Privmsg(CHANNEL, why[r.Next(why.Length)]);
                     }
@@ -3455,7 +3455,7 @@ namespace NarutoBot3
 
             DateTime convertedTime;
 
-            GoogleTimeZoneObject.GoogleTimeZone g = new GoogleTimeZoneObject.GoogleTimeZone();
+            Google.GoogleTimeZone g = new Google.GoogleTimeZone();
             string json;
 
             if (userlist.UserIsMuted(nick)) return;
@@ -4005,8 +4005,8 @@ namespace NarutoBot3
         {
             IrcMessage message;
             string jsonYoutube, title, duration;
-            YoutubeSearchObject.YoutubeSearch y = new YoutubeSearchObject.YoutubeSearch();
-            YoutubeVideoInfoObject.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfoObject.YoutubeVideoInfo();
+            Youtube.YoutubeSearch y = new Youtube.YoutubeSearch();
+            Youtube.YoutubeVideoInfo youtubeVideo = new Youtube.YoutubeVideoInfo();
 
             if (userlist.UserIsMuted(nick)) return;
             if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;

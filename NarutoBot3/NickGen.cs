@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NarutoBot3
 {
-    internal static class NickGen
+    internal static class NickGenerator
     {
         private static int lineNumber;
         private static List<string> nickStrings;
@@ -21,15 +21,15 @@ namespace NarutoBot3
             foreach (string s in _nickStrings)
                 nickStrings.Add(s);
 
-            return Creator(rd_numb, rd_uppr, rd_switch, rd_ique);
+            return GenerateNick(rd_numb, rd_uppr, rd_switch, rd_ique);
         }
 
-        static public string replaceChar(int index, string word, char newChar)
+        static public string ReplaceCharacter(int position, string word, char newChar)
         {
-            return word.Substring(0, index) + newChar + word.Substring(index + 1);
+            return word.Substring(0, position) + newChar + word.Substring(position + 1);
         }
 
-        private static string letterSwitch(string nick_gen)//Used in the Nick gen
+        private static string LetterToNumber(string nick_gen)
         {
             Random rnd = new Random();
             int changed = 0;
@@ -46,7 +46,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '3');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '3');
                             changed = 1;
                             letras = 0;
                         }
@@ -55,7 +55,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '4');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '4');
                             changed = 1;
                             letras = 0;
                         }
@@ -64,7 +64,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '7');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '7');
                             changed = 1;
                             letras = 0;
                         }
@@ -73,7 +73,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '0');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '0');
                             changed = 1;
                             letras = 0;
                         }
@@ -82,7 +82,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '1');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '1');
                             changed = 1;
                             letras = 0;
                         }
@@ -91,7 +91,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '5');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '5');
                             changed = 1;
                             letras = 0;
                         }
@@ -100,7 +100,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, '2');
+                            nick_gen = ReplaceCharacter(i, nick_gen, '2');
                             changed = 1;
                             letras = 0;
                         }
@@ -112,7 +112,7 @@ namespace NarutoBot3
             return nick_gen;
         }
 
-        private static string randomNumber(string nick_gen, int size = 2)//Used in the Nick gen
+        private static string AppendNumber(string nick_gen, int size = 2)
         {
             Random rnd = new Random();
 
@@ -121,7 +121,7 @@ namespace NarutoBot3
             return nick_gen;
         }
 
-        private static string randomUpper(string nick_gen)//Used in the Nick gen
+        private static string AddUpperCase(string nick_gen)
         {
             Random rnd = new Random();
             int changed = 0;
@@ -139,7 +139,7 @@ namespace NarutoBot3
                     {
                         if (rnd.Next(0, 10) <= 2)
                         {
-                            nick_gen = replaceChar(i, nick_gen, Char.ToUpper(nick_gen[i]));
+                            nick_gen = ReplaceCharacter(i, nick_gen, Char.ToUpper(nick_gen[i]));
                             changed = 1;
                             letras = 0;
                         }
@@ -151,7 +151,7 @@ namespace NarutoBot3
             return nick_gen;
         }
 
-        private static string addSuffix(string nick_gen, string suffix)//Used in the Nick gen
+        private static string AddSuffix(string nick_gen, string suffix)
         {
             string last = nick_gen[nick_gen.Length - 1].ToString();
             if (last == "a".ToString() || last == "e".ToString() || last == "i".ToString() || last == "o".ToString() || last == "u".ToString())
@@ -163,7 +163,7 @@ namespace NarutoBot3
             return nick_gen;
         }
 
-        private static string Creator(bool rd_numb, bool rd_uppr, bool rd_switch, bool sufix) //Used to create nicks
+        private static string GenerateNick(bool rd_numb, bool rd_uppr, bool rd_switch, bool sufix)
         {
             Random rnd = new Random();
             int rd = rnd.Next(lineNumber);
@@ -180,15 +180,15 @@ namespace NarutoBot3
             nick_gen = part1 + part2;
 
             if (sufix)
-                nick_gen = addSuffix(nick_gen, "ique");
+                nick_gen = AddSuffix(nick_gen, "ique");
             if (rd_numb)
-                nick_gen = randomNumber(nick_gen);
+                nick_gen = AppendNumber(nick_gen);
 
             if (rd_switch)
-                nick_gen = letterSwitch(nick_gen);
+                nick_gen = LetterToNumber(nick_gen);
 
             if (rd_uppr)
-                nick_gen = randomUpper(nick_gen);
+                nick_gen = AddUpperCase(nick_gen);
 
             return nick_gen;
         }

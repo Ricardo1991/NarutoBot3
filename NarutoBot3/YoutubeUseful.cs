@@ -10,9 +10,7 @@ namespace NarutoBot3
     {
         static public string getYoutubeInfoFromID(string id)
         {
-            string jsonYoutube = "";
-            string title, duration;
-            YoutubeVideoInfoObject.YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfoObject.YoutubeVideoInfo();
+            Youtube.YoutubeVideoInfo youtubeVideo = new Youtube.YoutubeVideoInfo();
 
             string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
 
@@ -22,13 +20,13 @@ namespace NarutoBot3
             webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
             try
             {
-                jsonYoutube = webClient.DownloadString(getString);
+                string jsonYoutube = webClient.DownloadString(getString);
                 JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
             }
             catch { }
 
-            title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-            duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+            string title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+            string duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
 
             return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
         }
