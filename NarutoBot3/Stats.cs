@@ -10,10 +10,10 @@ namespace NarutoBot3
 
         public StatsManager()
         {
-            loadData();
+            LoadData();
         }
 
-        public void saveData()
+        public void SaveData()
         {
             TextWriter WriteFileStream = new StreamWriter("stats.json", false);
 
@@ -22,7 +22,7 @@ namespace NarutoBot3
             WriteFileStream.Close();
         }
 
-        public void loadData()
+        public void LoadData()
         {
             try
             {
@@ -37,242 +37,242 @@ namespace NarutoBot3
             }
         }
 
-        public void kill()
+        public void Kill()
         {
-            session.incrementKill();
-            lifetime.incrementKill();
-            saveData();
+            session.IncrementKill();
+            lifetime.IncrementKill();
+            SaveData();
         }
 
-        public void fact()
+        public void Fact()
         {
-            session.incrementFact();
-            lifetime.incrementFact();
-            saveData();
+            session.IncrementFact();
+            lifetime.IncrementFact();
+            SaveData();
         }
 
-        public void youtube()
+        public void Youtube()
         {
-            session.incrementYoutube();
-            lifetime.incrementYoutube();
-            saveData();
+            session.IncrementYoutube();
+            lifetime.IncrementYoutube();
+            SaveData();
         }
 
-        public void nick()
+        public void Nick()
         {
-            session.incrementNick();
-            lifetime.incrementNick();
-            saveData();
+            session.IncrementNick();
+            lifetime.IncrementNick();
+            SaveData();
         }
 
-        public void funk()
+        public void Funk()
         {
-            session.incrementFunk();
-            lifetime.incrementFunk();
-            saveData();
+            session.IncrementFunk();
+            lifetime.IncrementFunk();
+            SaveData();
         }
 
-        public void shuffle()
+        public void Shuffle()
         {
-            session.incrementShuffle();
-            lifetime.incrementShuffle();
-            saveData();
+            session.IncrementShuffle();
+            lifetime.IncrementShuffle();
+            SaveData();
         }
 
-        public void choose()
+        public void Choose()
         {
-            session.incrementChoose();
-            lifetime.incrementChoose();
-            saveData();
+            session.IncrementChoose();
+            lifetime.IncrementChoose();
+            SaveData();
         }
 
-        public void quote()
+        public void Quote()
         {
-            session.incrementQuote();
-            lifetime.incrementQuote();
-            saveData();
+            session.IncrementQuote();
+            lifetime.IncrementQuote();
+            SaveData();
         }
 
-        public void trivia()
+        public void Trivia()
         {
-            session.incrementTrivia();
-            lifetime.incrementTrivia();
-            saveData();
+            session.IncrementTrivia();
+            lifetime.IncrementTrivia();
+            SaveData();
         }
 
-        public void poke()
+        public void Poke()
         {
-            session.incrementPoke();
-            lifetime.incrementPoke();
-            saveData();
+            session.IncrementPoke();
+            lifetime.IncrementPoke();
+            SaveData();
         }
 
-        public void wiki()
+        public void Wiki()
         {
-            session.incrementWiki();
-            lifetime.incrementWiki();
-            saveData();
+            session.IncrementWiki();
+            lifetime.IncrementWiki();
+            SaveData();
         }
 
-        public void temperature()
+        public void Temperature()
         {
-            session.incrementTemperature();
-            lifetime.incrementTemperature();
-            saveData();
+            session.IncrementTemperature();
+            lifetime.IncrementTemperature();
+            SaveData();
         }
 
-        public void time()
+        public void Time()
         {
-            session.incrementTime();
-            lifetime.incrementTime();
-            saveData();
+            session.IncrementTime();
+            lifetime.IncrementTime();
+            SaveData();
         }
 
-        public void greet()
+        public void Greet()
         {
-            session.incrementGreet();
-            lifetime.incrementGreet();
-            saveData();
+            session.IncrementGreet();
+            lifetime.IncrementGreet();
+            SaveData();
         }
 
-        public void rules()
+        public void Rules()
         {
-            session.incrementRules();
-            lifetime.incrementRules();
-            saveData();
+            session.IncrementRules();
+            lifetime.IncrementRules();
+            SaveData();
         }
 
-        public void help()
+        public void Help()
         {
-            session.incrementHelp();
-            lifetime.incrementHelp();
-            saveData();
+            session.IncrementHelp();
+            lifetime.IncrementHelp();
+            SaveData();
         }
 
-        public void anime()
+        public void Anime()
         {
-            session.incrementAnime();
-            lifetime.incrementAnime();
-            saveData();
+            session.IncrementAnime();
+            lifetime.IncrementAnime();
+            SaveData();
         }
 
-        public void roll()
+        public void Roll()
         {
-            session.incrementRoll();
-            lifetime.incrementRoll();
-            saveData();
+            session.IncrementRoll();
+            lifetime.IncrementRoll();
+            SaveData();
         }
 
-        public void question()
+        public void Question()
         {
-            session.incrementQuestion();
-            lifetime.incrementQuestion();
-            saveData();
+            session.IncrementQuestion();
+            lifetime.IncrementQuestion();
+            SaveData();
         }
 
-        public void tell()
+        public void Tell()
         {
-            session.incrementTell();
-            lifetime.incrementTell();
-            saveData();
+            session.IncrementTell();
+            lifetime.IncrementTell();
+            SaveData();
         }
 
-        public int[] getKill()
+        public int[] GetKill()
         {
             return new int[2] { session.Kill, lifetime.Kill };
         }
 
-        public int[] getYoutube()
+        public int[] GetYoutube()
         {
             return new int[2] { session.Youtube, lifetime.Youtube };
         }
 
-        public int[] getQuestion()
+        public int[] GetQuestion()
         {
             return new int[2] { session.Question, lifetime.Question };
         }
 
-        public int[] getNick()
+        public int[] GetNick()
         {
             return new int[2] { session.Nick, lifetime.Nick };
         }
 
-        public int[] getFunk()
+        public int[] GetFunk()
         {
             return new int[2] { session.Funk, lifetime.Funk };
         }
 
-        public int[] getShuffle()
+        public int[] GetShuffle()
         {
             return new int[2] { session.Shuffle, lifetime.Shuffle };
         }
 
-        public int[] getChoose()
+        public int[] GetChoose()
         {
             return new int[2] { session.Choose, lifetime.Choose };
         }
 
-        public int[] getQuote()
+        public int[] GetQuote()
         {
             return new int[2] { session.Quote, lifetime.Quote };
         }
 
-        public int[] getTrivia()
+        public int[] GetTrivia()
         {
             return new int[2] { session.Trivia, lifetime.Trivia };
         }
 
-        public int[] getPoke()
+        public int[] GetPoke()
         {
             return new int[2] { session.Poke, lifetime.Poke };
         }
 
-        public int[] getWiki()
+        public int[] GetWiki()
         {
             return new int[2] { session.Wiki, lifetime.Wiki };
         }
 
-        public int[] getTemperature()
+        public int[] GetTemperature()
         {
             return new int[2] { session.Temperature, lifetime.Temperature };
         }
 
-        public int[] getTime()
+        public int[] GetTime()
         {
             return new int[2] { session.Time, lifetime.Time };
         }
 
-        public int[] getGreet()
+        public int[] GetGreet()
         {
             return new int[2] { session.Greet, lifetime.Greet };
         }
 
-        public int[] getRules()
+        public int[] GetRules()
         {
             return new int[2] { session.Rules, lifetime.Rules };
         }
 
-        public int[] getHelp()
+        public int[] GetHelp()
         {
             return new int[2] { session.Help, lifetime.Help };
         }
 
-        public int[] getAnime()
+        public int[] GetAnime()
         {
             return new int[2] { session.Anime, lifetime.Anime };
         }
 
-        public int[] getRoll()
+        public int[] GetRoll()
         {
             return new int[2] { session.Roll, lifetime.Roll };
         }
 
-        public int[] getTell()
+        public int[] GetTell()
         {
             return new int[2] { session.Tell, lifetime.Tell };
         }
 
-        public int[] getFact()
+        public int[] GetFact()
         {
             return new int[2] { session.Fact, lifetime.Fact };
         }
@@ -464,102 +464,102 @@ namespace NarutoBot3
             tell = 0;
         }
 
-        public void incrementKill()
+        public void IncrementKill()
         {
             Kill++;
         }
 
-        public void incrementFact()
+        public void IncrementFact()
         {
             Fact++;
         }
 
-        public void incrementYoutube()
+        public void IncrementYoutube()
         {
             Youtube++;
         }
 
-        public void incrementQuestion()
+        public void IncrementQuestion()
         {
             Question++;
         }
 
-        public void incrementNick()
+        public void IncrementNick()
         {
             Nick++;
         }
 
-        public void incrementFunk()
+        public void IncrementFunk()
         {
             Funk++;
         }
 
-        public void incrementShuffle()
+        public void IncrementShuffle()
         {
             Shuffle++;
         }
 
-        public void incrementChoose()
+        public void IncrementChoose()
         {
             Choose++;
         }
 
-        public void incrementQuote()
+        public void IncrementQuote()
         {
             Quote++;
         }
 
-        public void incrementTrivia()
+        public void IncrementTrivia()
         {
             Trivia++;
         }
 
-        public void incrementPoke()
+        public void IncrementPoke()
         {
             Poke++;
         }
 
-        public void incrementWiki()
+        public void IncrementWiki()
         {
             Wiki++;
         }
 
-        public void incrementTemperature()
+        public void IncrementTemperature()
         {
             Temperature++;
         }
 
-        public void incrementTime()
+        public void IncrementTime()
         {
             Time++;
         }
 
-        public void incrementGreet()
+        public void IncrementGreet()
         {
             Greet++;
         }
 
-        public void incrementRules()
+        public void IncrementRules()
         {
             Rules++;
         }
 
-        public void incrementHelp()
+        public void IncrementHelp()
         {
             Help++;
         }
 
-        public void incrementAnime()
+        public void IncrementAnime()
         {
             Anime++;
         }
 
-        public void incrementRoll()
+        public void IncrementRoll()
         {
             Roll++;
         }
 
-        public void incrementTell()
+        public void IncrementTell()
         {
             Tell++;
         }

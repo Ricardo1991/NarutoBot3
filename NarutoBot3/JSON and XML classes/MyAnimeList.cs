@@ -1,4 +1,5 @@
-﻿namespace MyAnimeList
+﻿#pragma warning disable IDE1006 // Naming Styles
+namespace MyAnimeList
 {
     /// <remarks/>
     [System.Xml.Serialization.XmlType(AnonymousType = true)]

@@ -178,7 +178,7 @@ namespace NarutoBot3
 
         private void bApplyTheme_Click(object sender, EventArgs e)
         {
-            themes.selectTheme(themeList.SelectedIndex);
+            themes.SelectTheme(themeList.SelectedIndex);
 
             Settings.Default.themeName = themes.CurrentColorScheme.Name;
             OnThemeChanged(EventArgs.Empty);

@@ -1,7 +1,10 @@
-﻿namespace Google
+﻿#pragma warning disable IDE1006 // Naming Styles
+
+namespace Google
 {
     public class GoogleSearch
     {
+
         public string kind { get; set; }
         public Url url { get; set; }
         public Queries queries { get; set; }

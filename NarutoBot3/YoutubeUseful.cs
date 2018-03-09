@@ -8,14 +8,16 @@ namespace NarutoBot3
 {
     internal static class YoutubeUseful
     {
-        static public string getYoutubeInfoFromID(string id)
+        static public string GetYoutubeInfoFromID(string id)
         {
             Youtube.YoutubeVideoInfo youtubeVideo = new Youtube.YoutubeVideoInfo();
 
             string getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + id;
 
-            var webClient = new WebClient();
-            webClient.Encoding = Encoding.UTF8;
+            var webClient = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
 
             webClient.Headers.Add("User-agent", Settings.Default.UserAgent);
             try
@@ -26,12 +28,12 @@ namespace NarutoBot3
             catch { }
 
             string title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-            string duration = YoutubeUseful.parseDuration(youtubeVideo.items[0].contentDetails.duration);
+            string duration = YoutubeUseful.ParseDuration(youtubeVideo.items[0].contentDetails.duration);
 
             return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
         }
 
-        static public string getYoutubeIdFromURL(string url)
+        static public string GetYoutubeIdFromURL(string url)
         {
             string id;
 
@@ -50,7 +52,7 @@ namespace NarutoBot3
             return id.Split(new char[] { ' ' }, 2)[0];
         }
 
-        static public string parseDuration(string duration)//PT#H#M#S
+        static public string ParseDuration(string duration)//PT#H#M#S
         {
             string temp = "";
             int hours = 0, minutes = 0, seconds = 0;

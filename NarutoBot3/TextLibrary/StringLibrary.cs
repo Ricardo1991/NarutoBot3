@@ -50,7 +50,7 @@ namespace NarutoBot3
             ReadQuotes();
             ReadFunk();
             ReadRules();
-            CustomCommands = CustomCommand.loadCustomCommands();
+            CustomCommands = CustomCommand.LoadCustomCommands();
 
             return true;
         }
@@ -108,8 +108,8 @@ namespace NarutoBot3
 
         public bool SaveLibrary()
         {
-            saveFunk();
-            saveQuotes();
+            SaveFunk();
+            SaveQuotes();
 
 
             return true;
@@ -153,11 +153,11 @@ namespace NarutoBot3
 
                 case "quotes":
                 case "quote":
-                    saveQuotes();
+                    SaveQuotes();
                     break;
 
                 case "funk":
-                    saveFunk();
+                    SaveFunk();
                     break;
 
                 default:
@@ -357,7 +357,7 @@ namespace NarutoBot3
             }
         }
 
-        private void saveQuotes()
+        private void SaveQuotes()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/quotes.txt", false))
             {
@@ -390,7 +390,7 @@ namespace NarutoBot3
             }
         }
 
-        private void saveFunk()
+        private void SaveFunk()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/Funk.txt", false))
             {

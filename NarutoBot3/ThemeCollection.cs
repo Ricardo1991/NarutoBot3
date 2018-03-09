@@ -37,10 +37,10 @@ namespace NarutoBot3
 
         public ThemeCollection()
         {
-            loadThemes();
+            LoadThemes();
         }
 
-        public bool themeExists(string name)
+        public bool ThemeExists(string name)
         {
             foreach (ColorScheme c in ThemeColection)
             {
@@ -52,7 +52,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public bool selectTheme(int index)
+        public bool SelectTheme(int index)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace NarutoBot3
             }
         }
 
-        public ColorScheme getThemeByName(string name)
+        public ColorScheme GetThemeByName(string name)
         {
             ColorScheme color = new ColorScheme();
 
@@ -78,17 +78,17 @@ namespace NarutoBot3
             return color;
         }
 
-        public bool selectTheme(ColorScheme theme)
+        public bool SelectTheme(ColorScheme theme)
         {
             CurrentColorScheme = theme;
 
-            if (!themeExists(theme.Name))
+            if (!ThemeExists(theme.Name))
                 themeColection.Add(theme);
 
             return true;
         }
 
-        private void loadThemes()
+        private void LoadThemes()
         {
             ThemeColection.Clear();
             ThemeColection.Add(CurrentColorScheme);
@@ -106,7 +106,7 @@ namespace NarutoBot3
                 JsonConvert.PopulateObject(json, tmpScheme);
 
                 stream.Close();
-                if (!themeExists(tmpScheme.Name))
+                if (!ThemeExists(tmpScheme.Name))
                     ThemeColection.Add(tmpScheme);
             }
         }

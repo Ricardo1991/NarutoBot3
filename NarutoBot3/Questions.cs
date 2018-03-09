@@ -18,7 +18,7 @@ namespace NarutoBot3
             lp = LexicalizedParser.loadModel(@"models\lexparser\englishPCFG.ser.gz");
         }
 
-        public string getSubject(string question)
+        public string GetSubject(string question)
         {
             string subjectNPL = string.Empty;
 

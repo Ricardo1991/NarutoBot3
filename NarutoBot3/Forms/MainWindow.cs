@@ -363,7 +363,7 @@ namespace NarutoBot3
 
         private void ApplyTheme(string themeName)
         {
-            themes.selectTheme(themes.getThemeByName(themeName));
+            themes.SelectTheme(themes.GetThemeByName(themeName));
             RefreshTheme();
         }
 
@@ -776,6 +776,7 @@ namespace NarutoBot3
                 catch (IndexOutOfRangeException ex)
                 {
                     arg = String.Empty;
+                    Console.Out.WriteLine(ex.Message);
                 }
 
                 switch (command)

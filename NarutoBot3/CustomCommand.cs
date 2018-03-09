@@ -57,7 +57,7 @@ namespace NarutoBot3
             this.Author = author;
         }
 
-        public static List<CustomCommand> loadCustomCommands()
+        public static List<CustomCommand> LoadCustomCommands()
         {
             List<CustomCommand> command = new List<CustomCommand>();
             string line;
@@ -91,7 +91,7 @@ namespace NarutoBot3
             return command;
         }
 
-        public static void saveCustomCommands(List<CustomCommand> commands)
+        public static void SaveCustomCommands(List<CustomCommand> commands)
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/customCommands.txt", false))
             {
@@ -102,7 +102,7 @@ namespace NarutoBot3
             }
         }
 
-        public static bool commandExists(string name, List<CustomCommand> commands)
+        public static bool CommandExists(string name, List<CustomCommand> commands)
         {
             foreach (CustomCommand q in commands)
             {
@@ -113,7 +113,7 @@ namespace NarutoBot3
             return false;
         }
 
-        public static CustomCommand getCustomCommandByName(string name, List<CustomCommand> commands)
+        public static CustomCommand GetCustomCommandByName(string name, List<CustomCommand> commands)
         {
             foreach (CustomCommand q in commands)
             {
@@ -130,7 +130,7 @@ namespace NarutoBot3
             {
                 if (String.Compare(q.Name, name, true) == 0)
                 {
-                    commands.Remove(getCustomCommandByName(name, commands));
+                    commands.Remove(GetCustomCommandByName(name, commands));
                     return;
                 }
             }
