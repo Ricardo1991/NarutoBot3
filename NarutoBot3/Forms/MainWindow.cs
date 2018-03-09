@@ -27,10 +27,6 @@ namespace NarutoBot3
 
             LoadSettings();
 
-            bot = new Bot(ref OutputBox);
-            bot.UpdateTheme(themes.CurrentColorScheme);
-            InitializeBotEvents();
-
             string[] args = Environment.GetCommandLineArgs();
             foreach (string s in args)
             {
@@ -143,9 +139,9 @@ namespace NarutoBot3
         {
             ChangeConnectingLabel("Connecting...");
 
-            bot.Client.ChangeHomeChannel(Settings.Default.Channel);
-            bot.Client.ChangeHostPort(Settings.Default.Server, Settings.Default.Port);
-            bot.Client.ChangeNickRealName(Settings.Default.Nick, Settings.Default.RealName);
+            bot = new Bot(ref OutputBox);
+            bot.UpdateTheme(themes.CurrentColorScheme);
+            InitializeBotEvents();
 
             return bot.Connect();
         }
@@ -478,7 +474,7 @@ namespace NarutoBot3
             if (bot != null && !bot.userlist.UserIsOperator(nick))
                 contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.TakeOps(nick); }));
+                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.RemoveBotOperatorStatus(nick); }));
 
             if (bot != null && !bot.userlist.UserIsMuted(nick))
                 contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.MuteUser(nick); }));
@@ -499,15 +495,17 @@ namespace NarutoBot3
 
         private void DisconnectClient()
         {
-            if (bot != null)
-                bot.Disconnect(Settings.Default.quitMessage);
-
-            InterfaceUserList.DataSource = null;
-            UpdateDataSource();
-
             ChangeConnectingLabel("Disconnecting...");
             OutputClean();
             ChangeTitle("NarutoBot");
+
+            if (bot != null)
+            {
+                bot.Disconnect(Settings.Default.quitMessage);
+            }
+                
+            InterfaceUserList.DataSource = null;
+            UpdateDataSource();
 
             Thread.Sleep(250);
         }
@@ -534,11 +532,6 @@ namespace NarutoBot3
 
         private void ExitApplication()
         {
-            if (bot != null)
-            {
-                bot.userlist.SaveData();
-            }
-
             if (bot.Client != null && bot.Client.isConnected)
             {
                 DisconnectClient();
@@ -553,6 +546,10 @@ namespace NarutoBot3
                 }
                 catch { }
             }
+
+            ChangeConnectingLabel("Disconnected");
+            Application.Exit();
+            
         }
 
         private void FactsToolStripMenuItem_Click(object sender, EventArgs e)

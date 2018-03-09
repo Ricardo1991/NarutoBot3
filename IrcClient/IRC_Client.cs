@@ -86,33 +86,38 @@ namespace IrcClient
 
         public bool Connect(MessageReceived messageDelegate)
         {
+            if (backgroundWorker.IsBusy) return false;
+
             if (irc != null) irc.Close();
 
             if (HOST == null)
                 throw new Exception("Please provide the host");
 
-            irc = new TcpClient(HOST, PORT);
-            //irc.ReceiveTimeout = 5000;
-            stream = irc.GetStream();
-
-            reader = new StreamReader(stream);
-            writer = new StreamWriter(stream) { AutoFlush = true };
-
-            if (user_message == null || nick_message == null || join_message == null)
-                throw new Exception("Please provide channel, nick and realname");
-
             try
             {
+                irc = new TcpClient(HOST, PORT);
+
+                //irc.ReceiveTimeout = 5000;
+                stream = irc.GetStream();
+
+                reader = new StreamReader(stream);
+                writer = new StreamWriter(stream) { AutoFlush = true };
+
+                if (user_message == null || nick_message == null || join_message == null)
+                    throw new Exception("Please provide channel, nick and realname");
+
+
                 SendMessage(user_message);
                 SendMessage(nick_message);
                 backgroundWorker.RunWorkerAsync(messageDelegate);
 
                 return true;    //Weee, we connected!
+
             }
-            catch (SocketException se)
+            catch (SocketException ex)
             {
-                Console.Out.Write(se);
-                return false;   //Boo, we didnt connect
+                Console.Out.Write(ex.Message);
+                return false;
             }
         }
 
@@ -151,8 +156,9 @@ namespace IrcClient
                 writer.Flush();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.Out.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -191,6 +197,8 @@ namespace IrcClient
 
 #if DEBUG
                     messageDelegate(":Client 375 :#debug : " + ex.Message);
+                    Disconnect("Error");
+                    return;
 #endif
                 }
             }

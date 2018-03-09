@@ -43,9 +43,8 @@ namespace NarutoBot3
         public Bot(ref RichTextBox output)
         {
             OutputBox = output;
-            Client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
-                Settings.Default.Nick, Settings.Default.RealName);
 
+            InitiateClient();
             qq = new Questions();
 
             userlist.LoadData();
@@ -83,6 +82,13 @@ namespace NarutoBot3
                 TwitterLogOn();
         }
 
+        private void InitiateClient()
+        {
+            Client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
+                Settings.Default.Nick, Settings.Default.RealName);
+
+        }
+
         public event EventHandler<EventArgs> BotNickChanged;
 
         public event EventHandler<EventArgs> BotSilenced;
@@ -107,7 +113,6 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> Timeout;
         public event EventHandler<TopicChangedEventArgs> TopicChange;
         public event EventHandler<EventArgs> UpdateUserListSource;
-                //To check for connection lost
 
         public IRC_Client Client
         {
@@ -159,6 +164,7 @@ namespace NarutoBot3
 
         internal bool Connect()
         {
+            InitiateClient();
             if (Client.Connect(ProcessMessage))
             {
                 pingServerTimer.Enabled = true;
@@ -179,6 +185,8 @@ namespace NarutoBot3
             userlist.LoadData();
 
             pingServerTimer.Enabled = false;
+            if(timeoutTimer !=  null) timeoutTimer.Enabled = false;
+
             return client.Disconnect(quitMessage);
         }
 
@@ -264,7 +272,7 @@ namespace NarutoBot3
             }
         }
 
-        internal void TakeOps(string nick)
+        internal void RemoveBotOperatorStatus(string nick)
         {
             userlist.SetUserOperatorStatus(nick, false);
             userlist.SaveData();
@@ -2995,7 +3003,7 @@ namespace NarutoBot3
             if (!userlist.UserIsOperator(nick))
                 return false;
 
-            TakeOps(targetUser);
+            RemoveBotOperatorStatus(targetUser);
 
             message = new Notice(nick, targetUser + " was removed as a bot operator!");
             SendMessage(message);
@@ -3933,7 +3941,7 @@ namespace NarutoBot3
 
                     if (Settings.Default.autoScrollToBottom)
                     {
-                        OutputBox.SelectionStart = OutputBox.Text.Length;       //Set the current caret position at the end
+                        OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
                         OutputBox.ScrollToCaret();                          //Now scroll it automatically
                     }
                 }
