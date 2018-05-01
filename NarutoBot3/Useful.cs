@@ -150,7 +150,7 @@ namespace NarutoBot3
 
     public static class GetCompilationDate
     {
-        static public DateTime RetrieveLinkerTimestamp()
+        public static DateTime RetrieveLinkerTimestamp()
         {
             string filePath = System.Reflection.Assembly.GetCallingAssembly().Location;
             const int c_PeHeaderOffset = 60;

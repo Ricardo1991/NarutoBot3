@@ -554,7 +554,7 @@ namespace NarutoBot3
             else return UserMode + Nick;
         }
 
-        static public int Compare1(User x, User y)
+        public static int Compare1(User x, User y)
         {
             return x.ToString().CompareTo(y.ToString());
         }

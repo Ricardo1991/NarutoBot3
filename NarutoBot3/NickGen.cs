@@ -14,7 +14,7 @@ namespace NarutoBot3
             set { lineNumber = value; }
         }
 
-        static public string GenerateNick(List<string> _nickStrings, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
+        public static string GenerateNick(List<string> _nickStrings, int lineNumber, bool rd_numb, bool rd_uppr, bool rd_switch, bool rd_ique)
         {
             nickStrings = new List<string>();
             LineNumber = lineNumber;
@@ -24,7 +24,7 @@ namespace NarutoBot3
             return GenerateNick(rd_numb, rd_uppr, rd_switch, rd_ique);
         }
 
-        static public string ReplaceCharacter(int position, string word, char newChar)
+        public static string ReplaceCharacter(int position, string word, char newChar)
         {
             return word.Substring(0, position) + newChar + word.Substring(position + 1);
         }

@@ -8,7 +8,7 @@ namespace NarutoBot3
 {
     internal static class YoutubeUseful
     {
-        static public string GetYoutubeInfoFromID(string id)
+        public static string GetYoutubeInfoFromID(string id)
         {
             Youtube.YoutubeVideoInfo youtubeVideo = new Youtube.YoutubeVideoInfo();
 
@@ -33,7 +33,7 @@ namespace NarutoBot3
             return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
         }
 
-        static public string GetYoutubeIdFromURL(string url)
+        public static string GetYoutubeIdFromURL(string url)
         {
             string id;
 
@@ -49,10 +49,10 @@ namespace NarutoBot3
                     id = Useful.GetBetween(url, "&v=", "&");
             }
 
-            return id.Split(new char[] { ' ' }, 2)[0];
+            return id.Split(new char[] { ' ', '\\', '"' }, 2)[0];
         }
 
-        static public string ParseDuration(string duration)//PT#H#M#S
+        public static string ParseDuration(string duration)//PT#H#M#S
         {
             string temp = "";
             int hours = 0, minutes = 0, seconds = 0;

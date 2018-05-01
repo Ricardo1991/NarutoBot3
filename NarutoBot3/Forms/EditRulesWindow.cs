@@ -9,7 +9,7 @@ namespace NarutoBot3
     {
         private static List<string> rls = new List<string>();
 
-        static private void SaveRLS()
+        private static void SaveRLS()
         {
             using (StreamWriter newTask = new StreamWriter("TextFiles/rules.txt", false))
             {
