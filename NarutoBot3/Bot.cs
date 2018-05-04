@@ -1999,14 +1999,14 @@ namespace NarutoBot3
             Random r = new Random();
             IrcMessage message;
 
-            if (userlist.UserIsMuted(nick) || !Settings.Default.quotesEnabled) return;
+            if (userlist.UserIsMuted(nick) || !Settings.Default.quotesEnabled || StringLib.Quotes.Count == 0) return;
 
-            if (string.IsNullOrWhiteSpace(args) && StringLib.Quotes.Count > 0) //print random
+            if (string.IsNullOrWhiteSpace(args)) //print random
             {
                 PrintRandomQuote(CHANNEL);
                 return;
             }
-            else if (args[0] == '#')    //Print quote by number
+            else if (args.StartsWith("#")) //Print quote by number
             {
                 string split = args.Split(new char[] { ' ' }, 2)[0];
                 int number = Convert.ToInt32(split.Replace("#", string.Empty));
@@ -2427,11 +2427,7 @@ namespace NarutoBot3
                     {
                         cmd = cmd.Substring(1);
 
-                        if (string.Compare(msg, "!anime best anime ever", true) == 0)
-                        {
-                            SendMessage(new Privmsg(messageSource, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] -> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
-                        }
-                        else if (string.Compare(cmd, "help", true) == 0)
+                        if (string.Compare(cmd, "help", true) == 0)
                         {
                             WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                             Help(user);
@@ -2551,6 +2547,12 @@ namespace NarutoBot3
                         }
                         else if (string.Compare(cmd, "anime", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
+                            if (string.Compare(arg, "best anime ever", true) == 0)
+                            {
+                                SendMessage(new Privmsg(messageSource, "Code Geass: Hangyaku no Lelouch : [Finished Airing] [25 episodes] [8,86 / 10] " +
+                                    "-> http://myanimelist.net/anime/1575/Code_Geass:_Hangyaku_no_Lelouch"));
+                                return;
+                            }
                             WriteMessage("* Received a animeSearch request from " + user, currentColorScheme.BotReport);
                             AnimeSearch(messageSource, user, arg);
                         }

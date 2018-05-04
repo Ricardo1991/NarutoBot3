@@ -450,18 +450,10 @@ namespace NarutoBot3
 
             if (connectWindow.ShowDialog() == DialogResult.OK)
             {
-                //Re-do Connect!
-                if (bot.Client != null)
-                {
-                    if (bot.Client.isConnected)
+                if (bot.Client != null && bot.Client.isConnected)
                         DisconnectClient();
 
-                    TryToConnect();
-                }
-                else
-                {
-                    TryToConnect();
-                }
+                TryToConnect();
             }
         }
 
@@ -470,21 +462,25 @@ namespace NarutoBot3
             contextMenuUserList.Items.Clear();
         }
 
+        /// <summary>
+        /// Creates the context menu to be shown when user right clicks the userlist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ContextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
+            contextMenuUserList.Items.Clear();
             if (InterfaceUserList.SelectedIndex == -1) return;
 
-            contextMenuUserList.Items.Clear();
             string nick = Useful.RemoveUserMode(InterfaceUserList.SelectedItem.ToString());
 
             contextMenuUserList.Items.Add(nick);
-
             contextMenuUserList.Items.Add(new ToolStripSeparator());
 
             if (bot != null && !bot.userlist.UserIsOperator(nick))
-                contextMenuUserList.Items.Add("Give Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
+                contextMenuUserList.Items.Add("Give Bot Permissions", null, new EventHandler(delegate (object o, EventArgs a) { bot.GiveOps(nick); }));
             else
-                contextMenuUserList.Items.Add("Take Bot Ops", null, new EventHandler(delegate (object o, EventArgs a) { bot.RemoveBotOperatorStatus(nick); }));
+                contextMenuUserList.Items.Add("Remove Bot Permissions", null, new EventHandler(delegate (object o, EventArgs a) { bot.RemoveBotOperatorStatus(nick); }));
 
             if (bot != null && !bot.userlist.UserIsMuted(nick))
                 contextMenuUserList.Items.Add("Ignore", null, new EventHandler(delegate (object o, EventArgs a) { bot.MuteUser(nick); }));
@@ -492,10 +488,10 @@ namespace NarutoBot3
                 contextMenuUserList.Items.Add("Stop Ignoring", null, new EventHandler(delegate (object o, EventArgs a) { bot.UnmuteUser(nick); }));
 
             contextMenuUserList.Items.Add(new ToolStripSeparator());
-
             contextMenuUserList.Items.Add("Poke", null, new EventHandler(delegate (object o, EventArgs a) { bot.PokeUser(nick); }));
             contextMenuUserList.Items.Add("Whois", null, new EventHandler(delegate (object o, EventArgs a) { bot.WhoisUser(nick); }));
 
+            //Add kick option if the bot has kick permissions on channel
             if (bot.userlist.GetUserMode(bot.Client.NICK) == '@')
             {
                 contextMenuUserList.Items.Add(new ToolStripSeparator());
@@ -514,7 +510,6 @@ namespace NarutoBot3
                 bot.Disconnect(Settings.Default.quitMessage);
             }
                 
-            InterfaceUserList.DataSource = null;
             UpdateDataSource();
 
             Thread.Sleep(250);
@@ -639,18 +634,22 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Up)
             {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
                 if (lastCommand.Count > 0)
                 {
                     ChangeInput(lastCommand[(lastCommand.Count - 1) - lastCommandIndex]);
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-
+                    
                     if (lastCommandIndex + 1 < lastCommand.Count)
                         lastCommandIndex++;
                 }
             }
             else if (e.KeyCode == Keys.Down)
             {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
                 if (lastCommand.Count > 0 && lastCommandIndex > 0)
                 {
                     lastCommandIndex--;
@@ -658,25 +657,23 @@ namespace NarutoBot3
                         ChangeInput(lastCommand[(lastCommand.Count - 1) - lastCommandIndex]);
                     else
                         ChangeInput("");
-
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-
                 }
             }
             else lastCommandIndex = 0;
 
             if (e.KeyCode == Keys.Enter)
             {
-                lastCommand.Add(InputBox.Text);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+
+                lastCommand.Add(InputBox.Text);
 
                 if (string.IsNullOrEmpty(InputBox.Text)) return;
 
                 ParseInputMessage(InputBox.Text);
 
                 ChangeInput("");
+               
             }
         }
 

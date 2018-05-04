@@ -19,7 +19,7 @@ namespace NarutoBot3
         {
             TextWriter WriteFileStream = new StreamWriter("data.json", false);
 
-            WriteFileStream.Write(JsonConvert.SerializeObject(users, Formatting.Indented));
+            WriteFileStream.Write(JsonConvert.SerializeObject(Users, Formatting.Indented));
 
             WriteFileStream.Close();
         }
@@ -38,7 +38,7 @@ namespace NarutoBot3
                         MissingMemberHandling = MissingMemberHandling.Ignore,
                         DefaultValueHandling = DefaultValueHandling.Populate
                     };
-                    JsonConvert.PopulateObject(json, users, jss);
+                    JsonConvert.PopulateObject(json, Users, jss);
                     stream.Close();
                 }
                 catch
@@ -65,7 +65,7 @@ namespace NarutoBot3
                 u.IsOnline = status;
                 u.LastSeen = DateTime.UtcNow;
             }
-            else users.Add(new User(nick, status));
+            else Users.Add(new User(nick, status));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace NarutoBot3
                 {
                     IsOperator = status
                 };
-                users.Add(u);
+                Users.Add(u);
             }
         }
 
@@ -110,7 +110,7 @@ namespace NarutoBot3
                 {
                     IsMuted = status
                 };
-                users.Add(u);
+                Users.Add(u);
             }
         }
 
@@ -130,7 +130,7 @@ namespace NarutoBot3
                     Greeting = greeting,
                     GreetingEnabled = enabled
                 };
-                users.Add(u);
+                Users.Add(u);
             }
         }
 
@@ -300,7 +300,7 @@ namespace NarutoBot3
                     u.DeliveredMessages = new List<UserMessage>();
 
                 u.DeliveredMessages.Add(new UserMessage(message, sender));
-                users.Add(u);
+                Users.Add(u);
             }
         }
 
