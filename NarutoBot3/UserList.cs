@@ -26,24 +26,29 @@ namespace NarutoBot3
 
         public void LoadData()
         {
-            try
+            if (File.Exists("data.json"))
             {
-                TextReader stream = new StreamReader("data.json");
-                string json = stream.ReadToEnd();
-
-                JsonSerializerSettings jss = new JsonSerializerSettings()
+                try
                 {
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    DefaultValueHandling = DefaultValueHandling.Populate
-                };
-                JsonConvert.PopulateObject(json, users, jss);
-                stream.Close();
+                    TextReader stream = new StreamReader("data.json");
+                    string json = stream.ReadToEnd();
+
+                    JsonSerializerSettings jss = new JsonSerializerSettings()
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
+                        DefaultValueHandling = DefaultValueHandling.Populate
+                    };
+                    JsonConvert.PopulateObject(json, users, jss);
+                    stream.Close();
+                }
+                catch
+                {
+                    File.Move("data.json", "data.json.bak");
+                    users = new List<User>();
+                }
             }
-            catch
-            {
-                System.IO.File.Move("data.json", "data.json.bak");
+            else
                 users = new List<User>();
-            }
         }
 
         /// <summary>
