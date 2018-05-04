@@ -84,9 +84,9 @@ namespace IrcClient
             nick_message = new Nick(NICK);
         }
 
-        public bool Connect(MessageReceived messageDelegate)
+        public void Connect(MessageReceived messageDelegate)
         {
-            if (backgroundWorker.IsBusy) return false;
+            if (backgroundWorker.IsBusy) throw new WorkerIsBusyException("Worker is busy");
 
             if (irc != null) irc.Close();
 
@@ -111,13 +111,11 @@ namespace IrcClient
                 SendMessage(nick_message);
                 backgroundWorker.RunWorkerAsync(messageDelegate);
 
-                return true;    //Weee, we connected!
-
             }
             catch (SocketException ex)
             {
                 Console.Out.Write(ex.Message);
-                return false;
+                throw ex;
             }
         }
 

@@ -14,12 +14,17 @@ namespace NarutoBot3
     public partial class MainWindow : Form
     {
         private Bot bot;
-
-        private List<string> lastCommand = new List<string>();
+        private ThemeCollection themes = new ThemeCollection();
 
         private int lastCommandIndex = 0;
+        private List<string> lastCommand = new List<string>();
 
-        private ThemeCollection themes = new ThemeCollection();
+        private delegate void ChangeDataSource();
+        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
+        private delegate void SetBoolCallback(bool status);
+        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+        private delegate void SetTextCallback(string text);
+
 
         public MainWindow()
         {
@@ -32,7 +37,7 @@ namespace NarutoBot3
             {
                 if (s.ToLower().CompareTo("skip") == 0)
                 {
-                    TryConnect();
+                    TryToConnect();
                     return;
                 }
             }
@@ -43,19 +48,14 @@ namespace NarutoBot3
             if (connectWindow.ShowDialog() == DialogResult.OK)
             {
                 UpdateSilenceMarks();
-                TryConnect();
+                TryToConnect();
             }
         }
 
-        private delegate void ChangeDataSource();
-
-        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
-
-        private delegate void SetBoolCallback(bool status);
-
-        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-
-        private delegate void SetTextCallback(string text);
+        /// <summary>
+        /// Change status label
+        /// </summary>
+        /// <param name="message">Text to display on status label</param>
         public void ChangeConnectingLabel(string message)
         {
             try
@@ -65,16 +65,22 @@ namespace NarutoBot3
             catch { }
         }
 
-        public void ChangeInput(string title)
+        /// <summary>
+        /// Change text in inputbox
+        /// </summary>
+        /// <param name="text"></param>
+        public void ChangeInput(string text)
         {
             if (InputBox.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(ChangeInput);
-                this.Invoke(d, new object[] { title });
+                Invoke(d, new object[] { text });
             }
             else
             {
-                this.InputBox.Text = title;
+                InputBox.Text = text;
+                InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
+                InputBox.ScrollToCaret();                          //Now scroll it automatically
             }
         }
 
@@ -135,17 +141,6 @@ namespace NarutoBot3
             }
         }
 
-        public bool Connect()
-        {
-            ChangeConnectingLabel("Connecting...");
-
-            bot = new Bot(ref OutputBox);
-            bot.UpdateTheme(themes.CurrentColorScheme);
-            InitializeBotEvents();
-
-            return bot.Connect();
-        }
-
         public void DuplicatedNick(object sender, EventArgs e)
         {
             Random r = new Random();
@@ -157,7 +152,7 @@ namespace NarutoBot3
                 Settings.Default.Nick = bot.Client.NICK + r.Next(10);
                 Settings.Default.Save();
 
-                TryConnect();
+                TryToConnect();
             }
         }
 
@@ -174,13 +169,15 @@ namespace NarutoBot3
             ExitApplication();
         }
 
+        /// <summary>
+        /// Update the bot UI and settings based on the available API keys and other settings
+        /// </summary>
         public void LoadSettings()
         {
             UpdateSilenceMarks();
             CheckTwitterApi();
             CheckGoogleApi();
 
-            //Themes
             ApplyTheme(Settings.Default.themeName);
 
             if (Settings.Default.malPass.Length < 2 || Settings.Default.malUser.Length < 2)
@@ -189,20 +186,15 @@ namespace NarutoBot3
             if (string.IsNullOrEmpty(Settings.Default.redditUser) || string.IsNullOrEmpty(Settings.Default.redditPass))
                 Settings.Default.redditEnabled = false;
 
-            Settings.Default.releaseEnabled = false;
+            forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
 
-            if (Settings.Default.enforceMirrorOff)
-            {
-                forceMirrorModeOffToolStripMenuItem.Checked = true;
-            }
-            else
-            {
-                forceMirrorModeOffToolStripMenuItem.Checked = false;
-            }
 
             Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Clears the UI console (chat window)
+        /// </summary>
         public void OutputClean()
         {
             if (OutputBox.InvokeRequired)
@@ -220,11 +212,17 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Reapplies the current theme
+        /// </summary>
         public void RefreshTheme(object sender, EventArgs e)
         {
             RefreshTheme();
         }
 
+        /// <summary>
+        /// Reapplies the current theme
+        /// </summary>
         public void RefreshTheme()
         {
             this.OutputBox.BackColor = themes.CurrentColorScheme.MainWindowBG;
@@ -245,16 +243,25 @@ namespace NarutoBot3
                 bot.UpdateTheme(themes.CurrentColorScheme);
         }
 
-        public bool TryConnect()
+        public void TryToConnect()
         {
-            bool success = this.Connect();
-            if (!success)
+            ChangeConnectingLabel("Connecting...");
+
+            bot = new Bot(ref OutputBox);
+            bot.UpdateTheme(themes.CurrentColorScheme);
+            InitializeBotEvents();
+
+            try
             {
-                MessageBox.Show("Connection Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                bot.Connect(); 
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Connection Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
             }
 
-            return success;
         }
         public void UpdateDataSource(object source, EventArgs e)
         {
@@ -361,6 +368,10 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Applies and refreshes the UI theme
+        /// </summary>
+        /// <param name="themeName">Name of the theme to apply</param>
         private void ApplyTheme(string themeName)
         {
             themes.SelectTheme(themes.GetThemeByName(themeName));
@@ -406,6 +417,9 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Disables the google functionalities if the API keys are not provided
+        /// </summary>
         private void CheckGoogleApi()
         {
             if (Settings.Default.cxKey.Length < 5 || Settings.Default.apikey.Length < 5)
@@ -418,6 +432,9 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Disables the twitter functionality is the API keys are not provided
+        /// </summary>
         private void CheckTwitterApi()
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.twitterAccessToken) ||
@@ -439,18 +456,11 @@ namespace NarutoBot3
                     if (bot.Client.isConnected)
                         DisconnectClient();
 
-                    TryConnect();
+                    TryToConnect();
                 }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(Settings.Default.Channel)) Settings.Default.Channel = "#reddit-naruto";
-                    if (string.IsNullOrWhiteSpace(Settings.Default.Server)) Settings.Default.Server = "irc.freenode.net";
-                    if (string.IsNullOrWhiteSpace(Settings.Default.Nick)) Settings.Default.Nick = "NarutoBot";
-                    if (Convert.ToInt32(Settings.Default.Port) <= 0 || Convert.ToInt32(Settings.Default.Port) > 65535) Settings.Default.Port = 6667.ToString();
-
-                    Settings.Default.Save();
-
-                    TryConnect();
+                    TryToConnect();
                 }
             }
         }
@@ -631,12 +641,9 @@ namespace NarutoBot3
             {
                 if (lastCommand.Count > 0)
                 {
-                    InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
+                    ChangeInput(lastCommand[(lastCommand.Count - 1) - lastCommandIndex]);
                     e.Handled = true;
                     e.SuppressKeyPress = true;
-
-                    InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
-                    InputBox.ScrollToCaret();                          //Now scroll it automatically
 
                     if (lastCommandIndex + 1 < lastCommand.Count)
                         lastCommandIndex++;
@@ -648,15 +655,13 @@ namespace NarutoBot3
                 {
                     lastCommandIndex--;
                     if (lastCommandIndex > 0)
-                        InputBox.Text = lastCommand[(lastCommand.Count - 1) - lastCommandIndex];
+                        ChangeInput(lastCommand[(lastCommand.Count - 1) - lastCommandIndex]);
                     else
-                        InputBox.Text = "";
+                        ChangeInput("");
 
                     e.Handled = true;
                     e.SuppressKeyPress = true;
 
-                    InputBox.SelectionStart = InputBox.Text.Length;    //Set the current caret position at the end
-                    InputBox.ScrollToCaret();                          //Now scroll it automatically
                 }
             }
             else lastCommandIndex = 0;
@@ -675,6 +680,11 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Catches MouseDown events on the user list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InterfaceUserList_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -947,7 +957,7 @@ namespace NarutoBot3
             ChangeConnectingLabel("Re-Connecting...");
             WriteMessage("* The connection timed out. Will try to reconnect.");
 
-            TryConnect();
+            TryToConnect();
         }
 
         private void TriviaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -974,6 +984,9 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Show's or hides the UI silenced status based on settings
+        /// </summary>
         private void UpdateSilenceMarks()
         {
             if (Settings.Default.silence == true)

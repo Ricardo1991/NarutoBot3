@@ -65,6 +65,11 @@ namespace NarutoBot3
             }
         }
 
+        /// <summary>
+        /// Get a theme by name, returns the default theme if the specified theme was not found
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ColorScheme GetThemeByName(string name)
         {
             ColorScheme color = new ColorScheme();

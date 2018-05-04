@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
@@ -162,18 +163,25 @@ namespace NarutoBot3
             else return false;
         }
 
-        internal bool Connect()
+        internal void Connect()
         {
             InitiateClient();
-            if (Client.Connect(ProcessMessage))
+            try
             {
+                Client.Connect(ProcessMessage);
                 pingServerTimer.Enabled = true;
-                return true;
+                
             }
-            else
+            catch (WorkerIsBusyException ex)
+            {
+                //Maybe create a new Client here...
+                pingServerTimer.Enabled = false;
+                throw ex;
+            }
+            catch (SocketException ex)
             {
                 pingServerTimer.Enabled = false;
-                return false;
+                throw ex;
             }
         }
 
