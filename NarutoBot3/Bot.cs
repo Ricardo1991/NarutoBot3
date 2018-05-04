@@ -2335,7 +2335,7 @@ namespace NarutoBot3
 
                     string user;
                     string messageSource = messageObject.Source;            //Who sent is the Source of the Message. (The Channel, or User if private Message)
-                    string msg = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                    string msg = messageObject.SplitMessage[1].Replace("\r", string.Empty).Replace("\n", string.Empty);
                     string cmd = msg.Split(' ')[0];
                     string arg = "";
 
@@ -2423,7 +2423,9 @@ namespace NarutoBot3
                         WriteMessage("* Received a gg ez from " + user, currentColorScheme.BotReport);
                         DoGgEz(messageSource, user);
                     }
-                    else if (cmd[0] == Client.SYMBOL)   //Bot Command
+
+                    //Bot Command
+                    else if (cmd.StartsWith(Client.SYMBOL.ToString()))
                     {
                         cmd = cmd.Substring(1);
 

@@ -11,7 +11,7 @@
 
         public override string toString()
         {
-            return header + " " + destinatary + " :" + body.Trim() + footer;
+            return header + " " + destinatary + " :" + body + footer;
         }
 
         public override bool isValid()
