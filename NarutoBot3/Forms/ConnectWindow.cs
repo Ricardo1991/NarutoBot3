@@ -24,7 +24,8 @@ namespace NarutoBot3
 
         private void b_Conect_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            if (!ValidateFields())
+                return;
 
             if (alreadyConencted)
             {
@@ -36,12 +37,10 @@ namespace NarutoBot3
                     this.DialogResult = DialogResult.No;
                     return;
                 }
-                else
-                    save();
             }
-            else
-                save();
 
+            Save();
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -55,7 +54,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                save();
+                Save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -67,7 +66,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                save();
+                Save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -85,7 +84,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                save();
+                Save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -97,7 +96,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                save();
+                Save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -109,7 +108,7 @@ namespace NarutoBot3
         {
             if (e.KeyCode == Keys.Enter)
             {
-                save();
+                Save();
 
                 //do connect after this
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -117,7 +116,7 @@ namespace NarutoBot3
             }
         }
 
-        private void save()
+        private void Save()
         {
             Settings.Default.Channel = t_Channel.Text;
             Settings.Default.Nick = t_BotNick.Text;
@@ -125,7 +124,22 @@ namespace NarutoBot3
             Settings.Default.Port = t_port.Text;
             Settings.Default.RealName = t_RealName.Text;
             Settings.Default.silence = cb_silence.Checked;
+
             Settings.Default.Save();
+        }
+
+        private bool ValidateFields()
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Default.Channel) ||
+               string.IsNullOrWhiteSpace(Settings.Default.Server) ||
+               string.IsNullOrWhiteSpace(Settings.Default.Nick) ||
+               Convert.ToInt32(Settings.Default.Port) <= 0 ||
+               Convert.ToInt32(Settings.Default.Port) > 65535)
+            {
+                MessageBox.Show("Please fill all the fields with correct information", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
     }
 }
