@@ -859,6 +859,51 @@ namespace NarutoBot3
             SendMessage(message);
         }
 
+        private void SquareText(string CHANNEL, string text)
+        {
+            int MAX_TEXT = 15;
+
+            if (text.Length > MAX_TEXT)
+            {
+                return;
+            }
+            else
+            {
+                for (int i = 0; i <= text.Length - 1; i++)
+                {
+                    if (i == 0)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        foreach (char value in text.ToCharArray())
+                        {
+                            builder.Append(value + " ");
+                        }
+                        String msg = builder.ToString();
+                        IrcMessage message = new Privmsg(CHANNEL, (msg.ToUpper()));
+                        SendMessage(message);
+                    }
+                    else if (i == text.Length - 1)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        foreach (char value in text.ToCharArray().Reverse())
+                        {
+                            builder.Append(value + " ");
+                        }
+                        String msg = builder.ToString();
+                        IrcMessage message = new Privmsg(CHANNEL, (msg.ToUpper()));
+                        SendMessage(message);
+                    }
+                    else
+                    {
+                        String msg = null;
+                        msg = text[i] + new String(' ', text.Length + (text.Length - 3)) + text[text.Length - 1 - i];
+                        IrcMessage message = new Privmsg(CHANNEL, (msg.ToUpper()));
+                        SendMessage(message);
+                    }
+                }
+            }
+        }
+
         private void DoGgEz(string CHANNEL, string nick)
         {
             if (userlist.UserIsMuted(nick)) return;
@@ -2433,6 +2478,11 @@ namespace NarutoBot3
                         {
                             WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                             Help(user);
+                        }
+                        else if ((string.Compare(cmd, "square", true) == 0 || string.Compare(cmd, "s", true) == 0) && !string.IsNullOrWhiteSpace(arg))
+                        {
+                            WriteMessage("* Received a squared text request from " + user, currentColorScheme.BotReport);
+                            SquareText(messageSource, arg);
                         }
                         else if (string.Compare(cmd, "mirror", true) == 0)
                         {
