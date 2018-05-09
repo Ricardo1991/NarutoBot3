@@ -859,12 +859,13 @@ namespace NarutoBot3
             SendMessage(message);
         }
 
-        private void SquareText(string CHANNEL, string text)
+        private void SquareText(string CHANNEL, string text, string user)
         {
-            int MAX_TEXT = 15;
+            int MAX_TEXT = 10;
 
             if (text.Length > MAX_TEXT)
             {
+                IrcMessage message = new ActionMessage(CHANNEL, "farts on " + user);
                 return;
             }
             else
@@ -2482,7 +2483,7 @@ namespace NarutoBot3
                         else if ((string.Compare(cmd, "square", true) == 0 || string.Compare(cmd, "s", true) == 0) && !string.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("* Received a squared text request from " + user, currentColorScheme.BotReport);
-                            SquareText(messageSource, arg);
+                            SquareText(messageSource, arg, user);
                         }
                         else if (string.Compare(cmd, "mirror", true) == 0)
                         {
