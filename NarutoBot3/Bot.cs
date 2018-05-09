@@ -866,6 +866,7 @@ namespace NarutoBot3
             if (text.Length > MAX_TEXT)
             {
                 IrcMessage message = new ActionMessage(CHANNEL, "farts on " + user);
+                SendMessage(message);
                 return;
             }
             else
