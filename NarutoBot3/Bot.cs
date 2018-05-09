@@ -2771,7 +2771,7 @@ namespace NarutoBot3
                         WriteMessage("* Detected an url from " + user, currentColorScheme.BotReport);
                         UrlTitle(messageSource, user, msg);
                     }
-                    else if (msg.TrimEnd('?').EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
+                    else if (msg.TrimEnd(new char[]{ '?',' '}).EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
                     {
                         WriteMessage("* Detected a think message from " + user, currentColorScheme.BotReport);
                         BotThink(messageSource, msg, user);
