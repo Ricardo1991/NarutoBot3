@@ -1020,5 +1020,10 @@ namespace NarutoBot3
 
             UpdateDataSource();
         }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ExitApplication();
+        }
     }
 }
