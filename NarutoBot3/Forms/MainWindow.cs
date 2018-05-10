@@ -537,20 +537,8 @@ namespace NarutoBot3
 
         private void ExitApplication()
         {
-            if (bot.Client != null && bot.Client.isConnected)
-            {
-                DisconnectClient();
-            }
 
-            if (this.InvokeRequired)
-            {
-                try
-                {
-                    MethodInvoker invoker = () => Close();
-                    Invoke(invoker);
-                }
-                catch { }
-            }
+            DisconnectClient();
 
             ChangeConnectingLabel("Disconnected");
             Application.Exit();
