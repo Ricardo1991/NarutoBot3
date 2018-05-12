@@ -2105,6 +2105,12 @@ namespace NarutoBot3
             stats.Quote();
         }
 
+        private void QuoteCount(string CHANNEL)
+        {
+            IrcMessage message = new Privmsg(CHANNEL, StringLib.Quotes.Count.ToString());
+            SendMessage(message);
+        }
+
         private void ProcessMessage(string message)
         {
             if (string.IsNullOrEmpty(message)) return;
@@ -2480,6 +2486,11 @@ namespace NarutoBot3
                         {
                             WriteMessage("* Received a Help request from " + user, currentColorScheme.BotReport);
                             Help(user);
+                        }
+                        else if (string.Compare(cmd, "qcount", true) == 0)
+                        {
+                            WriteMessage("* Received a quote count request from " + user, currentColorScheme.BotReport);
+                            QuoteCount(messageSource);
                         }
                         else if ((string.Compare(cmd, "square", true) == 0 || string.Compare(cmd, "s", true) == 0) && !string.IsNullOrWhiteSpace(arg))
                         {
