@@ -2146,6 +2146,11 @@ namespace NarutoBot3
                 case ("255"):
                 case ("265"):
                 case ("266"):
+                    WriteMessage(messageObject.SplitMessage[0]);
+                    break;
+                case ("301"):
+                    UserAway(messageObject);
+                    break;
                 case ("333"): //Topic author and Time
                 case ("366"): //End of /NAMES
                 case ("375"): //START OF MOTD
@@ -2879,6 +2884,19 @@ namespace NarutoBot3
                     break;
             }
         }
+
+        private void UserAway(ParsedMessage messageObject)
+        {
+            string awayUser = Useful.RemoveUserMode(messageObject.SplitMessage[1]);
+            awayUser = awayUser.Truncate(13);
+            int tab = 15 - awayUser.Length;
+
+            for (int i = 0; i < tab; i++)
+                awayUser = awayUser + " ";
+
+            WriteMessage(awayUser + ": " + messageObject.SplitMessage[2], currentColorScheme.Notice);
+        }
+
         private bool QuitIRC(string nick)
         {
             if (userlist.UserIsOperator(nick))
