@@ -1317,11 +1317,31 @@ namespace NarutoBot3
                 TimeSpan diff = DateTime.Now.ToUniversalTime().Subtract(m.Timestamp);
 
                 string timeDiff = "";
+                int years = 0;
 
                 //TODO: Simplify the if/elses here
                 if (diff.Days > 3)
                 {
-                    timeDiff += diff.Days + " days ago";
+                    years = diff.Days / 365;
+
+                    if (years >= 1)
+                    {
+                        if (years == 1)
+                            timeDiff += years + " year, ";
+                        else
+                            timeDiff += years + " years, ";
+
+                        TimeSpan s = new TimeSpan(365 * years, 0, 0, 0);
+                        diff = diff.Subtract(s);
+
+                        if (diff.Days >= 1)
+                            if (diff.Days == 1)
+                                timeDiff += diff.Days + " day ago";
+                            else
+                                timeDiff += diff.Days + " days ago";
+                    }
+                    else
+                        timeDiff += diff.Days + " days ago";
                 }
                 else
                 {
