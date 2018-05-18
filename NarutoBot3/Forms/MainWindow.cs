@@ -446,7 +446,7 @@ namespace NarutoBot3
 
         private void ConnectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
-            ConnectWindow connectWindow = new ConnectWindow(bot.Client != null && bot.Client.isConnected);
+            ConnectWindow connectWindow = new ConnectWindow(bot!= null && bot.Client != null && bot.Client.isConnected);
 
             if (connectWindow.ShowDialog() == DialogResult.OK)
             {
