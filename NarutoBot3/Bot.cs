@@ -3847,7 +3847,7 @@ namespace NarutoBot3
             if (Settings.Default.silence == true || Settings.Default.twitterEnabled == false) return;
             else
             {
-                string ID = Useful.GetBetween(line, "/status/", "?");
+                string ID = Useful.GetBetween(line, "/status/", "?").Split('/')[0];
                 long tweetID = Convert.ToInt64(ID);
 
                 try { 
