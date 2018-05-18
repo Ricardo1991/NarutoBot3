@@ -100,8 +100,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cleverbot.Net">
-      <HintPath>..\packages\Cleverbot.0.9.0\Cleverbot.Net.dll</HintPath>
+    <Reference Include="Cleverbot.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cleverbot.1.0.0\lib\Cleverbot.Net.dll</HintPath>
     </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.Parser.3.8.0.0\lib\ejml-0.23.dll</HintPath>
@@ -224,9 +224,11 @@
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RedditSharp, Version=1.1.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RedditSharp.1.1.14\lib\net461\RedditSharp.dll</HintPath>
     </Reference>
     <Reference Include="slf4j-api, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.Parser.3.8.0.0\lib\slf4j-api.dll</HintPath>
@@ -433,10 +435,6 @@
     <ProjectReference Include="..\MarkovChainSentenceGeneratorGit\TextMarkovChains\TextMarkovChains.csproj">
       <Project>{fc6d37a9-a17a-4d22-8fca-91a9fef74152}</Project>
       <Name>TextMarkovChains</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RedditSharp\RedditSharp\RedditSharp.csproj">
-      <Project>{a368cb75-75f0-4489-904d-b5cebb0fe624}</Project>
-      <Name>RedditSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
