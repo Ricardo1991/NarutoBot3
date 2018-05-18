@@ -2951,13 +2951,9 @@ namespace NarutoBot3
                 else
                     target = args.Trim();
 
-                if (!StringLib.Killgen.readyToGenerate())
+                try
                 {
-                    message = new Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
-                }
-                else
-                {
-                    killString = StringLib.Killgen.generateSentence();
+                    killString = StringLib.getRandomKillString();
 
                     killString = Useful.FillTags(killString, nick.Trim(), target, userlist);
 
@@ -2970,6 +2966,10 @@ namespace NarutoBot3
                         message = new ActionMessage(CHANNEL, killString);
 
                     message.body = message.body.Replace("  ", " ");
+                }
+                catch (Exception ex)
+                {
+                    message = new Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
                 }
 
                 SendMessage(message);

@@ -1,7 +1,8 @@
 ﻿using NarutoBot3.Properties;
 using System.Collections.Generic;
 using System.IO;
-using TextMarkovChains;
+using System;
+using MarkovSharp.TokenisationStrategies;
 
 namespace NarutoBot3
 {
@@ -20,7 +21,7 @@ namespace NarutoBot3
         private List<int> killsUsed = new List<int>();
         private List<int> factsUsed = new List<int>();
 
-        private TextMarkovChain killgen = new TextMarkovChain();
+        private StringMarkov killgen = new StringMarkov();
 
         public List<string> Rules { get => rls; set => rls = value; }
         public List<string> Help { get => hlp; set => hlp = value; }
@@ -33,7 +34,7 @@ namespace NarutoBot3
         public List<CustomCommand> CustomCommands { get => customCommands; set => customCommands = value; }
         public List<int> KillsUsed { get => killsUsed; set => killsUsed = value; }
         public List<int> FactsUsed { get => factsUsed; set => factsUsed = value; }
-        public TextMarkovChain Killgen { get => killgen; set => killgen = value; }
+        public StringMarkov Killgen { get => killgen; set => killgen = value; }
 
         public StringLibrary()
         {
@@ -170,7 +171,7 @@ namespace NarutoBot3
         {
             Kill.Clear();
             KillsUsed.Clear();
-            Killgen = new TextMarkovChain();
+            Killgen = new StringMarkov();
 
             if (File.Exists("TextFiles/kills.txt"))
             {
@@ -184,7 +185,7 @@ namespace NarutoBot3
                         if (killS.Length > 1 && !(killS[0] == '/' && killS[1] == '/'))
                         {
                             Kill.Add(killS);
-                            Killgen.feed(killS);
+                            Killgen.Learn(killS);
                         }
                     }
 
@@ -199,6 +200,13 @@ namespace NarutoBot3
                 Settings.Default.killEnabled = false;
                 Settings.Default.Save();
             }
+        }
+
+        internal string getRandomKillString()
+        {
+            string s = Killgen.RebuildPhrase(Killgen.Walk());
+
+            return s;
         }
 
         private void ReadFacts()
@@ -400,5 +408,7 @@ namespace NarutoBot3
                 }
             }
         }
+
+
     }
 }
