@@ -87,7 +87,6 @@ namespace NarutoBot3
         {
             Client = new IRC_Client(Settings.Default.Channel, Settings.Default.Server, Convert.ToInt32(Settings.Default.Port),
                 Settings.Default.Nick, Settings.Default.RealName);
-
         }
 
         public event EventHandler<EventArgs> BotNickChanged;
@@ -103,6 +102,7 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> Created;
 
         public event EventHandler<EventArgs> DuplicatedNick;
+
         public event EventHandler<EventArgs> EnforceMirrorChanged;
 
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
@@ -112,7 +112,9 @@ namespace NarutoBot3
         public event EventHandler<EventArgs> Quit;
 
         public event EventHandler<EventArgs> Timeout;
+
         public event EventHandler<TopicChangedEventArgs> TopicChange;
+
         public event EventHandler<EventArgs> UpdateUserListSource;
 
         public IRC_Client Client
@@ -170,7 +172,6 @@ namespace NarutoBot3
             {
                 Client.Connect(ProcessMessage);
                 pingServerTimer.Enabled = true;
-                
             }
             catch (WorkerIsBusyException ex)
             {
@@ -193,7 +194,7 @@ namespace NarutoBot3
             userlist.LoadData();
 
             pingServerTimer.Enabled = false;
-            if(timeoutTimer !=  null) timeoutTimer.Enabled = false;
+            if (timeoutTimer != null) timeoutTimer.Enabled = false;
 
             return client.Disconnect(quitMessage);
         }
@@ -381,14 +382,17 @@ namespace NarutoBot3
         {
             TopicChange?.Invoke(this, e);
         }
+
         protected virtual void OnUnsilence(EventArgs e)
         {
             BotUnsilenced?.Invoke(this, e);
         }
+
         protected virtual void OnUpdateUserListSource(UserJoinLeftMessageEventArgs e)
         {
             UpdateUserListSource?.Invoke(this, e);
         }
+
         private static string QuestionsRegex(string rest)
         {
             var someVariable1 = "you";
@@ -539,7 +543,6 @@ namespace NarutoBot3
 
             webClient.Credentials = new NetworkCredential(Settings.Default.malUser, Settings.Default.malPass);
 
-           
             if ((googleObject = GoogleAnimeSearch(query)) == null)
             {
                 SendMessage(new Privmsg(CHANNEL, "[Error] Google Search failed"));
@@ -555,7 +558,7 @@ namespace NarutoBot3
             if (googleObject.items.Length < 5)
                 i_max = googleObject.items.Length - 1;
 
-            for(int i = 0; i <= i_max; i++)
+            for (int i = 0; i <= i_max; i++)
             {
                 if (googleObject.items[i].link.Contains("myanimelist.net/anime/"))
                 {
@@ -632,7 +635,7 @@ namespace NarutoBot3
                     if (episodes == "0")
                         episodes = "?";
 
-                    message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" + 
+                    message = new Privmsg(CHANNEL, "\x02" + title + "\x02 : " + "[" + status + "] " + "[" +
                         episodes + " episode" + (episodes == "1" ? "" : "s") + "] " + "[" + score + " / 10] " + "-> " + searchResultURL);
                 }
             }
@@ -950,8 +953,6 @@ namespace NarutoBot3
                 Settings.Default.silence == true || Settings.Default.factsEnabled == false)
 
                 return;
-
-            
 
             if (string.IsNullOrWhiteSpace(args) || args.ToLower() == "random")
                 target = listU[r.Next((listU.Count))].Nick;
@@ -2168,9 +2169,11 @@ namespace NarutoBot3
                 case ("266"):
                     WriteMessage(messageObject.SplitMessage[0]);
                     break;
+
                 case ("301"):
                     UserAway(messageObject);
                     break;
+
                 case ("333"): //Topic author and Time
                 case ("366"): //End of /NAMES
                 case ("375"): //START OF MOTD
@@ -2809,7 +2812,7 @@ namespace NarutoBot3
                         WriteMessage("* Detected an url from " + user, currentColorScheme.BotReport);
                         UrlTitle(messageSource, user, msg);
                     }
-                    else if (msg.TrimEnd(new char[]{ '?',' '}).EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
+                    else if (msg.TrimEnd(new char[] { '?', ' ' }).EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
                     {
                         WriteMessage("* Detected a think message from " + user, currentColorScheme.BotReport);
                         BotThink(messageSource, msg, user);
@@ -2969,6 +2972,7 @@ namespace NarutoBot3
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error BOT randomkill :" + ex.Message);
                     message = new Privmsg(CHANNEL, "Sorry, i can't think of a random kill right now.");
                 }
 
@@ -3070,8 +3074,9 @@ namespace NarutoBot3
 
                     if (linkParse.Length >= 7 && !string.IsNullOrEmpty(linkParse[6]) && !linkParse[6].StartsWith("?"))   //With Comment
                     {
-                        if (linkParse[6].Contains('/')) { 
-                            linkParse[6] = linkParse[6].Substring(0,linkParse[6].LastIndexOf('/'));
+                        if (linkParse[6].Contains('/'))
+                        {
+                            linkParse[6] = linkParse[6].Substring(0, linkParse[6].LastIndexOf('/'));
                             url = url.Substring(0, url.LastIndexOf('/'));
                         }
 
@@ -3850,8 +3855,9 @@ namespace NarutoBot3
                 string ID = Useful.GetBetween(line, "/status/", "?").Split('/')[0];
                 long tweetID = Convert.ToInt64(ID);
 
-                try { 
-                    TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID,});
+                try
+                {
+                    TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID, });
 
                     author = HttpUtility.HtmlDecode(tweetResult.Author.ScreenName);
                     tweet = HttpUtility.HtmlDecode(tweetResult.TextDecoded.Replace("\n", " "));
@@ -3859,9 +3865,7 @@ namespace NarutoBot3
                     IrcMessage message = new Privmsg(CHANNEL, "Tweet by @" + author + ": " + tweet);
 
                     SendMessage(message);
-
                 }
-
                 catch
                 {
                     SendMessage(new Privmsg(CHANNEL, "Error"));
@@ -3960,6 +3964,7 @@ namespace NarutoBot3
             WriteMessage("** " + whoLeft + " parted (" + quitMessage.Trim() + ")", currentColorScheme.Leave);
             return quitMessage;
         }
+
         private void Vimeo(string CHANNEL, string nick, string line)
         {
             if (userlist.UserIsMuted(nick)) return;
@@ -4122,6 +4127,7 @@ namespace NarutoBot3
                 SendMessage(message);
             }
         }
+
         private void YoutubeSearch(string CHANNEL, string nick, string query)
         {
             IrcMessage message;

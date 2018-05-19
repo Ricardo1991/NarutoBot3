@@ -1,4 +1,5 @@
 ﻿#pragma warning disable IDE1006 // Naming Styles
+
 namespace MyAnimeList
 {
     /// <remarks/>
@@ -660,6 +661,4 @@ namespace MyAnimeList
             }
         }
     }
-
-
 }

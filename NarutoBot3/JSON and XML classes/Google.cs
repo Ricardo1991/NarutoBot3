@@ -4,14 +4,12 @@ namespace Google
 {
     public class GoogleSearch
     {
-
         public string kind { get; set; }
         public Url url { get; set; }
         public Queries queries { get; set; }
         public Context context { get; set; }
         public Searchinformation searchInformation { get; set; }
         public Item[] items { get; set; }
-
 
         public class Url
         {
@@ -104,7 +102,6 @@ namespace Google
         }
     }
 
-
     public class GoogleTimeZone
     {
         public int DSTOffset { get; set; }
@@ -113,5 +110,4 @@ namespace Google
         public string TimeZoneId { get; set; }
         public string TimeZoneName { get; set; }
     }
-
 }

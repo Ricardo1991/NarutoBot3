@@ -106,11 +106,9 @@ namespace IrcClient
                 if (user_message == null || nick_message == null || join_message == null)
                     throw new Exception("Please provide channel, nick and realname");
 
-
                 SendMessage(user_message);
                 SendMessage(nick_message);
                 backgroundWorker.RunWorkerAsync(messageDelegate);
-
             }
             catch (SocketException ex)
             {
@@ -190,9 +188,9 @@ namespace IrcClient
                         if (line.Length > 0) messageDelegate(line);
                     }
                 }
-                catch(IOException ex)
+                catch (IOException ex)
                 {
-
+                    Console.WriteLine("Error IRC_CLIENT read :" + ex.Message);
 #if DEBUG
                     messageDelegate(":Client 375 :#debug : " + ex.Message);
                     Disconnect("Error");
@@ -209,7 +207,7 @@ namespace IrcClient
                 if (writer != null) SendMessage(new Quit(quitMessage));
 
                 isConnected = false;
-                
+
                 backgroundWorker.CancelAsync();
 
                 if (stream != null)

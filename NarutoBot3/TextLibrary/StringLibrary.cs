@@ -1,12 +1,11 @@
-﻿using NarutoBot3.Properties;
+﻿using MarkovSharp.TokenisationStrategies;
+using NarutoBot3.Properties;
 using System.Collections.Generic;
 using System.IO;
-using System;
-using MarkovSharp.TokenisationStrategies;
 
 namespace NarutoBot3
 {
-    class StringLibrary
+    internal class StringLibrary
     {
         private List<string> rls = new List<string>();
         private List<string> hlp = new List<string>();
@@ -63,6 +62,7 @@ namespace NarutoBot3
                 case "all":
                     ReloadLibrary();
                     break;
+
                 case "rules":
                 case "rule":
                     ReadRules();
@@ -112,7 +112,6 @@ namespace NarutoBot3
             SaveFunk();
             SaveQuotes();
 
-
             return true;
         }
 
@@ -123,33 +122,34 @@ namespace NarutoBot3
                 case "all":
                     SaveLibrary();
                     break;
+
                 case "rules":
                 case "rule":
-                    
+
                     break;
 
                 case "help":
-                   
+
                     break;
 
                 case "nick":
                 case "nicks":
-                    
+
                     break;
 
                 case "trivia":
                 case "trivias":
-                    
+
                     break;
 
                 case "kills":
                 case "kill":
-                    
+
                     break;
 
                 case "facts":
                 case "fact":
-                    
+
                     break;
 
                 case "quotes":
@@ -317,6 +317,7 @@ namespace NarutoBot3
                 Settings.Default.Save();
             }
         }
+
         private void ReadNickGen()//These are for the Nick gen
         {
             NickGenStrings = new List<string>();
@@ -408,7 +409,5 @@ namespace NarutoBot3
                 }
             }
         }
-
-
     }
 }

@@ -119,7 +119,6 @@ namespace NarutoBot3
                 template = regex.Replace(template, randomTarget, 1);
             }
 
-
             return template;
         }
     }

@@ -20,11 +20,14 @@ namespace NarutoBot3
         private List<string> lastCommand = new List<string>();
 
         private delegate void ChangeDataSource();
-        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
-        private delegate void SetBoolCallback(bool status);
-        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
-        private delegate void SetTextCallback(string text);
 
+        private delegate void ChangeTimeStamp(object sender, PongEventArgs e);
+
+        private delegate void SetBoolCallback(bool status);
+
+        private delegate void SetEventCallback(object sender, TopicChangedEventArgs e);
+
+        private delegate void SetTextCallback(string text);
 
         public MainWindow()
         {
@@ -188,7 +191,6 @@ namespace NarutoBot3
 
             forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
 
-
             Settings.Default.Save();
         }
 
@@ -253,16 +255,15 @@ namespace NarutoBot3
 
             try
             {
-                bot.Connect(); 
+                bot.Connect();
             }
-
             catch (Exception ex)
             {
                 MessageBox.Show("Connection Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ChangeConnectingLabel("Disconnected");
             }
-
         }
+
         public void UpdateDataSource(object source, EventArgs e)
         {
             UpdateDataSource();
@@ -446,12 +447,12 @@ namespace NarutoBot3
 
         private void ConnectMenuItem1_Click(object sender, EventArgs e) //Connect to...
         {
-            ConnectWindow connectWindow = new ConnectWindow(bot!= null && bot.Client != null && bot.Client.isConnected);
+            ConnectWindow connectWindow = new ConnectWindow(bot != null && bot.Client != null && bot.Client.isConnected);
 
             if (connectWindow.ShowDialog() == DialogResult.OK)
             {
                 if (bot.Client != null && bot.Client.isConnected)
-                        DisconnectClient();
+                    DisconnectClient();
 
                 TryToConnect();
             }
@@ -509,7 +510,7 @@ namespace NarutoBot3
             {
                 bot.Disconnect(Settings.Default.quitMessage);
             }
-                
+
             UpdateDataSource();
 
             Thread.Sleep(250);
@@ -530,6 +531,7 @@ namespace NarutoBot3
                 ParseInputMessage(Settings.Default.autojoinCommand);
             }
         }
+
         private void EnforceChanged(object sender, EventArgs e)
         {
             forceMirrorModeOffToolStripMenuItem.Checked = Settings.Default.enforceMirrorOff;
@@ -537,12 +539,10 @@ namespace NarutoBot3
 
         private void ExitApplication()
         {
-
             DisconnectClient();
 
             ChangeConnectingLabel("Disconnected");
             Application.Exit();
-            
         }
 
         private void FactsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -628,7 +628,7 @@ namespace NarutoBot3
                 if (lastCommand.Count > 0)
                 {
                     ChangeInput(lastCommand[(lastCommand.Count - 1) - lastCommandIndex]);
-                    
+
                     if (lastCommandIndex + 1 < lastCommand.Count)
                         lastCommandIndex++;
                 }
@@ -661,7 +661,6 @@ namespace NarutoBot3
                 ParseInputMessage(InputBox.Text);
 
                 ChangeInput("");
-               
             }
         }
 
@@ -756,13 +755,11 @@ namespace NarutoBot3
 
             if (!bot.Client.isConnected) return;
 
-
             if (inputMessage.StartsWith("/"))
             {
                 string[] parsed = inputMessage.Split(new char[] { ' ' }, 2); //parsed[0] is the command (first word), arg is the rest
                 string command = parsed[0].Substring(1);
                 string arg;
-
 
                 try
                 {
@@ -777,7 +774,7 @@ namespace NarutoBot3
                 switch (command)
                 {
                     case "me":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -786,7 +783,7 @@ namespace NarutoBot3
                         break;
 
                     case "whois":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -795,7 +792,7 @@ namespace NarutoBot3
                         break;
 
                     case "whowas":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -804,7 +801,7 @@ namespace NarutoBot3
                         break;
 
                     case "nick":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -814,7 +811,7 @@ namespace NarutoBot3
 
                     case "nickserv":
                     case "ns":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -824,7 +821,7 @@ namespace NarutoBot3
 
                     case "chanserv":
                     case "cs":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -835,7 +832,7 @@ namespace NarutoBot3
                     case "query":
                     case "pm":
                     case "msg":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -849,7 +846,7 @@ namespace NarutoBot3
                         break;
 
                     case "identify":
-                        if(String.IsNullOrWhiteSpace(arg))
+                        if (String.IsNullOrWhiteSpace(arg))
                         {
                             WriteMessage("Not enough arguments");
                             break;
@@ -857,13 +854,13 @@ namespace NarutoBot3
 
                         message = new Privmsg("NickServ", "identify " + arg);
                         break;
+
                     case "clear":
                     case "clean":
                         OutputClean();
                         break;
-                }  
+                }
             }
-
             else //Normal send
                 message = new Privmsg(bot.Client.HOME_CHANNEL, InputBox.Text);
 
@@ -985,6 +982,7 @@ namespace NarutoBot3
                 toolStripStatusLabelSilence.Visible = false;
             }
         }
+
         private void UserModeChanged(object sender, ModeChangedEventArgs e)
         {
             Dictionary<string, string> modeChanges = new Dictionary<string, string>

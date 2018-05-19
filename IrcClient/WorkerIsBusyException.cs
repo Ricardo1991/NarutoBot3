@@ -6,13 +6,10 @@ namespace IrcClient
     {
         public WorkerIsBusyException()
         {
-
         }
 
         public WorkerIsBusyException(string message) : base(message)
         {
-            
         }
     }
-
 }

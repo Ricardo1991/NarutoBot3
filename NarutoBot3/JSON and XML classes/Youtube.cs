@@ -12,7 +12,6 @@ namespace Youtube
         public Pageinfo pageInfo { get; set; }
         public Item[] items { get; set; }
 
-
         public class Pageinfo
         {
             public int totalResults { get; set; }
@@ -144,8 +143,6 @@ namespace Youtube
                     public int height { get; set; }
                 }
             }
-
-
 
             public class Contentdetails
             {
