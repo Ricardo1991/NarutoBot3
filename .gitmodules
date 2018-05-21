@@ -1,8 +1,0 @@
-[submodule "RedditSharp"]
-	path = RedditSharp
-	url = https://github.com/CrustyJew/RedditSharp
-	ignore = dirty
-[submodule "MarkovChainSentenceGeneratorGit"]
-	path = MarkovChainSentenceGeneratorGit
-	url = https://github.com/treydwilson/MarkovChainSentenceGenerator
-	ignore = dirty
