@@ -42,7 +42,7 @@ namespace NarutoBot3
 
         private bool waitingForPong = false;
 
-        private object threadLock;
+        private Object threadLock = new Object();
 
         public Bot(ref RichTextBox output)
         {
