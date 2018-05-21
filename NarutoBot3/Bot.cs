@@ -1216,7 +1216,7 @@ namespace NarutoBot3
                 }
                 else if (args.ToLower() == "me baby".Trim())
                 {
-                    message = new Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=dwkClIFBMEE");
+                    message = new Privmsg(CHANNEL, "WASSA WASSA https://www.youtube.com/watch?v=Yk8DAb99QeQ");
                 }
                 else
                 {
