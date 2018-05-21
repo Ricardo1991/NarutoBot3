@@ -15,6 +15,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Timers;
 using System.Web;
 using System.Windows.Forms;
@@ -40,6 +41,8 @@ namespace NarutoBot3
         private System.Timers.Timer timeoutTimer;
 
         private bool waitingForPong = false;
+
+        private object threadLock;
 
         public Bot(ref RichTextBox output)
         {
@@ -248,7 +251,9 @@ namespace NarutoBot3
 
         internal void SendMessage(IrcMessage message)
         {
+            Monitor.Enter(threadLock);
             Client.SendMessage(message);
+            Monitor.Exit(threadLock);
 
             if (message is Notice)
             {
@@ -2138,9 +2143,9 @@ namespace NarutoBot3
             SendMessage(message);
         }
 
-        private void ProcessMessage(string message)
+        private void ProcessMessageThread(object obj)
         {
-            if (string.IsNullOrEmpty(message)) return;
+            string message = (string)obj;
 
             ParsedMessage messageObject;
             messageObject = new ParsedMessage(message);
@@ -2912,6 +2917,14 @@ namespace NarutoBot3
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
             }
+        }
+
+        private void ProcessMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message)) return;
+
+            Thread t = new Thread(new ParameterizedThreadStart(ProcessMessageThread));
+            t.Start(message);
         }
 
         private void UserAway(ParsedMessage messageObject)
@@ -4058,6 +4071,7 @@ namespace NarutoBot3
                 }
                 else
                 {
+                    Monitor.Enter(threadLock);
                     if (Settings.Default.showTimeStamps)
                         this.OutputBox.AppendText(timeString + " " + message + "\n");
                     else
@@ -4068,6 +4082,7 @@ namespace NarutoBot3
                         OutputBox.SelectionStart = OutputBox.Text.Length;   //Set the current caret position at the end
                         OutputBox.ScrollToCaret();                          //Now scroll it automatically
                     }
+                    Monitor.Exit(threadLock);
                 }
 
                 //also, should make a log
@@ -4095,6 +4110,7 @@ namespace NarutoBot3
                 }
                 else
                 {
+                    Monitor.Enter(threadLock);
                     if (Settings.Default.showTimeStamps)
                     {
                         this.OutputBox.AppendText(timeString + " ");
@@ -4108,6 +4124,7 @@ namespace NarutoBot3
                         OutputBox.SelectionStart = OutputBox.Text.Length;       //Set the current caret position at the end
                         OutputBox.ScrollToCaret();                              //Now scroll it automatically
                     }
+                    Monitor.Exit(threadLock);
                 }
 
                 //also, should make a log
