@@ -24,13 +24,16 @@ namespace NarutoBot3
             {
                 string jsonYoutube = webClient.DownloadString(getString);
                 JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
+
+                string title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+                string duration = ParseDuration(youtubeVideo.items[0].contentDetails.duration);
+
+                return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
             }
-            catch { }
-
-            string title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-            string duration = YoutubeUseful.ParseDuration(youtubeVideo.items[0].contentDetails.duration);
-
-            return "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02";
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static string GetYoutubeIdFromURL(string url)

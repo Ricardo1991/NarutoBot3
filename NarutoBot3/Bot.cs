@@ -476,9 +476,15 @@ namespace NarutoBot3
                             || (args.Contains("youtube") && args.Contains("watch") && (args.Contains("?v=") || args.Contains("&v="))))
             {
                 string id = YoutubeUseful.GetYoutubeIdFromURL(args);
-                string result = YoutubeUseful.GetYoutubeInfoFromID(id);
-
-                args = result + " : " + args;
+                try
+                {
+                    string result = YoutubeUseful.GetYoutubeInfoFromID(id);
+                    args = result + " : " + args;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error getting youtube link info: " + ex.Message);
+                }
             }
 
             StringLib.Funk.Add(args);
@@ -2790,7 +2796,7 @@ namespace NarutoBot3
                         || (msg.ToLower().Contains("youtube") && msg.ToLower().Contains("watch") && (msg.ToLower().Contains("?v=") || msg.ToLower().Contains("&v="))))
                     {
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
-                        Youtube(messageSource, user, msg);
+                        GetYoutubeLinkInfo(messageSource, user, msg);
                     }
                     else if (msg.Contains("vimeo.com"))
                     {
@@ -4112,7 +4118,7 @@ namespace NarutoBot3
             }
         }
 
-        private void Youtube(string CHANNEL, string nick, string line)
+        private void GetYoutubeLinkInfo(string CHANNEL, string nick, string line)
         {
             if (string.IsNullOrEmpty(line)) return;
             if (userlist.UserIsMuted(nick)) return;
@@ -4121,10 +4127,18 @@ namespace NarutoBot3
             {
                 string id = YoutubeUseful.GetYoutubeIdFromURL(line);
 
-                string result = YoutubeUseful.GetYoutubeInfoFromID(id);
+                try
+                {
+                    string result = YoutubeUseful.GetYoutubeInfoFromID(id);
 
-                IrcMessage message = new Privmsg(CHANNEL, result);
-                SendMessage(message);
+                    IrcMessage message = new Privmsg(CHANNEL, result);
+                    SendMessage(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error trying to get youtube link info: " + ex.Message);
+                    SendMessage(new Privmsg(CHANNEL, "Youtube link " + line + " seems to either be invalid or points to a removed video"));
+                }
             }
         }
 
