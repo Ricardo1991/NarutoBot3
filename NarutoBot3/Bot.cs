@@ -889,49 +889,71 @@ namespace NarutoBot3
             }
         }
 
+        private String SecondsConvert(string input)
+        {
+            // Converts seconds into H:M:S or M:S format depending on the length
+            int num = int.Parse(input);
+            TimeSpan ts;
+            String time_length = null;
+            if (num >= 3600)
+            {
+                ts = TimeSpan.FromSeconds(num);
+                StringBuilder builder = new StringBuilder();
+                builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds));
+                time_length = builder.ToString();
+            }
+            else
+            {
+                ts = TimeSpan.FromSeconds(num);
+                StringBuilder builder = new StringBuilder();
+                builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds));
+                time_length = builder.ToString();
+
+            }
+            return time_length;
+        }
+
         private void GetOsuData(string CHANNEL, string maplink)
         {
-            maplink = maplink.Substring(maplink.LastIndexOf("/") + 1);
-            maplink = maplink.Replace("beatmap?b=", string.Empty);
-            maplink = Regex.Replace(maplink, @".m=\d{0,9}", "");
+            string beatmap_id = maplink.Substring(maplink.LastIndexOf("/") + 1);
+            beatmap_id = beatmap_id.Replace("beatmap?b=", string.Empty);
+            beatmap_id = Regex.Replace(beatmap_id, @".m=\d{0,9}", "");
 
-            string sURL = "https://osu.ppy.sh/api/get_beatmaps";
+            string api_url = "https://osu.ppy.sh/api/get_beatmaps";
             string api_key = Settings.Default.osuGameAPI;
 
-            var data = GetJSONBeatMapData<OsuGame.BeatMapData>(sURL + "?k=" + api_key + "&b=" + maplink);
-
-            //Build Message:
+            List<OsuGame.BeatMapData> data;
+            StringBuilder builder = new StringBuilder();
             try
             {
-                int num = int.Parse(data[0].total_length);
-                TimeSpan ts;
-                String time_length = null;
-                if (num >= 3600)
+                if (maplink.ToLower().Contains("osu.ppy.sh/s/"))
                 {
-                    ts = TimeSpan.FromSeconds(num);
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds));
-                    time_length = builder.ToString();
+                    // If beatmap_id links to a beatmap set:
+                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&s=" + beatmap_id);
+
+                    // Build message:
+                    builder.Append(String.Format("\x02[{0}|{1} - {2}] [{3} BPM] [{4}] [{5} Beatmaps]\x02", data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString())));
                 }
                 else
                 {
-                    ts = TimeSpan.FromSeconds(num);
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds));
-                    time_length = builder.ToString();
+                    // If beatmap_id links to a single beatmap:
+                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&b=" + beatmap_id);
 
+                    // Build message:
+                    builder.Append(String.Format("\x02[{0}|{1} - {2}] \x1F\x16[{3}]\x1F\x16 [{4} BPM] [{5}] [{6}*]\x02", data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4)));
                 }
-                String msg = data[0].artist + " - " + data[0].title + " [" + data[0].version + "] " + "BPM: " + data[0].bpm + " " + time_length + " " + data[0].difficultyrating.Substring(0, 4) + "*";
-
+                String msg = builder.ToString();
                 IrcMessage message = new Privmsg(CHANNEL, msg);
                 SendMessage(message);
+                
             }
             catch (Exception)
             {
-                String msg = "I can't think right now";
+                String msg = "I am not overstreaming two twenty two BPM, are you blind?!"; // Error Message ;)
                 IrcMessage message = new Privmsg(CHANNEL, msg);
                 SendMessage(message);
             }
+
         }
 
         private void SquareText(string CHANNEL, string text, string user)
@@ -2864,7 +2886,7 @@ namespace NarutoBot3
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                         GetYoutubeLinkInfo(messageSource, user, msg);
                     }
-                    else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/"))) && Settings.Default.osuBeatMapParser == true)
+                    else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")) || (msg.ToLower().Contains("osu.ppy.sh/s/"))) && Settings.Default.osuBeatMapParser == true)
                     {
                         WriteMessage("* Detected an osu! beatmap from " + user, currentColorScheme.BotReport);
                         GetOsuData(messageSource, msg);
