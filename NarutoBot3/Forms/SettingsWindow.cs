@@ -80,8 +80,7 @@ namespace NarutoBot3
                 Settings.Default.botThinkEnabled = false;
 
             Settings.Default.osuGameAPI = t_osuBox.Text;
-            if (String.IsNullOrWhiteSpace(Settings.Default.osuGameAPI))
-                Settings.Default.osuBeatMapParser = false;
+            Settings.Default.osuBeatMapParser = !String.IsNullOrWhiteSpace(Settings.Default.osuGameAPI);
 
             Settings.Default.quitMessage = tbQuitMessage.Text;
 
@@ -148,6 +147,8 @@ namespace NarutoBot3
             cbScroll.Checked = Settings.Default.autoScrollToBottom;
 
             tbQuitMessage.Text = Settings.Default.quitMessage;
+
+            t_osuBox.Text = Settings.Default.osuGameAPI;
 
             //Read schemes
 

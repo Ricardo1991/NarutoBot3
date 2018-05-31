@@ -108,13 +108,13 @@
             this.tb_ConsumerKey = new System.Windows.Forms.TextBox();
             this.b_ConsumerKey = new System.Windows.Forms.Label();
             this.cleverbot = new System.Windows.Forms.TabPage();
+            this.osuGameBox = new System.Windows.Forms.GroupBox();
+            this.t_osuBox = new System.Windows.Forms.TextBox();
             this.groupClever = new System.Windows.Forms.GroupBox();
             this.t_cleverAPI = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.osuGameBox = new System.Windows.Forms.GroupBox();
-            this.t_osuBox = new System.Windows.Forms.TextBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -136,10 +136,10 @@
             this.gb_CredentialsTwitterAccessTokens.SuspendLayout();
             this.gb_CredentialsTwitterConsumer.SuspendLayout();
             this.cleverbot.SuspendLayout();
+            this.osuGameBox.SuspendLayout();
             this.groupClever.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
-            this.osuGameBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // cb_hello
@@ -996,8 +996,25 @@
             this.cleverbot.Padding = new System.Windows.Forms.Padding(3);
             this.cleverbot.Size = new System.Drawing.Size(517, 302);
             this.cleverbot.TabIndex = 5;
-            this.cleverbot.Text = "Cleverbot & osu Memes";
+            this.cleverbot.Text = "Cleverbot & osu API";
             this.cleverbot.UseVisualStyleBackColor = true;
+            // 
+            // osuGameBox
+            // 
+            this.osuGameBox.Controls.Add(this.t_osuBox);
+            this.osuGameBox.Location = new System.Drawing.Point(7, 61);
+            this.osuGameBox.Name = "osuGameBox";
+            this.osuGameBox.Size = new System.Drawing.Size(490, 48);
+            this.osuGameBox.TabIndex = 1;
+            this.osuGameBox.TabStop = false;
+            this.osuGameBox.Text = "osuGame API Key";
+            // 
+            // t_osuBox
+            // 
+            this.t_osuBox.Location = new System.Drawing.Point(6, 19);
+            this.t_osuBox.Name = "t_osuBox";
+            this.t_osuBox.Size = new System.Drawing.Size(478, 20);
+            this.t_osuBox.TabIndex = 1;
             // 
             // groupClever
             // 
@@ -1030,23 +1047,6 @@
             // eventLog1
             // 
             this.eventLog1.SynchronizingObject = this;
-            // 
-            // osuGameBox
-            // 
-            this.osuGameBox.Controls.Add(this.t_osuBox);
-            this.osuGameBox.Location = new System.Drawing.Point(7, 82);
-            this.osuGameBox.Name = "osuGameBox";
-            this.osuGameBox.Size = new System.Drawing.Size(490, 48);
-            this.osuGameBox.TabIndex = 1;
-            this.osuGameBox.TabStop = false;
-            this.osuGameBox.Text = "osuGame API Key";
-            // 
-            // t_osuBox
-            // 
-            this.t_osuBox.Location = new System.Drawing.Point(6, 19);
-            this.t_osuBox.Name = "t_osuBox";
-            this.t_osuBox.Size = new System.Drawing.Size(478, 20);
-            this.t_osuBox.TabIndex = 1;
             // 
             // SettingsWindow
             // 
@@ -1096,12 +1096,12 @@
             this.gb_CredentialsTwitterConsumer.ResumeLayout(false);
             this.gb_CredentialsTwitterConsumer.PerformLayout();
             this.cleverbot.ResumeLayout(false);
+            this.osuGameBox.ResumeLayout(false);
+            this.osuGameBox.PerformLayout();
             this.groupClever.ResumeLayout(false);
             this.groupClever.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
-            this.osuGameBox.ResumeLayout(false);
-            this.osuGameBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
