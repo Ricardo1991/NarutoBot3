@@ -896,7 +896,7 @@ namespace NarutoBot3
             maplink = Regex.Replace(maplink, @".m=\d{0,9}", "");
 
             string sURL = "https://osu.ppy.sh/api/get_beatmaps";
-            string api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+            string api_key = Settings.Default.osuGameAPI;
 
             var data = GetJSONBeatMapData<OsuGame.BeatMapData>(sURL + "?k=" + api_key + "&b=" + maplink);
 
@@ -2864,7 +2864,7 @@ namespace NarutoBot3
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                         GetYoutubeLinkInfo(messageSource, user, msg);
                     }
-                    else if ((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")))
+                    else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/"))) && Settings.Default.osuBeatMapParser == true)
                     {
                         WriteMessage("* Detected an osu! beatmap from " + user, currentColorScheme.BotReport);
                         GetOsuData(messageSource, msg);

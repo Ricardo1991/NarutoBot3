@@ -778,5 +778,29 @@ namespace NarutoBot3.Properties {
                 this["botThinkEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string osuGameAPI {
+            get {
+                return ((string)(this["osuGameAPI"]));
+            }
+            set {
+                this["osuGameAPI"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool osuBeatMapParser {
+            get {
+                return ((bool)(this["osuBeatMapParser"]));
+            }
+            set {
+                this["osuBeatMapParser"] = value;
+            }
+        }
     }
 }
