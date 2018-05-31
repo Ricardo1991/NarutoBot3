@@ -284,6 +284,7 @@
     </Compile>
     <Compile Include="Bot.cs" />
     <Compile Include="ColorScheme.cs" />
+    <Compile Include="JSON and XML classes\OsuGame.cs" />
     <Compile Include="JSON and XML classes\Google.cs" />
     <Compile Include="Forms\ConnectWindow.cs">
       <SubType>Form</SubType>

@@ -79,6 +79,10 @@ namespace NarutoBot3
             if (String.IsNullOrWhiteSpace(Settings.Default.cleverbotAPI))
                 Settings.Default.botThinkEnabled = false;
 
+            Settings.Default.osuGameAPI = t_osuBox.Text;
+            if (String.IsNullOrWhiteSpace(Settings.Default.osuGameAPI))
+                Settings.Default.osuBeatMapParser = false;
+
             Settings.Default.quitMessage = tbQuitMessage.Text;
 
             Settings.Default.Save();

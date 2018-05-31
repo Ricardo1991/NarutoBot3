@@ -873,6 +873,67 @@ namespace NarutoBot3
             SendMessage(message);
         }
 
+        private static List<T> GetJSONBeatMapData<T>(string url) where T : new()
+        {
+            using (var w = new WebClient())
+            {
+                var json_data = string.Empty;
+                // attempt to download JSON data as a string
+                try
+                {
+                    json_data = w.DownloadString(url);
+                }
+                catch (Exception) {}
+                // if string with JSON data is not empty, deserialize it to class and return its instance 
+                return !string.IsNullOrEmpty(json_data) ? JsonConvert.DeserializeObject<List<T>>(json_data) : new List<T>();
+            }
+        }
+
+        private void GetOsuData(string CHANNEL, string maplink)
+        {
+            maplink = maplink.Substring(maplink.LastIndexOf("/") + 1);
+            maplink = maplink.Replace("beatmap?b=", string.Empty);
+            maplink = Regex.Replace(maplink, @".m=\d{0,9}", "");
+
+            string sURL = "https://osu.ppy.sh/api/get_beatmaps";
+            string api_key = Settings.Default.osuGameAPI;
+
+            var data = GetJSONBeatMapData<OsuGame.BeatMapData>(sURL + "?k=" + api_key + "&b=" + maplink);
+
+            //Build Message:
+            try
+            {
+                int num = int.Parse(data[0].total_length);
+                TimeSpan ts;
+                String time_length = null;
+                if (num >= 3600)
+                {
+                    ts = TimeSpan.FromSeconds(num);
+                    StringBuilder builder = new StringBuilder();
+                    builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds));
+                    time_length = builder.ToString();
+                }
+                else
+                {
+                    ts = TimeSpan.FromSeconds(num);
+                    StringBuilder builder = new StringBuilder();
+                    builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds));
+                    time_length = builder.ToString();
+
+                }
+                String msg = data[0].artist + " - " + data[0].title + " [" + data[0].version + "] " + "BPM: " + data[0].bpm + " " + time_length + " " + data[0].difficultyrating.Substring(0, 4) + "*";
+
+                IrcMessage message = new Privmsg(CHANNEL, msg);
+                SendMessage(message);
+            }
+            catch (Exception)
+            {
+                String msg = "I can't think right now";
+                IrcMessage message = new Privmsg(CHANNEL, msg);
+                SendMessage(message);
+            }
+        }
+
         private void SquareText(string CHANNEL, string text, string user)
         {
             int MAX_TEXT = 10;
@@ -2802,6 +2863,11 @@ namespace NarutoBot3
                     {
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                         GetYoutubeLinkInfo(messageSource, user, msg);
+                    }
+                    else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/"))) && Settings.Default.osuBeatMapParser == true)
+                    {
+                        WriteMessage("* Detected an osu! beatmap from " + user, currentColorScheme.BotReport);
+                        GetOsuData(messageSource, msg);
                     }
                     else if (msg.Contains("vimeo.com"))
                     {
