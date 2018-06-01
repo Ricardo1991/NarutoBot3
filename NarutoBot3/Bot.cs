@@ -883,8 +883,8 @@ namespace NarutoBot3
                 {
                     json_data = w.DownloadString(url);
                 }
-                catch (Exception) {}
-                // if string with JSON data is not empty, deserialize it to class and return its instance 
+                catch (Exception) { }
+                // if string with JSON data is not empty, deserialize it to class and return its instance
                 return !string.IsNullOrEmpty(json_data) ? JsonConvert.DeserializeObject<List<T>>(json_data) : new List<T>();
             }
         }
@@ -899,19 +899,21 @@ namespace NarutoBot3
             {
                 ts = TimeSpan.FromSeconds(num);
                 StringBuilder builder = new StringBuilder();
-                builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds));
+                builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds.ToString("00")));
                 time_length = builder.ToString();
             }
             else
             {
                 ts = TimeSpan.FromSeconds(num);
                 StringBuilder builder = new StringBuilder();
-                builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds));
+                builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds.ToString("00")));
                 time_length = builder.ToString();
-
             }
             return time_length;
         }
+
+        private enum Approved
+        { Loved = 4, Qualified = 3, Approved = 2, Ranked = 1, WIP = -1, Graveyard = -2 };
 
         private void GetOsuData(string CHANNEL, string maplink)
         {
@@ -930,9 +932,9 @@ namespace NarutoBot3
                 {
                     // If beatmap_id links to a beatmap set:
                     data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&s=" + beatmap_id);
-
                     // Build message:
-                    builder.Append(String.Format("\x02[{0}|{1} - {2}] [{3} BPM] [{4}] [{5} Beatmaps]\x02", data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString())));
+                    Approved app = (Approved)data[0].approved;
+                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6} BPM] [{7} Beatmaps]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString()));
                 }
                 else
                 {
@@ -940,12 +942,12 @@ namespace NarutoBot3
                     data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&b=" + beatmap_id);
 
                     // Build message:
-                    builder.Append(String.Format("\x02[{0}|{1} - {2}] \x1F\x16[{3}]\x1F\x16 [{4} BPM] [{5}] [{6}*]\x02", data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4)));
+                    Approved app = (Approved)data[0].approved;
+                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4));
                 }
                 String msg = builder.ToString();
                 IrcMessage message = new Privmsg(CHANNEL, msg);
                 SendMessage(message);
-                
             }
             catch (Exception)
             {
@@ -953,7 +955,33 @@ namespace NarutoBot3
                 IrcMessage message = new Privmsg(CHANNEL, msg);
                 SendMessage(message);
             }
+        }
 
+        private string approvedColor(Approved app)
+        {
+            switch (app)
+            {
+                case Approved.Loved:
+                    return (char)3 + "04";
+
+                case Approved.Ranked:
+                    return (char)3 + "02";
+
+                case Approved.Qualified:
+                    return (char)3 + "08";
+
+                case Approved.WIP:
+                    return (char)3 + "05";
+
+                case Approved.Graveyard:
+                    return (char)3 + "14";
+
+                case Approved.Approved:
+                    return (char)3 + "11";
+
+                default:
+                    return (char)3 + "01";
+            }
         }
 
         private void SquareText(string CHANNEL, string text, string user)
