@@ -933,7 +933,7 @@ namespace NarutoBot3
                     data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&s=" + beatmap_id);
                     // Build message:
                     Approved app = (Approved)data[0].approved;
-                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6} BPM] [{7} Beatmaps]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString()));
+                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6}] [{7} Beatmaps]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString()));
                 }
                 else
                 {
