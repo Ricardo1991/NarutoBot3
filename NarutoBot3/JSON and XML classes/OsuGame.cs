@@ -7,7 +7,7 @@ namespace OsuGame
         public string beatmapset_id { get; set; }
         public string beatmap_id { get; set; }
         public int approved { get; set; }
-        public string total_length { get; set; }
+        public int total_length { get; set; }
         public string hit_length { get; set; }
         public string version { get; set; }
         public string file_md5 { get; set; }

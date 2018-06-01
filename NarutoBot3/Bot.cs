@@ -889,22 +889,21 @@ namespace NarutoBot3
             }
         }
 
-        private String SecondsConvert(string input)
+        private String SecondsConvert(int input)
         {
             // Converts seconds into H:M:S or M:S format depending on the length
-            int num = int.Parse(input);
             TimeSpan ts;
             String time_length = null;
-            if (num >= 3600)
+            if (input >= 3600)
             {
-                ts = TimeSpan.FromSeconds(num);
+                ts = TimeSpan.FromSeconds(input);
                 StringBuilder builder = new StringBuilder();
                 builder.Append(String.Format("{0}:{1}:{2}", ts.Hours, ts.Minutes, ts.Seconds.ToString("00")));
                 time_length = builder.ToString();
             }
             else
             {
-                ts = TimeSpan.FromSeconds(num);
+                ts = TimeSpan.FromSeconds(input);
                 StringBuilder builder = new StringBuilder();
                 builder.Append(String.Format("{0}:{1}", ts.Minutes, ts.Seconds.ToString("00")));
                 time_length = builder.ToString();
