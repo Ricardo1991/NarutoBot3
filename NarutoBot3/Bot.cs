@@ -817,7 +817,7 @@ namespace NarutoBot3
             string[] choices;
             IrcMessage message;
 
-            arg = arg.Replace("  ", " ");
+            arg = arg.Trim().Replace("  ", " ");
 
             if (arg.Contains(','))
                 choices = arg.Split(new char[] { ',' });
@@ -3536,7 +3536,7 @@ namespace NarutoBot3
             string[] choices;
             List<string> sList = new List<string>();
 
-            arg = arg.Replace("  ", " ");
+            arg = arg.Trim().Replace("  ", " ");
 
             if (arg.Contains(','))
                 choices = arg.Split(new char[] { ',' });
