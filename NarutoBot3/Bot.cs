@@ -540,6 +540,7 @@ namespace NarutoBot3
             string id = "";
             string searchResultURL = string.Empty;
             int i_max = 5;
+            string xmlAnime;
 
             bool foundGoogle = false;
 
@@ -594,17 +595,21 @@ namespace NarutoBot3
                 string animeName = searchResultName.Replace(" ", "+").Replace("_", "+").Replace("%20", "+");
                 string getString = "https://myanimelist.net/api/anime/search.xml?q=" + animeName;
 
-                string xmlAnime = webClient.DownloadString(getString);
-
                 try
                 {
+                    xmlAnime = webClient.DownloadString(getString);
                     XmlSerializer serializer = new XmlSerializer(typeof(MyAnimeList.MalAnimeData));
                     using (StringReader reader = new StringReader(xmlAnime))
                     {
                         malAnime = (MyAnimeList.MalAnimeData)(serializer.Deserialize(reader));
                     }
                 }
-                catch { }
+                catch
+                {
+                    message = new Privmsg(CHANNEL, "[Error] on the MAL API");
+                    SendMessage(message);
+                    return;
+                }
 
                 if (malAnime.entry == null)
                 {
