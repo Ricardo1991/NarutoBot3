@@ -990,6 +990,8 @@ namespace NarutoBot3
 
         private void SquareText(string CHANNEL, string text, string user)
         {
+            if (userlist.UserIsMuted(user) || !Settings.Default.squareEnabled) return;
+
             int MAX_TEXT = 10;
 
             if (text.Length > MAX_TEXT)
@@ -3520,6 +3522,11 @@ namespace NarutoBot3
                 case "tell":
                     Settings.Default.tellEnabled = status;
                     SendMessage(new Notice(user, "Tell is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "square":
+                    Settings.Default.squareEnabled = status;
+                    SendMessage(new Notice(user, "Squared text is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 default: break;

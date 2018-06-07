@@ -58,6 +58,7 @@ namespace NarutoBot3
             Settings.Default.tellEnabled = cbTell.Checked;
             Settings.Default.factsEnabled = cbFacts.Checked;
             Settings.Default.botThinkEnabled = cb_BotThink.Checked;
+            Settings.Default.squareEnabled = cbSquare.Checked;
 
             Settings.Default.twitterAccessToken = tb_AccessToken.Text;
             Settings.Default.twitterAccessTokenSecret = tb_AccessTokenSecret.Text;
@@ -125,6 +126,7 @@ namespace NarutoBot3
             cbTell.Checked = Settings.Default.tellEnabled;
             cbFacts.Checked = Settings.Default.factsEnabled;
             cb_BotThink.Checked = Settings.Default.botThinkEnabled;
+            cbSquare.Checked = Settings.Default.squareEnabled;
 
             cb_TwitterEnabled.Checked = Settings.Default.twitterEnabled;
             tb_AccessToken.Text = Settings.Default.twitterAccessToken;

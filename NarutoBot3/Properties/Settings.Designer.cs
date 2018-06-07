@@ -802,5 +802,17 @@ namespace NarutoBot3.Properties {
                 this["osuBeatMapParser"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool squareEnabled {
+            get {
+                return ((bool)(this["squareEnabled"]));
+            }
+            set {
+                this["squareEnabled"] = value;
+            }
+        }
     }
 }

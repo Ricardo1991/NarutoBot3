@@ -115,6 +115,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
+            this.cbSquare = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -381,6 +382,7 @@
             // 
             // gb_FeaturesFun
             // 
+            this.gb_FeaturesFun.Controls.Add(this.cbSquare);
             this.gb_FeaturesFun.Controls.Add(this.cb_BotThink);
             this.gb_FeaturesFun.Controls.Add(this.cbFacts);
             this.gb_FeaturesFun.Controls.Add(this.cbFunk);
@@ -1048,6 +1050,16 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
+            // cbSquare
+            // 
+            this.cbSquare.AutoSize = true;
+            this.cbSquare.Location = new System.Drawing.Point(6, 226);
+            this.cbSquare.Name = "cbSquare";
+            this.cbSquare.Size = new System.Drawing.Size(90, 17);
+            this.cbSquare.TabIndex = 18;
+            this.cbSquare.Text = "Squared Text";
+            this.cbSquare.UseVisualStyleBackColor = true;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1194,5 +1206,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox osuGameBox;
         private System.Windows.Forms.TextBox t_osuBox;
+        private System.Windows.Forms.CheckBox cbSquare;
     }
 }
