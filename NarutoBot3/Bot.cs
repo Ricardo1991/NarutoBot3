@@ -919,8 +919,10 @@ namespace NarutoBot3
         private enum Approved
         { Loved = 4, Qualified = 3, Approved = 2, Ranked = 1, WIP = -1, Graveyard = -2 };
 
-        private void GetOsuData(string CHANNEL, string maplink)
+        private void GetOsuData(string CHANNEL, string user, string maplink)
         {
+            if (userlist.UserIsMuted(user) || !Settings.Default.osuBeatMapParser) return;
+
             string beatmap_id = maplink.Substring(maplink.LastIndexOf("/") + 1);
             beatmap_id = beatmap_id.Replace("beatmap?b=", string.Empty);
             beatmap_id = Regex.Replace(beatmap_id, @".m=\d{0,9}", "");
@@ -2923,7 +2925,7 @@ namespace NarutoBot3
                     else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")) || (msg.ToLower().Contains("osu.ppy.sh/s/"))) && Settings.Default.osuBeatMapParser == true)
                     {
                         WriteMessage("* Detected an osu! beatmap from " + user, currentColorScheme.BotReport);
-                        GetOsuData(messageSource, msg);
+                        GetOsuData(messageSource, user, msg);
                     }
                     else if (msg.Contains("vimeo.com"))
                     {

@@ -116,6 +116,7 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
             this.cbSquare = new System.Windows.Forms.CheckBox();
+            this.cbOsu = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -322,6 +323,7 @@
             // 
             // gb_FeaturesParser
             // 
+            this.gb_FeaturesParser.Controls.Add(this.cbOsu);
             this.gb_FeaturesParser.Controls.Add(this.cbPageTitle);
             this.gb_FeaturesParser.Controls.Add(this.cb_Reddit);
             this.gb_FeaturesParser.Controls.Add(this.cb_youtube);
@@ -329,7 +331,7 @@
             this.gb_FeaturesParser.Controls.Add(this.cb_twitter);
             this.gb_FeaturesParser.Location = new System.Drawing.Point(342, 10);
             this.gb_FeaturesParser.Name = "gb_FeaturesParser";
-            this.gb_FeaturesParser.Size = new System.Drawing.Size(162, 133);
+            this.gb_FeaturesParser.Size = new System.Drawing.Size(162, 163);
             this.gb_FeaturesParser.TabIndex = 15;
             this.gb_FeaturesParser.TabStop = false;
             this.gb_FeaturesParser.Text = "Link Parsers";
@@ -515,9 +517,9 @@
             this.gb_FeaturesBasic.Controls.Add(this.cb_help);
             this.gb_FeaturesBasic.Controls.Add(this.cb_greetings);
             this.gb_FeaturesBasic.Controls.Add(this.cb_hello);
-            this.gb_FeaturesBasic.Location = new System.Drawing.Point(342, 149);
+            this.gb_FeaturesBasic.Location = new System.Drawing.Point(342, 179);
             this.gb_FeaturesBasic.Name = "gb_FeaturesBasic";
-            this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 137);
+            this.gb_FeaturesBasic.Size = new System.Drawing.Size(162, 107);
             this.gb_FeaturesBasic.TabIndex = 12;
             this.gb_FeaturesBasic.TabStop = false;
             this.gb_FeaturesBasic.Text = "Basic";
@@ -1060,6 +1062,16 @@
             this.cbSquare.Text = "Squared Text";
             this.cbSquare.UseVisualStyleBackColor = true;
             // 
+            // cbOsu
+            // 
+            this.cbOsu.AutoSize = true;
+            this.cbOsu.Location = new System.Drawing.Point(6, 134);
+            this.cbOsu.Name = "cbOsu";
+            this.cbOsu.Size = new System.Drawing.Size(115, 17);
+            this.cbOsu.TabIndex = 13;
+            this.cbOsu.Text = "OSU Beatmap Info";
+            this.cbOsu.UseVisualStyleBackColor = true;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1207,5 +1219,6 @@
         private System.Windows.Forms.GroupBox osuGameBox;
         private System.Windows.Forms.TextBox t_osuBox;
         private System.Windows.Forms.CheckBox cbSquare;
+        private System.Windows.Forms.CheckBox cbOsu;
     }
 }

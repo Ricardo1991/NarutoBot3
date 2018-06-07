@@ -814,5 +814,17 @@ namespace NarutoBot3.Properties {
                 this["squareEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool osuParseEnabled {
+            get {
+                return ((bool)(this["osuParseEnabled"]));
+            }
+            set {
+                this["osuParseEnabled"] = value;
+            }
+        }
     }
 }
