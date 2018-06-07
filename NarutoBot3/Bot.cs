@@ -2922,7 +2922,7 @@ namespace NarutoBot3
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
                         GetYoutubeLinkInfo(messageSource, user, msg);
                     }
-                    else if (((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")) || (msg.ToLower().Contains("osu.ppy.sh/s/"))) && Settings.Default.osuBeatMapParser == true)
+                    else if ((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")) || (msg.ToLower().Contains("osu.ppy.sh/s/")))
                     {
                         WriteMessage("* Detected an osu! beatmap from " + user, currentColorScheme.BotReport);
                         GetOsuData(messageSource, user, msg);
@@ -3529,6 +3529,11 @@ namespace NarutoBot3
                 case "square":
                     Settings.Default.squareEnabled = status;
                     SendMessage(new Notice(user, "Squared text is now " + (status ? "enabled" : "disabled")));
+                    break;
+
+                case "osu":
+                    Settings.Default.osuBeatMapParser = status;
+                    SendMessage(new Notice(user, "Osu Parser is now " + (status ? "enabled" : "disabled")));
                     break;
 
                 default: break;

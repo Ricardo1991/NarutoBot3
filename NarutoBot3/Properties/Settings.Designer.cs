@@ -793,7 +793,7 @@ namespace NarutoBot3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool osuBeatMapParser {
             get {
                 return ((bool)(this["osuBeatMapParser"]));
@@ -812,18 +812,6 @@ namespace NarutoBot3.Properties {
             }
             set {
                 this["squareEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool osuParseEnabled {
-            get {
-                return ((bool)(this["osuParseEnabled"]));
-            }
-            set {
-                this["osuParseEnabled"] = value;
             }
         }
     }
