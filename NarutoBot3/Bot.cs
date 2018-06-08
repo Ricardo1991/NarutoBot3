@@ -3082,7 +3082,9 @@ namespace NarutoBot3
             {
                 OnQuit(EventArgs.Empty);
 
-                timeoutTimer.Stop();
+                if (timeoutTimer != null)
+                    timeoutTimer.Stop();
+
                 waitingForPong = false;
                 return true;
             }
