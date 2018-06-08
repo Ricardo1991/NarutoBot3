@@ -21,6 +21,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using TweetSharp;
+using Youtube;
 
 namespace NarutoBot3
 {
@@ -2920,7 +2921,7 @@ namespace NarutoBot3
                         || (msg.ToLower().Contains("youtube") && msg.ToLower().Contains("watch") && (msg.ToLower().Contains("?v=") || msg.ToLower().Contains("&v="))))
                     {
                         WriteMessage("* Detected a Youtube video from " + user, currentColorScheme.BotReport);
-                        GetYoutubeLinkInfo(messageSource, user, msg);
+                        YoutubeLinkInfo(messageSource, user, msg);
                     }
                     else if ((msg.ToLower().Contains("osu.ppy.sh/beatmapsets/")) || (msg.ToLower().Contains("osu.ppy.sh/b/")) || (msg.ToLower().Contains("osu.ppy.sh/s/")))
                     {
@@ -4187,7 +4188,7 @@ namespace NarutoBot3
         /// <summary>
         /// Writes a Message on the output window
         /// </summary>
-        /// <param Name="Message">A sting with the Message to write</param>
+        /// <param Name="message">A sting with the Message to write</param>
         private void WriteMessage(string message) //Writes Message on the TextBox (bot console)
         {
             string timeString = DateTime.Now.ToString("[HH:mm:ss]");
@@ -4219,7 +4220,7 @@ namespace NarutoBot3
                     Monitor.Exit(threadLock);
                 }
 
-                //also, should make a log
+                //TODO: should make a log
             }
             else
             {
@@ -4227,7 +4228,12 @@ namespace NarutoBot3
             }
         }
 
-        private void WriteMessage(string message, Color color)           //Writes Message on the TextBox (bot console)
+        /// <summary>
+        /// Writes a Message on the output window
+        /// </summary>
+        /// <param Name="message">A sting with the Message to write</param>
+        /// <param name="color">Color for the text to be printed</param>
+        private void WriteMessage(string message, Color color)
         {
             string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
@@ -4261,7 +4267,7 @@ namespace NarutoBot3
                     Monitor.Exit(threadLock);
                 }
 
-                //also, should make a log
+                //TODO: should make a log
             }
             else
             {
@@ -4269,42 +4275,47 @@ namespace NarutoBot3
             }
         }
 
-        private void GetYoutubeLinkInfo(string CHANNEL, string nick, string line)
+        /// <summary>
+        /// Replies with the information about the youtube link
+        /// </summary>
+        /// <param name="source">Source of the message. Usually a Channel, can sometimes be a nick</param>
+        /// <param name="user">Nick of the user that sent the request</param>
+        /// <param name="line">String containing the youtube link</param>
+        private void YoutubeLinkInfo(string source, string user, string line)
         {
-            if (string.IsNullOrEmpty(line)) return;
-            if (userlist.UserIsMuted(nick)) return;
+            if (string.IsNullOrEmpty(line) || userlist.UserIsMuted(user) || Settings.Default.silence || !Settings.Default.youtube_Enabled)
+                return;
 
-            if (!Settings.Default.silence && Settings.Default.youtube_Enabled)
+            string id = YoutubeUseful.GetYoutubeIdFromURL(line);
+
+            try
             {
-                string id = YoutubeUseful.GetYoutubeIdFromURL(line);
+                string result = YoutubeUseful.GetYoutubeInfoFromID(id);
 
-                try
-                {
-                    string result = YoutubeUseful.GetYoutubeInfoFromID(id);
-
-                    IrcMessage message = new Privmsg(CHANNEL, result);
-                    SendMessage(message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error trying to get youtube link info: " + ex.Message);
-                    SendMessage(new Privmsg(CHANNEL, "Youtube link " + line + " seems to either be invalid or points to a removed video"));
-                }
+                IrcMessage message = new Privmsg(source, result);
+                SendMessage(message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error trying to get youtube link info: " + ex.Message);
+                SendMessage(new Privmsg(source, "Youtube link " + line + " seems to either be invalid or points to a removed video"));
             }
         }
 
-        private void YoutubeSearch(string CHANNEL, string nick, string query)
+        /// <summary>
+        /// Search Youtube for a certain keyword, replies withe the info for the top result
+        /// </summary>
+        /// <param name="source">Source of the message. Usually a Channel, can sometimes be a nick</param>
+        /// <param name="user">Nick of the user that sent the request</param>
+        /// <param name="query">Keywords to search for</param>
+        private void YoutubeSearch(string source, string user, string query)
         {
             IrcMessage message;
-            string jsonYoutube, title, duration;
-            Youtube.YoutubeSearch y = new Youtube.YoutubeSearch();
-            Youtube.YoutubeVideoInfo youtubeVideo = new Youtube.YoutubeVideoInfo();
+            YoutubeSearch youtubeSearch = new YoutubeSearch();
+            YoutubeVideoInfo youtubeVideo = new YoutubeVideoInfo();
 
-            if (userlist.UserIsMuted(nick)) return;
-            if (Settings.Default.silence == true || Settings.Default.youtubeSearchEnabled == false) return;
-            if (string.IsNullOrWhiteSpace(query)) return;
-
-            //query = query.Replace(" ", "%20");
+            if (userlist.UserIsMuted(user) || Settings.Default.silence || !Settings.Default.youtubeSearchEnabled || string.IsNullOrWhiteSpace(query))
+                return;
 
             string getString = "https://www.googleapis.com/youtube/v3/search" + "?key=" + Settings.Default.apikey + "&part=id,snippet" + "&q=" +
                 HttpUtility.UrlEncode(query) + "&maxresults=10&type=video&safeSearch=none";
@@ -4317,37 +4328,38 @@ namespace NarutoBot3
 
             try
             {
-                jsonYoutube = webClient.DownloadString(getString);
-                JsonConvert.PopulateObject(jsonYoutube, y);
+                string jsonYoutube = webClient.DownloadString(getString);
+                JsonConvert.PopulateObject(jsonYoutube, youtubeSearch);
             }
             catch { }
 
-            foreach (var searchResult in y.items)
+            foreach (var searchResult in youtubeSearch.items)
             {
-                switch (searchResult.id.kind.ToLower())
+                if (searchResult.id.kind.ToLower() == "youtube#video")
                 {
-                    case "youtube#video":
+                    try
+                    {
+                        getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" +
+                        "&id=" + searchResult.id.videoId;
+                        string jsonYoutube = webClient.DownloadString(getString);
+                        JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
 
-                        getString = "https://www.googleapis.com/youtube/v3/videos/" + "?key=" + Settings.Default.apikey + "&part=snippet,contentDetails,statistics" + "&id=" + searchResult.id.videoId;
-                        try
-                        {
-                            jsonYoutube = webClient.DownloadString(getString);
-                            JsonConvert.PopulateObject(jsonYoutube, youtubeVideo);
+                        string title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
+                        string duration = YoutubeUseful.ParseDuration(youtubeVideo.items[0].contentDetails.duration);
 
-                            title = WebUtility.HtmlDecode(youtubeVideo.items[0].snippet.title);
-                            duration = YoutubeUseful.ParseDuration(youtubeVideo.items[0].contentDetails.duration);
-
-                            message = new Privmsg(CHANNEL, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
-                            SendMessage(message);
-                            return;//Only shows 1 link
-                        }
-                        catch { }
-
-                        break;
+                        message = new Privmsg(source, "\x02" + "\x031,0You" + "\x030,4Tube" + "\x03 Video: " + title + " [" + duration + "]\x02" + ": https://www.youtube.com/watch?v=" + searchResult.id.videoId);
+                        SendMessage(message);
+                        stats.Youtube();
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error getting youtube link info: " + ex.Message);
+                    }
                 }
             }
-            message = new Privmsg(CHANNEL, "No results found");
-            SendMessage(message);
+
+            SendMessage(new Privmsg(source, "No results found"));
             stats.Youtube();
             return;
         }
