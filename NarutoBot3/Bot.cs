@@ -2764,11 +2764,6 @@ namespace NarutoBot3
                             WriteMessage("* Received a Time request from " + user, currentColorScheme.BotReport);
                             Time(messageSource, user, arg);
                         }
-                        else if (string.Compare(cmd, "wiki", true) == 0)
-                        {
-                            WriteMessage("* Received a explain request from " + user, currentColorScheme.BotReport);
-                            Wiki(messageSource, user, arg);
-                        }
                         else if (string.Compare(cmd, "anime", true) == 0 && !string.IsNullOrEmpty(arg))
                         {
                             if (string.Compare(arg, "best anime ever", true) == 0)
@@ -3407,11 +3402,6 @@ namespace NarutoBot3
                     SendMessage(new Notice(user, "Conversions is now " + (status ? "enabled" : "disabled")));
                     break;
 
-                case "wiki":
-                    Settings.Default.wikiEnabled = status;
-                    SendMessage(new Notice(user, "Wiki is now " + (status ? "enabled" : "disabled")));
-                    break;
-
                 case "anime":
                     Settings.Default.aniSearchEnabled = status;
                     SendMessage(new Notice(user, "Anime Search is now " + (status ? "enabled" : "disabled")));
@@ -3640,10 +3630,6 @@ namespace NarutoBot3
                     case "temperature":
                     case "temperatures":
                         SendMessage(new Privmsg(whoSent, "Session: " + stats.GetTemperature()[0] + " Lifetime: " + stats.GetTemperature()[1]));
-                        break;
-
-                    case "wiki":
-                        SendMessage(new Privmsg(whoSent, "Session: " + stats.GetWiki()[0] + " Lifetime: " + stats.GetWiki()[1]));
                         break;
 
                     case "poke":
@@ -4170,18 +4156,6 @@ namespace NarutoBot3
                     message = new Privmsg(CHANNEL, "\x02" + "Vimeo Video: " + title + " [" + minutes + ":" + seconds.ToString("00") + "]\x02");
                     SendMessage(message);
                 }
-            }
-        }
-
-        private void Wiki(string CHANNEL, string nick, string args)
-        {
-            if (userlist.UserIsMuted(nick)) return;
-
-            if (Settings.Default.silence == false && Settings.Default.wikiEnabled == true)
-            {
-                IrcMessage message = new Privmsg(CHANNEL, "Here's a Wiki for \"" + args + "\": " + "http://en.wikipedia.org/w/index.php?title=Special:Search&search=" + args.Replace(" ", "%20"));
-                SendMessage(message);
-                stats.Wiki();
             }
         }
 
