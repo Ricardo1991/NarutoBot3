@@ -934,17 +934,18 @@ namespace NarutoBot3
             beatmap_id = beatmap_id.Replace("beatmap?b=", string.Empty);
             beatmap_id = Regex.Replace(beatmap_id, @".m=\d{0,9}", "");
 
-            string api_url = "https://osu.ppy.sh/api/get_beatmaps";
+            string api_url = "https://osu.ppy.sh/api/";
             string api_key = Settings.Default.osuGameAPI;
 
             List<OsuGame.BeatMapData> data;
+            List<OsuGame.ScoreData> score_data;
             StringBuilder builder = new StringBuilder();
             try
             {
                 if (maplink.ToLower().Contains("osu.ppy.sh/s/"))
                 {
                     // If beatmap_id links to a beatmap set:
-                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&s=" + beatmap_id);
+                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps" + "?k=" + api_key + "&s=" + beatmap_id);
                     // Build message:
                     Approved app = (Approved)data[0].approved;
                     builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6}] [{7} Beatmaps]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString()));
@@ -952,11 +953,13 @@ namespace NarutoBot3
                 else
                 {
                     // If beatmap_id links to a single beatmap:
-                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "?k=" + api_key + "&b=" + beatmap_id);
+                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps" + "?k=" + api_key + "&b=" + beatmap_id);
+                    // Get 100 top scores of given beatmap (only use one OMEGAROLL):
+                    score_data = GetJSONBeatMapData<OsuGame.ScoreData>(api_url + "get_scores" + "?k=" + api_key + "&b=" + beatmap_id);
 
                     // Build message:
                     Approved app = (Approved)data[0].approved;
-                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4));
+                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*] [{9}|{10}]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4), String.Format("{0:0.00}pp", score_data[0].pp), score_data[0].username);
                 }
                 String msg = builder.ToString();
                 IrcMessage message = new Privmsg(CHANNEL, msg);
