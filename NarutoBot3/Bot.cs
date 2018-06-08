@@ -3393,10 +3393,15 @@ namespace NarutoBot3
                 return;
             }
 
-            if (options[1] != "off")
-                if (options[1] == "on")
-                    status = true;
-                else { SendMessage(new Notice(user, "Invalid Status")); return; }
+            if (options[1] == "off" || options[1] == "disabled" || options[1] == "disable" || options[1] == "false")
+                status = false;
+            else if (options[1] == "on" || options[1] == "enabled" || options[1] == "enable" || options[1] == "true")
+                status = true;
+            else
+            {
+                SendMessage(new Notice(user, "Invalid Status"));
+                return;
+            }
 
             switch (options[0])
             {
