@@ -42,14 +42,15 @@
             this.cb_YTSearch = new System.Windows.Forms.CheckBox();
             this.cb_Time = new System.Windows.Forms.CheckBox();
             this.cb_Convert = new System.Windows.Forms.CheckBox();
-            this.cb_Wiki = new System.Windows.Forms.CheckBox();
             this.cb_Anime = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesParser = new System.Windows.Forms.GroupBox();
+            this.cbOsu = new System.Windows.Forms.CheckBox();
             this.cbPageTitle = new System.Windows.Forms.CheckBox();
             this.cb_Reddit = new System.Windows.Forms.CheckBox();
             this.cb_vimeo = new System.Windows.Forms.CheckBox();
             this.cb_twitter = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesFun = new System.Windows.Forms.GroupBox();
+            this.cbSquare = new System.Windows.Forms.CheckBox();
             this.cb_BotThink = new System.Windows.Forms.CheckBox();
             this.cbFacts = new System.Windows.Forms.CheckBox();
             this.cbFunk = new System.Windows.Forms.CheckBox();
@@ -115,8 +116,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.eventLog1 = new System.Diagnostics.EventLog();
-            this.cbSquare = new System.Windows.Forms.CheckBox();
-            this.cbOsu = new System.Windows.Forms.CheckBox();
             this.gb_FeaturesHelpful.SuspendLayout();
             this.gb_FeaturesParser.SuspendLayout();
             this.gb_FeaturesFun.SuspendLayout();
@@ -185,7 +184,7 @@
             this.cb_roll.AutoSize = true;
             this.cb_roll.Checked = true;
             this.cb_roll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_roll.Location = new System.Drawing.Point(5, 179);
+            this.cb_roll.Location = new System.Drawing.Point(5, 156);
             this.cb_roll.Name = "cb_roll";
             this.cb_roll.Size = new System.Drawing.Size(44, 17);
             this.cb_roll.TabIndex = 0;
@@ -223,7 +222,6 @@
             this.gb_FeaturesHelpful.Controls.Add(this.cb_YTSearch);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Time);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Convert);
-            this.gb_FeaturesHelpful.Controls.Add(this.cb_Wiki);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_roll);
             this.gb_FeaturesHelpful.Controls.Add(this.cb_Anime);
             this.gb_FeaturesHelpful.Location = new System.Drawing.Point(6, 10);
@@ -236,7 +234,7 @@
             // cbTell
             // 
             this.cbTell.AutoSize = true;
-            this.cbTell.Location = new System.Drawing.Point(5, 203);
+            this.cbTell.Location = new System.Drawing.Point(5, 180);
             this.cbTell.Name = "cbTell";
             this.cbTell.Size = new System.Drawing.Size(43, 17);
             this.cbTell.TabIndex = 16;
@@ -246,7 +244,7 @@
             // cbShuffle
             // 
             this.cbShuffle.AutoSize = true;
-            this.cbShuffle.Location = new System.Drawing.Point(5, 156);
+            this.cbShuffle.Location = new System.Drawing.Point(5, 133);
             this.cbShuffle.Name = "cbShuffle";
             this.cbShuffle.Size = new System.Drawing.Size(59, 17);
             this.cbShuffle.TabIndex = 15;
@@ -256,7 +254,7 @@
             // cb_choose
             // 
             this.cb_choose.AutoSize = true;
-            this.cb_choose.Location = new System.Drawing.Point(5, 134);
+            this.cb_choose.Location = new System.Drawing.Point(5, 111);
             this.cb_choose.Name = "cb_choose";
             this.cb_choose.Size = new System.Drawing.Size(62, 17);
             this.cb_choose.TabIndex = 14;
@@ -266,7 +264,7 @@
             // cb_YTSearch
             // 
             this.cb_YTSearch.AutoSize = true;
-            this.cb_YTSearch.Location = new System.Drawing.Point(5, 111);
+            this.cb_YTSearch.Location = new System.Drawing.Point(5, 88);
             this.cb_YTSearch.Name = "cb_YTSearch";
             this.cb_YTSearch.Size = new System.Drawing.Size(103, 17);
             this.cb_YTSearch.TabIndex = 11;
@@ -297,24 +295,12 @@
             this.cb_Convert.Text = "Conversions";
             this.cb_Convert.UseVisualStyleBackColor = true;
             // 
-            // cb_Wiki
-            // 
-            this.cb_Wiki.AutoSize = true;
-            this.cb_Wiki.Checked = true;
-            this.cb_Wiki.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Wiki.Location = new System.Drawing.Point(5, 65);
-            this.cb_Wiki.Name = "cb_Wiki";
-            this.cb_Wiki.Size = new System.Drawing.Size(47, 17);
-            this.cb_Wiki.TabIndex = 8;
-            this.cb_Wiki.Text = "Wiki";
-            this.cb_Wiki.UseVisualStyleBackColor = true;
-            // 
             // cb_Anime
             // 
             this.cb_Anime.AutoSize = true;
             this.cb_Anime.Checked = true;
             this.cb_Anime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Anime.Location = new System.Drawing.Point(5, 88);
+            this.cb_Anime.Location = new System.Drawing.Point(5, 65);
             this.cb_Anime.Name = "cb_Anime";
             this.cb_Anime.Size = new System.Drawing.Size(92, 17);
             this.cb_Anime.TabIndex = 10;
@@ -335,6 +321,16 @@
             this.gb_FeaturesParser.TabIndex = 15;
             this.gb_FeaturesParser.TabStop = false;
             this.gb_FeaturesParser.Text = "Link Parsers";
+            // 
+            // cbOsu
+            // 
+            this.cbOsu.AutoSize = true;
+            this.cbOsu.Location = new System.Drawing.Point(6, 134);
+            this.cbOsu.Name = "cbOsu";
+            this.cbOsu.Size = new System.Drawing.Size(115, 17);
+            this.cbOsu.TabIndex = 13;
+            this.cbOsu.Text = "OSU Beatmap Info";
+            this.cbOsu.UseVisualStyleBackColor = true;
             // 
             // cbPageTitle
             // 
@@ -400,6 +396,16 @@
             this.gb_FeaturesFun.TabIndex = 14;
             this.gb_FeaturesFun.TabStop = false;
             this.gb_FeaturesFun.Text = "For Fun";
+            // 
+            // cbSquare
+            // 
+            this.cbSquare.AutoSize = true;
+            this.cbSquare.Location = new System.Drawing.Point(6, 226);
+            this.cbSquare.Name = "cbSquare";
+            this.cbSquare.Size = new System.Drawing.Size(90, 17);
+            this.cbSquare.TabIndex = 18;
+            this.cbSquare.Text = "Squared Text";
+            this.cbSquare.UseVisualStyleBackColor = true;
             // 
             // cb_BotThink
             // 
@@ -1052,26 +1058,6 @@
             // 
             this.eventLog1.SynchronizingObject = this;
             // 
-            // cbSquare
-            // 
-            this.cbSquare.AutoSize = true;
-            this.cbSquare.Location = new System.Drawing.Point(6, 226);
-            this.cbSquare.Name = "cbSquare";
-            this.cbSquare.Size = new System.Drawing.Size(90, 17);
-            this.cbSquare.TabIndex = 18;
-            this.cbSquare.Text = "Squared Text";
-            this.cbSquare.UseVisualStyleBackColor = true;
-            // 
-            // cbOsu
-            // 
-            this.cbOsu.AutoSize = true;
-            this.cbOsu.Location = new System.Drawing.Point(6, 134);
-            this.cbOsu.Name = "cbOsu";
-            this.cbOsu.Size = new System.Drawing.Size(115, 17);
-            this.cbOsu.TabIndex = 13;
-            this.cbOsu.Text = "OSU Beatmap Info";
-            this.cbOsu.UseVisualStyleBackColor = true;
-            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1145,7 +1131,6 @@
         private System.Windows.Forms.CheckBox cb_Trivia;
         private System.Windows.Forms.CheckBox cb_vimeo;
         private System.Windows.Forms.CheckBox cb_Poke;
-        private System.Windows.Forms.CheckBox cb_Wiki;
         private System.Windows.Forms.CheckBox cb_Anime;
         private System.Windows.Forms.CheckBox cb_twitter;
         private System.Windows.Forms.GroupBox gb_FeaturesHelpful;

@@ -36,7 +36,6 @@ namespace NarutoBot3
             Settings.Default.questionEnabled = cb_Questions.Checked;
             Settings.Default.killEnabled = cb_Kill.Checked;
             Settings.Default.twitterEnabled = cb_twitter.Checked;
-            Settings.Default.wikiEnabled = cb_Wiki.Checked;
             Settings.Default.pokeEnabled = cb_Poke.Checked;
             Settings.Default.vimeoEnabled = cb_vimeo.Checked;
             Settings.Default.triviaEnabled = cb_Trivia.Checked;
@@ -103,7 +102,6 @@ namespace NarutoBot3
             cbQuotes.Checked = Settings.Default.quotesEnabled;
             cb_Kill.Checked = Settings.Default.killEnabled;
             cb_Anime.Checked = Settings.Default.aniSearchEnabled;
-            cb_Wiki.Checked = Settings.Default.wikiEnabled;
             cb_Poke.Checked = Settings.Default.pokeEnabled;
             cb_vimeo.Checked = Settings.Default.vimeoEnabled;
             cb_hello.Checked = Settings.Default.hello_Enabled;
