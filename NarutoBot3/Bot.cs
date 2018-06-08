@@ -45,6 +45,8 @@ namespace NarutoBot3
 
         private Object threadLock = new Object();
 
+        private string previousNick;
+
         public Bot(ref RichTextBox output)
         {
             OutputBox = output;
@@ -146,7 +148,9 @@ namespace NarutoBot3
 
         internal bool ChangeNick(string nick)
         {
-            string oldnick = Client.NICK;
+            Console.WriteLine("Changing nick from " + Client.NICK + " to " + nick);
+
+            previousNick = Client.NICK;
             Client.NICK = Settings.Default.Nick = nick;
             Settings.Default.Save();
             OnBotNickChanged(EventArgs.Empty);
@@ -158,11 +162,13 @@ namespace NarutoBot3
                 SendMessage(message);
 
                 userlist.SetUserOnlineStatus(nick, true);
-                userlist.SetUserMode(nick, userlist.GetUserMode(oldnick));
-                userlist.SetUserChannelVoice(nick, userlist.UserHasChannelVoice(oldnick));
-                userlist.SetUserChannelOP(nick, userlist.UserHasChannelOP(oldnick));
+                userlist.SetUserMode(nick, userlist.GetUserMode(previousNick));
+                userlist.SetUserChannelVoice(nick, userlist.UserHasChannelVoice(previousNick));
+                userlist.SetUserChannelOP(nick, userlist.UserHasChannelOP(previousNick));
 
-                userlist.SetUserOnlineStatus(oldnick, false);
+                userlist.SetUserOnlineStatus(previousNick, false);
+
+                SendMessage(new Names(Client.HOME_CHANNEL));
 
                 return true;
             }
@@ -2180,13 +2186,12 @@ namespace NarutoBot3
         {
             string list = "[";
 
-            List<User> listU = userlist.GetAllOnlineUsers();
-
-            foreach (User u in listU)
+            foreach (User u in userlist.GetAllOnlineUsers())
             {
                 list += u.Nick + " ";
             }
 
+            list = list.Trim();
             list += "]";
 
             IrcMessage message = new Privmsg(nick, list);
@@ -2341,13 +2346,16 @@ namespace NarutoBot3
 
                 case ("433"): //Nickname is already in use.
 
+                    if (!String.IsNullOrWhiteSpace(previousNick))
+                        RevertNick();
+
                     OnDuplicatedNick(EventArgs.Empty);
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
 
                 case ("438"): //Nickname change too fast
 
-                    //TODO: revert back to old nick
+                    RevertNick();
                     WriteMessage(messageObject.SplitMessage[0]);
 
                     break;
@@ -3037,6 +3045,12 @@ namespace NarutoBot3
                     WriteMessage("* " + messageObject.Type + " " + messageObject.CompleteMessage);
                     break;
             }
+        }
+
+        private void RevertNick()
+        {
+            if (!String.IsNullOrWhiteSpace(previousNick))
+                ChangeNick(previousNick);
         }
 
         private void ProcessMessage(string message)

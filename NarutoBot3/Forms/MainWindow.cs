@@ -152,7 +152,7 @@ namespace NarutoBot3
             {
                 DisconnectClient();
 
-                Settings.Default.Nick = bot.Client.NICK + r.Next(10);
+                Settings.Default.Nick = bot.Client.NICK + '_';
                 Settings.Default.Save();
 
                 TryToConnect();

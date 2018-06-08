@@ -48,6 +48,7 @@
     <Compile Include="Messages\Join.cs" />
     <Compile Include="Messages\Kick.cs" />
     <Compile Include="Messages\Message.cs" />
+    <Compile Include="Messages\Names.cs" />
     <Compile Include="Messages\Nick.cs" />
     <Compile Include="Messages\Notice.cs" />
     <Compile Include="Messages\Ping.cs" />
