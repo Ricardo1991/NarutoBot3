@@ -4016,23 +4016,30 @@ namespace NarutoBot3
             if (Settings.Default.silence == true || Settings.Default.twitterEnabled == false) return;
             else
             {
-                string ID = Useful.GetBetween(line, "/status/", "?").Split('/')[0];
-                long tweetID = Convert.ToInt64(ID);
-
-                try
+                string[] split = line.Split();
+                foreach (string s in split)
                 {
-                    TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID, });
+                    if (s.Contains("/status/"))
+                    {
+                        string ID = Useful.GetBetween(s, "/status/", "?").Split('/')[0];
+                        long tweetID = Convert.ToInt64(ID);
 
-                    author = HttpUtility.HtmlDecode(tweetResult.Author.ScreenName);
-                    tweet = HttpUtility.HtmlDecode(tweetResult.TextDecoded.Replace("\n", " "));
+                        try
+                        {
+                            TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID, });
 
-                    IrcMessage message = new Privmsg(CHANNEL, "Tweet by @" + author + ": " + tweet);
+                            author = HttpUtility.HtmlDecode(tweetResult.Author.ScreenName);
+                            tweet = HttpUtility.HtmlDecode(tweetResult.TextDecoded.Replace("\n", " "));
 
-                    SendMessage(message);
-                }
-                catch
-                {
-                    SendMessage(new Privmsg(CHANNEL, "Error"));
+                            IrcMessage message = new Privmsg(CHANNEL, "Tweet by @" + author + ": " + tweet);
+
+                            SendMessage(message);
+                        }
+                        catch
+                        {
+                            SendMessage(new Privmsg(CHANNEL, "Error"));
+                        }
+                    }
                 }
             }
         }
