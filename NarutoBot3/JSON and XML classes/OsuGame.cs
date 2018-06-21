@@ -50,7 +50,7 @@ namespace OsuGame
         public string user_id { get; set; }
         public string date { get; set; }
         public string rank { get; set; }
-        public float pp { get; set; }
+        public decimal? pp { get; set; }
         public string replay_available { get; set; }
     }
 

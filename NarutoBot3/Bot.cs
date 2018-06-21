@@ -887,17 +887,27 @@ namespace NarutoBot3
 
         private static List<T> GetJSONBeatMapData<T>(string url) where T : new()
         {
-            using (var w = new WebClient())
+            try
             {
-                var json_data = string.Empty;
-                // attempt to download JSON data as a string
-                try
+                using (var w = new WebClient())
                 {
-                    json_data = w.DownloadString(url);
+                    var json_data = string.Empty;
+                    // attempt to download JSON data as a string
+                    if ((json_data = w.DownloadString(url)) == "[]")
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        // if string with JSON data is not empty, deserialize it to class and return its instance
+                        return !string.IsNullOrEmpty(json_data) ? JsonConvert.DeserializeObject<List<T>>(json_data) : new List<T>();
+                    }
                 }
-                catch (Exception) { }
-                // if string with JSON data is not empty, deserialize it to class and return its instance
-                return !string.IsNullOrEmpty(json_data) ? JsonConvert.DeserializeObject<List<T>>(json_data) : new List<T>();
+            }
+            catch (Exception)
+            {
+                System.FormatException e = new System.FormatException("Can't deserialize object [ I'm a dumb bot ;( ]");
+                throw e;
             }
         }
 
@@ -937,7 +947,7 @@ namespace NarutoBot3
             string api_url = "https://osu.ppy.sh/api/";
             string api_key = Settings.Default.osuGameAPI;
 
-            List<OsuGame.BeatMapData> data;
+            List<OsuGame.BeatMapData> beatmap_data;
             List<OsuGame.ScoreData> score_data;
             StringBuilder builder = new StringBuilder();
             try
@@ -945,23 +955,48 @@ namespace NarutoBot3
                 if (maplink.ToLower().Contains("osu.ppy.sh/s/"))
                 {
                     // If beatmap_id links to a beatmap set:
-                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps" + "?k=" + api_key + "&s=" + beatmap_id);
+                    beatmap_data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps?k=" + api_key + "&s=" + beatmap_id);
+
                     // Build message:
-                    Approved app = (Approved)data[0].approved;
-                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6}] [{7} Beatmaps]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].bpm, SecondsConvert(data[0].total_length), (data.Count().ToString()));
+                    Approved app = (Approved)beatmap_data[0].approved;
+                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} BPM] [{6}] [{7} Beatmaps]\x02", approvedColor(app), app, beatmap_data[0].creator, beatmap_data[0].artist, beatmap_data[0].title, beatmap_data[0].bpm, SecondsConvert(beatmap_data[0].total_length), (beatmap_data.Count().ToString()));
                 }
                 else
                 {
                     // If beatmap_id links to a single beatmap:
-                    data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps" + "?k=" + api_key + "&b=" + beatmap_id);
+                    beatmap_data = GetJSONBeatMapData<OsuGame.BeatMapData>(api_url + "get_beatmaps?k=" + api_key + "&b=" + beatmap_id);
                     // Get 100 top scores of given beatmap (only use one OMEGAROLL):
-                    score_data = GetJSONBeatMapData<OsuGame.ScoreData>(api_url + "get_scores" + "?k=" + api_key + "&b=" + beatmap_id);
+                    score_data = GetJSONBeatMapData<OsuGame.ScoreData>(api_url + "get_scores?k=" + api_key + "&b=" + beatmap_id);
 
                     // Build message:
-                    Approved app = (Approved)data[0].approved;
-                    builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*] [{9}|{10}]\x02", approvedColor(app), app, data[0].creator, data[0].artist, data[0].title, data[0].version, data[0].bpm, SecondsConvert(data[0].total_length), data[0].difficultyrating.Substring(0, 4), String.Format("{0:0.00}pp", score_data[0].pp), score_data[0].username);
+                    Approved app = (Approved)beatmap_data[0].approved;
+
+                    if (score_data == null)
+                    {
+                        builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*]\x02", approvedColor(app), app, beatmap_data[0].creator, beatmap_data[0].artist, beatmap_data[0].title, beatmap_data[0].version, beatmap_data[0].bpm, SecondsConvert(beatmap_data[0].total_length), beatmap_data[0].difficultyrating.Substring(0, 4));
+                    }
+                    else if (!score_data[0].pp.HasValue)
+                    {
+                        builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*] [0pp|{9}]\x02", approvedColor(app), app, beatmap_data[0].creator, beatmap_data[0].artist, beatmap_data[0].title, beatmap_data[0].version, beatmap_data[0].bpm, SecondsConvert(beatmap_data[0].total_length), beatmap_data[0].difficultyrating.Substring(0, 4), score_data[0].username);
+                    }
+                    else
+                    {
+                        builder.AppendFormat("\x02{0}[{1}]\x03 [{2}|{3} - {4}] [{5} | {6} BPM | {7} | {8}*] [{9}|{10}]\x02", approvedColor(app), app, beatmap_data[0].creator, beatmap_data[0].artist, beatmap_data[0].title, beatmap_data[0].version, beatmap_data[0].bpm, SecondsConvert(beatmap_data[0].total_length), beatmap_data[0].difficultyrating.Substring(0, 4), String.Format("{0:0.00}pp", score_data[0].pp), score_data[0].username);
+                    }
                 }
                 String msg = builder.ToString();
+                IrcMessage message = new Privmsg(CHANNEL, msg);
+                SendMessage(message);
+            }
+            catch (System.FormatException e)
+            {
+                String msg = e.Message; // Error Message ;)
+                IrcMessage message = new Privmsg(CHANNEL, msg);
+                SendMessage(message);
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                String msg = "Argument out of range, maybe check if peppy fucked with the json again ;)"; // Error Message ;)
                 IrcMessage message = new Privmsg(CHANNEL, msg);
                 SendMessage(message);
             }
