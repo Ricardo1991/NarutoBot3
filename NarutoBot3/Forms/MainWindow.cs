@@ -278,18 +278,25 @@ namespace NarutoBot3
             }
             else
             {
-                List<User> ul = bot.userlist.GetAllOnlineUsers();
-                ul.Sort();
-                InterfaceUserList.DataSource = ul;
-
-                List<string> temp = new List<string>();
-
-                foreach (User s in ul)
+                try
                 {
-                    temp.Add(s.Nick);
-                }
+                    List<User> ul = bot.userlist.GetAllOnlineUsers();
+                    ul.Sort();
+                    InterfaceUserList.DataSource = ul;
 
-                InputBox.Values = temp.ToArray();
+                    List<string> temp = new List<string>();
+
+                    foreach (User s in ul)
+                    {
+                        temp.Add(s.Nick);
+                    }
+
+                    InputBox.Values = temp.ToArray();
+                }
+                catch
+                {
+                    InterfaceUserList.DataSource = null;
+                }
             }
         }
 
