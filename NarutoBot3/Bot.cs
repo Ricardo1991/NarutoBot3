@@ -1219,10 +1219,11 @@ namespace NarutoBot3
 
                         html = reader.ReadToEnd();
 
-                        if (!html.Contains("<title")) return;
+                        if (!html.Contains("<title") || !html.Contains("<head")) return;
 
-                        string temp = Useful.GetBetween(html, "<title", "</title>");
-                        title = Useful.GetBetween(temp, ">", "</title>");
+                        string temp = Useful.GetBetween(html, "<head>", "</head>");
+                        string temp2 = Useful.GetBetween(temp, "<title", "</title>");
+                        title = Useful.GetBetween(temp2, ">", "<");
 
                         if (!string.IsNullOrWhiteSpace(title))
                         {
