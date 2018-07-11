@@ -1,4 +1,5 @@
 ﻿using Cleverbot.Net;
+using HtmlAgilityPack;
 using IrcClient;
 using IrcClient.Messages;
 using NarutoBot3.Events;
@@ -1206,24 +1207,11 @@ namespace NarutoBot3
             {
                 if (headers["Content-Type"].Contains("text/html"))
                 {
-                    WebRequest request = WebRequest.Create(url);
-                    request.Proxy = null;
-                    request.Timeout = 30000;
-
                     try
                     {
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                        Stream dataStream = response.GetResponseStream();
-                        StreamReader reader = new StreamReader(dataStream);
-
-                        html = reader.ReadToEnd();
-
-                        if (!html.Contains("<title") || !html.Contains("<head")) return;
-
-                        string temp = Useful.GetBetween(html, "<head>", "</head>");
-                        string temp2 = Useful.GetBetween(temp, "<title", "</title>");
-                        title = Useful.GetBetween(temp2, ">", "<");
+                        HtmlWeb webGet = new HtmlWeb();
+                        var document = webGet.Load(url);
+                        title = document.DocumentNode.SelectSingleNode("html/head/title").InnerText;
 
                         if (!string.IsNullOrWhiteSpace(title))
                         {
