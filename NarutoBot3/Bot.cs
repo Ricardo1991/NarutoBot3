@@ -1184,8 +1184,10 @@ namespace NarutoBot3
         private void GetURLInfo(string CHANNEL, string url)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
-            string html, title;
+            string title;
             IrcMessage message;
+
+            url = url.Trim(new char[2] { '(', ')' });
 
             WebRequest webRequest = HttpWebRequest.Create(url);
             webRequest.Method = "HEAD";
