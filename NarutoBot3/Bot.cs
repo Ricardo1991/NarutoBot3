@@ -17,6 +17,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
 using System.Windows.Forms;
@@ -181,7 +182,7 @@ namespace NarutoBot3
             InitiateClient();
             try
             {
-                Client.Connect(ProcessMessage);
+                Client.Connect(ProcessMessageAsync);
                 pingServerTimer.Enabled = true;
             }
             catch (WorkerIsBusyException ex)
@@ -736,7 +737,7 @@ namespace NarutoBot3
             stats.Anime();
         }
 
-        private async void BotThink(string CHANNEL, string line, string nick)
+        private async Task BotThink(string CHANNEL, string line, string nick)
         {
             IrcMessage message;
 
@@ -754,6 +755,9 @@ namespace NarutoBot3
 
             try
             {
+                if (cleverbotSession == null)
+                    cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
+
                 CleverbotResponse answer = await cleverbotSession.GetResponseAsync(newLine);
                 message = new Privmsg(CHANNEL, answer.Response);
             }
@@ -1890,19 +1894,7 @@ namespace NarutoBot3
                     }
                     else if (string.Compare(split[0], "if", true) == 0)
                     {
-                        if (Settings.Default.botThinkEnabled)
-                        {
-                            try
-                            {
-                                CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
-                                message = new Privmsg(CHANNEL, answer.Response);
-                            }
-                            catch
-                            {
-                                message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                                cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
-                            }
-                        }
+                        await BotThink(CHANNEL, arg, user);
                     }
                     else if (string.Compare(split[0], "am", true) == 0 && string.Compare(split[1], "i", true) == 0)
                     {
@@ -2117,36 +2109,12 @@ namespace NarutoBot3
                 }
                 else
                 {
-                    if (Settings.Default.botThinkEnabled)
-                    {
-                        try
-                        {
-                            CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
-                            message = new Privmsg(CHANNEL, answer.Response);
-                        }
-                        catch
-                        {
-                            message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                            cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
-                        }
-                    }
+                    await BotThink(CHANNEL, arg, user);
                 }
             }
             else
             {
-                if (Settings.Default.botThinkEnabled)
-                {
-                    try
-                    {
-                        CleverbotResponse answer = await cleverbotSession.GetResponseAsync(arg + "?");
-                        message = new Privmsg(CHANNEL, answer.Response);
-                    }
-                    catch
-                    {
-                        message = new Privmsg(CHANNEL, "Sorry, but i can't think right now");
-                        cleverbotSession = new CleverbotSession(Settings.Default.cleverbotAPI);
-                    }
-                }
+                await BotThink(CHANNEL, arg, user);
             }
 
             if (message != null && !string.IsNullOrWhiteSpace(message.body))
@@ -2297,7 +2265,7 @@ namespace NarutoBot3
             SendMessage(message);
         }
 
-        private void ProcessMessageThread(object obj)
+        private async Task ProcessMessageThread(object obj)
         {
             string message = (string)obj;
 
@@ -2983,7 +2951,7 @@ namespace NarutoBot3
                     else if (msg.TrimEnd(new char[] { '?', ' ' }).EndsWith(Client.NICK, true, CultureInfo.CurrentCulture))
                     {
                         WriteMessage("* Detected a think message from " + user, currentColorScheme.BotReport);
-                        BotThink(messageSource, msg, user);
+                        await BotThink(messageSource, msg, user);
                     }
                     else if (message.Contains("\x01"))
                     {
@@ -3082,12 +3050,11 @@ namespace NarutoBot3
                 ChangeNick(previousNick);
         }
 
-        private void ProcessMessage(string message)
+        private async void ProcessMessageAsync(string message)
         {
             if (string.IsNullOrEmpty(message)) return;
 
-            Thread t = new Thread(new ParameterizedThreadStart(ProcessMessageThread));
-            t.Start(message);
+            await ProcessMessageThread(message);
         }
 
         private void UserAway(ParsedMessage messageObject)
