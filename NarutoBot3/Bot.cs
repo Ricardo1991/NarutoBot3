@@ -1192,6 +1192,7 @@ namespace NarutoBot3
             IrcMessage message;
 
             url = url.Trim(new char[2] { '(', ')' });
+            url = url.Substring(url.IndexOf("http"));
 
             WebRequest webRequest = HttpWebRequest.Create(url);
             webRequest.Method = "HEAD";
