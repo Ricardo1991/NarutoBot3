@@ -1615,7 +1615,7 @@ namespace NarutoBot3
             }
         }
 
-        private void OpList(string nick)
+        private void OperatorList(string nick)
         {
             IrcMessage message;
 
@@ -1623,11 +1623,15 @@ namespace NarutoBot3
             {
                 message = new Notice(nick, "Bot operators:");
                 SendMessage(message);
+                StringBuilder sb = new StringBuilder();
+
                 foreach (User u in userlist.Users)
                 {
                     if (u.IsOperator)
-                        SendMessage(new Notice(nick, "     -> " + u.Nick));
+                        sb.Append(u.Nick + ", ");
                 }
+
+                SendMessage(new Notice(nick, sb.ToString().TrimEnd(new char[] { ',', ' ' })));
             }
         }
 
@@ -2690,7 +2694,7 @@ namespace NarutoBot3
                         else if (string.Compare(cmd, "oplist", true) == 0)
                         {
                             WriteMessage("* Received a oplist request from " + user, currentColorScheme.BotReport);
-                            OpList(user);
+                            OperatorList(user);
                         }
                         else if (string.Compare(cmd, "roll", true) == 0)
                         {
