@@ -264,13 +264,14 @@ namespace NarutoBot3
             Client.SendMessage(message);
             Monitor.Exit(threadLock);
 
+            //Write the Message on the bot console
             if (message is Notice)
             {
                 if (Client.NICK.Length > 15)
                 {
                     WriteMessage(Client.NICK.Truncate(16) + ":" + message.body);
                 }
-                else if (Client.NICK.Length >= 8)                       //Write the Message on the bot console
+                else if (Client.NICK.Length >= 8)
                 {
                     WriteMessage(Client.NICK + "\t: " + message.body);
                 }
@@ -318,7 +319,6 @@ namespace NarutoBot3
             }
         }
 
-        ////
         internal void UnmuteUser(string nick)
         {
             userlist.SetUserMuteStatus(nick, false);
@@ -1194,7 +1194,7 @@ namespace NarutoBot3
             url = url.Trim(new char[2] { '(', ')' });
             url = url.Substring(url.IndexOf("http"));
 
-            WebRequest webRequest = HttpWebRequest.Create(url);
+            WebRequest webRequest = WebRequest.Create(url);
             webRequest.Method = "HEAD";
             webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
 
@@ -1637,7 +1637,7 @@ namespace NarutoBot3
 
         private async void ParseQuestion(string CHANNEL, string user, string arg)
         {
-            //This needs to go or be simplified
+            //TODO: This needs to go or be simplified
 
             if (userlist.UserIsMuted(user)) return;
             if (Settings.Default.silence || !Settings.Default.questionEnabled) return;
@@ -4192,7 +4192,7 @@ namespace NarutoBot3
         /// Writes a Message on the output window
         /// </summary>
         /// <param Name="message">A sting with the Message to write</param>
-        private void WriteMessage(string message) //Writes Message on the TextBox (bot console)
+        private void WriteMessage(string message)
         {
             string timeString = DateTime.Now.ToString("[HH:mm:ss]");
 
