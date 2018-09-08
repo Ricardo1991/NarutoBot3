@@ -1194,20 +1194,22 @@ namespace NarutoBot3
             url = url.Trim(new char[2] { '(', ')' });
             url = url.Substring(url.IndexOf("http"));
 
-            WebRequest webRequest = WebRequest.Create(url);
-            webRequest.Method = "HEAD";
-            webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
-
             try
             {
+                WebRequest webRequest = WebRequest.Create(url);
+                webRequest.Method = "HEAD";
+                webRequest.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-gb;q=0.8, en-us;q=0.7, en;q=0.6");
+
                 using (WebResponse webResponse = webRequest.GetResponse())
                 {
                     foreach (string header in webResponse.Headers)
                         headers.Add(header, webResponse.Headers[header]);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("Error: Exception on GetURLInfo: " + ex.Message);
+                return;
             }
 
             if (headers.ContainsKey("Content-Type"))
