@@ -323,6 +323,7 @@
     <Compile Include="Forms\ChangeBotNickWindow.Designer.cs">
       <DependentUpon>ChangeBotNickWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Log.cs" />
     <Compile Include="ParsedMessage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

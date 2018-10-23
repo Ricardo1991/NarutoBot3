@@ -3072,7 +3072,15 @@ namespace NarutoBot3
         {
             if (string.IsNullOrEmpty(message)) return;
 
-            await ProcessMessageThread(message);
+            try
+            {
+                await ProcessMessageThread(message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Unhandled Exception caught for the message: {0}", message), ex);
+                //throw;
+            }
         }
 
         private void UserAway(ParsedMessage messageObject)
