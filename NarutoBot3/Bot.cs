@@ -2219,7 +2219,7 @@ namespace NarutoBot3
                 string split = args.Split(new char[] { ' ' }, 2)[0];
                 int number = Convert.ToInt32(split.Replace("#", string.Empty));
 
-                if (number <= StringLib.Quotes.Count)
+                if (number <= StringLib.Quotes.Count && number > 0)
                     message = new Privmsg(CHANNEL, StringLib.Quotes[number - 1]);
                 else
                     message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
