@@ -1656,17 +1656,17 @@ namespace NarutoBot3
             string[] howIs = { "fine", "not fine", "lost", "being retarded again", "not feeling well", "being annoying as always", "probably hungry", "good", "all right", "upset", "bored" };
 
             string[] because = { "was lost", "is stupid", "asked me to", "was asked to", "has an inferiority complex", "is a terrible person",
-                                   "felt like so", "wanted to", "liked it", "already had plans to do it", "wanted it that way"  };
+                                    "felt like so", "wanted to", "liked it", "already had plans to do it", "wanted it that way"  };
 
             string[] when = { "maybe next week", "a few days ago", "last year", "yesterday", "tomorrow", "in a few hours",
                                 "nobody knows", "next year", "it was yesterday", "I'm not sure", "next week" };
 
             string[] why = { "I dont know, maybe", "I don't know", "Yeah", "Nope.", "Yes.", "No.", "Probably", "Everything makes me believe so",
-                               "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know", "Because that was destined to be so" };
+                                "Not sure, ask somebody else", "I don't know, im not wikipedia", "Sorry, but i don't know", "Because that was destined to be so" };
 
             string[] where = { "somewhere in a far away land" , "on the Youtube datacenter", "behind you", "in your house", "in Europe", "near Lygs", "that special place",
-                               "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer",
-                               "beneath your bed!", "where you didnt expect", "near your house"};
+                                "in outer space","somewhere i belong", "On the shaddiest subreddit","on tumblr", "in space", "on your computer",
+                                "beneath your bed!", "where you didnt expect", "near your house"};
 
             string[] whoDid = { "Probably", "Maybe it was", "I'm sure it was", "I don't think it was", "I suspect", "Someone told me it was", "I think it was" };
             string[] whoDo = { "Probably", "Maybe it is", "I'm sure it is", "I don't think it was", "I suspect", "Someone told me it is", "I think it is" };
@@ -2205,7 +2205,7 @@ namespace NarutoBot3
         private void PrintQuote(string CHANNEL, string args, string nick)
         {
             Random r = new Random();
-            IrcMessage message;
+            IrcMessage message = null;
 
             if (userlist.UserIsMuted(nick) || !Settings.Default.quotesEnabled || StringLib.Quotes.Count == 0) return;
 
@@ -2217,15 +2217,26 @@ namespace NarutoBot3
             else if (args.StartsWith("#")) //Print quote by number
             {
                 string split = args.Split(new char[] { ' ' }, 2)[0];
-                int number = Convert.ToInt32(split.Replace("#", string.Empty));
+                int number = 0;
 
-                if (number <= StringLib.Quotes.Count && number > 0)
-                    message = new Privmsg(CHANNEL, StringLib.Quotes[number - 1]);
-                else
-                    message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
+                try
+                {
+                    number = Convert.ToInt32(split.Replace("#", string.Empty));
 
-                SendMessage(message);
-                stats.Quote();
+                    if (number <= StringLib.Quotes.Count && number > 0)
+                        message = new Privmsg(CHANNEL, StringLib.Quotes[number - 1]);
+                    else
+                        message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
+                }
+                catch (FormatException ex)
+                {
+                    message = new Privmsg(CHANNEL, "Invalid input");
+                }
+                finally
+                {
+                    SendMessage(message);
+                    stats.Quote();
+                }
                 return;
             }
             else   //search
