@@ -40,7 +40,6 @@ namespace NarutoBot3
         private Reddit reddit;
         private TwitterService service;
         private StatsManager stats = new StatsManager();
-        private StringLibrary stringLib = new StringLibrary();
         private System.Timers.Timer timeoutTimer;
 
         private bool waitingForPong = false;
@@ -138,7 +137,7 @@ namespace NarutoBot3
             }
         }
 
-        internal StringLibrary StringLib { get => stringLib; set => stringLib = value; }
+        internal StringLibrary StringLib { get; set; } = new StringLibrary();
 
         internal static UserList GetSavedUsers()
         {
@@ -792,7 +791,7 @@ namespace NarutoBot3
             seenTime = userlist.GetUserSeenUTC(arg);
 
             if (seenTime.CompareTo(new DateTime(0)) == 0)
-                message = new Privmsg(CHANNEL, "The user has not been seen yet, or an error as occured");
+                message = new Privmsg(CHANNEL, "The user has not been seen yet, or an error has occured");
             else
             {
                 diff = now.Subtract(seenTime);
