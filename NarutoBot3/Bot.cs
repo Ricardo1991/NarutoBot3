@@ -33,7 +33,6 @@ namespace NarutoBot3
         private CleverbotSession cleverbotSession = null;
         private IRC_Client client;
         private ColorScheme currentColorScheme = new ColorScheme();
-        private string lastImgurID;
         private RichTextBox OutputBox = null;
         private System.Timers.Timer pingServerTimer;
         private Questions qq;
@@ -1167,23 +1166,6 @@ namespace NarutoBot3
             stats.Fact();
         }
 
-        private void Filmot(string CHANNEL, string args, string user)
-        {
-            if (userlist.UserIsMuted(user)) return;
-
-            if (string.IsNullOrWhiteSpace(args))
-            {
-                if (string.IsNullOrWhiteSpace(lastImgurID))
-                    SendMessage(new Privmsg(CHANNEL, "No links in memory to convert"));
-                SendMessage(new Privmsg(CHANNEL, "http://i.filmot.org/" + lastImgurID));
-            }
-            else
-            {
-                string id = Useful.GetBetween(args, "imgur.com/", "");
-                SendMessage(new Privmsg(CHANNEL, "http://i.filmot.org/" + id));
-            }
-        }
-
         private void GetURLInfo(string CHANNEL, string url)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
@@ -2227,7 +2209,7 @@ namespace NarutoBot3
                     else
                         message = new Privmsg(CHANNEL, "Quote number " + number + " does not exist");
                 }
-                catch (FormatException ex)
+                catch
                 {
                     message = new Privmsg(CHANNEL, "Invalid input");
                 }
@@ -2923,11 +2905,6 @@ namespace NarutoBot3
                             WriteMessage("* Received a Clean Messages request from " + user, currentColorScheme.BotReport);
                             CleanMessages(arg, user);
                         }
-                        else if ((string.Compare(cmd, "filmot", true) == 0))
-                        {
-                            WriteMessage("* Received a Filmot Convert request from " + user, currentColorScheme.BotReport);
-                            Filmot(messageSource, arg, user);
-                        }
                         else
                         {
                             //check for custom commands
@@ -2987,10 +2964,6 @@ namespace NarutoBot3
                             WriteMessage("* Received a CTCP ping request from " + user, currentColorScheme.BotReport);
                             CtcpPing(user, arg);
                         }
-                    }
-                    if (msg.Contains("imgur.com"))
-                    {
-                        UpdateLastImgurLink(msg);
                     }
 
                     break;
@@ -4075,11 +4048,6 @@ namespace NarutoBot3
             message = new Notice(nick, targetUser + " was unmuted!");
             SendMessage(message);
             return true;
-        }
-
-        private void UpdateLastImgurLink(string msg)
-        {
-            lastImgurID = Useful.GetBetween(msg, "imgur.com/", "");
         }
 
         private void UrlTitle(string CHANNEL, string nick, string line)
