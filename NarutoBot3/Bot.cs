@@ -1659,6 +1659,13 @@ namespace NarutoBot3
 
             string[] whyN = { "Nope,", "No,", "I think that", "I believe that", "Negative!", "" };
 
+            //Easter egg
+            if(arg.ToLower().Trim().Contains("play despacito"))
+            {
+                message = new Privmsg(CHANNEL, "https://www.youtube.com/watch?v=kJQP7kiw5Fk");
+            }
+            else
+            // End with ?
             if (arg[arg.Length - 1] == '?')
             {
                 arg = arg.Replace("?", string.Empty).TrimStart(new char[] { ' ' });
