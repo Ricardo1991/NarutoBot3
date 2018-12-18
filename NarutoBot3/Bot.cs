@@ -1618,7 +1618,7 @@ namespace NarutoBot3
             }
         }
 
-        private async void ParseQuestion(string CHANNEL, string user, string arg)
+        private async Task ParseQuestion(string CHANNEL, string user, string arg)
         {
             //TODO: This needs to go or be simplified
 
@@ -2109,7 +2109,7 @@ namespace NarutoBot3
             }
             else
             {
-                await BotThink(CHANNEL, arg, user);
+               await BotThink(CHANNEL, arg, user);
             }
 
             if (message != null && !string.IsNullOrWhiteSpace(message.body))
@@ -2639,7 +2639,7 @@ namespace NarutoBot3
                     else if (string.Compare(cmd, Client.NICK + ",", true) == 0 && !string.IsNullOrWhiteSpace(arg))
                     {
                         WriteMessage("* Received a Question from " + user, currentColorScheme.BotReport);
-                        ParseQuestion(messageSource, user, arg);
+                        await ParseQuestion(messageSource, user, arg);
                     }
                     else if ((string.Compare(cmd, "gg", true) == 0 && !string.IsNullOrWhiteSpace(arg) && string.Compare(arg.Split(' ')[0], "ez", true) == 0) || string.Compare(cmd, "ggez", true) == 0)
                     {
