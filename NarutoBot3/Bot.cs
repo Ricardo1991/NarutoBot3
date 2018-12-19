@@ -4021,13 +4021,14 @@ namespace NarutoBot3
                     {
                         string ID = Useful.GetBetween(s, "/status/", "?").Split('/')[0];
                         long tweetID = Convert.ToInt64(ID);
+                        string tm = TweetMode.Extended;
 
                         try
                         {
-                            TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID, });
+                            TwitterStatus tweetResult = service.GetTweet(new GetTweetOptions { Id = tweetID, TweetMode = tm});
 
                             author = HttpUtility.HtmlDecode(tweetResult.Author.ScreenName);
-                            tweet = HttpUtility.HtmlDecode(tweetResult.TextDecoded.Replace("\n", " "));
+                            tweet = HttpUtility.HtmlDecode(tweetResult.FullText.Replace("\n", " "));
 
                             IrcMessage message = new Privmsg(CHANNEL, "Tweet by @" + author + ": " + tweet);
 

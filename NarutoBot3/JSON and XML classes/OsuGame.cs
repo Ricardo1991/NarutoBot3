@@ -53,6 +53,4 @@ namespace OsuGame
         public decimal? pp { get; set; }
         public string replay_available { get; set; }
     }
-
-
 }
